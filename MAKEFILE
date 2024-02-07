@@ -1,4 +1,4 @@
-NAME = ../minishell
+NAME = ./minishell
 
 LIBFT_DIR   := ./submodules/42_libft
 FTPRINTF_DIR:= ./submodules/42_ft_printf
@@ -40,11 +40,16 @@ fclean: clean
 re: fclean all
 
 comp:
-	@cd git submodule update --init --remote
+	@git submodule update --init --remote
+	@make re
+	@make clean
+	@clear
+normcomp:
+	@git submodule update --init --remote
 	@cd ./include && norminette
 	@cd ./src && norminette
 	@make re
 	@make clean
 	@clear
 
-.PHONY: all clean fclean re comp
+.PHONY: all clean fclean re comp normcomp
