@@ -1,23 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   testing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/30 11:29:36 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/07 10:07:49 by fschuber         ###   ########.fr       */
+/*   Created: 2024/02/07 07:59:29 by fschuber          #+#    #+#             */
+/*   Updated: 2024/02/07 10:17:09 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int main()
+void test_lexer()
 {
-	printf("Welcome to crazy robust & advanced shell!\n");
-	printf("crash 💥 <- thats how the typing prompt could look haha\n");
+	char *input = "echo \"Hello $USER\" && pwd; export | "
+				"cat < input.txt > output.txt || echo $?; ls *; cd /home; exit;";
 
-	test_lexer();
+	t_token **tokens = lexer(input);
 
-	return 0;
+	if (tokens != NULL)
+	{
+		print_tokens(tokens);
+
+		for (int i = 0; tokens[i] != NULL; i++)
+		{
+			free(tokens[i]);
+		}
+		free(tokens);
+	}
+	else
+	{
+		printf("Lexer returned NULL. Memory allocation failure or other error.\n");
+	}
 }
