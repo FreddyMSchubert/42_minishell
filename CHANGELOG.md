@@ -1,5 +1,10 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+## v0.2.0 - 08.02.24
+- added `parser.c` & `parser_util.c` which create basic bin tree from token array
+	- untested because theres not a printing function yet
+- changed t_bin_tree_node to save a token array as value instead of a single token
+
 ## v0.1.0 - 07.02.24
 - added `printing.c` for printing debug functions (with print_tokens())
 - added `testing.c` for testing debug functions (with test_lexer())

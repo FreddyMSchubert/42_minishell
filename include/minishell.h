@@ -6,15 +6,15 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/07 09:19:40 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/02/08 12:26:39 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // ----- SUBMODULES
 
 #include "../submodules/42_ft_printf/ft_printf.h"
-#include "../submodules/42_libft/libft.h"
 #include "../submodules/42_get_next_line/get_next_line.h"
+#include "../submodules/42_libft/libft.h"
 
 // ----- TOKEN TYPES
 
@@ -35,16 +35,17 @@
 
 typedef struct s_token
 {
-	char	type;
-	char	*value;
+	char type;
+	char *value;
 }				t_token;
 // char used for type to save space, as there are only 12 types
 
-typedef struct s_bin_tree_node	t_bin_tree_node;
-typedef struct s_bin_tree_node {
-	t_token				*val;
-	t_bin_tree_node		*left;
-	t_bin_tree_node		*right;
+typedef struct s_bin_tree_node t_bin_tree_node;
+typedef struct s_bin_tree_node
+{
+  t_token **val;
+  t_bin_tree_node *left;
+  t_bin_tree_node *right;
 }				t_bin_tree_node;
 // maybe make val an array e.g. for flags
 
@@ -55,9 +56,16 @@ typedef struct s_bin_tree_node {
 
 // ----- FUNCTIONS
 
-// utils / debug
-void	print_tokens(t_token **tokens);
-void	test_lexer();
+// --- utils / debug
+void				print_tokens(t_token **tokens);
+void				test_lexer();
 
-// lexer
-t_token	**lexer(char *input);
+// --- 0-lexing
+t_token				**lexer(char *input);
+
+// --- 3-parsing
+// util
+t_token				**get_sub_token_arr(t_token **token_arr, int start, int end);
+int					get_token_arr_len(t_token **token_arr);
+// parser
+t_bin_tree_node		*convert_tokens_to_bin_tree(t_token **token_arr);
