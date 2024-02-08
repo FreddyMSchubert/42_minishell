@@ -1,5 +1,14 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+## v0.3.0 - 08.02.24
+- fixed parser.c array assingment & infinite loop problem
+    - fixed get_dominant_operator not iterating
+    - fixed get_sub_token_arr incorrect malloc size calculation
+- moved print_token as a seperate function out of print_tokens in printing.c
+- added print_binary_tree() to printing.c
+- fixed broken import in testing.c & added print binary tree call
+- apparently Makefile spelling was not properly corrected, should be good now
+
 ## v0.2.0 - 08.02.24
 - added `parser.c` & `parser_util.c` which create basic bin tree from token array
 	- untested because theres not a printing function yet

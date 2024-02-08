@@ -27,10 +27,11 @@ static int get_dominant_operator(t_token **token_arr)
 	while (counter2 < 3) // amount of tokens to target
 	{
 		counter = 0;
-		while (token_arr[counter]) {
-		if (token_arr[counter]->type == targeted_token_type) {
-			return (counter);
-		}
+		while (token_arr[counter] != NULL)
+		{
+    		if (token_arr[counter]->type == targeted_token_type)
+    			return (counter);
+            counter++;
 		}
 		if (targeted_token_type == TOK_LOG_OP)
 			targeted_token_type = TOK_PIPE;
@@ -43,8 +44,6 @@ static int get_dominant_operator(t_token **token_arr)
 
 /*
     Gets a token array as input. Returns a functional binary tree structure.
-
-    Could make this recursive prolly
 */
 t_bin_tree_node *convert_tokens_to_bin_tree(t_token **token_arr)
 {
@@ -64,7 +63,11 @@ t_bin_tree_node *convert_tokens_to_bin_tree(t_token **token_arr)
 		tree_node->right = NULL;
 		return (tree_node);
 	}
-	tree_node->val = token_arr[dominant_operator_index];
+	tree_node->val = malloc(sizeof(t_token) * 2);
+	if (!tree_node->val)
+	   return (free(tree_node), NULL);
+	tree_node->val[1] = NULL;
+	tree_node->val[0] = token_arr[dominant_operator_index];
 	tree_node->left = convert_tokens_to_bin_tree(get_sub_token_arr(token_arr, 0, dominant_operator_index - 1));
 	tree_node->right = convert_tokens_to_bin_tree(get_sub_token_arr(token_arr, dominant_operator_index + 1, get_token_arr_len(token_arr) - 1));
 	if (!tree_node->left || !tree_node->right)

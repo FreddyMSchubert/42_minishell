@@ -22,9 +22,10 @@ t_token **get_sub_token_arr(t_token **token_arr, int start, int end)
 	t_token			**sub_token_arr;
 	int				counter;
 
-	sub_token_arr = malloc(sizeof(t_token *) * (end - start + 1));
+	sub_token_arr = malloc(sizeof(t_token *) * (end - start + 1 + 1));
 	if (!sub_token_arr)
 		return (NULL);
+	sub_token_arr[end - start + 1] = NULL;
 	counter = 0;
 	while (start <= end)
 	{
@@ -32,7 +33,6 @@ t_token **get_sub_token_arr(t_token **token_arr, int start, int end)
 		counter++;
 		start++;
 	}
-	sub_token_arr[counter] = NULL;
 	return (sub_token_arr);
 }
 

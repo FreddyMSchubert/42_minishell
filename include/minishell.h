@@ -57,7 +57,11 @@ typedef struct s_bin_tree_node
 // ----- FUNCTIONS
 
 // --- utils / debug
+// printing
 void				print_tokens(t_token **tokens);
+void                print_token(t_token *token);
+void                print_binary_tree(t_bin_tree_node *tree, int tabs);
+// testing
 void				test_lexer();
 
 // --- 0-lexing
