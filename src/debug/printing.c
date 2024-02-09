@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 07:42:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/07 08:09:06 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/02/09 11:47:18 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,16 +32,16 @@ void print_binary_tree(t_bin_tree_node *tree, int tabs)
         print_token(tree->val[counter]);
         counter++;
     }
-    if (tree->left != NULL)
+    if (tree->l != NULL)
     {
         printf("\x1b[31m");
-        print_binary_tree(tree->left, tabs + 1);
+        print_binary_tree(tree->l, tabs + 1);
         printf("\x1b[0m");
     }
-    if (tree->right != NULL)
+    if (tree->r != NULL)
     {
         printf("\x1b[34m");
-        print_binary_tree(tree->right, tabs + 1);
+        print_binary_tree(tree->r, tabs + 1);
         printf("\x1b[0m");
     }
 }
@@ -71,7 +71,13 @@ void print_token(t_token *token)
 		printf("Builtin");
 	else if (token->type == TOK_CTRL_SEQ)
 		printf("Control Sequence");
-	printf(", \tValue: \"%s\"\n", token->value);
+	else if (token->type == TOK_OPEN_BRACE)
+		printf("Open Brace");
+	else if (token->type == TOK_CLOSE_BRACE)
+		printf("Close Brace");
+	else
+		printf("\x1b[32mUnknown\x1b[0m");
+	printf(", \tValue: \"%s\", ignored: %d\n", token->value, token->ignored);
 }
 
 void print_tokens(t_token **tokens)

@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 12:13:26 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/08 12:25:38 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/02/09 11:46:38 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 	Does not free the original token array.
 	e.g. get_sub_token_arr({a, e, b, w, t, c, d}, 1, 3) -> {e, b, w}
 */
-t_token **get_sub_token_arr(t_token **token_arr, int start, int end)
+t_token	**sub_tok_arr(t_token **token_arr, int start, int end)
 {
 	t_token			**sub_token_arr;
 	int				counter;
@@ -36,9 +36,9 @@ t_token **get_sub_token_arr(t_token **token_arr, int start, int end)
 	return (sub_token_arr);
 }
 
-int get_token_arr_len(t_token **token_arr)
+int	toklen(t_token **token_arr)
 {
-	int counter;
+	int	counter;
 
 	counter = 0;
 	while (token_arr[counter])

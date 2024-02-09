@@ -1,4 +1,4 @@
-NAME = ./minishell
+NAME = ./crash
 
 LIBFT_DIR   := ./submodules/42_libft
 FTPRINTF_DIR:= ./submodules/42_ft_printf
