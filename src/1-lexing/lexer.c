@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
 /*
 	IMPROVEMENTS COULD BE MADE HERE
@@ -82,8 +82,6 @@ static t_token *detect_token_type(char *input)
 			check_same_string(input, "\x04") == 0 ||
 			check_same_string(input, "\x1A") == 0)
 		token->type = TOK_CTRL_SEQ;
-	else if (check_same_string(input, ";") == 0)
-		token->type = TOK_SEMICOLON;
 	else
 		token->type = TOK_CMD_ARG;
 	return (token);
@@ -94,7 +92,7 @@ static t_token *detect_token_type(char *input)
 static int is_operator_symbol(char c)
 {
 	if (c == '\'' || c == '\"' || c == '<' || \
-		c == '>' || c == '|' || c == '&' || c == ';')
+		c == '>' || c == '|' || c == '&')
 		return (0);
 	return (1);
 }

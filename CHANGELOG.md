@@ -1,5 +1,9 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+### v0.3.1 - 08.02.24
+- moved lexer.c
+- removed ; semicolon recognition as unique token from lexer and minishell.h and printing.c
+
 ## v0.3.0 - 08.02.24
 - fixed parser.c array assingment & infinite loop problem
     - fixed get_dominant_operator not iterating

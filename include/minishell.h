@@ -29,7 +29,6 @@
 #define TOK_WILDCARD 8   // Wildcard (*)
 #define TOK_BUILTIN 9    // Builtins (echo, cd, pwd, export, unset, env, exit)
 #define TOK_CTRL_SEQ 10  // Control Sequences (Ctrl-C, Ctrl-D, Ctrl-Z)
-#define TOK_SEMICOLON 11 // Semicolon (;)
 
 // ----- STRUCTS
 

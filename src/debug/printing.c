@@ -71,8 +71,6 @@ void print_token(t_token *token)
 		printf("Builtin");
 	else if (token->type == TOK_CTRL_SEQ)
 		printf("Control Sequence");
-	else if (token->type == TOK_SEMICOLON)
-		printf("Semicolon");
 	printf(", \tValue: \"%s\"\n", token->value);
 }
 
