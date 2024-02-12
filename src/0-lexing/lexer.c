@@ -6,11 +6,11 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 06:54:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/07 10:49:48 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/02/09 11:24:48 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
 /*
 	IMPROVEMENTS COULD BE MADE HERE
@@ -82,10 +82,13 @@ static t_token *detect_token_type(char *input)
 			check_same_string(input, "\x04") == 0 ||
 			check_same_string(input, "\x1A") == 0)
 		token->type = TOK_CTRL_SEQ;
-	else if (check_same_string(input, ";") == 0)
-		token->type = TOK_SEMICOLON;
+	else if (check_same_string(input, "(") == 0)
+		token->type = TOK_OPEN_BRACE;
+	else if (check_same_string(input, ")") == 0)
+		token->type = TOK_CLOSE_BRACE;
 	else
 		token->type = TOK_CMD_ARG;
+	token->ignored = 0;
 	return (token);
 }
 
@@ -94,7 +97,7 @@ static t_token *detect_token_type(char *input)
 static int is_operator_symbol(char c)
 {
 	if (c == '\'' || c == '\"' || c == '<' || \
-		c == '>' || c == '|' || c == '&' || c == ';')
+		c == '>' || c == '|' || c == '&' || c == '(' || c == ')')
 		return (0);
 	return (1);
 }
@@ -113,7 +116,7 @@ char *put_space_between_tokens(char *input)
 
 	input_counter = -1;
 	additional_spaces_needed = 0;
-	current_symbol_type = 0;		// technically unnecessary if we need to save space
+	current_symbol_type = 0;
 	while (input[++input_counter])
 	{
 		if (is_operator_symbol(input[input_counter]) == 0)
