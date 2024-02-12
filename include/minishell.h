@@ -3,12 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/07 09:19:40 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/02/07 15:56:07 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+// ------ INCLUDES
+
+#include <stdbool.h>
 
 // ----- SUBMODULES
 
@@ -18,8 +22,10 @@
 
 // ----- TOKEN TYPES
 
-#define TOK_CMD_ARG 0    // Commands or Arguments
-#define TOK_S_QUOTE 1    // Single Quotes (')
+// Commands or Arguments
+#define TOK_CMD_ARG 0
+// Single Quotes (')
+#define TOK_S_QUOTE 1
 #define TOK_D_QUOTE 2    // Double Quotes (")
 #define TOK_VAR_EXP 3    // Dollar Sign ($) for variable expansion
 #define TOK_EXIT_STAT 4  // Exit Status ($?)
