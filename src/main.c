@@ -6,18 +6,18 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:29:36 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/12 13:39:19 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/13 15:05:22 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-// int main()
-// {
-// 	printf("Welcome to crazy robust & advanced shell!\n");
-// 	printf("crash 💥 <- thats how the typing prompt could look haha\n");
+int main()
+{
+	printf("Welcome to crazy robust & advanced shell!\n");
+	printf("crash 💥 <- thats how the typing prompt could look haha\n");
 
-// 	test_lexer();
+	test_lexer();
 
-// 	return (0);
-// }
+	return (0);
+}

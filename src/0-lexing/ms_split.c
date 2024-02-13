@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 15:40:24 by nburchha          #+#    #+#             */
-/*   Updated: 2024/02/13 13:11:08 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/13 15:06:42 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static int	count_words(const char *s)
 	{
 		if ((s[i] == '"' && in_quote != 2) || (s[i] == '\'' && in_quote != 1))
 		{
-			printf("quote: %c\n", s[i]);
+			// printf("quote: %c\n", s[i]);
 			if (in_quote == 0)
 			{
 				if (s[i] != '\"')
@@ -65,7 +65,7 @@ static int	count_words(const char *s)
 		}
 		else if (is_operator_symbol(s[i], s[i + 1]))
 		{
-			printf("operator: %c\n", s[i]);
+			// printf("operator: %c\n", s[i]);
 			if (is_operator_symbol(s[i], s[i + 1]) == 2)
 				i++;
 			count++;
@@ -93,9 +93,12 @@ static char	*make_split_str(const char *s, char delim, int *i)
 	size_t	size;
 
 	size = *i;
+	if (delim == '\'' || delim == '"')
+		*i += 1;
 	while (s[*i] && s[*i] != delim)
 		*i += 1;
-	*i -= 1;
+	if (delim != '\'' && delim != '"')
+		*i -= 1;
 	return (ft_substr(s, size, *i - size + 1));
 }
 
@@ -119,9 +122,8 @@ void	free_split(char **split)
 
 /// @brief splits a string into an array of strings, using spaces,
 /// single quotes and double quotes as delimiters. inside single
-/// quotes: everything is a string,
-/// inside double quotes: everything but $ is a string
-char **ms_split(char *input)
+/// quotes: everything is a string
+char	**ms_split(char *input)
 {
 	int				word_count;
 	char			**result;
@@ -133,7 +135,7 @@ char **ms_split(char *input)
 	j = 0;
 	flag = 0;
 	word_count = count_words(input);
-	printf("word_count: %d\n", word_count);
+	// printf("word_count: %d\n", word_count);
 	if (word_count == -1)
 		return (NULL);
 	result = malloc((word_count + 1) * sizeof(char *));
@@ -143,59 +145,55 @@ char **ms_split(char *input)
 	// printf("result[i]: %p\n", result[0]);
 	while (input[++i] && j < word_count)
 	{
-		printf("input[i]: %c\n", input[i]);
+		// printf("input[i]: %c\n", input[i]);
 		if (input[i] == '"')
 		{
-			i++;
 			result[j++] = make_split_str(input, '"', &i);
-			i++;
-			printf("double quote: %c\n", input[i]);
+			// printf("double quote: %c\n", input[i]);
 			if (!result[j - 1])
 				return (free_split(result), NULL);
 		}
 		else if (input[i] == '\'')
 		{
-			i++;
 			result[j++] = make_split_str(input, '\'', &i);
-			i++;
 			if (!result[j - 1])
 				return (free_split(result), NULL);
-			printf("single quote: %c\n", input[i]);
+			// printf("single quote: %c\n", input[i]);
 		}
 		else if (is_operator_symbol(input[i], input[i + 1]))
 		{
 			result[j++] = make_split_str(input, ' ', &i);
 			if (!result[j - 1])
 				return (free_split(result), NULL);
-			printf("operator symbol: %c\n", input[i]);
+			// printf("operator symbol: %c\n", input[i]);
 		}
 		else if (!ft_isspace(input[i]))
 		{
 			result[j++] = make_split_str(input, ' ', &i);
 			if (!result[j - 1])
 				return (free_split(result), NULL);
-			printf("word: %c\n", input[i]);
+			// printf("word: %c\n", input[i]);
 		}
 	}
 	return (result);
 }
 
 
-int main(int argc, char **argv)
-{
-	if (argc == 1 && argv)
-		return 1;
-	char *input = "<>";
-	// char *input1 = "( echo \"Hello $USER\" && ( export | cat < input.txt > output.txt ) ) || ( echo $? && ls * && cd /home ) && echo \"Nested start\" && ( cd /tmp && ls ) && echo \"Nested end\"";;
-	char **split = ms_split(input);
-	for (int i = 0; split && split[i]; i++)
-	{
-		printf("ms_split: .%s.\n", split[i]);
-	}
-	// printf("word_count: %d\n", count_words(argv[1]));
-	// printf("word_count: %d\n", count_words(input1));
-	return 0;
-}
+// int main(int argc, char **argv)
+// {
+// 	if (argc == 1 && argv)
+// 		return 1;
+// 	// char *input1 = "hallo || welt > welt";
+// 	char *input1 = "( echo \"Hello $USER\" && ( export | ) cat < input.txt > output.txt ) ) || ( echo $? && ls * && cd /home ) && echo \"Nested start\" && ( cd /tmp && ls ) && echo \"Nested end\"";;
+// 	char **split = ms_split(input1);
+// 	for (int i = 0; split && split[i]; i++)
+// 	{
+// 		printf("ms_split: .%s.\n", split[i]);
+// 	}
+// 	// printf("word_count: %d\n", count_words(argv[1]));
+// 	// printf("word_count: %d\n", count_words(input1));
+// 	return 0;
+// }
 
 /*
 different operator symbols:
