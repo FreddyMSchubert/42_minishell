@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 15:40:24 by nburchha          #+#    #+#             */
-/*   Updated: 2024/02/13 11:02:34 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/13 13:11:08 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,11 @@ int ft_isspace(char c)
 	return (0);
 }
 
-static int is_operator_symbol(char c)
+static int is_operator_symbol(char c, char d)
 {
-	if (c == '<' || c == '>' || c == '|' || c == '&' || c == '\\')
+	if ((c == '<' && d == '<') || (c == '>' && d == '>') || (c == '|' && d == '|') || (c == '&' && d == '&'))
+		return (2);
+	else if (c == '<' || c == '>' || c == '|' || c == '&' || c == '(' || c == ')' || c == '*')
 		return (1);
 	return (0);
 }
@@ -46,16 +48,9 @@ static int	count_words(const char *s)
 	in_quote = 0;
 	while (s[++i])
 	{
-		// if (s[i] == '\\')
-		// {
-		// 	if (s[i + 1] == '"' || s[i + 1] == '\'')
-		// 		i++; // Skip the backslash and treat the quote as a regular character
-		// 	else if (s[i + 1] == '\\')
-		// 		i++; // Skip the backslash and treat the next backslash as a regular character
-		// 	printf("s[i]: %c,	s[i + 1]: %c\n", s[i], s[i + 1]);
-		// }
 		if ((s[i] == '"' && in_quote != 2) || (s[i] == '\'' && in_quote != 1))
 		{
+			printf("quote: %c\n", s[i]);
 			if (in_quote == 0)
 			{
 				if (s[i] != '\"')
@@ -68,18 +63,21 @@ static int	count_words(const char *s)
 			else
 				in_quote = 0;
 		}
-		else if (is_operator_symbol(s[i]))
+		else if (is_operator_symbol(s[i], s[i + 1]))
 		{
+			printf("operator: %c\n", s[i]);
+			if (is_operator_symbol(s[i], s[i + 1]) == 2)
+				i++;
 			count++;
 			in_word = 0;
 		}
-		else if (!ft_isspace(s[i]) && !in_word && !in_quote)
+		else if (!ft_isspace(s[i]) && !in_word && !in_quote) //count new word
 		{
 			count++;
 			in_word = 1;
-			printf("s[i]: %c\n", s[i]);
+			// printf("wortanfang: %c\n", s[i]);
 		}
-		else
+		else if (ft_isspace(s[i]) && !in_quote)
 			in_word = 0;
 	}
 	if (in_quote)
@@ -145,28 +143,38 @@ char **ms_split(char *input)
 	// printf("result[i]: %p\n", result[0]);
 	while (input[++i] && j < word_count)
 	{
+		printf("input[i]: %c\n", input[i]);
 		if (input[i] == '"')
 		{
 			i++;
-			printf("input[i]: %c\n", input[i]);
 			result[j++] = make_split_str(input, '"', &i);
+			i++;
+			printf("double quote: %c\n", input[i]);
 			if (!result[j - 1])
 				return (free_split(result), NULL);
 		}
 		else if (input[i] == '\'')
 		{
 			i++;
-			printf("input[i]: %c\n", input[i]);
 			result[j++] = make_split_str(input, '\'', &i);
+			i++;
 			if (!result[j - 1])
 				return (free_split(result), NULL);
+			printf("single quote: %c\n", input[i]);
 		}
-		else if (!ft_isspace(input[i]))
+		else if (is_operator_symbol(input[i], input[i + 1]))
 		{
-			printf("input[i]: %c\n", input[i]);
 			result[j++] = make_split_str(input, ' ', &i);
 			if (!result[j - 1])
 				return (free_split(result), NULL);
+			printf("operator symbol: %c\n", input[i]);
+		}
+		else if (!ft_isspace(input[i]))
+		{
+			result[j++] = make_split_str(input, ' ', &i);
+			if (!result[j - 1])
+				return (free_split(result), NULL);
+			printf("word: %c\n", input[i]);
 		}
 	}
 	return (result);
@@ -175,15 +183,22 @@ char **ms_split(char *input)
 
 int main(int argc, char **argv)
 {
-	if (argc == 1)
+	if (argc == 1 && argv)
 		return 1;
-	// char *input1 = "echo 'hel$\"$'US 		  ERlo world\"";
-	char **split = ms_split(argv[1]);
+	char *input = "<>";
+	// char *input1 = "( echo \"Hello $USER\" && ( export | cat < input.txt > output.txt ) ) || ( echo $? && ls * && cd /home ) && echo \"Nested start\" && ( cd /tmp && ls ) && echo \"Nested end\"";;
+	char **split = ms_split(input);
 	for (int i = 0; split && split[i]; i++)
 	{
 		printf("ms_split: .%s.\n", split[i]);
 	}
-	// printf("word_count: %d\n", count_words(input));
+	// printf("word_count: %d\n", count_words(argv[1]));
 	// printf("word_count: %d\n", count_words(input1));
 	return 0;
 }
+
+/*
+different operator symbols:
+< > | & ( )
+<< >> || && -> not implemented
+*/
