@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/12 13:29:30 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/13 11:29:23 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,3 +80,13 @@ t_token				**sub_tok_arr(t_token **token_arr, int start, int end);
 int					toklen(t_token **token_arr);
 // parser
 t_bin_tree_node		*tok_to_bin_tree(t_token **token_arr);
+
+// --- 4-executing
+// general
+int					executer(t_bin_tree_node *tree);
+// commands
+int					execute_log_op(t_bin_tree_node *tree);
+int					execute_redir(t_bin_tree_node *tree);
+int					execute_pipe(t_bin_tree_node *tree);
+// builtins
+int					execute_echo(t_bin_tree_node *tree);

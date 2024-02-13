@@ -1,23 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/30 11:29:36 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/13 11:43:36 by fschuber         ###   ########.fr       */
+/*   Created: 2024/02/13 11:28:35 by fschuber          #+#    #+#             */
+/*   Updated: 2024/02/13 11:28:59 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
-int main(int argc, char **argv, char **envp)
+int execute_echo(t_bin_tree_node *tree)
 {
-	printf("Welcome to crazy robust & advanced shell!\n");
-	printf("crash 💥 <- thats how the typing prompt could look haha\n");
+	int i;
 
-	test_lexer();
-
-	return (0);
+	i = 1;
+	while (tree->val[i])
+	{
+		ft_printf("%s", tree->val[i]->value);
+		i++;
+	}
+	ft_printf("\n");
+	return 0;
 }
