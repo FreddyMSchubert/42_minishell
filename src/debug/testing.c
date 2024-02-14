@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   testing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 07:59:29 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/09 11:44:18 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/02/14 13:33:53 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 void test_lexer()
 {
 	char *input = "( echo \"Hello $USER\" && ( export | cat < input.txt > output.txt ) ) || ( echo $? && ls * && cd /home ) && echo \"Nested start\" && ( cd /tmp && ls ) && echo \"Nested end\"";
+	// char *input = "( echo \"Hello $USER\"";
 
 	t_token **tokens = lexer(input);
 	
