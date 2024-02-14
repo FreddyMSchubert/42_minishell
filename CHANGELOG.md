@@ -1,5 +1,8 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+## v0.5.0 - 14.02.24 - Niklas
+- Added `ms_split` function that splits input into tokens, taking care of quotes
+
 ## v0.4.0 - 09.02.24 - Freddy
 - Added correct bracket binary tree creation functionality in `parser`
 - Added opening & closing brace operators for use in parser, implemented in `lexer`
