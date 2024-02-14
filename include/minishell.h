@@ -90,3 +90,5 @@ int					execute_redir(t_bin_tree_node *tree);
 int					execute_pipe(t_bin_tree_node *tree);
 // builtins
 int					execute_echo(t_bin_tree_node *tree);
+// util
+void                pex_free_rec(void **blob);

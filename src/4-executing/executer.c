@@ -12,6 +12,11 @@
 
 #include "../../include/minishell.h"
 
+typedef struct s_cmd_path {
+    char	*path;
+    char	**args;
+}				t_cmd_path;
+
 /*
 	@brief		Returns a dynamically allocated path to the command.
 	@brief		It's on the caller to free the path.
@@ -28,7 +33,7 @@ static char	*get_command_path(char **envp, char *command)
 		envp++;
 	split_paths = ft_split(envp[0], ':');
 	if (split_paths == NULL)
-		exit_error("Problem splitting command paths.\n");
+		return NULL;
 	counter = 0;
 	while (split_paths[counter])
 	{
@@ -41,16 +46,37 @@ static char	*get_command_path(char **envp, char *command)
 		counter++;
 	}
 	pex_free_rec((void **)split_paths);
-	exit_error("ERROR finding command path.\n");
 	return (NULL);
+}
+
+/*
+	@brief	Creates a path struct consisting of a path string
+	@brief	and the arguments as an array of strings
+*/
+t_cmd_path	*create_cmd_struct(char	**envp, char	*cmd)
+{
+    t_cmd_path	*path;
+    char		**split_cmd;
+
+    path = malloc(sizeof(t_cmd_path));
+    if (!path)
+        return (NULL);
+    split_cmd = ft_split(cmd, ' ');
+    if (!split_cmd)
+        return (NULL);
+    path->path = get_command_path(envp, split_cmd[0]);
+    path->args = split_cmd;
+    if (VERBOSE == 1)
+        ft_printf("LOGGER: Found command at '%s'.\n", path->path);
+    return (path);
 }
 
 static int execute_builtin(t_bin_tree_node *tree)
 {
-	if (ft_strncmp("echo", tree->val[0]->value, 4) == 0 && 
+	if (ft_strncmp("echo", tree->val[0]->value, 4) == 0 &&
 		tree->val[0]->value[4] == '\0')
 		return execute_echo(tree);
-	if (ft_strncmp("cd", tree->val[0]->value, 2) == 0 && 
+	if (ft_strncmp("cd", tree->val[0]->value, 2) == 0 &&
 		tree->val[0]->value[2] == '\0')
 		// return execute_cd(tree);
 	if (ft_strncmp("pwd", tree->val[0]->value, 3) == 0 &&
@@ -72,20 +98,46 @@ static int execute_builtin(t_bin_tree_node *tree)
 }
 
 // this assumes expander already did its job
-static int execute_command(t_bin_tree_node *tree)
+// if in_fd is supposed to be normal, please pass STDIN_FILENO
+// this works because dup2 has a check whether both inputs are the same.
+// same for output
+static int execute_command(t_bin_tree_node *tree, int in_fd, int out_fd, char **envp)
 {
-	int		pipefd[2];
-	pid_t	pid;
+	int		    pipefd[2];
+	pid_t	    pid;
+    t_cmd_path  *cmd;
+    int         exit_status;
+    int         i;
 
 	if (pipe(pipefd) == -1)
-		exit_error("ERROR: Creating of pipe failed.\n");
+		return -1;
+    cmd = create_cmd_struct(envp, tree->val[0]->value);
 	pid = fork();
 	if (pid == 0)
-		children_routine(pipefd, create_cmd_struct(envp, cmd), in_fd, out_fd);
+	{
+        close(pipefd[0]);
+        dup2(in_fd, STDIN_FILENO);
+        if (dup2(out_fd, STDOUT_FILENO) == -1)
+            return (close(pipefd[1]), exit(-1), -1);
+        close(pipefd[1]);
+        execve(cmd->path, cmd->args, NULL);
+        // error, not good
+	}
 	else if (pid > 0)
-		return (parent_routine(pid, pipefd, out_fd));
+    {
+        close(pipefd[1]);
+        waitpid(pid, &exit_status, 0);
+        i = 0;
+        while (cmd->args[i])
+            free(cmd->args[i]);
+        free(cmd);
+        if (WIFEXITED(exit_status)) {
+            return (WEXITSTATUS(exit_status));
+    }
 	else
-		exit_error("ERROR: Forking failed.\n");
+    {
+        return (-1);
+    }
 	return (0);
 }
 
