@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/12 13:29:30 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/14 13:25:36 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ void				test_lexer();
 
 // --- 0-lexing
 t_token				**lexer(char *input);
+char				**ms_split(char *input);
 
 // --- 3-parsing
 // util
