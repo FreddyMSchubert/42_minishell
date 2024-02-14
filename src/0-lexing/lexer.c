@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 06:54:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/13 15:05:11 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/14 13:16:04 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ static t_token *detect_token_type(char *input)
 // ' " < << >> > | && || ;
 static int is_operator_symbol(char c)
 {
-	if (c == '\'' || c == '\"' || c == '<' || \
+	if (c == '<' || //c == '\'' || c == '\"' || 
 		c == '>' || c == '|' || c == '&' || c == '(' || c == ')')
 		return (0);
 	return (1);

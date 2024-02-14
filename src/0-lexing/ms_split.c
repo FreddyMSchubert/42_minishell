@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 15:40:24 by nburchha          #+#    #+#             */
-/*   Updated: 2024/02/13 15:06:42 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/14 11:40:06 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int ft_isspace(char c)
 	return (0);
 }
 
-static int is_operator_symbol(char c, char d)
+int	is_operator_symbol(char c, char d)
 {
 	if ((c == '<' && d == '<') || (c == '>' && d == '>') || (c == '|' && d == '|') || (c == '&' && d == '&'))
 		return (2);
@@ -35,7 +35,7 @@ static int is_operator_symbol(char c, char d)
 // }
 
 /// @brief counts how many pointers are needed in pointer array
-static int	count_words(const char *s)
+int	count_tokens(const char *s)
 {
 	int	i;
 	int	count;
@@ -134,8 +134,9 @@ char	**ms_split(char *input)
 	i = -1;
 	j = 0;
 	flag = 0;
-	word_count = count_words(input);
-	// printf("word_count: %d\n", word_count);
+	word_count = count_tokens(input);
+	printf("input: %s\n", input);
+	printf("word_count: %d\n", word_count);
 	if (word_count == -1)
 		return (NULL);
 	result = malloc((word_count + 1) * sizeof(char *));
@@ -179,12 +180,10 @@ char	**ms_split(char *input)
 }
 
 
-// int main(int argc, char **argv)
+// int main(void)
 // {
-// 	if (argc == 1 && argv)
-// 		return 1;
-// 	// char *input1 = "hallo || welt > welt";
-// 	char *input1 = "( echo \"Hello $USER\" && ( export | ) cat < input.txt > output.txt ) ) || ( echo $? && ls * && cd /home ) && echo \"Nested start\" && ( cd /tmp && ls ) && echo \"Nested end\"";;
+// 	char *input1 = ">>";
+// 	// char *input1 = "( echo \"Hello $USER\" && ( export | ) cat < input.txt > output.txt ) ) || ( echo $? && ls * && cd /home ) && echo \"Nested start\" && ( cd /tmp && ls ) && echo \"Nested end\"";;
 // 	char **split = ms_split(input1);
 // 	for (int i = 0; split && split[i]; i++)
 // 	{
