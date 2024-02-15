@@ -1,5 +1,8 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+### v0.4.1 - 15.02.24 - Freddy
+- fixed parser segfaulting when two operators are next to each other or an operator is at start of line
+
 ## v0.4.0 - 09.02.24 - Freddy
 - Added correct bracket binary tree creation functionality in `parser`
 - Added opening & closing brace operators for use in parser, implemented in `lexer`
