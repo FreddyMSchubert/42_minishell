@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/14 14:58:48 by nburchha          #+#    #+#             */
-/*   Updated: 2024/02/15 13:00:00 by nburchha         ###   ########.fr       */
+/*   Created: 2024/02/18 15:25:11 by nburchha          #+#    #+#             */
+/*   Updated: 2024/02/18 19:42:49 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,112 +26,68 @@ error codes:
 5 for allocation error
 */
 
-/// @brief recursively checks the token tree for errors
-/// @return different error codes  if an error is found, 0 if no error is found
-int	check_token_tree_rec(t_bin_tree_node *node, int brace_opened, t_list **infiles, t_list **outfiles[2])
+int	add_file_to_list(t_list **files, char *value, int *error_code)
 {
-	int		error_code;
 	t_list	*tmp;
 
-	tmp = NULL;
-	// check for consecutive operators
-	if ((*node->val)->type >= 5 && (*node->val)->type <= 7)
-	{
-		if (((*node->l->val)->type >= 5 && (*node->l->val)->type <= 7) || \
-			((*node->r->val)->type >= 5 && (*node->r->val)->type <= 7))
-			return (1);
-	}
-	// check for valid delim for here_doc
-	if ((*node->val)->type == TOK_REDIR && ft_strncmp((*node->val)->value, "<<", 2) == 0 && \
-		(*node->r->val)->type != TOK_CMD_ARG && (*node->r->val)->type != TOK_VAR_EXP && \
-		(*node->r->val)->type != TOK_S_QUOTE && (*node->r->val)->type != TOK_D_QUOTE && \
-		(*node->r->val)->type != TOK_WILDCARD && (*node->r->val)->type != TOK_BUILTIN && \
-		(*node->r->val)->type != TOK_OPEN_BRACE && (*node->r->val)->type != TOK_CLOSE_BRACE)
-		return (1);
-
-	//protect malloc???
-	// put in files into linked lists
-	if ((*node->val)->type == TOK_REDIR && ft_strncmp((*node->val)->value, "<", 1) == 0 && (*node->r->val)->value)
-	{
-		tmp = ft_lstnew((*node->r->val)->value);
-		if (!tmp)
-			return (5);
-		ft_lstadd_back(infiles, tmp);
-		tmp = NULL;
-	}
-	// put output files into linked lists
-	if ((*node->val)->type == TOK_REDIR && ft_strncmp((*node->val)->value, ">", 1) == 0 && (*node->r->val)->value)
-	{
-		tmp = ft_lstnew((*node->r->val)->value);
-		if (!tmp)
-			return (5);
-		ft_lstadd_back(outfiles[0], tmp);
-		tmp = NULL;
-	}
-	// put append files into linked lists
-	if ((*node->val)->type == TOK_REDIR && ft_strncmp((*node->val)->value, ">>", 2) == 0 && (*node->r->val)->value)
-	{
-		tmp = ft_lstnew((*node->r->val)->value);
-		if (!tmp)
-			return (5);
-		ft_lstadd_back(outfiles[1], tmp);
-		tmp = NULL;
-	}
-
-	//handle braces
-	if (node->val[0]->type == TOK_OPEN_BRACE)
-		brace_opened++;
-	else if (node->val[0]->type == TOK_CLOSE_BRACE)
-		brace_opened--;
-
-	if (node->l)
-	{
-		error_code = check_token_tree_rec(node->l, brace_opened, infiles, outfiles);
-		if (error_code > 0)
-			return (error_code);
-	}
-	if (node->r)
-	{
-		error_code = check_token_tree_rec(node->r, brace_opened, infiles, outfiles);
-		if (error_code > 0)
-			return (error_code);
-	}
-	if (brace_opened > 0)
-		return (2);
-	return (0);
+	printf("error_code: %s\n", value);
+	tmp = ft_lstnew(value);
+	if (!tmp)
+		*error_code = 5;
+	if (*error_code == 0)
+		ft_lstadd_back(files, tmp);
+	return (*error_code);
 }
 
-int	validator(t_bin_tree_node *head_node)
+int	validator(t_token **token_arr)
 {
-	// t_bin_tree_node	*node;
-	t_list			*infiles;
-	t_list			*outfiles[2];
-	// t_list			*outfiles_append;
-	int				error_code;
+	int	i;
+	int	brace_opened;
+	int	error_code;
+	t_list	*files[3]; // 0 for input, 1 for output, 2 for append_out
 
-	infiles = NULL;
-	outfiles[0] = NULL;
-	outfiles[1] = NULL;
-	error_code = check_token_tree_rec(head_node, 0, &infiles, (t_list ***)outfiles);
-
-	// check files
-	if (!error_code)
+	i = -1;
+	brace_opened = 0;
+	error_code = 0;
+	while (token_arr[++i] != NULL)
 	{
-		if (infiles)
-		{
-			error_code = check_files(&infiles, 0);
-			ft_lstclear(&infiles, free);
-		}
-		if (outfiles[0])
-		{
-			error_code = check_files(&outfiles[0], 1);
-			ft_lstclear(&outfiles[0], free);
-		}
-		if (outfiles[1])
-		{
-			error_code = check_files(&outfiles[1], 2);
-			ft_lstclear(&outfiles[1], free);
-		}
+		printf("token_arr: %s\n", token_arr[i]->value);
+		// check for consecutive operators - i dont know if necessary
+		if (token_arr[i]->type >= 5 && token_arr[i]->type <= 7)
+			if (token_arr[i + 1] && token_arr[i + 1]->type >= 5 && token_arr[i + 1]->type <= 7)
+				return (1);
+		
+
+		// check for unclosed braces
+		if (token_arr[i]->type == TOK_OPEN_BRACE)
+			brace_opened++;
+		else if (token_arr[i]->type == TOK_CLOSE_BRACE)
+			brace_opened--;
+
+		// check for valid word after < > >> <<
+		if (token_arr[i]->type == TOK_REDIR)
+			if (!token_arr[i + 1] || token_arr[i + 1]->type > 2)
+				return (3);
+		// put in files into linked lists
+		if (token_arr[i]->type == TOK_REDIR && ft_strncmp(token_arr[i]->value, "<", 2) == 0 && token_arr[i + 1])
+			if (add_file_to_list(&files[0], token_arr[i + 1]->value, &error_code) != 0)
+				return (error_code);
+		// put append files into linked lists
+		if (token_arr[i]->type == TOK_REDIR && ft_strncmp(token_arr[i]->value, ">>", 2) == 0 && token_arr[i + 1])
+			if (add_file_to_list(&files[2], token_arr[i + 1]->value, &error_code) != 0)
+				return (error_code);
+		// put output files into linked lists
+		if (token_arr[i]->type == TOK_REDIR && ft_strncmp(token_arr[i]->value, ">", 2) == 0 && token_arr[i + 1])
+			if (add_file_to_list(&files[1], token_arr[i + 1]->value, &error_code) != 0)
+				return (error_code);
 	}
-	return (error_code);
+	// check for | in beginning or end
+	if (token_arr[0]->type == 6 || token_arr[i - 1]->type == 6)
+		return (1);
+	if (brace_opened != 0)
+		return (2);
+	// check for file errors
+	if (check_files(files[0], 0) != 0 || check_files(files[1], 1) != 0 || check_files(files[2], 2) != 0)
+		return (3);
+	return (0);
 }

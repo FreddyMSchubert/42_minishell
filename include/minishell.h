@@ -6,13 +6,14 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/14 13:25:36 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/18 19:39:14 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // ------ INCLUDES
 
 #include <stdbool.h>
+#include <fcntl.h>
 
 // ----- SUBMODULES
 
@@ -56,6 +57,14 @@ typedef struct s_bin_tree_node
 }				t_bin_tree_node;
 // maybe make val an array e.g. for flags
 
+// linked list with all files and their opened file descriptors
+typedef struct s_files
+{
+	void *content;
+	int fd;
+	struct s_files *next;
+}				t_files;
+
 // ----- SETTINGS
 
 // will output detailed logging if set to 1, and normal logging if 0
@@ -70,6 +79,7 @@ void                print_token(t_token *token);
 void                print_binary_tree(t_bin_tree_node *tree, int tabs);
 // testing
 void				test_lexer();
+void				test_validator(void);
 
 // --- 0-lexing
 t_token				**lexer(char *input);
@@ -81,3 +91,6 @@ t_token				**sub_tok_arr(t_token **token_arr, int start, int end);
 int					toklen(t_token **token_arr);
 // parser
 t_bin_tree_node		*tok_to_bin_tree(t_token **token_arr);
+// validator
+int					validator(t_token **token_arr);
+int					check_files(t_list *files, int flag);
