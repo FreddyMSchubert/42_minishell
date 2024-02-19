@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 11:16:19 by nburchha          #+#    #+#             */
-/*   Updated: 2024/02/19 12:08:13 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/19 14:31:04 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ int check_files(t_list *files, int flag)
 			access(tmp->content, W_OK);
 		else if (flag == 2)
 			access(tmp->content, W_OK);
-		printf("errno: %d\n", errno);
 		if (errno == EACCES || (flag == 0 && errno == ENOENT))
 			return (3);
 		tmp = tmp->next;

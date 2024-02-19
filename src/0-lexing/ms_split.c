@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 15:40:24 by nburchha          #+#    #+#             */
-/*   Updated: 2024/02/19 13:20:46 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/19 13:57:30 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ int ft_isspace(char c)
 	return (0);
 }
 
+/// @return 2 if valid operator symbol (<<, >>, ||, &&), 1 if single operator symbol, 0 if not operator symbol
 int	is_operator_symbol(char c, char d)
 {
 	if ((c == '<' && d == '<') || (c == '>' && d == '>') || (c == '|' && d == '|') || (c == '&' && d == '&'))
@@ -27,12 +28,6 @@ int	is_operator_symbol(char c, char d)
 		return (1);
 	return (0);
 }
-
-// static int	is_operator_symbol(char c)
-// {
-//     // Define your operator symbols here
-//     return (c == '+' || c == '-' || c == '*' || c == '/');
-// }
 
 /// @brief counts how many pointers are needed in pointer array
 int	count_tokens(const char *s)
@@ -136,7 +131,7 @@ char	**ms_split(char *input)
 	flag = 0;
 	word_count = count_tokens(input);
 	// printf("input: %s\n", input);
-	printf("word_count: %d\n", word_count);
+	// printf("word_count: %d\n", word_count);
 	if (word_count == -1)
 		return (NULL);
 	result = malloc((word_count + 1) * sizeof(char *));

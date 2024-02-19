@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 06:54:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/19 13:19:22 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/19 17:41:40 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static t_token *detect_token_type(char *input)
 {
 	t_token		*token;
 
-	printf("input: %s\n", input);
+	// printf("input: %s\n", input);
 	token = malloc(sizeof(t_token));
 	if (!token)
 		return (NULL);
@@ -95,13 +95,13 @@ static t_token *detect_token_type(char *input)
 
 // the following can be on other arguments without space in between
 // ' " < << >> > | && || ;
-static int is_operator_symbol(char c)
-{
-	if (c == '<' || //c == '\'' || c == '\"' || 
-		c == '>' || c == '|' || c == '&' || c == '(' || c == ')')
-		return (0);
-	return (1);
-}
+// static int is_operator_symbol(char c)
+// {
+// 	if (c == '<' || //c == '\'' || c == '\"' || 
+// 		c == '>' || c == '|' || c == '&' || c == '(' || c == ')')
+// 		return (0);
+// 	return (1);
+// }
 
 /*
 	@brief	Receives full input command, returns new string with spaces
@@ -113,56 +113,64 @@ char *put_space_between_tokens(char *input)
 	int		new_input_counter;
 	int		additional_spaces_needed;
 	char	*new_input;
-	int		current_symbol_type;
+	int		in_quote;
+	int		current_symbol_type; // 0 for space, 1 for word, 2 operator, 3 for quotes
 
 	input_counter = -1;
 	additional_spaces_needed = 0;
 	current_symbol_type = 0;
+	in_quote = 0;
+	// check how many spaces are there
 	while (input[++input_counter])
 	{
-		if (is_operator_symbol(input[input_counter]) == 0)
-		{
-			if (current_symbol_type > 0 && input_counter != 0)
-				additional_spaces_needed++;
-			current_symbol_type = 2;
-		}
-		else if (input[input_counter] == ' ' && input_counter != 0)
+		if ((input[input_counter] == '\'' || input[input_counter] == '\"') && current_symbol_type != input[input_counter])
+			current_symbol_type = input[input_counter];
+		else if (current_symbol_type == input[input_counter])
 			current_symbol_type = 0;
-		else
+		if (current_symbol_type >= 1 && current_symbol_type <= 2 && input[input_counter] == ' ')
 		{
-			if (current_symbol_type == 2 && input_counter != 0)
-				additional_spaces_needed++;
-			current_symbol_type = 1;
+			additional_spaces_needed++;
+			current_symbol_type = 0;
+			// printf("input: %c\n", input[input_counter]);
 		}
+		else if (current_symbol_type < 3)
+			current_symbol_type = 1;
 	}
-	printf("additional_spaces_needed: %d\n", additional_spaces_needed);
+	additional_spaces_needed = count_tokens(input) - additional_spaces_needed - 1;
 	new_input = malloc(sizeof(char) * (ft_strlen(input) + additional_spaces_needed + 1));
 	if (!new_input)
 		return (NULL);
 	new_input[ft_strlen(input) + additional_spaces_needed] = '\0';
 	input_counter = 0;
 	new_input_counter = 0;
+	current_symbol_type = 0;
+	in_quote = 0;
 	while (input[input_counter])
 	{
-		if (is_operator_symbol(input[input_counter]) == 0)
+		if ((input[input_counter] == '\'' || input[input_counter] == '\"'))
 		{
-			if (current_symbol_type == 1 && input_counter != 0)
+			if (!in_quote && current_symbol_type != 0 && current_symbol_type != 3) // Before entering a quote
+				new_input[new_input_counter++] = ' ';
+			in_quote = !in_quote;
+		}
+		else if (!in_quote && is_operator_symbol(input[input_counter], input[input_counter + 1]) > 0)
+		{
+			if (current_symbol_type != 0)
 				new_input[new_input_counter++] = ' ';
 			current_symbol_type = 2;
 		}
-		else if (input[input_counter] == ' ' && input_counter != 0)
+		else if (input[input_counter] == ' ')
 			current_symbol_type = 0;
-		else
+		else if (input[input_counter] != ' ' && !in_quote)
 		{
-			if (current_symbol_type == 2 && input_counter != 0)
+			if (current_symbol_type == 2 || (current_symbol_type == 1 && is_operator_symbol(input[input_counter], input[input_counter + 1]) > 0))
 				new_input[new_input_counter++] = ' ';
 			current_symbol_type = 1;
 		}
-		new_input[new_input_counter] = input[input_counter];
-		new_input_counter++;
-		input_counter++;
+		if (input[input_counter] && is_operator_symbol(input[input_counter], input[input_counter + 1]) == 2)
+			new_input[new_input_counter++] = input[input_counter++];
+		new_input[new_input_counter++] = input[input_counter++];
 	}
-	printf("new_input: %s\n", new_input);
 	return (new_input);
 }
 
@@ -176,9 +184,10 @@ t_token **lexer(char *input)
 	int		token_amount;
 	int		counter;
 
+	printf("input:		%s\n", input);
 	split_input = ms_split(put_space_between_tokens(input));
-	for (int i = 0; split_input[i]; i++)
-		printf("split_input: %s\n", split_input[i]);
+	// for (int i = 0; split_input[i]; i++)
+	// 	printf("split_input: %s\n", split_input[i]);
 	token_amount = 0;
 	while (split_input[token_amount])
 		token_amount++;
@@ -189,7 +198,6 @@ t_token **lexer(char *input)
 	while (counter < token_amount)
 	{
 		tokens[counter] = detect_token_type(split_input[counter]);
-		printf("where IS THE SEG FAULT counter: %d\n", counter);
 		if (!tokens[counter])
 		{
 			while (counter > 0)
@@ -203,7 +211,6 @@ t_token **lexer(char *input)
 		}
 		counter++;
 	}
-	printf("after while loop\n");
 	tokens[counter] = NULL;
 	counter = 0;
 	while (split_input[counter])
