@@ -82,7 +82,8 @@ static int	get_dominant_operator(t_token **arr)
 				depth++;
 			else if (arr[i]->type == TOK_CLOSE_BRACE && arr[i]->ignored == 0)
 				depth--;
-			if (arr[i]->type == targeted_token_type && depth == 0)
+			if (arr[i]->type == targeted_token_type && depth == 0 \
+			    && i > 0 && i < toklen(arr) - 1)
 				return (i);
 			i++;
 		}

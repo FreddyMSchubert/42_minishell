@@ -6,13 +6,15 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/14 13:25:36 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/19 13:40:32 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // ------ INCLUDES
 
 #include <stdbool.h>
+#include <fcntl.h>
+#include <errno.h>
 
 // ----- SUBMODULES
 
@@ -70,10 +72,13 @@ void                print_token(t_token *token);
 void                print_binary_tree(t_bin_tree_node *tree, int tabs);
 // testing
 void				test_lexer();
+void				test_validator(void);
 
 // --- 0-lexing
 t_token				**lexer(char *input);
 char				**ms_split(char *input);
+int					count_tokens(const char *s);
+int					is_operator_symbol(char c, char d);
 
 // --- 3-parsing
 // util
@@ -81,3 +86,6 @@ t_token				**sub_tok_arr(t_token **token_arr, int start, int end);
 int					toklen(t_token **token_arr);
 // parser
 t_bin_tree_node		*tok_to_bin_tree(t_token **token_arr);
+// validator
+int					validator(t_token **token_arr);
+int					check_files(t_list *files, int flag);

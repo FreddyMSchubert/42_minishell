@@ -1,5 +1,8 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+### v0.5.1 - 15.02.24 - Freddy
+- fixed parser segfaulting when two operators are next to each other or an operator is at start of line
+
 ## v0.5.0 - 14.02.24 - Niklas
 - Added `ms_split` function that splits input into tokens, taking care of quotes
 
