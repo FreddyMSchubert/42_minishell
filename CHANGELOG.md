@@ -1,5 +1,11 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+## v0.6.0 - 19.02.24 - Freddy
+- Added garbage collector, currently unimplemented
+- removed dysfunctional execution functions for merging with master
+- added input loop which takes input and currently just throws it into the lexer & tree building testing function
+- Added .DS_Store to gitignore
+
 ### v0.5.1 - 15.02.24 - Freddy
 - fixed parser segfaulting when two operators are next to each other or an operator is at start of line
 
