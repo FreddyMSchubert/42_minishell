@@ -80,7 +80,8 @@ void test_lexer(char *input);
 int run_crash_interface();
 
 // --- 0-lexing
-t_token **lexer(char *input);
+t_token				**lexer(char *input);
+char				**ms_split(char *input);
 
 // --- 3-parsing
 // util

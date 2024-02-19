@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 06:54:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/09 11:24:48 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/02/14 13:16:04 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ static t_token *detect_token_type(char *input)
 // ' " < << >> > | && || ;
 static int is_operator_symbol(char c)
 {
-	if (c == '\'' || c == '\"' || c == '<' || \
+	if (c == '<' || //c == '\'' || c == '\"' || 
 		c == '>' || c == '|' || c == '&' || c == '(' || c == ')')
 		return (0);
 	return (1);
@@ -173,7 +173,7 @@ t_token **lexer(char *input)
 	int		token_amount;
 	int		counter;
 
-	split_input = ft_split(put_space_between_tokens(input), ' ');
+	split_input = ms_split(put_space_between_tokens(input));
 	token_amount = 0;
 	while (split_input[token_amount])
 		token_amount++;

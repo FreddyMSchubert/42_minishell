@@ -6,6 +6,12 @@
 - added input loop which takes input and currently just throws it into the lexer & tree building testing function
 - Added .DS_Store to gitignore
 
+### v0.5.1 - 15.02.24 - Freddy
+- fixed parser segfaulting when two operators are next to each other or an operator is at start of line
+
+## v0.5.0 - 14.02.24 - Niklas
+- Added `ms_split` function that splits input into tokens, taking care of quotes
+
 ## v0.4.0 - 09.02.24 - Freddy
 - Added correct bracket binary tree creation functionality in `parser`
 - Added opening & closing brace operators for use in parser, implemented in `lexer`
