@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/19 11:49:36 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/19 13:40:32 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,8 @@ void				test_validator(void);
 // --- 0-lexing
 t_token				**lexer(char *input);
 char				**ms_split(char *input);
+int					count_tokens(const char *s);
+int					is_operator_symbol(char c, char d);
 
 // --- 3-parsing
 // util
