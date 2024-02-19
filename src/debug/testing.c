@@ -12,12 +12,10 @@
 
 #include "../../include/minishell.h"
 
-void test_lexer()
+void test_lexer(char *input)
 {
-	char *input = "( echo \"Hello $USER\" && ( export | cat < input.txt > output.txt ) ) || ( echo $? && ls * && cd /home ) && echo \"Nested start\" && ( cd /tmp && ls ) && echo \"Nested end\"";
-
 	t_token **tokens = lexer(input);
-	
+
 	if (tokens != NULL)
 	{
 		print_tokens(tokens);
