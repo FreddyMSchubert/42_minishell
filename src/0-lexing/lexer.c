@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 06:54:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/19 17:41:40 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/19 17:44:05 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,7 +184,6 @@ t_token **lexer(char *input)
 	int		token_amount;
 	int		counter;
 
-	printf("input:		%s\n", input);
 	split_input = ms_split(put_space_between_tokens(input));
 	// for (int i = 0; split_input[i]; i++)
 	// 	printf("split_input: %s\n", split_input[i]);
