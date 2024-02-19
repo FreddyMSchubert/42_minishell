@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/13 11:29:23 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/02/19 12:41:49 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,3 +98,13 @@ int execute_redir(t_bin_tree_node *tree);
 int execute_pipe(t_bin_tree_node *tree);
 // builtins
 int execute_echo(t_bin_tree_node *tree);
+// util
+void                pex_free_rec(void **blob);
+
+// --- util
+// garbage collector
+t_list* createGarbageCollector();
+int	appendElement(t_list* gc, void* content);
+void appendElementArray(t_list* gc, void* content);
+void cleanup(t_list* gc);
+void exit_error(char *message, int exit_code, t_list* gc);

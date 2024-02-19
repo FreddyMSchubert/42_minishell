@@ -1,5 +1,11 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+## v0.6.0 - 19.02.24 - Freddy
+- Added garbage collector, currently unimplemented
+- removed dysfunctional execution functions for merging with master
+- added input loop which takes input and currently just throws it into the lexer & tree building testing function
+- Added .DS_Store to gitignore
+
 ## v0.4.0 - 09.02.24 - Freddy
 - Added correct bracket binary tree creation functionality in `parser`
 - Added opening & closing brace operators for use in parser, implemented in `lexer`

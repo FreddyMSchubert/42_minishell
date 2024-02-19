@@ -1,4 +1,6 @@
 minishell.subject.pdf
 .vscode
+.idea
 minishell
 crash
+.DS_Store
