@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 11:16:19 by nburchha          #+#    #+#             */
-/*   Updated: 2024/02/18 19:45:59 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/19 12:08:13 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,45 +20,34 @@ void print_list(t_list *list)
 	tmp = list;
 	while (tmp != NULL)
 	{
-		printf("print_list: %p\n", tmp);
+		printf("print_list: %s\n", tmp->content);
 		tmp = tmp->next;
 	}
 }
 
 /// @brief checks the file linked list for errors. 0 infile, 1 outfile, 2 outfile append
-int	check_files(t_list *files, int flag)
+int check_files(t_list *files, int flag)
 {
-	print_list(files);
-	printf("flag: %d\n", flag);
-	// t_list	*tmp;
-	// int		fd;
+	t_list *tmp;
 
-	// tmp = files;
-	// while (tmp != NULL)
-	// {
-	// 	printf("check_file: %p\n", tmp);
-	// 	if (flag == 0)
-	// 	{
-	// 		fd = open(tmp->content, O_RDONLY);
-	// 		if (fd < 0)
-	// 			return (3);
-	// 		close(fd);
-	// 	}
-	// 	else if (flag == 1)
-	// 	{
-	// 		fd = open(tmp->content, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	// 		if (fd < 0)
-	// 			return (3);
-	// 		close(fd);
-	// 	}
-	// 	else if (flag == 2)
-	// 	{
-	// 		fd = open(tmp->content, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	// 		if (fd < 0)
-	// 			return (3);
-	// 		close(fd);
-	// 	}
-	// 	tmp = tmp->next;
-	// }
+	if (files == NULL)
+		return (0);
+	printf("flag: %d\n", flag);
+	print_list(files);
+	tmp = files;
+	errno = 0;
+	while (tmp != NULL)
+	{
+		if (flag == 0)
+			access(tmp->content, R_OK);
+		else if (flag == 1)
+			access(tmp->content, W_OK);
+		else if (flag == 2)
+			access(tmp->content, W_OK);
+		printf("errno: %d\n", errno);
+		if (errno == EACCES || (flag == 0 && errno == ENOENT))
+			return (3);
+		tmp = tmp->next;
+	}
 	return (0);
 }

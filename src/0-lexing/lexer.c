@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 06:54:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/14 13:16:04 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/19 13:19:22 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ static t_token *detect_token_type(char *input)
 {
 	t_token		*token;
 
+	printf("input: %s\n", input);
 	token = malloc(sizeof(t_token));
 	if (!token)
 		return (NULL);
@@ -121,7 +122,7 @@ char *put_space_between_tokens(char *input)
 	{
 		if (is_operator_symbol(input[input_counter]) == 0)
 		{
-			if (current_symbol_type == 1 && input_counter != 0)
+			if (current_symbol_type > 0 && input_counter != 0)
 				additional_spaces_needed++;
 			current_symbol_type = 2;
 		}
@@ -134,6 +135,7 @@ char *put_space_between_tokens(char *input)
 			current_symbol_type = 1;
 		}
 	}
+	printf("additional_spaces_needed: %d\n", additional_spaces_needed);
 	new_input = malloc(sizeof(char) * (ft_strlen(input) + additional_spaces_needed + 1));
 	if (!new_input)
 		return (NULL);
@@ -160,6 +162,7 @@ char *put_space_between_tokens(char *input)
 		new_input_counter++;
 		input_counter++;
 	}
+	printf("new_input: %s\n", new_input);
 	return (new_input);
 }
 
@@ -174,6 +177,8 @@ t_token **lexer(char *input)
 	int		counter;
 
 	split_input = ms_split(put_space_between_tokens(input));
+	for (int i = 0; split_input[i]; i++)
+		printf("split_input: %s\n", split_input[i]);
 	token_amount = 0;
 	while (split_input[token_amount])
 		token_amount++;
@@ -184,6 +189,7 @@ t_token **lexer(char *input)
 	while (counter < token_amount)
 	{
 		tokens[counter] = detect_token_type(split_input[counter]);
+		printf("where IS THE SEG FAULT counter: %d\n", counter);
 		if (!tokens[counter])
 		{
 			while (counter > 0)
@@ -197,6 +203,7 @@ t_token **lexer(char *input)
 		}
 		counter++;
 	}
+	printf("after while loop\n");
 	tokens[counter] = NULL;
 	counter = 0;
 	while (split_input[counter])

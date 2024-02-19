@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 15:40:24 by nburchha          #+#    #+#             */
-/*   Updated: 2024/02/14 11:40:06 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/19 13:20:46 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,7 @@ char	**ms_split(char *input)
 	j = 0;
 	flag = 0;
 	word_count = count_tokens(input);
-	printf("input: %s\n", input);
+	// printf("input: %s\n", input);
 	printf("word_count: %d\n", word_count);
 	if (word_count == -1)
 		return (NULL);

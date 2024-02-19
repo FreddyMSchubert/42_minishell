@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 15:25:11 by nburchha          #+#    #+#             */
-/*   Updated: 2024/02/18 19:42:49 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/19 13:08:01 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	add_file_to_list(t_list **files, char *value, int *error_code)
 {
 	t_list	*tmp;
 
-	printf("error_code: %s\n", value);
+	// printf("error_code: %s\n", value);
 	tmp = ft_lstnew(value);
 	if (!tmp)
 		*error_code = 5;
@@ -47,14 +47,17 @@ int	validator(t_token **token_arr)
 	t_list	*files[3]; // 0 for input, 1 for output, 2 for append_out
 
 	i = -1;
+	files[0] = NULL;
+	files[1] = NULL;
+	files[2] = NULL;
 	brace_opened = 0;
 	error_code = 0;
 	while (token_arr[++i] != NULL)
 	{
-		printf("token_arr: %s\n", token_arr[i]->value);
-		// check for consecutive operators - i dont know if necessary
-		if (token_arr[i]->type >= 5 && token_arr[i]->type <= 7)
-			if (token_arr[i + 1] && token_arr[i + 1]->type >= 5 && token_arr[i + 1]->type <= 7)
+		// printf("token_arr: %s\n", token_arr[i]->value);
+		// check for consecutive pipes and or logical operators
+		if (token_arr[i]->type >= 6 && token_arr[i]->type <= 7)
+			if (token_arr[i + 1] && token_arr[i + 1]->type >= 6 && token_arr[i + 1]->type <= 7)
 				return (1);
 		
 
@@ -88,6 +91,6 @@ int	validator(t_token **token_arr)
 		return (2);
 	// check for file errors
 	if (check_files(files[0], 0) != 0 || check_files(files[1], 1) != 0 || check_files(files[2], 2) != 0)
-		return (3);
-	return (0);
+		return (ft_lstclear(&files[0], free), ft_lstclear(&files[1], free), ft_lstclear(&files[2], free), 3);
+	return (ft_lstclear(&files[0], free), ft_lstclear(&files[1], free), ft_lstclear(&files[2], free), 0);
 }

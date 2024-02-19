@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/18 19:39:14 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/19 11:49:36 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 #include <stdbool.h>
 #include <fcntl.h>
+#include <errno.h>
 
 // ----- SUBMODULES
 
@@ -56,14 +57,6 @@ typedef struct s_bin_tree_node
 	t_bin_tree_node *r;
 }				t_bin_tree_node;
 // maybe make val an array e.g. for flags
-
-// linked list with all files and their opened file descriptors
-typedef struct s_files
-{
-	void *content;
-	int fd;
-	struct s_files *next;
-}				t_files;
 
 // ----- SETTINGS
 
