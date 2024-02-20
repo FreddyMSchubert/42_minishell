@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 06:54:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/19 18:44:29 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/20 13:18:31 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,9 @@ static t_token *detect_token_type(char *input)
 	if (!token)
 		return (NULL);
 	token->value = ft_strdup(input);
-	if (check_same_string(input, "'") == 0)
+	if (ft_strncmp(input, "'", 1) == 0)
 		token->type = TOK_S_QUOTE;
-	else if (check_same_string(input, "\"") == 0)
+	else if (ft_strncmp(input, "\"", 1) == 0)
 		token->type = TOK_D_QUOTE;
 	else if (input[0] == '$' && input[1] && input[1] != '?')
 		token->type = TOK_VAR_EXP;
