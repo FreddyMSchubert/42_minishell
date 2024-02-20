@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/20 09:55:46 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/02/20 12:57:17 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void				test_validator(void);
 void test_lexer(char *input);
 
 // --- input loop
-int run_crash_interface();
+int run_crash_interface(t_program_data *program_data);
 
 // --- 0-lexing
 t_token				**lexer(char *input);
@@ -103,15 +103,11 @@ t_bin_tree_node *tok_to_bin_tree(t_token **token_arr);
 
 // --- 4-executing
 // general
-int executer(t_bin_tree_node *tree);
-// commands
-int execute_log_op(t_bin_tree_node *tree);
-int execute_redir(t_bin_tree_node *tree);
-int execute_pipe(t_bin_tree_node *tree);
+void execute(t_bin_tree_node *tree, t_program_data *program_data);
+void *execute_node(t_bin_tree_node *node, t_program_data *program_data);
 // builtins
-int execute_echo(t_bin_tree_node *tree);
-// util
-void                pex_free_rec(void **blob);
+int execute_builtin(t_bin_tree_node *node, t_program_data *program_data);
+int execute_echo(t_token **inputs);
 
 // --- util
 // garbage collector
@@ -120,3 +116,5 @@ int	appendElement(t_list* gc, void* content);
 void appendElementArray(t_list* gc, void* content);
 void cleanup(t_list* gc);
 void exit_error(char *message, int exit_code, t_list* gc);
+// errors
+void broadcast_validator_error(int errortype);

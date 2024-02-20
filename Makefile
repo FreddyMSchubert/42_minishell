@@ -7,8 +7,7 @@ FTGNL_DIR   := ./submodules/42_get_next_line
 SRC = $(shell find ./src -name "*.c")
 OBJ = $(SRC:.c=.o)
 
-CFLAGS		:=	-Wall -Werror -Wextra \
-				-Wunreachable-code -Ofast -g -fsanitize=address
+CFLAGS		:=	-Wall -Werror -Wextra -g -fsanitize=address
 HEADER		:=	-I./include/
 LIBS		:=	-L$(LIBFT_DIR) -lft \
 				-L$(FTPRINTF_DIR) -lftprintf \
