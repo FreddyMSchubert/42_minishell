@@ -1,6 +1,4 @@
 #include "../include/minishell.h"
-#include <stdlib.h>
-#include <unistd.h>
 
 int run_crash_interface()
 {

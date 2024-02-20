@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 12:13:26 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/09 11:46:38 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/02/20 08:39:24 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ t_token	**sub_tok_arr(t_token **token_arr, int start, int end)
 	t_token			**sub_token_arr;
 	int				counter;
 
+	if (start > end)
+		return (NULL);
 	sub_token_arr = malloc(sizeof(t_token *) * (end - start + 1 + 1));
 	if (!sub_token_arr)
 		return (NULL);
