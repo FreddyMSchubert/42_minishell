@@ -10,11 +10,10 @@ int run_crash_interface()
 	while (42 == 42)
 	{
 		char	*input;
-		ft_printf("%scrash%s 💥 %s", ANSI_COLOR_RED, ANSI_COLOR_RESET, ANSI_COLOR_YELLOW);
+		ft_printf("%scrash%s 💥 ", ANSI_COLOR_RED, ANSI_COLOR_RESET);
 		input = get_next_line(STDIN_FILENO);
 		// remove trailing newline
 		input[ft_strlen(input) - 1] = '\0';
-		ft_printf("%s", ANSI_COLOR_RESET);
 		test_lexer(input);
 		free(input);
 	}
