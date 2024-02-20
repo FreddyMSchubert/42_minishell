@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 12:13:31 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/09 11:48:43 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/02/20 08:39:13 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ static int	get_dominant_operator(t_token **arr)
 			else if (arr[i]->type == TOK_CLOSE_BRACE && arr[i]->ignored == 0)
 				depth--;
 			if (arr[i]->type == targeted_token_type && depth == 0 \
-			    && i > 0 && i < toklen(arr) - 1)
+			    && i >= 0 && i < toklen(arr))
 				return (i);
 			i++;
 		}
