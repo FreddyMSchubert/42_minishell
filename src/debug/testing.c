@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 07:59:29 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/19 17:49:17 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/19 17:55:11 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void test_lexer(char *input)
 {
-	char *input = "( echo \"Hello $USER\" && ( export | cat < input.txt > output.txt ) ) || ( echo $? && ls * && cd /home ) && echo \"Nested start\" && ( cd /tmp && ls ) && echo \"Nested end\"";
+	// char *input1 = "( echo \"Hello $USER\" && ( export | cat < input.txt > output.txt ) ) || ( echo $? && ls * && cd /home ) && echo \"Nested start\" && ( cd /tmp && ls ) && echo \"Nested end\"";
 	// char *input = "( echo \"Hello $USER\"";
 
 	t_token **tokens = lexer(input);

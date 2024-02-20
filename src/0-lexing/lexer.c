@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 06:54:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/19 17:44:05 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/19 18:44:29 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,73 +103,78 @@ static t_token *detect_token_type(char *input)
 // 	return (1);
 // }
 
+int	calc_str_len(char *input)
+{
+	int		i;
+	int		cur_symbol;
+	int		spaces;
+
+	i = -1;
+	spaces = 0;
+	cur_symbol = 0;
+	while (input[++i])
+	{
+		if ((input[i] == '\'' || input[i] == '\"') \
+			&& cur_symbol != input[i])
+			cur_symbol = input[i];
+		else if (cur_symbol == input[i])
+			cur_symbol = 0;
+		if (cur_symbol >= 1 && cur_symbol <= 2 && \
+			input[i] == ' ')
+		{
+			spaces++;
+			cur_symbol = 0;
+		}
+		else if (cur_symbol < 3)
+			cur_symbol = 1;
+	}
+	return (spaces = count_tokens(input) - spaces - 1);
+}
+
 /*
 	@brief	Receives full input command, returns new string with spaces
 			between tokens that are next to each other
 */
 char *put_space_between_tokens(char *input)
 {
-	int		input_counter;
-	int		new_input_counter;
-	int		additional_spaces_needed;
+	int		i;
+	int		j;
 	char	*new_input;
 	int		in_quote;
-	int		current_symbol_type; // 0 for space, 1 for word, 2 operator, 3 for quotes
+	int		cur_symbol; // 0 for space, 1 for word, 2 operator, 3 for quotes
 
-	input_counter = -1;
-	additional_spaces_needed = 0;
-	current_symbol_type = 0;
-	in_quote = 0;
-	// check how many spaces are there
-	while (input[++input_counter])
-	{
-		if ((input[input_counter] == '\'' || input[input_counter] == '\"') && current_symbol_type != input[input_counter])
-			current_symbol_type = input[input_counter];
-		else if (current_symbol_type == input[input_counter])
-			current_symbol_type = 0;
-		if (current_symbol_type >= 1 && current_symbol_type <= 2 && input[input_counter] == ' ')
-		{
-			additional_spaces_needed++;
-			current_symbol_type = 0;
-			// printf("input: %c\n", input[input_counter]);
-		}
-		else if (current_symbol_type < 3)
-			current_symbol_type = 1;
-	}
-	additional_spaces_needed = count_tokens(input) - additional_spaces_needed - 1;
-	new_input = malloc(sizeof(char) * (ft_strlen(input) + additional_spaces_needed + 1));
+	new_input = ft_calloc((ft_strlen(input) + calc_str_len(input) + 1), 1);
 	if (!new_input)
 		return (NULL);
-	new_input[ft_strlen(input) + additional_spaces_needed] = '\0';
-	input_counter = 0;
-	new_input_counter = 0;
-	current_symbol_type = 0;
+	i = 0;
+	j = 0;
+	cur_symbol = 0;
 	in_quote = 0;
-	while (input[input_counter])
+	while (input[i])
 	{
-		if ((input[input_counter] == '\'' || input[input_counter] == '\"'))
+		if ((input[i] == '\'' || input[i] == '\"'))
 		{
-			if (!in_quote && current_symbol_type != 0 && current_symbol_type != 3) // Before entering a quote
-				new_input[new_input_counter++] = ' ';
+			if (!in_quote && cur_symbol != 0 && cur_symbol != 3) // Before entering a quote
+				new_input[j++] = ' ';
 			in_quote = !in_quote;
 		}
-		else if (!in_quote && is_operator_symbol(input[input_counter], input[input_counter + 1]) > 0)
+		else if (!in_quote && is_operator_symbol(input[i], input[i + 1]) > 0)
 		{
-			if (current_symbol_type != 0)
-				new_input[new_input_counter++] = ' ';
-			current_symbol_type = 2;
+			if (cur_symbol != 0)
+				new_input[j++] = ' ';
+			cur_symbol = 2;
 		}
-		else if (input[input_counter] == ' ')
-			current_symbol_type = 0;
-		else if (input[input_counter] != ' ' && !in_quote)
+		else if (input[i] == ' ')
+			cur_symbol = 0;
+		else if (input[i] != ' ' && !in_quote)
 		{
-			if (current_symbol_type == 2 || (current_symbol_type == 1 && is_operator_symbol(input[input_counter], input[input_counter + 1]) > 0))
-				new_input[new_input_counter++] = ' ';
-			current_symbol_type = 1;
+			if (cur_symbol == 2 || (cur_symbol == 1 && is_operator_symbol(input[i], input[i + 1]) > 0))
+				new_input[j++] = ' ';
+			cur_symbol = 1;
 		}
-		if (input[input_counter] && is_operator_symbol(input[input_counter], input[input_counter + 1]) == 2)
-			new_input[new_input_counter++] = input[input_counter++];
-		new_input[new_input_counter++] = input[input_counter++];
+		if (input[i] && is_operator_symbol(input[i], input[i + 1]) == 2)
+			new_input[j++] = input[i++];
+		new_input[j++] = input[i++];
 	}
 	return (new_input);
 }
