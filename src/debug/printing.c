@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   printing.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 07:42:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/14 13:35:44 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/20 11:19:29 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void print_binary_tree(t_bin_tree_node *tree, int tabs)
     if (tabs == 0)
         printf("BINARY TREE VISUALIZATION\nleft childs are red, right childs are blue.\n");
     counter = 0;
-    while (tree->val[counter] != NULL)
+    while (tree && tree->val && tree->val[counter] && tree->val[counter] != NULL)
     {
         tabs_counter = 0;
         while (tabs_counter < tabs)
@@ -38,12 +38,16 @@ void print_binary_tree(t_bin_tree_node *tree, int tabs)
         print_binary_tree(tree->l, tabs + 1);
         printf("\x1b[0m");
     }
+	else if (tree->r != NULL)
+		printf("no left child\n");
     if (tree->r != NULL)
     {
         printf("\x1b[34m");
         print_binary_tree(tree->r, tabs + 1);
         printf("\x1b[0m");
     }
+	else if (tree->l != NULL)
+		printf("no right child\n");
 }
 
 void print_token(t_token *token)

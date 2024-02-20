@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/19 17:56:09 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/20 09:55:46 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ typedef struct s_bin_tree_node {
 typedef struct s_program_data {
 	char exit_flag;	// 0 by default, 1 to start exit & cleanup sequence
 	char **envcp;	// internal copy of envp
+	t_list *gc;		// garbage collector
 } t_program_data;
 
 // ----- SETTINGS
