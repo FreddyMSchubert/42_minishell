@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:29:36 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/19 18:01:35 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/20 16:36:21 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,9 @@ int main(int argc, char **argv, char **envp)
 	program_data.exit_flag = 0;
 	// create exact copy of envp
 	program_data.envcp = ft_strarrdup(envp);
-
-	run_crash_interface();
+	
+	// test_lexer("echo'$HOME\"hello'\"asdasd\"", &program_data);
+	test_expander(&program_data, lexer("\"echo $HOME\" \'echo $HOME\'", &program_data));
 
 	(void)argc;
 	(void)argv;

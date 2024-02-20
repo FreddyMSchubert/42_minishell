@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/19 17:56:09 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/20 15:07:20 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ typedef struct s_bin_tree_node {
 typedef struct s_program_data {
 	char exit_flag;	// 0 by default, 1 to start exit & cleanup sequence
 	char **envcp;	// internal copy of envp
+	t_list *gc;		// garbage collector
 } t_program_data;
 
 // ----- SETTINGS
@@ -72,50 +73,56 @@ typedef struct s_program_data {
 
 // --- utils / debug
 // printing
-void print_tokens(t_token **tokens);
-void print_token(t_token *token);
-void print_binary_tree(t_bin_tree_node *tree, int tabs);
+void				print_tokens(t_token **tokens);
+void				print_token(t_token *token);
+void				print_binary_tree(t_bin_tree_node *tree, int tabs);
 // testing
-void				test_lexer();
 void				test_validator(void);
-void test_lexer(char *input);
+void				test_lexer(char *input, t_program_data *data);
+void				test_expander(t_program_data *program_data, t_token **tokens);
 
 // --- input loop
 int run_crash_interface();
 
 // --- 0-lexing
-t_token				**lexer(char *input);
+t_token				**lexer(char *input, t_program_data *data);
 char				**ms_split(char *input);
 int					count_tokens(const char *s);
 int					is_operator_symbol(char c, char d);
 
+// --- 1-validation
+int					validator(t_token **token_arr);
+int					check_files(t_list *files, int flag);
+
+// --- 2-expanding
+char				*get_envcp(char *var_name, t_program_data *program_data);
+t_token				**expander(t_token **tokens, t_program_data *program_data);
 // --- 3-parsing
 // util
 t_token **sub_tok_arr(t_token **token_arr, int start, int end);
 int toklen(t_token **token_arr);
 // parser
 t_bin_tree_node		*tok_to_bin_tree(t_token **token_arr);
-// validator
-int					validator(t_token **token_arr);
-int					check_files(t_list *files, int flag);
-t_bin_tree_node *tok_to_bin_tree(t_token **token_arr);
+t_bin_tree_node		*tok_to_bin_tree(t_token **token_arr);
 
 // --- 4-executing
 // general
-int executer(t_bin_tree_node *tree);
+int					executer(t_bin_tree_node *tree);
 // commands
-int execute_log_op(t_bin_tree_node *tree);
-int execute_redir(t_bin_tree_node *tree);
-int execute_pipe(t_bin_tree_node *tree);
+int					execute_log_op(t_bin_tree_node *tree);
+int					execute_redir(t_bin_tree_node *tree);
+int					execute_pipe(t_bin_tree_node *tree);
 // builtins
 int execute_echo(t_bin_tree_node *tree);
 // util
-void                pex_free_rec(void **blob);
+void				pex_free_rec(void **blob);
 
 // --- util
+
+char	*strjoin_null_compatible(char const *s1, char const *s2);
 // garbage collector
-t_list* createGarbageCollector();
-int	appendElement(t_list* gc, void* content);
-void appendElementArray(t_list* gc, void* content);
-void cleanup(t_list* gc);
-void exit_error(char *message, int exit_code, t_list* gc);
+t_list*				create_garbage_collector();
+int					append_element(t_list* gc, void* content);
+void				append_element_array(t_list* gc, void* content);
+void				cleanup(t_list* gc);
+void				exit_error(char *message, int exit_code, t_list* gc);

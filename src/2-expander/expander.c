@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 09:20:32 by nburchha          #+#    #+#             */
-/*   Updated: 2024/02/20 13:20:52 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/20 16:40:26 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,18 @@ return envcp value
 
 char	*get_envcp(char *env_var, t_program_data *program_data)
 {
-	int	i;
+	int		i;
+	char	*tmp;
 
 	i = -1;
+	tmp = ft_strjoin(env_var, "=");
+	if (!tmp)
+		exit_error("malloc failed", 1, program_data->gc);
+	// append_element(program_data->gc, tmp);
+	
 	while (program_data->envcp[++i])
 	{
-		if (ft_strncmp(program_data->envcp[i], env_var, ft_strlen(env_var)) == 0)
+		if (ft_strncmp(program_data->envcp[i], tmp, ft_strlen(tmp)) == 0)
 			return (ft_strdup(program_data->envcp[i] + ft_strlen(env_var) + 1));
 	}
 	return (ft_strdup(""));

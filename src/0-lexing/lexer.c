@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 06:54:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/20 13:18:31 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/20 16:33:32 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ static t_token *detect_token_type(char *input)
 	token = malloc(sizeof(t_token));
 	if (!token)
 		return (NULL);
-	token->value = ft_strdup(input);
 	if (ft_strncmp(input, "'", 1) == 0)
 		token->type = TOK_S_QUOTE;
 	else if (ft_strncmp(input, "\"", 1) == 0)
@@ -89,6 +88,11 @@ static t_token *detect_token_type(char *input)
 		token->type = TOK_CLOSE_BRACE;
 	else
 		token->type = TOK_CMD_ARG;
+	
+	if (token->type == TOK_S_QUOTE || token->type == TOK_D_QUOTE)
+		token->value = ft_substr(input, 1, ft_strlen(input) - 2);
+	else
+		token->value = ft_strdup(input);
 	token->ignored = 0;
 	return (token);
 }
@@ -103,7 +107,7 @@ static t_token *detect_token_type(char *input)
 // 	return (1);
 // }
 
-int	calc_str_len(char *input)
+int	calc_additional_spaces(char *input)
 {
 	int		i;
 	int		cur_symbol;
@@ -114,13 +118,11 @@ int	calc_str_len(char *input)
 	cur_symbol = 0;
 	while (input[++i])
 	{
-		if ((input[i] == '\'' || input[i] == '\"') \
-			&& cur_symbol != input[i])
+		if ((input[i] == '\'' || input[i] == '\"') && cur_symbol != input[i])
 			cur_symbol = input[i];
 		else if (cur_symbol == input[i])
 			cur_symbol = 0;
-		if (cur_symbol >= 1 && cur_symbol <= 2 && \
-			input[i] == ' ')
+		if (cur_symbol >= 1 && cur_symbol <= 2 && input[i] == ' ')
 		{
 			spaces++;
 			cur_symbol = 0;
@@ -128,35 +130,42 @@ int	calc_str_len(char *input)
 		else if (cur_symbol < 3)
 			cur_symbol = 1;
 	}
-	return (spaces = count_tokens(input) - spaces - 1);
+	if (count_tokens(input) == -1)
+		return (-1);
+	return (count_tokens(input) - spaces - 1);
 }
 
 /*
 	@brief	Receives full input command, returns new string with spaces
 			between tokens that are next to each other
 */
-char *put_space_between_tokens(char *input)
+char *put_space_between_tokens(char *input, t_program_data *data)
 {
 	int		i;
 	int		j;
 	char	*new_input;
 	int		in_quote;
+	int		new_input_len;
 	int		cur_symbol; // 0 for space, 1 for word, 2 operator, 3 for quotes
 
-	new_input = ft_calloc((ft_strlen(input) + calc_str_len(input) + 1), 1);
+	if (count_tokens(input) == -1)
+		exit_error("Syntax error", 258, data->gc);
+	new_input_len = ft_strlen(input) + calc_additional_spaces(input);
+	new_input = ft_calloc((ft_strlen(input) + calc_additional_spaces(input) + 1), 1);
 	if (!new_input)
 		return (NULL);
 	i = 0;
 	j = 0;
 	cur_symbol = 0;
 	in_quote = 0;
-	while (input[i])
+	while (j < new_input_len && input[i])
 	{
 		if ((input[i] == '\'' || input[i] == '\"'))
 		{
-			if (!in_quote && cur_symbol != 0 && cur_symbol != 3) // Before entering a quote
+			if (!in_quote && cur_symbol != 0) // Before entering a quote
 				new_input[j++] = ' ';
-			in_quote = !in_quote;
+			if (!in_quote)
+				in_quote = input[i] % 4 - 1; // "=1 '=2
 		}
 		else if (!in_quote && is_operator_symbol(input[i], input[i + 1]) > 0)
 		{
@@ -176,22 +185,23 @@ char *put_space_between_tokens(char *input)
 			new_input[j++] = input[i++];
 		new_input[j++] = input[i++];
 	}
+	printf("new_input: %s\n", new_input);
 	return (new_input);
 }
 
 /*
 	@brief	Receives full input command, returns array of categorized tokens
 */
-t_token **lexer(char *input)
+t_token **lexer(char *input, t_program_data *data)
 {
 	char	**split_input;
 	t_token	**tokens;
 	int		token_amount;
 	int		counter;
 
-	split_input = ms_split(put_space_between_tokens(input));
-	// for (int i = 0; split_input[i]; i++)
-	// 	printf("split_input: %s\n", split_input[i]);
+	split_input = ms_split(put_space_between_tokens(input, data));
+	if (!split_input)
+		return (NULL);
 	token_amount = 0;
 	while (split_input[token_amount])
 		token_amount++;
