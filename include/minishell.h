@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/20 12:57:17 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/02/20 14:22:37 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ typedef struct s_bin_tree_node {
 
 typedef struct s_program_data {
 	char exit_flag;	// 0 by default, 1 to start exit & cleanup sequence
+	int exit_status;	// exit status to be returned
 	char **envcp;	// internal copy of envp
 	t_list *gc;		// garbage collector
 } t_program_data;
@@ -108,6 +109,8 @@ void *execute_node(t_bin_tree_node *node, t_program_data *program_data);
 // builtins
 int execute_builtin(t_bin_tree_node *node, t_program_data *program_data);
 int execute_echo(t_token **inputs);
+int execute_env(t_token **node, t_program_data *program_data);
+int execute_exit(t_token **tokens, t_program_data *program_data);
 
 // --- util
 // garbage collector

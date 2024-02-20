@@ -46,6 +46,10 @@ int run_crash_interface(t_program_data *program_data)
 		cleanup(program_data->gc);
 		program_data->gc = createGarbageCollector();
 	}
+	cleanup(program_data->gc);
+	for (int i = 0; program_data->envcp[i]; i++)
+		free(program_data->envcp[i]);
+	free(program_data->envcp);
 
 	return (0);
 }

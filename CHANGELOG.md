@@ -1,5 +1,11 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+## v0.8.0 - 20.02.24 - Freddy
+- Added builtins
+	- env
+	- exit
+- added exit status to program data
+
 ## v0.7.0 - 20.02.24 - Freddy
 - created a basic program execution loop with lexer, validator, parser, and executer, currently missing expander & executer is very basic
 - created basic executer, does not consider operators and can only execute one builtin, echo.
