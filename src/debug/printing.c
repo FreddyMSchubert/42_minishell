@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 07:42:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/14 13:35:44 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/21 16:36:56 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,8 @@ void print_token(t_token *token)
 		printf("Single Quote");
 	else if (token->type == TOK_D_QUOTE)
 		printf("Double Quote");
-	else if (token->type == TOK_VAR_EXP)
-		printf("Variable Expansion");
+	// else if (token->type == TOK_VAR_EXP)
+	// 	printf("Variable Expansion");
 	else if (token->type == TOK_EXIT_STAT)
 		printf("Exit Status");
 	else if (token->type == TOK_REDIR)
@@ -65,8 +65,8 @@ void print_token(t_token *token)
 		printf("Pipe");
 	else if (token->type == TOK_LOG_OP)
 		printf("Logical Operator");
-	else if (token->type == TOK_WILDCARD)
-		printf("Wildcard");
+	// else if (token->type == TOK_WILDCARD)
+	// 	printf("Wildcard");
 	else if (token->type == TOK_BUILTIN)
 		printf("Builtin");
 	else if (token->type == TOK_CTRL_SEQ)

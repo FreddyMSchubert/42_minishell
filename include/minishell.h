@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/21 12:48:37 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/21 16:31:59 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <stdbool.h>
 #include <fcntl.h>
 #include <errno.h>
+#include <dirent.h>
 
 #include "./colors.h"
 
@@ -97,6 +98,7 @@ int					check_files(t_list *files, int flag);
 // --- 2-expanding
 char				*get_envcp(char *var_name, t_program_data *program_data);
 t_token				**expander(t_token **tokens, t_program_data *program_data);
+char				*list_matching_files(const char *pattern);
 // --- 3-parsing
 // util
 t_token **sub_tok_arr(t_token **token_arr, int start, int end);
