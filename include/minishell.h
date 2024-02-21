@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/20 14:22:37 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/02/21 10:38:37 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 #include <stdbool.h>
 #include <fcntl.h>
 #include <errno.h>
+#include <unistd.h>
+#include <limits.h>
 
 #include "./colors.h"
 
@@ -111,6 +113,15 @@ int execute_builtin(t_bin_tree_node *node, t_program_data *program_data);
 int execute_echo(t_token **inputs);
 int execute_env(t_token **node, t_program_data *program_data);
 int execute_exit(t_token **tokens, t_program_data *program_data);
+int execute_cd(t_token **tokens, t_program_data *program_data);
+int execute_pwd();
+int execute_export(t_token **node, t_program_data *program_data);
+int execute_unset(t_token **node, t_program_data *program_data);
+// env utils
+char *get_envcp_var(char *var, char **envcp);
+int set_envcp_var(char *var, char *value, char createnew, t_program_data *program_data);
+int create_envcp_var(char *var, char *value, char **envcp, t_program_data *program_data);
+int delete_envcp_var(char *var, char **envcp);
 
 // --- util
 // garbage collector
@@ -121,3 +132,6 @@ void cleanup(t_list* gc);
 void exit_error(char *message, int exit_code, t_list* gc);
 // errors
 void broadcast_validator_error(int errortype);
+void broadcast_builtin_error(char *builtin, int error, char *arg);
+// general
+char *ft_strjoinfree(char *s1, char *s2);

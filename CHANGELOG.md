@@ -1,5 +1,16 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+## v0.9.0 - 21.02.24 - Freddy
+- Added more builtins (all currently with only flimsy error handling)
+	- pwd
+	- cd
+	- export
+	- unset
+- created envcp_utils for use in cd, export, & unset (get, create, set, delete an env parameter)
+- added new builtin_errors.c file for builtin error handling
+- added ft_strjoinfree which not only joins strings but frees originals
+- heap use after free error in input_loop fixed, missed one creategarbagecollector call in l23.
+
 ## v0.8.0 - 20.02.24 - Freddy
 - Added builtins
 	- env
