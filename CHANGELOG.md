@@ -1,5 +1,10 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+## v1.0.0 - 21.02.24 - Niklas
+- Added expansion of * in the cwd and $ after the lexer
+- Deleted expansion and wildcard token types
+- Minor bug fixes
+
 ## v0.9.0 - 21.02.24 - Freddy
 - Added more builtins (all currently with only flimsy error handling)
 	- pwd

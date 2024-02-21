@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 11:16:19 by nburchha          #+#    #+#             */
-/*   Updated: 2024/02/19 17:44:36 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/21 17:40:49 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int check_files(t_list *files, int flag)
 	if (files == NULL)
 		return (0);
 	// printf("flag: %d\n", flag);
-	print_list(files);
+	// print_list(files);
 	tmp = files;
 	errno = 0;
 	while (tmp != NULL)

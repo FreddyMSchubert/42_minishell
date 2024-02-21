@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:29:36 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/21 17:22:32 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/21 17:28:25 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int main(int argc, char **argv, char **envp)
 	program_data.exit_flag = 0;
 	program_data.exit_status = 0;
 	program_data.envcp = ft_strarrdup(envp);
-	program_data.gc = createGarbageCollector();
+	program_data.gc = create_garbage_collector();
 
 	run_crash_interface(&program_data);
 

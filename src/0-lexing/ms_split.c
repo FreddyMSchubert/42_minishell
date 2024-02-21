@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 15:40:24 by nburchha          #+#    #+#             */
-/*   Updated: 2024/02/21 12:49:57 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/21 17:34:04 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,8 +131,8 @@ char	**ms_split(char *input)
 	j = 0;
 	flag = 0;
 	word_count = count_tokens(input);
-	printf("input: %s\n", input);
-	printf("word_count: %d\n", word_count);
+	// printf("input: %s\n", input);
+	// printf("word_count: %d\n", word_count);
 	if (word_count == -1)
 		return (NULL);
 	result = malloc((word_count + 1) * sizeof(char *));

@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 06:54:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/21 12:49:23 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/21 17:33:40 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,7 +185,7 @@ char *put_space_between_tokens(char *input, t_program_data *data)
 			new_input[j++] = input[i++];
 		new_input[j++] = input[i++];
 	}
-	printf("new_input: %s\n", new_input);
+	// printf("new_input: %s\n", new_input);
 	return (new_input);
 }
 

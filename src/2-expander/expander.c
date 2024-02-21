@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 09:20:32 by nburchha          #+#    #+#             */
-/*   Updated: 2024/02/21 17:22:55 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/21 17:32:46 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,10 +111,10 @@ t_token	**expander(t_token **tokens, t_program_data *program_data)
 						+ 1));
 			if (!env_var)
 				exit_error("malloc failed", 1, program_data->gc);
-			printf("env_var: %s\n", env_var);
+			// printf("env_var: %s\n", env_var);
 			// append_element(program_data->gc, env_var);
 			envcp_value = get_envcp(env_var, program_data);
-			printf("envcp_value: %s\n", envcp_value);
+			// printf("envcp_value: %s\n", envcp_value);
 			if (!envcp_value)
 				exit_error("malloc failed", 1, program_data->gc);
 			// append_element(program_data->gc, envcp_value);
