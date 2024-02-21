@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 06:54:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/20 16:33:32 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/21 12:49:23 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,10 @@ static t_token *detect_token_type(char *input)
 		token->type = TOK_S_QUOTE;
 	else if (ft_strncmp(input, "\"", 1) == 0)
 		token->type = TOK_D_QUOTE;
-	else if (input[0] == '$' && input[1] && input[1] != '?')
-		token->type = TOK_VAR_EXP;
-	else if (input[0] == '$' && input[1] && input[1] == '?')
-		token->type = TOK_EXIT_STAT;
+	// else if (input[0] == '$' && input[1] && input[1] != '?')
+	// 	token->type = TOK_VAR_EXP;
+	// else if (input[0] == '$' && input[1] && input[1] == '?')
+		// token->type = TOK_EXIT_STAT;
 	else if (check_same_string(input, "<") == 0 ||
 			check_same_string(input, "<<") == 0 ||
 			check_same_string(input, ">") == 0 ||
@@ -68,8 +68,8 @@ static t_token *detect_token_type(char *input)
 	else if (check_same_string(input, "&&") == 0 ||
 			check_same_string(input, "||") == 0)
 		token->type = TOK_LOG_OP;
-	else if (ft_strchr(input, '*') != NULL)
-		token->type = TOK_WILDCARD;
+	// else if (ft_strchr(input, '*') != NULL)
+	// 	token->type = TOK_WILDCARD;
 	else if (check_same_string(input, "echo") == 0 ||
 			check_same_string(input, "cd") == 0 ||
 			check_same_string(input, "pwd") == 0 ||

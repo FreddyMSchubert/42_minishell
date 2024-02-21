@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/20 15:07:20 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/21 12:48:37 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,12 @@
 #define TOK_CMD_ARG 0      // Commands or Arguments
 #define TOK_S_QUOTE 1      // Single Quotes (')
 #define TOK_D_QUOTE 2      // Double Quotes (")
-#define TOK_VAR_EXP 3      // Dollar Sign ($) for variable expansion
+// #define TOK_VAR_EXP 3      // Dollar Sign ($) for variable expansion
 #define TOK_EXIT_STAT 4    // Exit Status ($?)
 #define TOK_REDIR 5        // Redirections (<, >, >>, <<)
 #define TOK_PIPE 6         // Pipe (|)
 #define TOK_LOG_OP 7       // Logical Operators (&&, ||)
-#define TOK_WILDCARD 8     // Wildcard (*)
+// #define TOK_WILDCARD 8     // Wildcard (*)
 #define TOK_BUILTIN 9      // Builtins (echo, cd, pwd, export, unset, env, exit)
 #define TOK_CTRL_SEQ 10    // Control Sequences (Ctrl-C, Ctrl-D, Ctrl-Z)
 #define TOK_OPEN_BRACE 11  // Open Brace -> (
