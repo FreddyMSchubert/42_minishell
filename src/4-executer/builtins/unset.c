@@ -1,31 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/30 11:29:36 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/20 13:58:20 by fschuber         ###   ########.fr       */
+/*   Created: 2024/02/21 09:48:54 by fschuber          #+#    #+#             */
+/*   Updated: 2024/02/21 11:48:05 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../../include/minishell.h"
 
-int main(int argc, char **argv, char **envp)
+int execute_unset(t_token **node, t_program_data *program_data)
 {
-	t_program_data program_data;
+	int i;
 
-	program_data.exit_flag = 0;
-	program_data.exit_status = 0;
-	program_data.envcp = ft_strarrdup(envp);
-	program_data.gc = createGarbageCollector();
-
-	run_crash_interface(&program_data);
-
-	// silence unused variable warnings
-	(void)argc;
-	(void)argv;
-
-	return (0);
+	i = 1;
+	while (node[i] != NULL)
+	{
+		if (delete_envcp_var(node[i]->value, program_data->envcp) != 0)
+			return (-1); // handle error
+		i++;
+	}
+	return 0;
 }

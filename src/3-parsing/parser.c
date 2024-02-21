@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 12:13:31 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/20 08:39:13 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/02/20 11:13:23 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,12 +115,5 @@ t_bin_tree_node	*tok_to_bin_tree(t_token **arr)
 	node->val[0] = arr[dom_op_i];
 	node->l = tok_to_bin_tree(sub_tok_arr(arr, 0, dom_op_i - 1));
 	node->r = tok_to_bin_tree(sub_tok_arr(arr, dom_op_i + 1, toklen(arr) - 1));
-	if (!node->l || !node->r)
-	{
-		free(node->l);
-		free(node->r);
-		free(node);
-		return (NULL);
-	}
 	return (node);
 }
