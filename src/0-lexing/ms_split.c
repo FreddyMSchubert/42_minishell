@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 15:40:24 by nburchha          #+#    #+#             */
-/*   Updated: 2024/02/19 13:57:30 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/21 12:49:57 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	is_operator_symbol(char c, char d)
 {
 	if ((c == '<' && d == '<') || (c == '>' && d == '>') || (c == '|' && d == '|') || (c == '&' && d == '&'))
 		return (2);
-	else if (c == '<' || c == '>' || c == '|' || c == '&' || c == '(' || c == ')' || c == '*')
+	else if (c == '<' || c == '>' || c == '|' || c == '&' || c == '(' || c == ')')
 		return (1);
 	return (0);
 }
@@ -41,8 +41,9 @@ int	count_tokens(const char *s)
 	count = 0;
 	in_word = 0;
 	in_quote = 0;
-	while (s[++i])
+	while ((int)ft_strlen(s) > i && s[++i])
 	{
+		// printf("%zu\n", ft_strlen(s));
 		if ((s[i] == '"' && in_quote != 2) || (s[i] == '\'' && in_quote != 1))
 		{
 			// printf("quote: %c\n", s[i]);
@@ -130,8 +131,8 @@ char	**ms_split(char *input)
 	j = 0;
 	flag = 0;
 	word_count = count_tokens(input);
-	// printf("input: %s\n", input);
-	// printf("word_count: %d\n", word_count);
+	printf("input: %s\n", input);
+	printf("word_count: %d\n", word_count);
 	if (word_count == -1)
 		return (NULL);
 	result = malloc((word_count + 1) * sizeof(char *));

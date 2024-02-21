@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   garbage_collector.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 12:18:59 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/20 13:05:58 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/02/21 17:23:12 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void exit_error(char *message, int exit_code, t_list* gc)
 	exit(exit_code);
 }
 
-t_list* createGarbageCollector()
+t_list* create_garbage_collector()
 {
 	t_list* gc = malloc(sizeof(t_list));
 	if (!gc)
@@ -37,7 +37,7 @@ t_list* createGarbageCollector()
 	return gc;
 }
 
-int	appendElement(t_list* gc, void* content)
+int	append_element(t_list* gc, void* content)
 {
 	t_list *newNode;
 	t_list *selectedNode;
@@ -54,7 +54,7 @@ int	appendElement(t_list* gc, void* content)
 	return (0);
 }
 
-void appendElementArray(t_list* gc, void* content)
+void append_element_array(t_list* gc, void* content)
 {
 	void **array;
 	int i;
@@ -63,10 +63,10 @@ void appendElementArray(t_list* gc, void* content)
 	i = 0;
 	while (array[i] != NULL)
 	{
-		appendElement(gc, array[i]);
+		append_element(gc, array[i]);
 		i++;
 	}
-	appendElement(gc, content);
+	append_element(gc, content);
 }
 
 // frees all elements in the garbage collector

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/21 10:38:37 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/02/21 17:21:49 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <stdbool.h>
 #include <fcntl.h>
 #include <errno.h>
+#include <dirent.h>
 #include <unistd.h>
 #include <limits.h>
 
@@ -31,12 +32,12 @@
 #define TOK_CMD_ARG 0      // Commands or Arguments
 #define TOK_S_QUOTE 1      // Single Quotes (')
 #define TOK_D_QUOTE 2      // Double Quotes (")
-#define TOK_VAR_EXP 3      // Dollar Sign ($) for variable expansion
+// #define TOK_VAR_EXP 3      // Dollar Sign ($) for variable expansion
 #define TOK_EXIT_STAT 4    // Exit Status ($?)
 #define TOK_REDIR 5        // Redirections (<, >, >>, <<)
 #define TOK_PIPE 6         // Pipe (|)
 #define TOK_LOG_OP 7       // Logical Operators (&&, ||)
-#define TOK_WILDCARD 8     // Wildcard (*)
+// #define TOK_WILDCARD 8     // Wildcard (*)
 #define TOK_BUILTIN 9      // Builtins (echo, cd, pwd, export, unset, env, exit)
 #define TOK_CTRL_SEQ 10    // Control Sequences (Ctrl-C, Ctrl-D, Ctrl-Z)
 #define TOK_OPEN_BRACE 11  // Open Brace -> (
@@ -76,33 +77,38 @@ typedef struct s_program_data {
 
 // --- utils / debug
 // printing
-void print_tokens(t_token **tokens);
-void print_token(t_token *token);
-void print_binary_tree(t_bin_tree_node *tree, int tabs);
+void				print_tokens(t_token **tokens);
+void				print_token(t_token *token);
+void				print_binary_tree(t_bin_tree_node *tree, int tabs);
 // testing
-void				test_lexer();
 void				test_validator(void);
-void test_lexer(char *input);
+void				test_lexer(char *input, t_program_data *data);
+void				test_expander(t_program_data *program_data, t_token **tokens);
 
 // --- input loop
 int run_crash_interface(t_program_data *program_data);
 
 // --- 0-lexing
-t_token				**lexer(char *input);
+t_token				**lexer(char *input, t_program_data *data);
 char				**ms_split(char *input);
 int					count_tokens(const char *s);
 int					is_operator_symbol(char c, char d);
 
+// --- 1-validation
+int					validator(t_token **token_arr);
+int					check_files(t_list *files, int flag);
+
+// --- 2-expanding
+char				*get_envcp(char *var_name, t_program_data *program_data);
+t_token				**expander(t_token **tokens, t_program_data *program_data);
+char				*list_matching_files(const char *pattern);
 // --- 3-parsing
 // util
 t_token **sub_tok_arr(t_token **token_arr, int start, int end);
 int toklen(t_token **token_arr);
 // parser
 t_bin_tree_node		*tok_to_bin_tree(t_token **token_arr);
-// validator
-int					validator(t_token **token_arr);
-int					check_files(t_list *files, int flag);
-t_bin_tree_node *tok_to_bin_tree(t_token **token_arr);
+t_bin_tree_node		*tok_to_bin_tree(t_token **token_arr);
 
 // --- 4-executing
 // general
@@ -124,12 +130,14 @@ int create_envcp_var(char *var, char *value, char **envcp, t_program_data *progr
 int delete_envcp_var(char *var, char **envcp);
 
 // --- util
+
+char	*strjoin_null_compatible(char const *s1, char const *s2);
 // garbage collector
-t_list* createGarbageCollector();
-int	appendElement(t_list* gc, void* content);
-void appendElementArray(t_list* gc, void* content);
-void cleanup(t_list* gc);
-void exit_error(char *message, int exit_code, t_list* gc);
+t_list*				create_garbage_collector();
+int					append_element(t_list* gc, void* content);
+void				append_element_array(t_list* gc, void* content);
+void				cleanup(t_list* gc);
+void				exit_error(char *message, int exit_code, t_list* gc);
 // errors
 void broadcast_validator_error(int errortype);
 void broadcast_builtin_error(char *builtin, int error, char *arg);

@@ -11,6 +11,7 @@ int run_crash_interface(t_program_data *program_data)
 
 	(void) program_data;
 
+	char	*input;
 	// get input
 	// for now an always true condition works, later break out using exit either with a flag or by just ending program
 	while (program_data->exit_flag == 0)
