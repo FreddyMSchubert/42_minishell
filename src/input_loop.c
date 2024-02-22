@@ -33,7 +33,6 @@ int run_crash_interface(t_program_data *program_data)
 		int valid = validator(tokenified_input);
 		if (valid != 0)
 		{
-			broadcast_validator_error(valid);
 			cleanup(program_data->gc);
 			program_data->gc = create_garbage_collector();
 			continue;
