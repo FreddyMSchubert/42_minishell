@@ -6,15 +6,15 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 08:44:06 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/21 08:53:40 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/02/22 07:55:06 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/minishell.h"
 
-int execute_pwd()
+int	execute_pwd(void)
 {
-	char *pwd;
+	char	*pwd;
 
 	pwd = getcwd(NULL, 0);
 	if (!pwd)

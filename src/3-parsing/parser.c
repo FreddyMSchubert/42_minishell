@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 12:13:31 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/20 11:13:23 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/02/22 09:03:16 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,27 +67,26 @@ static int	get_dominant_operator(t_token **arr)
 {
 	int		i;
 	int		operator_counter;
-	int		targeted_token_type;
+	int		target_tok;
 	int		depth;
 
-	targeted_token_type = check_substring(arr);
+	target_tok = check_substring(arr);
 	operator_counter = 0;
 	while (operator_counter < 3)
 	{
-		i = 0;
+		i = -1;
 		depth = 0;
-		while (arr[i] != NULL)
+		while (arr[++i] != NULL)
 		{
 			if (arr[i]->type == TOK_OPEN_BRACE && arr[i]->ignored == 0)
 				depth++;
 			else if (arr[i]->type == TOK_CLOSE_BRACE && arr[i]->ignored == 0)
 				depth--;
-			if (arr[i]->type == targeted_token_type && depth == 0 \
-			    && i >= 0 && i < toklen(arr))
+			if (arr[i]->type == target_tok && depth == 0 && \
+								i >= 0 && i < toklen(arr))
 				return (i);
-			i++;
 		}
-		targeted_token_type = adjust_operator_priority(targeted_token_type);
+		target_tok = adjust_operator_priority(target_tok);
 		operator_counter++;
 	}
 	return (-1);

@@ -6,19 +6,20 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 07:17:01 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/21 10:38:26 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/02/22 08:16:08 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../../include/minishell.h"
 
 // function to get the value of an environment variable
-// gets a reference to the actual environment variable, so strdup it if you want to keep it
-char *get_envcp_var(char *var, char **envcp)
+// gets a reference to the actual environment variable, 
+// so strdup it if you want to keep it
+char	*get_envcp_var(char *var, char **envcp)
 {
-	int i;	// index of envcp
-	int j;	// index of envcp[i]
-	int k;	// index of var
+	int	i;
+	int	j;
+	int	k;
 
 	i = 0;
 	while (envcp[i])
@@ -38,14 +39,16 @@ char *get_envcp_var(char *var, char **envcp)
 }
 
 // creates a new environment variable with the given value
-int create_envcp_var(char *var, char *value, char **envcp, t_program_data *program_data)
+int	create_envcp_var(char *var, char *value, char **envcp, \
+					t_program_data *program_data)
 {
-	char *newenvcp;
-	char **temp;
-	int i;
+	char	*newenvcp;
+	char	**temp;
+	int		i;
 
 	newenvcp = ft_strjoinfree(ft_strjoin(var, "="), ft_strdup(value));
-	if (!newenvcp) return (-1);
+	if (!newenvcp)
+		return (-1);
 	i = 0;
 	while (envcp[i])
 		i++;
@@ -61,52 +64,47 @@ int create_envcp_var(char *var, char *value, char **envcp, t_program_data *progr
 
 // function to set the value of an envcpironment variable
 // if it fails to find the variable and createnew is 1, it creates a new one
-int set_envcp_var(char *var, char *value, char createnew, t_program_data *program_data)
+int	set_envcp_var(char *var, char *val, char createnew, t_program_data *data)
 {
-	int i;	// index of envcp
-	int j;	// index of envcp[i]
-	int k;	// index of var
+	int	i;
+	int	j;
+	int	k;
 
 	i = -1;
-	while (program_data->envcp[++i])
+	while (data->envcp[++i])
 	{
 		j = 0;
 		k = 0;
-		while (program_data->envcp[i][j] && var[k] && program_data->envcp[i][j] == var[k])
+		while (data->envcp[i][j] && var[k] && data->envcp[i][j++] == var[k++])
+			;
+		if (var[k] == '\0' && data->envcp[i][j] == '=')
 		{
-			j++;
-			k++;
-		}
-		if (var[k] == '\0' && program_data->envcp[i][j] == '=')
-		{
-			free(program_data->envcp[i]);
-			program_data->envcp[i] = ft_strjoinfree(ft_strjoin(var, "="), ft_strdup(value));
-			if (!program_data->envcp[i])
+			free(data->envcp[i]);
+			data->envcp[i] = ft_strjoinfree(ft_strjoin(var, "="), \
+											ft_strdup(val));
+			if (!data->envcp[i])
 				return (-1); // handle error
 			return (0);
 		}
 	}
 	if (createnew)
-		return (create_envcp_var(var, value, program_data->envcp, program_data));
+		return (create_envcp_var(var, val, data->envcp, data));
 	return (broadcast_builtin_error("cd", -3, var), -1);
 }
 
-int delete_envcp_var(char *var, char **envcp)
+int	delete_envcp_var(char *var, char **envcp)
 {
-	int i;	// index of envcp
-	int j;	// index of envcp[i]
-	int k;	// index of var
+	int	i;
+	int	j;
+	int	k;
 
 	i = -1;
 	while (envcp[++i])
 	{
 		j = 0;
 		k = 0;
-		while (envcp[i][j] && var[k] && envcp[i][j] == var[k])
-		{
-			j++;
-			k++;
-		}
+		while (envcp[i][j] && var[k] && envcp[i][j++] == var[k++])
+			;
 		if (var[k] == '\0' && envcp[i][j] == '=')
 		{
 			free(envcp[i]);

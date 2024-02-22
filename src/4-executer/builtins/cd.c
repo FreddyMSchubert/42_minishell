@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 06:19:23 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/21 10:40:01 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/02/22 07:47:37 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@
 // expects the last character to not be a slash
 // if we are at root, return "/"
 // example: /home/user/ -> /home/
-char *go_up_one_directory(char *path)
+char	*go_up_one_directory(char *path)
 {
-	int i;
-	int last_slash;
+	int	i;
+	int	last_slash;
 
 	i = 0;
 	last_slash = -1;
@@ -29,9 +29,9 @@ char *go_up_one_directory(char *path)
 			last_slash = i;
 		i++;
 	}
-	if (last_slash == 0)	// if we are at root
+	if (last_slash == 0) // if we are at root
 		return (ft_strdup("/"));
-	if (last_slash == -1)	// if there is no slash (this shouldnt happen)
+	if (last_slash == -1) // if there is no slash (this shouldnt happen)
 		return (ft_strdup("."));
 	path[last_slash] = '\0';
 	return (path);
@@ -39,11 +39,11 @@ char *go_up_one_directory(char *path)
 
 // split path at '/' and loop through each part
 // free rel_path, dont touch currdirpath as its part of the env
-char *get_absolute_path(char *rel_path, char *currdirpath)
+char	*get_absolute_path(char *rel_path, char *currdirpath)
 {
-	char *currdir;
-	char **split_rel_path;
-	int i;
+	char	*currdir;
+	char	**split_rel_path;
+	int		i;
 
 	split_rel_path = ft_split(rel_path, '/');
 	free(rel_path);
@@ -68,35 +68,27 @@ char *get_absolute_path(char *rel_path, char *currdirpath)
 	return (currdir);
 }
 
-int execute_cd(t_token **tokens, t_program_data *program_data)
+int	execute_cd(t_token **tokens, t_program_data *program_data)
 {
-	char *path;
-	char *buffer;
-	int ret_val;
+	char	*path;
+	char	*buffer;
+	int		ret_val;
 
 	if (tokens[1] == NULL)
 		return (0);
 	else
 		path = ft_strdup(tokens[1]->value);
-	
-	// change directory
 	ret_val = chdir(path);
 	if (ret_val != 0)
 	{
 		broadcast_builtin_error("cd", -4, NULL);
 		return (errno);
 	}
-
-	// get absolute path to save in PWD
-	// Get current working directory
 	buffer = getcwd(NULL, 0);
-	if (!buffer) {
-		perror("getcwd");
-		return (errno);
-	}
-
-	// set path
-	if (set_envcp_var("OLDPWD", get_envcp_var("PWD", program_data->envcp), 0, program_data) == -1)
+	if (!buffer)
+		return (-1); // handle error
+	if (set_envcp_var("OLDPWD", get_envcp_var("PWD", program_data->envcp), \
+														0, program_data) == -1)
 		return (broadcast_builtin_error("cd", -2, NULL), free(path), 1);
 	if (set_envcp_var("PWD", buffer, 0, program_data) == -1)
 		return (broadcast_builtin_error("cd", -2, "PWD"), free(path), 1);

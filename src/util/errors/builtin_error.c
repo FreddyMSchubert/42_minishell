@@ -6,16 +6,17 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 07:08:39 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/21 08:52:07 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/02/22 08:17:13 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/minishell.h"
 
 // all of the stuff with // behind are not official bash errors
-// we could use strerror(errno) to find correct errors but we would have to set errno to e.g. ENOMEM
+// we could use strerror(errno) to find correct errors but we would have to 
+// set errno to e.g. ENOMEM
 // and we would have to do it in every function that could fail
-void broadcast_builtin_error(char *builtin, int error, char *arg)
+void	broadcast_builtin_error(char *builtin, int error, char *arg)
 {
 	ft_putstr_fd("crash: ", STDERR_FILENO);
 	ft_putstr_fd(builtin, STDERR_FILENO);

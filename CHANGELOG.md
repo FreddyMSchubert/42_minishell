@@ -1,5 +1,16 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+## v0.11.0 - 22.02.24 - Freddy
+- Added basic command execution based on pathfinding of right executables, with arguments and everything
+	- Added execute_command_utils and a new command struct that it populates.
+- Norminettification (fixed all norminette error except WRONG_SCOPE_COMMENT)
+	- general files
+		- moved logo printing into own function; created logo.txt
+	- 4-executer in full
+	- 3-parsing in full
+	- headers
+- removed deprecated folder
+
 ## v0.10.0 - 21.02.24 - Niklas
 - Added expansion of * in the cwd and $ after the lexer
 - Deleted expansion and wildcard token types
