@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/21 17:21:49 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/22 09:40:55 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ void				append_element_array(t_list* gc, void* content);
 void				cleanup(t_list* gc);
 void				exit_error(char *message, int exit_code, t_list* gc);
 // errors
-void broadcast_validator_error(int errortype);
+void broadcast_validator_error(int error, char *arg);
 void broadcast_builtin_error(char *builtin, int error, char *arg);
 // general
 char *ft_strjoinfree(char *s1, char *s2);
