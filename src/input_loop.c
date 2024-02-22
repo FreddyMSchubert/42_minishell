@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/22 13:08:14 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/22 13:11:16 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ static int	execute_input(t_program_data *program_data, char *input)
 	valid = validator(tokenified_input);
 	if (valid != 0)
 	{
-		broadcast_validator_error(valid);
 		cleanup(program_data->gc);
 		program_data->gc = create_garbage_collector();
 		return (-1);
@@ -96,17 +95,6 @@ int	run_crash_interface(t_program_data *program_data)
 			continue ;
 		}
 		input[ft_strlen(input) - 1] = '\0';
-		// lexer
-		t_token **tokenified_input = lexer(input, program_data);
-		expander(tokenified_input, program_data);
-		// validator
-		int valid = validator(tokenified_input);
-		if (valid != 0)
-		{
-			cleanup(program_data->gc);
-			program_data->gc = create_garbage_collector();
-			continue;
-		}
 		if (execute_input(program_data, input) == -1)
 			continue ;
 		cleanup(program_data->gc);
