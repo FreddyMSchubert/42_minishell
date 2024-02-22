@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:48:20 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/22 13:34:04 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/22 14:10:20 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	execute_echo(t_token **inputs)
 		if (!ft_printf("%s", inputs[i]->value))
 			return (-1);
 		i++;
-		if (inputs[i] && inputs[i]->type >= TOK_CMD_ARG && inputs[i]->type <= TOK_D_QUOTE)
+		if (inputs[i] && inputs[i]->type == TOK_CMD_ARG)// && inputs[i]->type <= TOK_D_QUOTE)
 			ft_printf(" ");
 	}
 	if (n_flag == 0)
