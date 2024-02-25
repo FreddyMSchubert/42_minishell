@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 09:20:32 by nburchha          #+#    #+#             */
-/*   Updated: 2024/02/21 18:47:36 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/25 17:03:47 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,14 @@ t_token	**expander(t_token **tokens, t_program_data *program_data)
 		}
 		else if (tokens[i]->type == TOK_CMD_ARG && ft_strchr(tokens[i]->value,
 				'*') != NULL) // wildcard, need to take* with the rest in front or behind delimitted by spaces
+		{
 			tokens[i]->value = list_matching_files(tokens[i]->value);
+			if (!tokens[i]->value)
+			{
+				tokens[i]->value = ft_strdup("*");
+				append_element(program_data->gc, tokens[i]->value);
+			}
+		}
 	}
 	return (tokens);
 }
