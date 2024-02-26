@@ -6,13 +6,13 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 09:38:36 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/26 08:13:51 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/02/26 09:27:09 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/minishell.h"
 
-int	execute_export(t_token **node, t_program_data *program_data)
+int	execute_export(t_token **node, t_program_data *program_data, int cmd_start_index)
 {
 	int		i;
 	int		equ_pos;
@@ -20,7 +20,7 @@ int	execute_export(t_token **node, t_program_data *program_data)
 	char	*var;
 	char	*value;
 
-	i = 0;
+	i = cmd_start_index;
 	while (node[++i])
 	{
 		equ_pos_char = ft_strchr(node[i]->value, '=');

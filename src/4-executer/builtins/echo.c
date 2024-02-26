@@ -3,26 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:48:20 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/22 14:10:20 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/26 09:25:32 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/minishell.h"
 
-int	execute_echo(t_token **inputs)
+int	execute_echo(t_token **inputs, int cmd_start_index)
 {
 	int		i;
 	int		n_flag;
 
-	i = 1;
+	i = cmd_start_index + 1;
 	n_flag = 0;
-	if (ft_strncmp(inputs[1]->value, "-n", 3) == 0)
+	if (ft_strncmp(inputs[cmd_start_index + 1]->value, "-n", 3) == 0)
 	{
 		n_flag = 1;
-		i = 2;
+		i = cmd_start_index + 2;
 	}
 	while (inputs[i] && inputs[i]->type >= TOK_CMD_ARG && inputs[i]->type <= TOK_D_QUOTE)
 	{

@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 12:13:31 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/22 09:03:16 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/02/26 09:57:32 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,10 @@ static int	check_substring(t_token **token_arr)
 	}
 	if (depth == 0)
 	{
-		token_arr[0]->ignored = 1;
-		token_arr[counter - 1]->ignored = 1;
+		if (token_arr[0]->type == TOK_OPEN_BRACE)
+			token_arr[0]->ignored = 1;
+		if (token_arr[counter - 1]->type == TOK_CLOSE_BRACE)
+			token_arr[counter - 1]->ignored = 1;
 	}
 	return (TOK_LOG_OP);
 }

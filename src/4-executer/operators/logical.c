@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 08:32:19 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/26 08:58:40 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/02/26 09:34:30 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int	logical_and(t_bin_tree_node *node, t_program_data *program_data)
 {
 	int	status;
 
+	status = 0; // this will never occur just to silence warning
 	if (node->l != NULL)
 		status = execute_node(node->l, program_data);
 	if (status == 0 && node->r != NULL)
@@ -38,6 +39,7 @@ int	logical_or(t_bin_tree_node *node, t_program_data *program_data)
 {
 	int	status;
 
+	status = 0; // this will never occur just to silence warning
 	if (node->l != NULL)
 		status = execute_node(node->l, program_data);
 	if (status != 0 && node->r != NULL)

@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 06:36:17 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/22 06:54:37 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/02/26 09:23:32 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static char	*get_command_path(char **envp, char *command)
 	@brief	Creates a path struct consisting of a path string
 	@brief	and the arguments as an array of strings
 */
-t_cmd_path	*create_cmd_struct(char	**envp, t_token	**cmd)
+t_cmd_path	*create_cmd_struct(char	**envp, t_token	**cmd, int cmd_start_index)
 {
 	t_cmd_path	*path;
 	char		**split_cmd;
@@ -57,18 +57,18 @@ t_cmd_path	*create_cmd_struct(char	**envp, t_token	**cmd)
 	path = malloc(sizeof(t_cmd_path));
 	if (!path)
 		return (NULL); // handle error
-	path->path = get_command_path(envp, cmd[0]->value);
+	path->path = get_command_path(envp, cmd[cmd_start_index]->value);
 	counter = 1;
 	while (cmd[counter])
 		counter++;
-	split_cmd = malloc(sizeof(char *) * (counter + 1));
+	split_cmd = malloc(sizeof(char *) * (counter - cmd_start_index + 1));
 	if (!split_cmd)
 		return (NULL); // handle error
-	split_cmd[counter] = NULL;
-	counter = 0;
+	split_cmd[counter - cmd_start_index] = NULL;
+	counter = cmd_start_index;
 	while (cmd[counter])
 	{
-		split_cmd[counter] = cmd[counter]->value;
+		split_cmd[counter - cmd_start_index] = cmd[counter]->value;
 		counter++;
 	}
 	path->args = split_cmd;

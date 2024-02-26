@@ -1,6 +1,16 @@
 # CHANGELOG minishell by nburchha & fschuber
 
-### v0.12.0 - 26.02.24 - Freddy
+## todo
+- duplicate brackets parser fix (in execute command utils the execve input builder)
+
+## v0.13.0 - 26.02.24 - Freddy
+- made executer ignore stuff flagged with ignore
+- removed unnecessary functions from cd.c
+- logical AND & OR fixes
+- added more logging based on verbose flag to input_loop.c
+- parser ignore flag setting when there arent even brackets fix
+
+## v0.12.0 - 26.02.24 - Freddy
 - Added logical AND & OR
 - changelog dates fix
 

@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/26 08:46:11 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/02/26 09:53:13 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,37 +33,38 @@ void	execute(t_bin_tree_node *tree, t_program_data *program_data)
 
 int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 {
-	program_data->exit_status = 0;
-	if (node->val[0]->type == TOK_BUILTIN)
-		program_data->exit_status = execute_builtin(node, program_data);
-		// right? takes exit of last command?
+	int		cmd_start_index;
+
+	cmd_start_index = 0;
+	while (node->val[cmd_start_index]->ignored == 1)
+		cmd_start_index++;
+	if (node->val[cmd_start_index]->type == TOK_BUILTIN)
+		program_data->exit_status = execute_builtin(node, program_data, cmd_start_index);
 	else
-	{
-		program_data->exit_status = execute_command(node, program_data);
-	}
+		program_data->exit_status = execute_command(node, program_data, cmd_start_index);
 	return (program_data->exit_status);
 }
 
-int	execute_builtin(t_bin_tree_node *node, t_program_data *program_data)
+int	execute_builtin(t_bin_tree_node *node, t_program_data *program_data, int cmd_start_index)
 {
-	if (ft_strncmp(node->val[0]->value, "echo", 4) == 0)
-		return (execute_echo(node->val));
-	if (ft_strncmp(node->val[0]->value, "cd", 2) == 0)
-		return (execute_cd(node->val, program_data));
-	if (ft_strncmp(node->val[0]->value, "pwd", 3) == 0)
+	if (ft_strncmp(node->val[cmd_start_index]->value, "echo", 4) == 0)
+		return (execute_echo(node->val, cmd_start_index));
+	if (ft_strncmp(node->val[cmd_start_index]->value, "cd", 2) == 0)
+		return (execute_cd(node->val, program_data, cmd_start_index));
+	if (ft_strncmp(node->val[cmd_start_index]->value, "pwd", 3) == 0)
 		return (execute_pwd());
-	if (ft_strncmp(node->val[0]->value, "export", 6) == 0)
-		return (execute_export(node->val, program_data));
-	if (ft_strncmp(node->val[0]->value, "unset", 5) == 0)
-		return (execute_unset(node->val, program_data));
-	if (ft_strncmp(node->val[0]->value, "env", 3) == 0)
+	if (ft_strncmp(node->val[cmd_start_index]->value, "export", 6) == 0)
+		return (execute_export(node->val, program_data, cmd_start_index));
+	if (ft_strncmp(node->val[cmd_start_index]->value, "unset", 5) == 0)
+		return (execute_unset(node->val, program_data, cmd_start_index));
+	if (ft_strncmp(node->val[cmd_start_index]->value, "env", 3) == 0)
 		return (execute_env(program_data));
-	if (ft_strncmp(node->val[0]->value, "exit", 4) == 0)
-		return (execute_exit(node->val, program_data));
+	if (ft_strncmp(node->val[cmd_start_index]->value, "exit", 4) == 0)
+		return (execute_exit(node->val, program_data, cmd_start_index));
 	return (-1);
 }
 
-int	execute_command(t_bin_tree_node *node, t_program_data *program_data)
+int	execute_command(t_bin_tree_node *node, t_program_data *program_data, int cmd_start_index)
 {
 	pid_t			pid;
 	t_cmd_path		*cmd_path;
@@ -72,7 +73,7 @@ int	execute_command(t_bin_tree_node *node, t_program_data *program_data)
 	pid = fork();
 	if (pid == 0) // child
 	{
-		cmd_path = create_cmd_struct(program_data->envcp, node->val);
+		cmd_path = create_cmd_struct(program_data->envcp, node->val, cmd_start_index);
 		execve(cmd_path->path, cmd_path->args, program_data->envcp);
 		return (-1); // handle error
 	}
