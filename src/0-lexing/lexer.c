@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 06:54:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/21 17:33:40 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/26 12:51:29 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static int check_same_string(char *str1, char *str2)
 /*
 	@brief	Receives one token as string, returns categorized token struct
 */
-static t_token *detect_token_type(char *input)
+static t_token *detect_token_type(char *input, int is_first_or_after_operator)
 {
 	t_token		*token;
 
@@ -70,13 +70,14 @@ static t_token *detect_token_type(char *input)
 		token->type = TOK_LOG_OP;
 	// else if (ft_strchr(input, '*') != NULL)
 	// 	token->type = TOK_WILDCARD;
-	else if (check_same_string(input, "echo") == 0 ||
+	else if (is_first_or_after_operator && 
+			(check_same_string(input, "echo") == 0 ||
 			check_same_string(input, "cd") == 0 ||
 			check_same_string(input, "pwd") == 0 ||
 			check_same_string(input, "export") == 0 ||
 			check_same_string(input, "unset") == 0 ||
 			check_same_string(input, "env") == 0 ||
-			check_same_string(input, "exit") == 0)
+			check_same_string(input, "exit") == 0))
 		token->type = TOK_BUILTIN;
 	else if (check_same_string(input, "\x03") == 0 ||
 			check_same_string(input, "\x04") == 0 ||
@@ -198,6 +199,7 @@ t_token **lexer(char *input, t_program_data *data)
 	t_token	**tokens;
 	int		token_amount;
 	int		counter;
+	int		is_first_or_after_operator;
 
 	split_input = ms_split(put_space_between_tokens(input, data));
 	if (!split_input)
@@ -211,7 +213,10 @@ t_token **lexer(char *input, t_program_data *data)
 	counter = 0;
 	while (counter < token_amount)
 	{
-		tokens[counter] = detect_token_type(split_input[counter]);
+		is_first_or_after_operator = 0;
+		if (counter == 0 || is_operator_symbol(*split_input[counter - 1], *split_input[counter]) != 0)
+			is_first_or_after_operator = 1;
+		tokens[counter] = detect_token_type(split_input[counter], is_first_or_after_operator);
 		if (!tokens[counter])
 		{
 			while (counter > 0)
