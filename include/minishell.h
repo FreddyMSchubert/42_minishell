@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/22 13:09:15 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/26 08:39:29 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,10 @@ t_bin_tree_node		*tok_to_bin_tree(t_token **token_arr);
 // general
 void				execute(t_bin_tree_node *tree, t_program_data *data);
 int					execute_node(t_bin_tree_node *node, t_program_data *data);
+// operators
+int					logical_op(t_bin_tree_node *node, t_program_data *data);
+int					logical_and(t_bin_tree_node *node, t_program_data *data);
+int					logical_or(t_bin_tree_node *node, t_program_data *data);
 // "normal" commands
 int					execute_command(t_bin_tree_node *node, t_program_data *dta);
 t_cmd_path			*create_cmd_struct(char **envp, t_token **cmd);

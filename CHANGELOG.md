@@ -1,9 +1,13 @@
 # CHANGELOG minishell by nburchha & fschuber
 
-### v0.11.2 - 27.02.24 - Freddy
+### v0.12.0 - 26.02.24 - Freddy
+- Added logical AND & OR
+- changelog dates fix
+
+### v0.11.2 - 26.02.24 - Freddy
 - Fixed export trying to set an already set variable without a value
 
-### v0.11.1 - 27.02.24 - Freddy
+### v0.11.1 - 26.02.24 - Freddy
 - Fixed cd not returning to home directory when run with no args
 
 ## v0.11.0 - 22.02.24 - Freddy

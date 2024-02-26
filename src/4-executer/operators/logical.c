@@ -1,0 +1,46 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   logical.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/26 08:32:19 by fschuber          #+#    #+#             */
+/*   Updated: 2024/02/26 08:58:40 by fschuber         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../../include/minishell.h"
+
+// check end of tree null
+
+int	logical_op(t_bin_tree_node *node, t_program_data *program_data)
+{
+	if (ft_strncmp(node->val[0]->value, "&&", 2) == 0)
+		return (logical_and(node, program_data));
+	if (ft_strncmp(node->val[0]->value, "||", 2) == 0)
+		return (logical_or(node, program_data));
+	return (-1);
+}
+
+int	logical_and(t_bin_tree_node *node, t_program_data *program_data)
+{
+	int	status;
+
+	if (node->l != NULL)
+		status = execute_node(node->l, program_data);
+	if (status == 0 && node->r != NULL)
+		status = execute_node(node->r, program_data);
+	return (status);
+}
+
+int	logical_or(t_bin_tree_node *node, t_program_data *program_data)
+{
+	int	status;
+
+	if (node->l != NULL)
+		status = execute_node(node->l, program_data);
+	if (status != 0 && node->r != NULL)
+		status = execute_node(node->r, program_data);
+	return (status);
+}
