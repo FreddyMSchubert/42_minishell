@@ -1,5 +1,8 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+### v0.11.2 - 27.02.24 - Freddy
+- Fixed export trying to set an already set variable without a value
+
 ### v0.11.1 - 27.02.24 - Freddy
 - Fixed cd not returning to home directory when run with no args
 
