@@ -1,5 +1,8 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+### v0.11.1 - 27.02.24 - Freddy
+- Fixed cd not returning to home directory when run with no args
+
 ## v0.11.0 - 22.02.24 - Freddy
 - Added basic command execution based on pathfinding of right executables, with arguments and everything
 	- Added execute_command_utils and a new command struct that it populates.

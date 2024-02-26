@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 06:19:23 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/22 07:47:37 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/02/26 07:58:11 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,10 +72,17 @@ int	execute_cd(t_token **tokens, t_program_data *program_data)
 {
 	char	*path;
 	char	*buffer;
+	char	*home;
 	int		ret_val;
 
 	if (tokens[1] == NULL)
-		return (0);
+	{
+		home = get_envcp_var("HOME", program_data->envcp);
+		if (home)
+			path = ft_strdup(home);
+		else
+			return (-1); // handle error
+	}
 	else
 		path = ft_strdup(tokens[1]->value);
 	ret_val = chdir(path);
