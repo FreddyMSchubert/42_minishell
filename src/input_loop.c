@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input_loop.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/22 13:11:16 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/26 09:46:09 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,20 @@ static int	execute_input(t_program_data *program_data, char *input)
 	int					valid;
 	t_bin_tree_node		*tree;
 
+	if (VERBOSE == 1)
+		ft_printf("Received input: %s\n", input);
 	// --- lexer
 	tokenified_input = lexer(input, program_data);
+	if (tokenified_input == NULL)
+		return (-1); // handle error
+	if (VERBOSE == 1)
+		print_tokens(tokenified_input);
 	expander(tokenified_input, program_data);
+	if (VERBOSE == 1)
+	{
+		ft_printf("after expanding:\n");
+		print_tokens(tokenified_input);
+	}
 	// --- validator
 	valid = validator(tokenified_input);
 	if (valid != 0)
@@ -69,10 +80,16 @@ static int	execute_input(t_program_data *program_data, char *input)
 		program_data->gc = create_garbage_collector();
 		return (-1);
 	}
+	if (VERBOSE == 1)
+		ft_printf("token sequence is valid\n");
 	// --- expander
 	// expand_tokens(tokenified_input);
 	// --- parser
 	tree = tok_to_bin_tree(tokenified_input);
+	if (VERBOSE == 1)
+		print_binary_tree(tree, 0);
+	if (VERBOSE == 1)
+		ft_printf("\n\n\n");
 	// --- executer
 	execute(tree, program_data);
 	return (0);

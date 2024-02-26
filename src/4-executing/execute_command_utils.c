@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 06:36:17 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/22 06:54:37 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/02/26 12:49:44 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,32 +44,53 @@ static char	*get_command_path(char **envp, char *command)
 	return (NULL);
 }
 
+static int	get_non_ignored_tokens_amount(t_token	**cmd)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (cmd[i])
+	{
+		if (cmd[i]->ignored == 0)
+			j++;
+		i++;
+	}
+	return (j);
+}
+
 /*
 	@brief	Creates a path struct consisting of a path string
 	@brief	and the arguments as an array of strings
 */
-t_cmd_path	*create_cmd_struct(char	**envp, t_token	**cmd)
+t_cmd_path	*create_cmd_struct(char	**envp, t_token	**cmd, int cmd_start_index)
 {
 	t_cmd_path	*path;
 	char		**split_cmd;
-	int			counter;
+	int			cmd_i_counter;
+	int			split_cmd_i_counter;
+	int			non_ignored_tokens;
 
 	path = malloc(sizeof(t_cmd_path));
 	if (!path)
 		return (NULL); // handle error
-	path->path = get_command_path(envp, cmd[0]->value);
-	counter = 1;
-	while (cmd[counter])
-		counter++;
-	split_cmd = malloc(sizeof(char *) * (counter + 1));
+	path->path = get_command_path(envp, cmd[cmd_start_index]->value);
+	non_ignored_tokens = get_non_ignored_tokens_amount(cmd);
+	split_cmd = malloc(sizeof(char *) * (non_ignored_tokens + 1));
 	if (!split_cmd)
-		return (NULL); // handle error
-	split_cmd[counter] = NULL;
-	counter = 0;
-	while (cmd[counter])
+		return (free(path), NULL); // handle error
+	split_cmd[non_ignored_tokens] = NULL;
+	cmd_i_counter = cmd_start_index;
+	split_cmd_i_counter = 0;
+	while (cmd[cmd_i_counter])
 	{
-		split_cmd[counter] = cmd[counter]->value;
-		counter++;
+		if (cmd[cmd_i_counter]->ignored == 0)
+		{
+			split_cmd[split_cmd_i_counter] = cmd[cmd_i_counter]->value;
+			split_cmd_i_counter++;
+		}
+		cmd_i_counter++;
 	}
 	path->args = split_cmd;
 	return (path);

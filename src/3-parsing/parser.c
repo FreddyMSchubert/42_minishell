@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 12:13:31 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/22 09:03:16 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/02/26 11:37:33 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,28 +20,40 @@ static int	check_substring(t_token **token_arr)
 {
 	int	counter;
 	int	depth;
+	int	changes_made;
 
 	counter = 0;
 	depth = 0;
+	changes_made = 0;
 	while (token_arr[counter] != NULL)
 	{
-		if (token_arr[counter]->type == TOK_OPEN_BRACE)
+		if (token_arr[counter]->type == TOK_OPEN_BRACE && token_arr[counter]->ignored != 1)
 			depth++;
-		else if (token_arr[counter]->type == TOK_CLOSE_BRACE)
+		else if (token_arr[counter]->type == TOK_CLOSE_BRACE && token_arr[counter]->ignored != 1)
 			depth--;
-		if (depth == 0 && token_arr[counter + 1] != NULL)
+		if (depth == 0 && token_arr[counter + 1] != NULL && counter != last_non_ignored(token_arr) && token_arr[counter]->ignored != 1)
 		{
+			ft_printf("no substring found. breaking out at index %d\n", counter);
 			depth = -1;
 			break ;
 		}
+		ft_printf("depth: %d, counter: %d\n", depth, counter);
 		counter++;
 	}
 	if (depth == 0)
 	{
-		token_arr[0]->ignored = 1;
-		token_arr[counter - 1]->ignored = 1;
+		if (token_arr[first_non_ignored(token_arr)]->type == TOK_OPEN_BRACE)
+		{
+			token_arr[first_non_ignored(token_arr)]->ignored = 1;
+			changes_made++;
+		}
+		if (token_arr[last_non_ignored(token_arr)]->type == TOK_CLOSE_BRACE)
+		{
+			changes_made++;
+			token_arr[last_non_ignored(token_arr)]->ignored = 1;
+		}
 	}
-	return (TOK_LOG_OP);
+	return (changes_made);
 }
 
 /*
@@ -70,7 +82,9 @@ static int	get_dominant_operator(t_token **arr)
 	int		target_tok;
 	int		depth;
 
-	target_tok = check_substring(arr);
+	target_tok = TOK_LOG_OP;
+	while (check_substring(arr) != 0)
+		ft_printf("looping over next substring\n");
 	operator_counter = 0;
 	while (operator_counter < 3)
 	{
@@ -101,6 +115,12 @@ t_bin_tree_node	*tok_to_bin_tree(t_token **arr)
 	t_bin_tree_node		*node;
 	int					dom_op_i;
 
+	if (VERBOSE == 1)
+	{
+		ft_printf("tok_to_bin_tree called with ");
+		print_tokens(arr);
+		ft_printf("\n");
+	}
 	node = malloc(sizeof(t_bin_tree_node));
 	if (!node || !arr)
 		return (free(node), NULL);

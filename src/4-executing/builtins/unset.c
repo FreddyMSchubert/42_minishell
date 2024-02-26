@@ -6,17 +6,17 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 09:48:54 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/22 08:02:19 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/02/26 09:27:56 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/minishell.h"
 
-int	execute_unset(t_token **node, t_program_data *program_data)
+int	execute_unset(t_token **node, t_program_data *program_data, int cmd_start_index)
 {
 	int	i;
 
-	i = 1;
+	i = cmd_start_index + 1;
 	while (node[i] != NULL)
 	{
 		if (delete_envcp_var(node[i]->value, program_data->envcp) != 0)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/22 13:09:15 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/26 11:08:41 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ typedef struct s_cmd_path {
 // ----- SETTINGS
 
 // will output detailed logging if set to 1, and normal logging if 0
-#define VERBOSE 0
+#define VERBOSE 1
 
 // ----- FUNCTIONS
 
@@ -110,6 +110,8 @@ char				*list_matching_files(const char *pattern);
 // util
 t_token				**sub_tok_arr(t_token **token_arr, int start, int end);
 int					toklen(t_token **token_arr);
+int					first_non_ignored(t_token **token_arr);
+int					last_non_ignored(t_token **token_arr);
 // parser
 t_bin_tree_node		*tok_to_bin_tree(t_token **token_arr);
 t_bin_tree_node		*tok_to_bin_tree(t_token **token_arr);
@@ -118,18 +120,22 @@ t_bin_tree_node		*tok_to_bin_tree(t_token **token_arr);
 // general
 void				execute(t_bin_tree_node *tree, t_program_data *data);
 int					execute_node(t_bin_tree_node *node, t_program_data *data);
+// operators
+int					logical_op(t_bin_tree_node *node, t_program_data *data);
+int					logical_and(t_bin_tree_node *node, t_program_data *data);
+int					logical_or(t_bin_tree_node *node, t_program_data *data);
 // "normal" commands
-int					execute_command(t_bin_tree_node *node, t_program_data *dta);
-t_cmd_path			*create_cmd_struct(char **envp, t_token **cmd);
+int	execute_command(t_bin_tree_node *node, t_program_data *program_data, int cmd_start_index);
+t_cmd_path	*create_cmd_struct(char	**envp, t_token	**cmd, int cmd_start_index);
 // builtins
-int					execute_builtin(t_bin_tree_node *node, t_program_data *dta);
-int					execute_echo(t_token **inputs);
+int	execute_builtin(t_bin_tree_node *node, t_program_data *program_data, int cmd_start_index);
+int	execute_echo(t_token **inputs, int cmd_start_index);
 int					execute_env(t_program_data *program_data);
-int					execute_exit(t_token **tokens, t_program_data *data);
-int					execute_cd(t_token **tokens, t_program_data *program_data);
+int	execute_exit(t_token **tokens, t_program_data *program_data, int cmd_start_index);
+int	execute_cd(t_token **tokens, t_program_data *program_data, int cmd_start_index);
 int					execute_pwd(void);
-int					execute_export(t_token **node, t_program_data *data);
-int					execute_unset(t_token **node, t_program_data *program_data);
+int	execute_export(t_token **node, t_program_data *program_data, int cmd_start_index);
+int	execute_unset(t_token **node, t_program_data *program_data, int cmd_start_index);
 // env utils
 char				*get_envcp_var(char *var, char **envcp);
 int					set_envcp_var(char *var, char *value, char createnew, \

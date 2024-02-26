@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 12:13:26 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/20 08:39:24 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/02/26 10:35:46 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,5 +45,25 @@ int	toklen(t_token **token_arr)
 	counter = 0;
 	while (token_arr[counter])
 		counter++;
+	return (counter);
+}
+
+int	first_non_ignored(t_token **token_arr)
+{
+	int	counter;
+
+	counter = 0;
+	while (token_arr[counter] && token_arr[counter]->ignored == 1)
+		counter++;
+	return (counter);
+}
+
+int	last_non_ignored(t_token **token_arr)
+{
+	int	counter;
+
+	counter = toklen(token_arr) - 1;
+	while (counter >= 0 && token_arr[counter]->ignored == 1)
+		counter--;
 	return (counter);
 }
