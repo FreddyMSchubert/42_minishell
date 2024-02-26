@@ -3,6 +3,12 @@
 ## todo
 - duplicate brackets parser fix (in execute command utils the execve input builder)
 
+### v0.13.1 - 26.02.24 - Freddy
+- fixed parser being weird with multiple nested brackets
+- dumb double execution executer fix
+- Norminettification of printing.c
+- renamed expander and executer to fit present progressive naming scheme
+
 ## v0.13.0 - 26.02.24 - Freddy
 - made executer ignore stuff flagged with ignore
 - removed unnecessary functions from cd.c

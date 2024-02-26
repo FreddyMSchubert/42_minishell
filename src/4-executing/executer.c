@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/26 09:53:13 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/02/26 10:43:20 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,14 @@ void	execute(t_bin_tree_node *tree, t_program_data *program_data)
 	{
 		if (tree->val[0]->type == TOK_LOG_OP)
 			logical_op(tree, program_data);
-
-		// this is just temporary so everything runs thorugh
-		if (tree->l != NULL)
-			execute(tree->l, program_data);
-		if (tree->r != NULL)
-			execute(tree->r, program_data);
+		else
+		{
+			// this is just temporary so everything runs thorugh
+			if (tree->l != NULL)
+				execute(tree->l, program_data);
+			if (tree->r != NULL)
+				execute(tree->r, program_data);
+		}
 	}
 }
 

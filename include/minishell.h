@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/26 09:44:36 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/02/26 11:08:41 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,8 @@ char				*list_matching_files(const char *pattern);
 // util
 t_token				**sub_tok_arr(t_token **token_arr, int start, int end);
 int					toklen(t_token **token_arr);
+int					first_non_ignored(t_token **token_arr);
+int					last_non_ignored(t_token **token_arr);
 // parser
 t_bin_tree_node		*tok_to_bin_tree(t_token **token_arr);
 t_bin_tree_node		*tok_to_bin_tree(t_token **token_arr);
