@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/26 10:43:20 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/02/27 13:33:14 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,32 +22,36 @@ void	execute(t_bin_tree_node *tree, t_program_data *program_data)
 	{
 		if (tree->val[0]->type == TOK_LOG_OP)
 			logical_op(tree, program_data);
-		else
-		{
-			// this is just temporary so everything runs thorugh
-			if (tree->l != NULL)
-				execute(tree->l, program_data);
-			if (tree->r != NULL)
-				execute(tree->r, program_data);
-		}
+		else if (tree->val[0]->type == TOK_PIPE)
+			setup_pipe(tree, program_data);
+		// this is just temporary so everything runs through
+		if (tree->l != NULL)
+			execute(tree->l, program_data);
+		if (tree->r != NULL)
+			execute(tree->r, program_data);
 	}
 }
 
 int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 {
-	int		cmd_start_index;
+	int	cmd_start_index;
 
 	cmd_start_index = 0;
 	while (node->val[cmd_start_index]->ignored == 1)
 		cmd_start_index++;
 	if (node->val[cmd_start_index]->type == TOK_BUILTIN)
-		program_data->exit_status = execute_builtin(node, program_data, cmd_start_index);
+		program_data->exit_status = execute_builtin(node, program_data,
+				cmd_start_index);
 	else
-		program_data->exit_status = execute_command(node, program_data, cmd_start_index);
+		program_data->exit_status = execute_command(node, program_data,
+				cmd_start_index);
+	// if (node->input_fd != 0 || node->output_fd != 1)
+	// 	print_pipes(node->input_fd, node->output_fd);
 	return (program_data->exit_status);
 }
 
-int	execute_builtin(t_bin_tree_node *node, t_program_data *program_data, int cmd_start_index)
+int	execute_builtin(t_bin_tree_node *node, t_program_data *program_data,
+		int cmd_start_index)
 {
 	if (ft_strncmp(node->val[cmd_start_index]->value, "echo", 4) == 0)
 		return (execute_echo(node->val, cmd_start_index));
@@ -66,21 +70,50 @@ int	execute_builtin(t_bin_tree_node *node, t_program_data *program_data, int cmd
 	return (-1);
 }
 
-int	execute_command(t_bin_tree_node *node, t_program_data *program_data, int cmd_start_index)
+int	execute_command(t_bin_tree_node *node, t_program_data *program_data,
+		int cmd_start_index)
 {
-	pid_t			pid;
-	t_cmd_path		*cmd_path;
-	int				return_value;
+	pid_t		pid;
+	t_cmd_path	*cmd_path;
+	int			return_value;
 
+	printf("executing command: %s\n", node->val[0]->value);
 	pid = fork();
 	if (pid == 0) // child
 	{
-		cmd_path = create_cmd_struct(program_data->envcp, node->val, cmd_start_index);
+		printf("child process\ninput_fd: %d\noutput_fd: %d\n", node->input_fd,
+			node->output_fd);
+		// Redirect input if necessary
+		if (node->input_fd != STDIN_FILENO)
+		{
+			if (dup2(node->input_fd, STDIN_FILENO) == -1)
+			{
+				perror("dup2 input redirect failed");
+				_exit(EXIT_FAILURE); // Exit child process on error
+			}
+			close(node->input_fd);
+				// Close the original file descriptor after duplication
+		}
+		// Redirect output if necessary
+		if (node->output_fd != STDOUT_FILENO)
+		{
+			if (dup2(node->output_fd, STDOUT_FILENO) == -1)
+			{
+				perror("dup2 output redirect failed");
+				_exit(EXIT_FAILURE); // Exit child process on error
+			}
+			close(node->output_fd);
+				// Close the original file descriptor after duplication
+		}
+		cmd_path = create_cmd_struct(program_data->envcp, node->val,
+				cmd_start_index);
 		execve(cmd_path->path, cmd_path->args, program_data->envcp);
 		return (-1); // handle error
 	}
 	else if (pid > 0) // parent
 	{
+		close(node->output_fd);
+		close(node->input_fd);
 		waitpid(pid, &return_value, 0);
 		if (WIFEXITED(return_value))
 			return (WEXITSTATUS(return_value));

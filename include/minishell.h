@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/26 11:08:41 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/02/27 10:56:38 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ typedef struct s_bin_tree_node {
 	t_token			**val;
 	t_bin_tree_node	*l;
 	t_bin_tree_node	*r;
+	int				input_fd;
+	int				output_fd;
 }	t_bin_tree_node;
 
 typedef struct s_program_data {
@@ -75,7 +77,7 @@ typedef struct s_cmd_path {
 // ----- SETTINGS
 
 // will output detailed logging if set to 1, and normal logging if 0
-#define VERBOSE 1
+#define VERBOSE 0
 
 // ----- FUNCTIONS
 
@@ -84,6 +86,7 @@ typedef struct s_cmd_path {
 void				print_tokens(t_token **tokens);
 void				print_token(t_token *token);
 void				print_binary_tree(t_bin_tree_node *tree, int tabs);
+void				print_pipes(int in_fd, int out_fd);
 // testing
 void				test_validator(void);
 void				test_lexer(char *input, t_program_data *data);
@@ -120,6 +123,7 @@ t_bin_tree_node		*tok_to_bin_tree(t_token **token_arr);
 // general
 void				execute(t_bin_tree_node *tree, t_program_data *data);
 int					execute_node(t_bin_tree_node *node, t_program_data *data);
+int	execute_input(t_program_data *program_data, char *input);
 // operators
 int					logical_op(t_bin_tree_node *node, t_program_data *data);
 int					logical_and(t_bin_tree_node *node, t_program_data *data);
@@ -127,6 +131,8 @@ int					logical_or(t_bin_tree_node *node, t_program_data *data);
 // "normal" commands
 int	execute_command(t_bin_tree_node *node, t_program_data *program_data, int cmd_start_index);
 t_cmd_path	*create_cmd_struct(char	**envp, t_token	**cmd, int cmd_start_index);
+// pipes
+void				setup_pipe(t_bin_tree_node *node, t_program_data *program_data);
 // builtins
 int	execute_builtin(t_bin_tree_node *node, t_program_data *program_data, int cmd_start_index);
 int	execute_echo(t_token **inputs, int cmd_start_index);

@@ -1,30 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipe.c                                             :+:      :+:    :+:   */
+/*   print_pipes.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/26 13:20:09 by nburchha          #+#    #+#             */
-/*   Updated: 2024/02/27 14:14:04 by nburchha         ###   ########.fr       */
+/*   Created: 2024/02/27 10:55:08 by nburchha          #+#    #+#             */
+/*   Updated: 2024/02/27 12:47:47 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../include/minishell.h"
+#include "../../include/minishell.h"
 
-void	setup_pipe(t_bin_tree_node *node, t_program_data *program_data)
+void	print_pipes(int in_fd, int out_fd)
 {
-	int		pipe_fd[2];
+	char	*str;
 
-	printf("setting up pipe\n");
-	node->l->input_fd = node->input_fd;
-	if (pipe(pipe_fd) == -1)
+	printf("print_pipe: %d %d\n", in_fd, out_fd);
+	while (1)
 	{
-		ft_putstr_fd("pipe error\n", 2);
-		return ;
+		str = get_next_line(out_fd);
+		write(1, str, 42);
+		if (str == NULL)
+			break ;
+		free(str);
 	}
-	node->l->output_fd = pipe_fd[1];
-	node->r->input_fd = pipe_fd[0];
-	printf("fds in pipe: %d %d\n", pipe_fd[1], pipe_fd[0]);
-	(void)program_data;
 }

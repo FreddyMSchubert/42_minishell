@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 12:13:31 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/26 11:37:33 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/02/27 14:16:16 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,8 @@ t_bin_tree_node	*tok_to_bin_tree(t_token **arr)
 	node = malloc(sizeof(t_bin_tree_node));
 	if (!node || !arr)
 		return (free(node), NULL);
+	node->input_fd = STDIN_FILENO;
+	node->output_fd = STDOUT_FILENO;
 	dom_op_i = get_dominant_operator(arr);
 	if (dom_op_i == -1)
 		return (node->val = arr, node->l = NULL, node->r = NULL, node);
