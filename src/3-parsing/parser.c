@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 12:13:31 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/26 11:37:33 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/02/27 09:15:44 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,9 @@ static int	check_substring(t_token **token_arr)
 			depth--;
 		if (depth == 0 && token_arr[counter + 1] != NULL && counter != last_non_ignored(token_arr) && token_arr[counter]->ignored != 1)
 		{
-			ft_printf("no substring found. breaking out at index %d\n", counter);
 			depth = -1;
 			break ;
 		}
-		ft_printf("depth: %d, counter: %d\n", depth, counter);
 		counter++;
 	}
 	if (depth == 0)
@@ -84,7 +82,7 @@ static int	get_dominant_operator(t_token **arr)
 
 	target_tok = TOK_LOG_OP;
 	while (check_substring(arr) != 0)
-		ft_printf("looping over next substring\n");
+		;
 	operator_counter = 0;
 	while (operator_counter < 3)
 	{

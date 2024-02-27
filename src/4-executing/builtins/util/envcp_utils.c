@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 07:17:01 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/22 08:16:08 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/02/27 10:10:49 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,24 +17,25 @@
 // so strdup it if you want to keep it
 char	*get_envcp_var(char *var, char **envcp)
 {
-	int	i;
-	int	j;
-	int	k;
+	int	env_i;
+	int	env_i_i;
+	int	var_i;
 
-	i = 0;
-	while (envcp[i])
+	env_i = 0;
+	while (envcp[env_i])
 	{
-		j = 0;
-		k = 0;
-		while (envcp[i][j] && var[k] && envcp[i][j] == var[k])
+		env_i_i = 0;
+		var_i = 0;
+		while (envcp[env_i][env_i_i] && var[var_i] && envcp[env_i][env_i_i] == var[var_i])
 		{
-			j++;
-			k++;
+			env_i_i++;
+			var_i++;
 		}
-		if (var[k] == '\0' && envcp[i][j] == '=')
-			return (envcp[i] + j + 1);
-		i++;
+		if (var[var_i] == '\0' && envcp[env_i][env_i_i] == '=')
+			return (envcp[env_i] + env_i_i + 1);
+		env_i++;
 	}
+	ft_printf("there is no path!\n");
 	return (NULL);
 }
 
@@ -70,6 +71,8 @@ int	set_envcp_var(char *var, char *val, char createnew, t_program_data *data)
 	int	j;
 	int	k;
 
+	if (val == NULL)
+		val = "";
 	i = -1;
 	while (data->envcp[++i])
 	{
@@ -89,7 +92,7 @@ int	set_envcp_var(char *var, char *val, char createnew, t_program_data *data)
 	}
 	if (createnew)
 		return (create_envcp_var(var, val, data->envcp, data));
-	return (broadcast_builtin_error("cd", -3, var), -1);
+	return (-2);
 }
 
 int	delete_envcp_var(char *var, char **envcp)

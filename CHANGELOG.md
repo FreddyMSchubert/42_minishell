@@ -1,5 +1,9 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+## v0.14.0 - 27.02.24 - Freddy
+- oldpwd & pwd specific precise bash replication if either or both are missing
+- removed unnecessary print statements form parser
+
 ### v0.13.2 - 26.02.24 - Freddy
 - duplicate brackets for non-builtins fix (previously ignored brackets would be counted as args)
 
