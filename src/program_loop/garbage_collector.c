@@ -6,11 +6,11 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 12:18:59 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/22 07:59:55 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/02/27 11:00:30 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
 /*
 	Garbage Collector has one dummy node at the start just as a reference.
@@ -85,4 +85,5 @@ void	cleanup(t_list *gc)
 		free(current2->content);
 		free(current2);
 	}
+	clear_history();
 }

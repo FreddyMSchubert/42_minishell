@@ -1,5 +1,9 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+## v0.15.0 - 27.02.24 - Freddy
+- implemented readline (-> history, file completion, arrow key through inputs)
+- move program loop stuff into own folder
+
 ## v0.14.0 - 27.02.24 - Freddy
 - oldpwd & pwd specific precise bash replication if either or both are missing
 - removed unnecessary print statements form parser

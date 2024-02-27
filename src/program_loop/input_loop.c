@@ -6,11 +6,11 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/26 09:46:09 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/02/27 10:54:37 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
 static void	*print_heading(void)
 {
@@ -102,16 +102,19 @@ int	run_crash_interface(t_program_data *program_data)
 	print_logo();
 	while (program_data->exit_flag == 0)
 	{
-		ft_printf("%scrash%s 💥 ", ANSI_COLOR_RED, ANSI_COLOR_RESET);
-		input = get_next_line(STDIN_FILENO);
+		if (program_data->exit_status == 0)
+			input = readline("crash 💣 ");
+		else
+			input = readline("crash 💥 ");
 		append_element(program_data->gc, input);
-		if (input[0] == '\n')
+		if (input == NULL)
 		{
 			cleanup(program_data->gc);
 			program_data->gc = create_garbage_collector();
 			continue ;
 		}
-		input[ft_strlen(input) - 1] = '\0';
+		else
+			add_history(input);
 		if (execute_input(program_data, input) == -1)
 			continue ;
 		cleanup(program_data->gc);

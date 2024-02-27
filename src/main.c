@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:29:36 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/22 08:56:50 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/02/27 10:50:39 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,9 @@ int	main(int argc, char **argv, char **envp)
 	program_data.envcp = ft_strarrdup(envp);
 	program_data.gc = create_garbage_collector();
 	run_crash_interface(&program_data);
-	i = 0;
-	while (program_data.envcp[i])
-	{
+	i = -1;
+	while (program_data.envcp[++i])
 		free(program_data.envcp[i]);
-		i++;
-	}
 	free(program_data.envcp);
 	(void)argc;
 	(void)argv;

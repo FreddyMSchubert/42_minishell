@@ -11,7 +11,8 @@ CFLAGS		:=	-Wall -Werror -Wextra -g -fsanitize=address
 HEADER		:=	-I./include/
 LIBS		:=	-L$(LIBFT_DIR) -lft \
 				-L$(FTPRINTF_DIR) -lftprintf \
-				-L$(FTGNL_DIR) -lftgnl
+				-L$(FTGNL_DIR) -lftgnl \
+				-lreadline
 
 $(NAME): $(LIBFT_DIR)/libft.a $(FTPRINTF_DIR)/ftprintf.a $(FTGNL_DIR)/ftgnl.a $(OBJ)
 	@cc $(CFLAGS) $(OBJ) $(LIBS) -o $(NAME)

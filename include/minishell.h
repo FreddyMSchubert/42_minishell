@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/27 09:13:09 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/02/27 10:56:58 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,10 @@
 #include <dirent.h>
 #include <unistd.h>
 #include <limits.h>
+// readline
+#include <stdio.h> // needed in readline for FILE
+#include <readline/readline.h>
+#include <readline/history.h>
 
 #include "./colors.h"
 
@@ -91,6 +95,12 @@ void				test_expander(t_program_data *data, t_token **tokens);
 
 // --- input loop
 int					run_crash_interface(t_program_data *program_data);
+// garbage collector
+t_list				*create_garbage_collector(void);
+int					append_element(t_list *gc, void *content);
+void				append_element_array(t_list *gc, void *content);
+void				cleanup(t_list *gc);
+void				exit_error(char *message, int exit_code, t_list *gc);
 
 // --- 0-lexing
 t_token				**lexer(char *input, t_program_data *data);
@@ -147,12 +157,6 @@ int					delete_envcp_var(char *var, char **envcp);
 // --- util
 
 char				*strjoin_null_compatible(char const *s1, char const *s2);
-// garbage collector
-t_list				*create_garbage_collector(void);
-int					append_element(t_list *gc, void *content);
-void				append_element_array(t_list *gc, void *content);
-void				cleanup(t_list *gc);
-void				exit_error(char *message, int exit_code, t_list *gc);
 // errors
 void				broadcast_validator_error(int error, char *arg);
 void				broadcast_builtin_error(char *builtin, int error, char *arg);
