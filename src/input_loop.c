@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input_loop.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/26 09:46:09 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/02/27 14:20:26 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static void	*print_logo(void)
 	return (NULL);
 }
 
-static int	execute_input(t_program_data *program_data, char *input)
+int	execute_input(t_program_data *program_data, char *input)
 {
 	t_token				**tokenified_input;
 	int					valid;
