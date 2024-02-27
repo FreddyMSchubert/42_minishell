@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/27 14:20:26 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/27 16:45:16 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ int	execute_input(t_program_data *program_data, char *input)
 		ft_printf("\n\n\n");
 	// --- executer
 	execute(tree, program_data);
+	// printf("exit status: %d\n", program_data->exit_status);
 	return (0);
 }
 
@@ -104,6 +105,8 @@ int	run_crash_interface(t_program_data *program_data)
 	{
 		ft_printf("%scrash%s 💥 ", ANSI_COLOR_RED, ANSI_COLOR_RESET);
 		input = get_next_line(STDIN_FILENO);
+		if (input == NULL)
+			continue ;
 		append_element(program_data->gc, input);
 		if (input[0] == '\n')
 		{

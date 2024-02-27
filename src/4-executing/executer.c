@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/27 13:33:14 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/27 16:44:36 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	execute(t_bin_tree_node *tree, t_program_data *program_data)
 {
-	if (program_data->exit_flag == 1 || tree == NULL)
+	if (program_data->exit_flag == 1 || !tree)
 		return ;
 	if (tree->l == NULL && tree->r == NULL)
 		execute_node(tree, program_data);
@@ -25,9 +25,9 @@ void	execute(t_bin_tree_node *tree, t_program_data *program_data)
 		else if (tree->val[0]->type == TOK_PIPE)
 			setup_pipe(tree, program_data);
 		// this is just temporary so everything runs through
-		if (tree->l != NULL)
+		// if (tree->l != NULL)
 			execute(tree->l, program_data);
-		if (tree->r != NULL)
+		// if (tree->r != NULL)
 			execute(tree->r, program_data);
 	}
 }
@@ -77,22 +77,27 @@ int	execute_command(t_bin_tree_node *node, t_program_data *program_data,
 	t_cmd_path	*cmd_path;
 	int			return_value;
 
-	printf("executing command: %s\n", node->val[0]->value);
+	// printf("executing command: %s\n", node->val[0]->value);
 	pid = fork();
-	if (pid == 0) // child
+	if (pid == -1)
 	{
-		printf("child process\ninput_fd: %d\noutput_fd: %d\n", node->input_fd,
-			node->output_fd);
+		perror("fork failed");
+		return (-1);
+	}
+	else if (pid == 0) // child
+	{
+		// printf("child process\ninput_fd: %d\noutput_fd: %d\n", node->input_fd,node->output_fd);
 		// Redirect input if necessary
 		if (node->input_fd != STDIN_FILENO)
 		{
 			if (dup2(node->input_fd, STDIN_FILENO) == -1)
 			{
 				perror("dup2 input redirect failed");
-				_exit(EXIT_FAILURE); // Exit child process on error
+				return (-1); // Exit child process on error
 			}
-			close(node->input_fd);
 				// Close the original file descriptor after duplication
+			// printf("closing input_fd: %d\n", node->input_fd);
+			close(node->input_fd);
 		}
 		// Redirect output if necessary
 		if (node->output_fd != STDOUT_FILENO)
@@ -100,10 +105,11 @@ int	execute_command(t_bin_tree_node *node, t_program_data *program_data,
 			if (dup2(node->output_fd, STDOUT_FILENO) == -1)
 			{
 				perror("dup2 output redirect failed");
-				_exit(EXIT_FAILURE); // Exit child process on error
+				return (-1); // Exit child process on error
 			}
-			close(node->output_fd);
 				// Close the original file descriptor after duplication
+			// printf("closing output_fd: %d\n", node->output_fd);
+			close(node->output_fd);
 		}
 		cmd_path = create_cmd_struct(program_data->envcp, node->val,
 				cmd_start_index);
@@ -112,15 +118,17 @@ int	execute_command(t_bin_tree_node *node, t_program_data *program_data,
 	}
 	else if (pid > 0) // parent
 	{
-		close(node->output_fd);
-		close(node->input_fd);
+		if (node->output_fd != STDOUT_FILENO)
+			close(node->output_fd);
+		if (node->input_fd != STDIN_FILENO)
+			close(node->input_fd);
+		// printf("parent process\n");
 		waitpid(pid, &return_value, 0);
+		// printf("child process exited with status: %d\n", WEXITSTATUS(return_value));
 		if (WIFEXITED(return_value))
 			return (WEXITSTATUS(return_value));
 		else
 			return (-1); // child didn't exit normally e.g. terminated by signal
 	}
-	else
-		return (-1); // handle error
 	return (0);
 }
