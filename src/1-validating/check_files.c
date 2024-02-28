@@ -20,7 +20,7 @@ void print_list(t_list *list)
 	tmp = list;
 	while (tmp != NULL)
 	{
-		printf("print_list: %s\n", tmp->content);
+		printf("print_list: %s\n", (char *)tmp->content);
 		tmp = tmp->next;
 	}
 }

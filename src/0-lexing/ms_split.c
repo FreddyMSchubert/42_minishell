@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
 int ft_isspace(char c)
 {
@@ -125,11 +125,9 @@ char	**ms_split(char *input)
 	char			**result;
 	int				i;
 	int				j;
-	int				flag;
 
 	i = -1;
 	j = 0;
-	flag = 0;
 	word_count = count_tokens(input);
 	// printf("input: %s\n", input);
 	// printf("word_count: %d\n", word_count);
