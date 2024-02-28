@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 13:20:09 by nburchha          #+#    #+#             */
-/*   Updated: 2024/02/27 17:00:50 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/27 19:01:29 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	setup_pipe(t_bin_tree_node *node, t_program_data *program_data)
 {
 	int		pipe_fd[2];
-	pid_t	pid;
+	// pid_t	pid;
 
 	// printf("setting up pipe\n");
 	node->l->input_fd = node->input_fd;

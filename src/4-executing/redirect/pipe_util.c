@@ -1,27 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   unset.c                                            :+:      :+:    :+:   */
+/*   pipe_util.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/21 09:48:54 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/28 14:44:26 by nburchha         ###   ########.fr       */
+/*   Created: 2024/02/28 12:06:49 by nburchha          #+#    #+#             */
+/*   Updated: 2024/02/28 12:59:42 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../include/minishell.h"
+// #include "../../../include/minishell.h"
 
-int	execute_unset(t_token **node, t_program_data *program_data, int cmd_start_index)
-{
-	int	i;
+// void	wait_for_processes(t_list *pid_list, t_program_data *program_data)
+// {
+// 	t_list	*tmp;
 
-	i = cmd_start_index + 1;
-	while (node[i] != NULL)
-	{
-		if (delete_envcp_var(node[i]->value, program_data->envcp) != 0)
-			return (1); // handle error
-		i++;
-	}
-	return (0);
-}
+// 	tmp = pid_list;
+// 	while (tmp)
+// 	{
+// 		waitpid((pid_t)tmp->content[0], (int *)&tmp->content[1], 0);
+// 		tmp = tmp->next;
+// 	}
+// }

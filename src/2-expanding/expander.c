@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 09:20:32 by nburchha          #+#    #+#             */
-/*   Updated: 2024/02/25 17:03:47 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/28 14:47:19 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ t_token	**expander(t_token **tokens, t_program_data *program_data)
 		if (tokens[i]->type != TOK_S_QUOTE && ft_strnstr(tokens[i]->value, "$?",
 				ft_strlen(tokens[i]->value)) != NULL)
 		{
-			envcp_value = ft_itoa(program_data->exit_flag);
+			envcp_value = ft_itoa(program_data->exit_status);
 			if (!envcp_value)
 				exit_error("malloc failed", 1, program_data->gc);
 			append_element(program_data->gc, envcp_value);

@@ -6,18 +6,18 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/27 16:44:36 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/02/28 14:46:07 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	execute(t_bin_tree_node *tree, t_program_data *program_data)
+void	execute(t_bin_tree_node *tree, t_program_data *program_data)//, int count_pids)
 {
 	if (program_data->exit_flag == 1 || !tree)
 		return ;
 	if (tree->l == NULL && tree->r == NULL)
-		execute_node(tree, program_data);
+		execute_node(tree, program_data);//, &count_pids);
 	else
 	{
 		if (tree->val[0]->type == TOK_LOG_OP)
@@ -26,25 +26,72 @@ void	execute(t_bin_tree_node *tree, t_program_data *program_data)
 			setup_pipe(tree, program_data);
 		// this is just temporary so everything runs through
 		// if (tree->l != NULL)
-			execute(tree->l, program_data);
+			execute(tree->l, program_data);//, count_pids);
 		// if (tree->r != NULL)
-			execute(tree->r, program_data);
+			execute(tree->r, program_data);//, count_pids);
 	}
 }
 
-int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
+int	execute_node(t_bin_tree_node *node, t_program_data *program_data)//, int *count_pids)
 {
 	int	cmd_start_index;
+	pid_t	pid;
+	int	return_value;
 
 	cmd_start_index = 0;
 	while (node->val[cmd_start_index]->ignored == 1)
 		cmd_start_index++;
-	if (node->val[cmd_start_index]->type == TOK_BUILTIN)
-		program_data->exit_status = execute_builtin(node, program_data,
-				cmd_start_index);
-	else
-		program_data->exit_status = execute_command(node, program_data,
-				cmd_start_index);
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("fork failed");
+		return (-1);
+	}
+	else if (pid == 0) // child
+	{
+		if (node->input_fd != STDIN_FILENO)
+		{
+			if (dup2(node->input_fd, STDIN_FILENO) == -1)
+			{
+				perror("dup2 input redirect failed");
+				return (-1);
+			}
+			close(node->input_fd);
+		}
+		if (node->output_fd != STDOUT_FILENO)
+		{
+			if (dup2(node->output_fd, STDOUT_FILENO) == -1)
+			{
+				perror("dup2 output redirect failed");
+				return (-1);
+			}
+			close(node->output_fd);
+		}
+		if (node->val[cmd_start_index]->type == TOK_BUILTIN)
+			program_data->exit_status = execute_builtin(node, program_data,
+					cmd_start_index);
+		else
+		{
+			program_data->exit_status = execute_command(node, program_data,
+					cmd_start_index);
+			// *count_pids += 1;
+		}
+		exit(program_data->exit_status);
+	}
+	else if (pid > 0) // parent
+	{
+		if (node->output_fd != STDOUT_FILENO)
+			close(node->output_fd);
+		if (node->input_fd != STDIN_FILENO)
+			close(node->input_fd);
+		// printf("parent process\n");
+		waitpid(pid, &return_value, 0);
+		// printf("child process exited with status: %d\n", WEXITSTATUS(return_value));
+		if (WIFEXITED(return_value))
+			return (WEXITSTATUS(return_value));
+		else
+			return (-1); // child didn't exit normally e.g. terminated by signal
+	}
 	// if (node->input_fd != 0 || node->output_fd != 1)
 	// 	print_pipes(node->input_fd, node->output_fd);
 	return (program_data->exit_status);
@@ -73,62 +120,28 @@ int	execute_builtin(t_bin_tree_node *node, t_program_data *program_data,
 int	execute_command(t_bin_tree_node *node, t_program_data *program_data,
 		int cmd_start_index)
 {
-	pid_t		pid;
 	t_cmd_path	*cmd_path;
-	int			return_value;
+	// int			return_value;
 
 	// printf("executing command: %s\n", node->val[0]->value);
-	pid = fork();
-	if (pid == -1)
-	{
-		perror("fork failed");
-		return (-1);
-	}
-	else if (pid == 0) // child
-	{
 		// printf("child process\ninput_fd: %d\noutput_fd: %d\n", node->input_fd,node->output_fd);
 		// Redirect input if necessary
-		if (node->input_fd != STDIN_FILENO)
-		{
-			if (dup2(node->input_fd, STDIN_FILENO) == -1)
-			{
-				perror("dup2 input redirect failed");
-				return (-1); // Exit child process on error
-			}
-				// Close the original file descriptor after duplication
-			// printf("closing input_fd: %d\n", node->input_fd);
-			close(node->input_fd);
-		}
-		// Redirect output if necessary
-		if (node->output_fd != STDOUT_FILENO)
-		{
-			if (dup2(node->output_fd, STDOUT_FILENO) == -1)
-			{
-				perror("dup2 output redirect failed");
-				return (-1); // Exit child process on error
-			}
-				// Close the original file descriptor after duplication
-			// printf("closing output_fd: %d\n", node->output_fd);
-			close(node->output_fd);
-		}
-		cmd_path = create_cmd_struct(program_data->envcp, node->val,
-				cmd_start_index);
-		execve(cmd_path->path, cmd_path->args, program_data->envcp);
-		return (-1); // handle error
-	}
-	else if (pid > 0) // parent
-	{
-		if (node->output_fd != STDOUT_FILENO)
-			close(node->output_fd);
-		if (node->input_fd != STDIN_FILENO)
-			close(node->input_fd);
-		// printf("parent process\n");
-		waitpid(pid, &return_value, 0);
-		// printf("child process exited with status: %d\n", WEXITSTATUS(return_value));
-		if (WIFEXITED(return_value))
-			return (WEXITSTATUS(return_value));
-		else
-			return (-1); // child didn't exit normally e.g. terminated by signal
-	}
-	return (0);
+	cmd_path = create_cmd_struct(program_data->envcp, node->val,
+			cmd_start_index);
+	execve(cmd_path->path, cmd_path->args, program_data->envcp);
+	return (-1); // handle error
+	// else if (pid > 0) // parent
+	// {
+	// 	if (node->output_fd != STDOUT_FILENO)
+	// 		close(node->output_fd);
+	// 	if (node->input_fd != STDIN_FILENO)
+	// 		close(node->input_fd);
+	// 	// printf("parent process\n");
+	// 	waitpid(pid, &return_value, 0);
+	// 	// printf("child process exited with status: %d\n", WEXITSTATUS(return_value));
+	// 	if (WIFEXITED(return_value))
+	// 		return (WEXITSTATUS(return_value));
+	// 	else
+	// 		return (-1); // child didn't exit normally e.g. terminated by signal
+	// }
 }
