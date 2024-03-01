@@ -6,18 +6,18 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/01 12:55:05 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/01 15:48:20 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	execute(t_bin_tree_node *tree, t_program_data *program_data)//, int count_pids)
+t_list	*execute(t_bin_tree_node *tree, t_program_data *program_data, t_list *pids)//, int count_pids)
 {
 	if (program_data->exit_flag == 1 || !tree)
-		return ;
+		return (pids);
 	if (tree->l == NULL && tree->r == NULL)
-		execute_node(tree, program_data);//, &count_pids);
+		execute_node(tree, program_data, pids);
 	else
 	{
 		if (tree->val[0]->type == TOK_LOG_OP)
@@ -26,18 +26,25 @@ void	execute(t_bin_tree_node *tree, t_program_data *program_data)//, int count_p
 			setup_pipe(tree, program_data);
 		// this is just temporary so everything runs through
 		// if (tree->l != NULL)
-			execute(tree->l, program_data);//, count_pids);
+			execute(tree->l, program_data, pids);
 		// if (tree->r != NULL)
-			execute(tree->r, program_data);//, count_pids);
+			execute(tree->r, program_data, pids);
 	}
+	return (pids);
 }
 
-int	execute_node(t_bin_tree_node *node, t_program_data *program_data)//, int *count_pids)
+int	execute_node(t_bin_tree_node *node, t_program_data *program_data, t_list *pids)
 {
 	int	cmd_start_index;
 	pid_t	pid;
 	int	return_value;
 
+	// pid = malloc(sizeof(pid_t));
+	// if (!pid)
+	// {
+	// 	perror("malloc failed");
+	// 	return (-1);
+	// }
 	cmd_start_index = 0;
 	while (node->val[cmd_start_index]->ignored == 1)
 		cmd_start_index++;
@@ -82,12 +89,14 @@ int	execute_node(t_bin_tree_node *node, t_program_data *program_data)//, int *co
 	}
 	else if (pid > 0) // parent
 	{
+		// printf("child pid: %d\n", pid);
+		ft_lstadd_back(&pids, ft_lstnew((void *)(intptr_t)pid));
 		if (node->output_fd != STDOUT_FILENO)
 			close(node->output_fd);
 		if (node->input_fd != STDIN_FILENO)
 			close(node->input_fd);
 		// printf("parent process\n");
-		waitpid(pid, &return_value, 0);
+		// waitpid(pid, &return_value, 0);
 		// printf("child process exited with status: %d\n", WEXITSTATUS(return_value));
 		if (WIFEXITED(return_value))
 			return (WEXITSTATUS(return_value));

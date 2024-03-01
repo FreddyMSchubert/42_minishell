@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/27 16:45:16 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/01 15:49:08 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,20 @@ int	execute_input(t_program_data *program_data, char *input)
 	if (VERBOSE == 1)
 		ft_printf("\n\n\n");
 	// --- executer
-	execute(tree, program_data);
+	t_list *pids = execute(tree, program_data, ft_lstnew(NULL));
+	pids = pids->next;
+	// t_list *tmp = pids;
+	// while (tmp != NULL)
+	// {
+	// 	printf("waiting for pid: %d\n", (pid_t)tmp->content);
+	// 	tmp = tmp->next;
+	// }
+	while (pids != NULL)
+	{
+		// printf("waiting for pid: %d\n", (pid_t)(intptr_t)pids->content);
+		waitpid((pid_t)(intptr_t)pids->content, &program_data->exit_status, 0);
+		pids = pids->next;
+	}
 	// printf("exit status: %d\n", program_data->exit_status);
 	return (0);
 }
