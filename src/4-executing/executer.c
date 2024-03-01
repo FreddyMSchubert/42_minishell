@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/28 14:46:07 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/01 12:55:05 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ int	execute_node(t_bin_tree_node *node, t_program_data *program_data)//, int *co
 	cmd_start_index = 0;
 	while (node->val[cmd_start_index]->ignored == 1)
 		cmd_start_index++;
+	if (node->val[cmd_start_index]->type == TOK_BUILTIN && ft_strncmp(node->val[cmd_start_index]->value, "exit", 5) == 0 && node->input_fd == 0 && node->output_fd == 1)
+		return (execute_exit(node->val, program_data, cmd_start_index));
 	pid = fork();
 	if (pid == -1)
 	{
