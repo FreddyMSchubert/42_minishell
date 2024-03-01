@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 15:25:11 by nburchha          #+#    #+#             */
-/*   Updated: 2024/02/19 13:08:01 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/01 16:22:25 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,6 @@ int	validator(t_token **token_arr)
 		return (2);
 	// check for file errors
 	if (check_files(files[0], 0) != 0 || check_files(files[1], 1) != 0 || check_files(files[2], 2) != 0)
-		return (ft_lstclear(&files[0], free), ft_lstclear(&files[1], free), ft_lstclear(&files[2], free), 3);
-	return (ft_lstclear(&files[0], free), ft_lstclear(&files[1], free), ft_lstclear(&files[2], free), 0);
+		return (ft_lstclear(&files[0], NULL), ft_lstclear(&files[1], NULL), ft_lstclear(&files[2], NULL), 3);
+	return (ft_lstclear(&files[0], NULL), ft_lstclear(&files[1], NULL), ft_lstclear(&files[2], NULL), 0);
 }

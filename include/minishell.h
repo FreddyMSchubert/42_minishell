@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/01 13:45:59 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/01 16:27:38 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <dirent.h>
 #include <unistd.h>
 #include <limits.h>
+#include <string.h>
 
 #include "./colors.h"
 
@@ -125,14 +126,14 @@ t_list			*execute(t_bin_tree_node *tree, t_program_data *data, t_list *pids);
 int					execute_node(t_bin_tree_node *node, t_program_data *data, t_list *pids);
 int	execute_input(t_program_data *program_data, char *input);
 // operators
-int					logical_op(t_bin_tree_node *node, t_program_data *data);
-int					logical_and(t_bin_tree_node *node, t_program_data *data);
-int					logical_or(t_bin_tree_node *node, t_program_data *data);
+int					logical_op(t_bin_tree_node *node, t_program_data *data, t_list *pids);
+int					logical_and(t_bin_tree_node *node, t_program_data *data, t_list *pids);
+int					logical_or(t_bin_tree_node *node, t_program_data *data, t_list *pids);
+int					redirect(t_bin_tree_node *node, t_program_data *program_data);
+void				setup_pipe(t_bin_tree_node *node, t_program_data *program_data);
 // "normal" commands
 int	execute_command(t_bin_tree_node *node, t_program_data *program_data, int cmd_start_index);
 t_cmd_path	*create_cmd_struct(char	**envp, t_token	**cmd, int cmd_start_index);
-// pipes
-void				setup_pipe(t_bin_tree_node *node, t_program_data *program_data);
 // builtins
 int	execute_builtin(t_bin_tree_node *node, t_program_data *program_data, int cmd_start_index);
 int	execute_echo(t_token **inputs, int cmd_start_index);

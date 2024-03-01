@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/01 15:48:20 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/01 16:27:02 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,16 @@ t_list	*execute(t_bin_tree_node *tree, t_program_data *program_data, t_list *pid
 	else
 	{
 		if (tree->val[0]->type == TOK_LOG_OP)
-			logical_op(tree, program_data);
+			logical_op(tree, program_data, pids);
 		else if (tree->val[0]->type == TOK_PIPE)
 			setup_pipe(tree, program_data);
+		else if (tree->val[0]->type == TOK_REDIR)
+			redirect(tree, program_data);
 		// this is just temporary so everything runs through
 		// if (tree->l != NULL)
-			execute(tree->l, program_data, pids);
+		execute(tree->l, program_data, pids);
 		// if (tree->r != NULL)
-			execute(tree->r, program_data, pids);
+		execute(tree->r, program_data, pids);
 	}
 	return (pids);
 }
