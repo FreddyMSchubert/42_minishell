@@ -1,5 +1,19 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+### v0.14.1 - 01.03.24 - Niklas
+- Concurrent processes in pipelines implemented, exit code handling added (not tested)
+- `> >>` redirections working, `<` redirection buggy but basically working
+
+## v0.14.0 - 28.02.24 - Niklas
+- Changed structure of forking and execution of commands & builtins, working up to some extent, not finished
+- Fixed exit to only exit when not in pipes, also to exit with the correct status code
+
+### v0.13.4 - 27.02.24 - Niklas
+- Corrected pipe behavior, so it works in main loop
+
+### v0.13.3 - 26.02.24 - Niklas
+- Pipes working properly with pipelines, fd's are parsed through struct nodes
+
 ### v0.13.2 - 26.02.24 - Freddy
 - duplicate brackets for non-builtins fix (previously ignored brackets would be counted as args)
 
@@ -15,6 +29,9 @@
 - logical AND & OR fixes
 - added more logging based on verbose flag to input_loop.c
 - parser ignore flag setting when there arent even brackets fix
+
+## v.0.12.1 - 26.02.24 - Niklas
+- Fixed Lexer issue interpreting arguments as builtins
 
 ## v0.12.0 - 26.02.24 - Freddy
 - Added logical AND & OR
