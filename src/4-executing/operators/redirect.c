@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 16:07:34 by nburchha          #+#    #+#             */
-/*   Updated: 2024/03/01 17:07:32 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/03 18:22:22 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,33 +28,52 @@ void	handle_arguments_after_redirection(t_bin_tree_node *node)
 	
 }
 
+char *get_filename(t_bin_tree_node *node)
+{
+	t_bin_tree_node *temp;
+
+	temp = node->r;
+	while (temp->val[0]->type != TOK_CMD_ARG)
+		temp = temp->l;
+	return (temp->val[0]->value);
+}
+
+int	heredoc(t_bin_tree_node *node, t_program_data *program_data)
+{
+	printf("heredoc\n");
+	(void)program_data;
+	(void)node;
+	return (0);
+}
+
 int	redirect(t_bin_tree_node *node, t_program_data *program_data)
 {
 	int		fd;
 	int		flags;
-	// int		perm;
+	char	*filename;
 
+	filename = get_filename(node);
+	printf("filename: %s\n", filename);
 	if (node->input_fd != 0)
 		node->l->input_fd = node->input_fd;
 	if (node->output_fd != 1)
 		node->l->output_fd = node->output_fd;
+	if (ft_strncmp(node->val[0]->value, "<<", 2) == 0)
+		return (heredoc(node, program_data), 0);
 	// printf("node->val[0]->value: %s\n", node->val[1]->value);
 	if (ft_strncmp(node->val[0]->value, "<", 1) == 0)
 		flags = O_RDONLY;
 	else if (ft_strncmp(node->val[0]->value, ">>", 2) == 0)
 		flags = O_APPEND | O_WRONLY | O_CREAT;
-	else if (ft_strncmp(node->val[0]->value, ">", 1) == 0)
-		flags = O_TRUNC | O_WRONLY | O_CREAT;
-	if (node->val[0]->value[0] == '<' || node->val[0]->value[1] == '>')
-		fd = open(node->r->val[0]->value, flags, 0644);
 	else
-		fd = open(node->r->val[0]->value, flags, 0644);
+		flags = O_TRUNC | O_WRONLY | O_CREAT;
+	fd = open(filename, flags, 0644);
 	if (fd < 0)
 	{
 		ft_printf("minishell: %s: %s\n", node->r->val[0]->value, strerror(errno));
 		return (-1);
 	}
-	if (ft_strncmp(node->val[0]->value, "<", 2) == 0)
+	if (ft_strncmp(node->val[0]->value, "<", 1) == 0)
 		node->l->input_fd = fd;
 	else
 		node->l->output_fd = fd;
