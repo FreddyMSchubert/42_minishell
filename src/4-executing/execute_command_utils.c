@@ -24,6 +24,8 @@ static char	*get_command_path(char **envp, char *command)
 	char	*path_temp;
 	int		counter;
 
+	if (access(command, X_OK) == 0)
+	   return (ft_strdup(command));
 	while (ft_strncmp(envp[0], "PATH", 4) != 0)
 		envp++;
 	split_paths = ft_split(envp[0], ':');

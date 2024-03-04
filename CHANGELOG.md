@@ -1,5 +1,9 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+## v0.16.0 - 04.03.24 - Freddy
+- made executable execution while specifying a path work
+- fun fact you can now run `./crash` and it will execute itself
+
 ### v0.15.1 - 28.02.24 - Freddy
 - fixed some small weird errors in lexing and validating
 
