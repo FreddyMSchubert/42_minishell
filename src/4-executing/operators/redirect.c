@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 16:07:34 by nburchha          #+#    #+#             */
-/*   Updated: 2024/03/05 12:37:10 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/05 20:27:13 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,15 @@ int	redirect(t_bin_tree_node *node, t_program_data *program_data)
 		ft_printf("minishell: %s: %s\n", node->r->val[0]->value, strerror(errno));
 		return (-1);
 	}
-	while (node->parent != NULL && node->parent->val && node->parent->val[0]->type == TOK_REDIR)
+	if (node->r->val[0]->type == TOK_REDIR && ft_strncmp(node->val[0]->value, node->r->val[0]->value, 1) == 0) // if its not the last redirect and the same as the current one
+		return (close(fd), redirect(node->r, program_data), 0);
+	while (node->parent && node->parent->val[0]->type == TOK_REDIR)
 	{
 		node = node->parent;
 		if (!node->parent || (node->parent->val && node->parent->val[0]->type != TOK_REDIR))
 		{
 			node->l->output_fd = fd;
+			printf("node: %s, output_fd: %d\n", node->l->val[0]->value, fd);
 			return (0);
 		}
 	}
@@ -70,6 +73,7 @@ int	redirect(t_bin_tree_node *node, t_program_data *program_data)
 		node->l->input_fd = fd;
 	else
 		node->l->output_fd = fd;
+	printf("not in while loop node: %s, output_fd: %d\n", node->l->val[0]->value, fd);
 	(void)program_data;
 	return (0);
 }
