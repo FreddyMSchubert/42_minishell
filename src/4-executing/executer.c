@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/05 12:35:48 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/05 12:50:33 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,18 +29,18 @@ t_list	*execute(t_bin_tree_node *tree, t_program_data *program_data, t_list *pid
 			redirect(tree, program_data);
 		// this is just temporary so everything runs through
 		// if (tree->l != NULL)
-		// execute(tree->l, program_data, pids);
-		// execute(tree->r, program_data, pids);
-		if (tree->l->val[0]->type < tree->r->val[0]->type)
-		{
-			execute(tree->r, program_data, pids);
-			execute(tree->l, program_data, pids);
-		}
-		else
-		{
-			execute(tree->l, program_data, pids);
-			execute(tree->r, program_data, pids);
-		}
+		execute(tree->l, program_data, pids);
+		execute(tree->r, program_data, pids);
+		// if (tree->l->val[0]->type < tree->r->val[0]->type)
+		// {
+		// 	execute(tree->r, program_data, pids);
+		// 	execute(tree->l, program_data, pids);
+		// }
+		// else
+		// {
+		// 	execute(tree->l, program_data, pids);
+		// 	execute(tree->r, program_data, pids);
+		// }
 	}
 	return (pids);
 }
