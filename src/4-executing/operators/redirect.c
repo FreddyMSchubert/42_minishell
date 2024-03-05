@@ -6,27 +6,11 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 16:07:34 by nburchha          #+#    #+#             */
-/*   Updated: 2024/03/03 18:22:22 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/05 12:37:10 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/minishell.h"
-
-void	handle_arguments_after_redirection(t_bin_tree_node *node)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
-	while (node->l->val[i])
-		j++;
-	while (node->r->val[++i] != NULL)
-	{
-		node->r->val[i] = node->r->val[j++];
-	}
-	
-}
 
 char *get_filename(t_bin_tree_node *node)
 {
@@ -52,8 +36,8 @@ int	redirect(t_bin_tree_node *node, t_program_data *program_data)
 	int		flags;
 	char	*filename;
 
+	// print_binary_tree(node, 0);
 	filename = get_filename(node);
-	printf("filename: %s\n", filename);
 	if (node->input_fd != 0)
 		node->l->input_fd = node->input_fd;
 	if (node->output_fd != 1)
@@ -72,6 +56,15 @@ int	redirect(t_bin_tree_node *node, t_program_data *program_data)
 	{
 		ft_printf("minishell: %s: %s\n", node->r->val[0]->value, strerror(errno));
 		return (-1);
+	}
+	while (node->parent != NULL && node->parent->val && node->parent->val[0]->type == TOK_REDIR)
+	{
+		node = node->parent;
+		if (!node->parent || (node->parent->val && node->parent->val[0]->type != TOK_REDIR))
+		{
+			node->l->output_fd = fd;
+			return (0);
+		}
 	}
 	if (ft_strncmp(node->val[0]->value, "<", 1) == 0)
 		node->l->input_fd = fd;

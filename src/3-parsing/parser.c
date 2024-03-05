@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 12:13:31 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/27 16:18:25 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/05 10:30:50 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,10 @@ t_bin_tree_node	*tok_to_bin_tree(t_token **arr)
 	node->val[1] = NULL;
 	node->val[0] = arr[dom_op_i];
 	node->l = tok_to_bin_tree(sub_tok_arr(arr, 0, dom_op_i - 1));
+	if (node->l)
+		node->l->parent = node;
 	node->r = tok_to_bin_tree(sub_tok_arr(arr, dom_op_i + 1, toklen(arr) - 1));
+	if (node->r)
+		node->r->parent = node;
 	return (node);
 }

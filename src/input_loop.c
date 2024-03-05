@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/01 15:49:08 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/05 12:37:35 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,10 +82,11 @@ int	execute_input(t_program_data *program_data, char *input)
 	}
 	if (VERBOSE == 1)
 		ft_printf("token sequence is valid\n");
-	// --- expander
-	// expand_tokens(tokenified_input);
 	// --- parser
 	tree = tok_to_bin_tree(tokenified_input);
+	tree->parent = NULL;
+
+	// printf("node: %p\nparent: %p\nvalue: %s\n", tree, tree->parent, tree->val[0]->value);
 	if (VERBOSE == 1)
 		print_binary_tree(tree, 0);
 	if (VERBOSE == 1)
@@ -93,12 +94,6 @@ int	execute_input(t_program_data *program_data, char *input)
 	// --- executer
 	t_list *pids = execute(tree, program_data, ft_lstnew(NULL));
 	pids = pids->next;
-	// t_list *tmp = pids;
-	// while (tmp != NULL)
-	// {
-	// 	printf("waiting for pid: %d\n", (pid_t)tmp->content);
-	// 	tmp = tmp->next;
-	// }
 	while (pids != NULL)
 	{
 		// printf("waiting for pid: %d\n", (pid_t)(intptr_t)pids->content);
