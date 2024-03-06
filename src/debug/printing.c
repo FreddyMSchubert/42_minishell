@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 07:42:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/05 10:07:04 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/06 10:27:51 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,6 @@ void	print_binary_tree(t_bin_tree_node *tree, int tabs)
 		while (++tabs_counter < tabs)
 			printf("\t");
 		print_token(tree->val[i]);
-		while (tabs_counter-- >= 0)
-			printf("\t");
-		printf("parent: %p, node: %p\n", tree->parent, tree);
 	}
 	if (tree->l != NULL)
 	{

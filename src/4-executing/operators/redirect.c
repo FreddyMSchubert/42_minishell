@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 16:07:34 by nburchha          #+#    #+#             */
-/*   Updated: 2024/03/05 20:27:13 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/06 10:42:48 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int	redirect(t_bin_tree_node *node, t_program_data *program_data)
 		if (!node->parent || (node->parent->val && node->parent->val[0]->type != TOK_REDIR))
 		{
 			node->l->output_fd = fd;
-			printf("node: %s, output_fd: %d\n", node->l->val[0]->value, fd);
+			// printf("node: %s, output_fd: %d\n", node->l->val[0]->value, fd);
 			return (0);
 		}
 	}
@@ -73,7 +73,7 @@ int	redirect(t_bin_tree_node *node, t_program_data *program_data)
 		node->l->input_fd = fd;
 	else
 		node->l->output_fd = fd;
-	printf("not in while loop node: %s, output_fd: %d\n", node->l->val[0]->value, fd);
+	// printf("not in while loop node: %s, output_fd: %d\n", node->l->val[0]->value, fd);
 	(void)program_data;
 	return (0);
 }
