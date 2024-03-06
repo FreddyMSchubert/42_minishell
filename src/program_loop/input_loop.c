@@ -107,8 +107,9 @@ int	run_crash_interface(t_program_data *program_data)
 		else
 			input = readline("crash 💥 ");
 		append_element(program_data->gc, input);
-		if (input == NULL)
+		if (input == NULL || ft_isspace_str_all(input) == 1)
 		{
+		    ft_printf("clea");
 			cleanup(program_data->gc);
 			program_data->gc = create_garbage_collector();
 			continue ;

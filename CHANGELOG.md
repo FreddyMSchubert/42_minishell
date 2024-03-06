@@ -1,5 +1,8 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+## v0.17.0 - 04.03.24 - Freddy
+- Added ft_isspace to libft submodule, removed from ms_split
+
 ## v0.16.0 - 04.03.24 - Freddy
 - made executable execution while specifying a path work
 - fun fact you can now run `./crash` and it will execute itself
