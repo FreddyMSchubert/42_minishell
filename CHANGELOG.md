@@ -1,5 +1,8 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+### freddy bugfix - 0.1.0
+- fixed whitespace crashing program execution, which was surprisingly hard
+
 ## v0.17.0 - 04.03.24 - Freddy
 - Added ft_isspace to libft submodule, removed from ms_split
 

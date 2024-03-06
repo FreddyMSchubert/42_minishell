@@ -106,21 +106,25 @@ int	run_crash_interface(t_program_data *program_data)
 			input = readline("crash 💣 ");
 		else
 			input = readline("crash 💥 ");
-		append_element(program_data->gc, input);
 		if (input == NULL || ft_isspace_str_all(input) == 1)
 		{
-		    ft_printf("clea");
+		    if (input != NULL)
+				append_element(program_data->gc, input);
 			cleanup(program_data->gc);
 			program_data->gc = create_garbage_collector();
 			continue ;
 		}
 		else
+		{
+		    append_element(program_data->gc, input);
 			add_history(input);
+		}
 		if (execute_input(program_data, input) == -1)
 			continue ;
 		cleanup(program_data->gc);
 		program_data->gc = create_garbage_collector();
 	}
 	cleanup(program_data->gc);
+	clear_history();
 	return (0);
 }
