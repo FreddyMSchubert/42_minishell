@@ -17,7 +17,7 @@
 */
 
 /*
-	Logs message & exits program with exit_code, 
+	Logs message & exits program with exit_code,
 	but not before freeing all elements in the garbage collector
 */
 void	exit_error(char *message, int exit_code, t_list *gc)
@@ -85,5 +85,4 @@ void	cleanup(t_list *gc)
 		free(current2->content);
 		free(current2);
 	}
-	clear_history();
 }

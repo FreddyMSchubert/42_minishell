@@ -12,13 +12,6 @@
 
 #include "../../include/minishell.h"
 
-int ft_isspace(char c)
-{
-	if (c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f' || c == '\r')
-		return (1);
-	return (0);
-}
-
 /// @return 2 if valid operator symbol (<<, >>, ||, &&), 1 if single operator symbol, 0 if not operator symbol
 int	is_operator_symbol(char c, char d)
 {
