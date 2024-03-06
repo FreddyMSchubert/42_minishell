@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/06 10:42:38 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/06 16:47:21 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,16 +91,9 @@ int	execute_input(t_program_data *program_data, char *input)
 		print_binary_tree(tree, 0);
 	if (VERBOSE == 1)
 		ft_printf("\n\n\n");
-	// --- executer
-	t_list *pids = execute(tree, program_data, ft_lstnew(NULL));
-	pids = pids->next;
-	while (pids != NULL)
-	{
-		// printf("waiting for pid: %d\n", (pid_t)(intptr_t)pids->content);
-		waitpid((pid_t)(intptr_t)pids->content, &program_data->exit_status, 0);
-		pids = pids->next;
-	}
-	// printf("exit status: %d\n", program_data->exit_status);
+	// --- executer 
+	pid_t last_pid = execute(tree, program_data);//, ft_lstnew(NULL));// t_list *pids = 
+	waitpid(last_pid, &program_data->exit_status, 0);
 	return (0);
 }
 

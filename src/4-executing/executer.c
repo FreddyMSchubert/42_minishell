@@ -6,22 +6,24 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/06 11:52:01 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/06 15:29:33 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-t_list	*execute(t_bin_tree_node *tree, t_program_data *program_data, t_list *pids)
+pid_t	execute(t_bin_tree_node *tree, t_program_data *program_data)
 {
+	int	last_pid;
+
 	if (program_data->exit_flag == 1 || !tree)
-		return (pids);
+		return (program_data->exit_status);
 	if (tree->l == NULL && tree->r == NULL)
-		execute_node(tree, program_data, pids);
+		last_pid = execute_node(tree, program_data);
 	else
 	{
 		if (tree->val[0]->type == TOK_LOG_OP)
-			logical_op(tree, program_data, pids);
+			last_pid = logical_op(tree, program_data);
 		else if (tree->val[0]->type == TOK_PIPE)
 			setup_pipe(tree, program_data);
 		else if (tree->val[0]->type == TOK_REDIR)
@@ -31,19 +33,19 @@ t_list	*execute(t_bin_tree_node *tree, t_program_data *program_data, t_list *pid
 		{
 			redirect(tree->r, program_data);
 		}
-		execute(tree->l, program_data, pids);
-		execute(tree->r, program_data, pids);
+		last_pid = execute(tree->l, program_data);
+		last_pid = execute(tree->r, program_data);
 	}
-	return (pids);
+	return (last_pid);
 }
 
-int	execute_node(t_bin_tree_node *node, t_program_data *program_data, t_list *pids)
+int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 {
 	int	cmd_start_index;
 	pid_t	pid;
-	int	return_value;
+	// int	return_value;
 
-	// printf("executing node: %s\n", node->val[0]->value);
+	// printf("node_exec: %s, in_fd: %d, out_fd: %d\n", node->val[0]->value, node->input_fd, node->output_fd);
 	cmd_start_index = 0;
 	while (node->val[cmd_start_index]->ignored == 1)
 		cmd_start_index++;
@@ -82,28 +84,21 @@ int	execute_node(t_bin_tree_node *node, t_program_data *program_data, t_list *pi
 		{
 			program_data->exit_status = execute_command(node, program_data,
 					cmd_start_index);
-			// *count_pids += 1;
 		}
 		exit(program_data->exit_status);
 	}
 	else if (pid > 0) // parent
 	{
-		// printf("child pid: %d\n", pid);
-		ft_lstadd_back(&pids, ft_lstnew((void *)(intptr_t)pid));
 		if (node->output_fd != STDOUT_FILENO)
 			close(node->output_fd);
 		if (node->input_fd != STDIN_FILENO)
 			close(node->input_fd);
-		// printf("parent process\n");
-		// waitpid(pid, &return_value, 0);
-		// printf("child process exited with status: %d\n", WEXITSTATUS(return_value));
-		if (WIFEXITED(return_value))
-			return (WEXITSTATUS(return_value));
-		else
-			return (-1); // child didn't exit normally e.g. terminated by signal
+		return (pid);
+	// 	if (WIFEXITED(return_value))
+	// 		return (WEXITSTATUS(return_value));
+	// 	else
+	// 		return (-1); // child didn't exit normally e.g. terminated by signal
 	}
-	// if (node->input_fd != 0 || node->output_fd != 1)
-	// 	print_pipes(node->input_fd, node->output_fd);
 	return (program_data->exit_status);
 }
 
@@ -133,25 +128,8 @@ int	execute_command(t_bin_tree_node *node, t_program_data *program_data,
 	t_cmd_path	*cmd_path;
 	// int			return_value;
 
-	// printf("executing command: %s\n", node->val[0]->value);
-		// printf("child process\ninput_fd: %d\noutput_fd: %d\n", node->input_fd,node->output_fd);
-		// Redirect input if necessary
 	cmd_path = create_cmd_struct(program_data->envcp, node->val,
 			cmd_start_index);
 	execve(cmd_path->path, cmd_path->args, program_data->envcp);
 	return (-1); // handle error
-	// else if (pid > 0) // parent
-	// {
-	// 	if (node->output_fd != STDOUT_FILENO)
-	// 		close(node->output_fd);
-	// 	if (node->input_fd != STDIN_FILENO)
-	// 		close(node->input_fd);
-	// 	// printf("parent process\n");
-	// 	waitpid(pid, &return_value, 0);
-	// 	// printf("child process exited with status: %d\n", WEXITSTATUS(return_value));
-	// 	if (WIFEXITED(return_value))
-	// 		return (WEXITSTATUS(return_value));
-	// 	else
-	// 		return (-1); // child didn't exit normally e.g. terminated by signal
-	// }
 }

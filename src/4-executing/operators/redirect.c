@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 16:07:34 by nburchha          #+#    #+#             */
-/*   Updated: 2024/03/06 10:42:48 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/06 15:29:27 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ int	redirect(t_bin_tree_node *node, t_program_data *program_data)
 	int		fd;
 	int		flags;
 	char	*filename;
+	bool	redir_out;
 
-	// print_binary_tree(node, 0);
 	filename = get_filename(node);
 	if (node->input_fd != 0)
 		node->l->input_fd = node->input_fd;
@@ -59,13 +59,19 @@ int	redirect(t_bin_tree_node *node, t_program_data *program_data)
 	}
 	if (node->r->val[0]->type == TOK_REDIR && ft_strncmp(node->val[0]->value, node->r->val[0]->value, 1) == 0) // if its not the last redirect and the same as the current one
 		return (close(fd), redirect(node->r, program_data), 0);
+	if (node->val[0]->value[0] == '>')
+		redir_out = true;
+	else
+		redir_out = false;
 	while (node->parent && node->parent->val[0]->type == TOK_REDIR)
 	{
 		node = node->parent;
 		if (!node->parent || (node->parent->val && node->parent->val[0]->type != TOK_REDIR))
 		{
-			node->l->output_fd = fd;
-			// printf("node: %s, output_fd: %d\n", node->l->val[0]->value, fd);
+			if (!redir_out)
+				node->l->input_fd = fd;
+			else
+				node->l->output_fd = fd;
 			return (0);
 		}
 	}

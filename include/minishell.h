@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/01 16:27:38 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/06 13:38:16 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ typedef struct s_bin_tree_node {
 	t_token			**val;
 	t_bin_tree_node	*l;
 	t_bin_tree_node	*r;
+	t_bin_tree_node	*parent;
 	int				input_fd;
 	int				output_fd;
 }	t_bin_tree_node;
@@ -122,13 +123,13 @@ t_bin_tree_node		*tok_to_bin_tree(t_token **token_arr);
 
 // --- 4-executing
 // general
-t_list			*execute(t_bin_tree_node *tree, t_program_data *data, t_list *pids);
-int					execute_node(t_bin_tree_node *node, t_program_data *data, t_list *pids);
+int				execute(t_bin_tree_node *tree, t_program_data *data);
+int					execute_node(t_bin_tree_node *node, t_program_data *data);
 int	execute_input(t_program_data *program_data, char *input);
 // operators
-int					logical_op(t_bin_tree_node *node, t_program_data *data, t_list *pids);
-int					logical_and(t_bin_tree_node *node, t_program_data *data, t_list *pids);
-int					logical_or(t_bin_tree_node *node, t_program_data *data, t_list *pids);
+int					logical_op(t_bin_tree_node *node, t_program_data *data);
+int					logical_and(t_bin_tree_node *node, t_program_data *data);
+int					logical_or(t_bin_tree_node *node, t_program_data *data);
 int					redirect(t_bin_tree_node *node, t_program_data *program_data);
 void				setup_pipe(t_bin_tree_node *node, t_program_data *program_data);
 // "normal" commands
