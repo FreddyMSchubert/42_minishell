@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input_loop.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/27 10:54:37 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/06 18:23:17 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static void	*print_logo(void)
 	return (NULL);
 }
 
-static int	execute_input(t_program_data *program_data, char *input)
+int	execute_input(t_program_data *program_data, char *input)
 {
 	t_token				**tokenified_input;
 	int					valid;
@@ -82,16 +82,18 @@ static int	execute_input(t_program_data *program_data, char *input)
 	}
 	if (VERBOSE == 1)
 		ft_printf("token sequence is valid\n");
-	// --- expander
-	// expand_tokens(tokenified_input);
 	// --- parser
 	tree = tok_to_bin_tree(tokenified_input);
+	tree->parent = NULL;
+
+	// printf("node: %p\nparent: %p\nvalue: %s\n", tree, tree->parent, tree->val[0]->value);
 	if (VERBOSE == 1)
 		print_binary_tree(tree, 0);
 	if (VERBOSE == 1)
 		ft_printf("\n\n\n");
-	// --- executer
-	execute(tree, program_data);
+	// --- executer 
+	pid_t last_pid = execute(tree, program_data);//, ft_lstnew(NULL));// t_list *pids = 
+	waitpid(last_pid, &program_data->exit_status, 0);
 	return (0);
 }
 
