@@ -1,5 +1,8 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+## v0.19.0 - 07.03.24 - Freddy
+- created argument reordering function for redirects
+
 ## v0.18.0 - 06.03.24 - Freddy
 - implemented here_doc
 - parents now return childs exit status

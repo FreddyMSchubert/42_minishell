@@ -11,8 +11,50 @@
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+#include <cstdlib>
 #include <sys/wait.h>
 #include <unistd.h>
+
+// yes i just reallocated it dont look at me like that.
+int    reorder_args_and_redirect(t_bin_tree_node *tree, t_program_data *program_data)
+{
+    int args_amount;
+    int previous_l_len;
+    t_token **temp;
+
+    args_amount = 1;
+    // get amount of args
+    previous_l_len = 0;
+    while (tree->r->val[args_amount])
+        args_amount++;
+    args_amount--;
+    // get length of previous command
+    while (tree->l->val[previous_l_len])
+        previous_l_len++;
+    // create new array left
+    temp = malloc(sizeof(t_token) * (previous_l_len + args_amount + 1));
+    if (!temp)
+        return (perror("malloc for redirect reallocation failed"), -1);
+    temp[previous_l_len + args_amount] = NULL;
+    for (int i = 0; i < previous_l_len; i++)
+        temp[i] = tree->l->val[i];
+    for (int i = 0; i < args_amount; i++)
+        temp[previous_l_len + i] = tree->r->val[i + 1];
+    free(tree->l->val);
+    tree->l->val = temp;
+    // create new array right
+    temp = malloc(sizeof(t_token) * (1 + 1));
+    if (!temp)
+        return (perror("malloc for redirect reallocation failed"), -1);
+    temp[1] = NULL;
+    temp[0] = tree->r->val[0];
+    free(tree->r->val);
+    tree->r->val = temp;
+    // print_tokens(tree->r->val);
+    // print_tokens(tree->l->val);
+    redirect(tree, program_data);
+    return (0);
+}
 
 pid_t	execute(t_bin_tree_node *tree, t_program_data *program_data)
 {
@@ -32,9 +74,11 @@ pid_t	execute(t_bin_tree_node *tree, t_program_data *program_data)
 		else if (tree->val[0]->type == TOK_PIPE)
 			setup_pipe(tree, program_data);
 		else if (tree->val[0]->type == TOK_REDIR)
-			redirect(tree, program_data);
+		    if (reorder_args_and_redirect(tree, program_data) != 0)
+				return (last_pid);
 		if (tree->l->val[0]->type < tree->r->val[0]->type && tree->r->val[0]->type == TOK_REDIR)
-			redirect(tree->r, program_data);
+			if (reorder_args_and_redirect(tree, program_data) != 0)
+                return (last_pid);
 		if (tree->val[0]->type == TOK_REDIR || tree->val[0]->type == TOK_PIPE)
 		{
 		    last_pid = execute(tree->l, program_data);
