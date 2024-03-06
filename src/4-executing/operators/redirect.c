@@ -22,11 +22,52 @@ char *get_filename(t_bin_tree_node *node)
 	return (temp->val[0]->value);
 }
 
-int	heredoc(t_bin_tree_node *node, t_program_data *program_data)
+int	heredoc_to_pipe(char *delimiter, int pipe_fd[2])
 {
-	printf("heredoc\n");
-	(void)program_data;
-	(void)node;
+    char	*line;
+
+    line = NULL;
+    if (pipe(pipe_fd) < 0)
+        return (perror("pipe creation failed"), -1);        // actual error message?
+    while (1)
+    {
+        line = readline("crash_doc 📄 ");
+        if (!line || ft_strncmp(line, delimiter, ft_strlen(delimiter)) == 0)
+        {
+            free(line);
+            break ;
+        }
+        write(pipe_fd[1], line, ft_strlen(line));
+        write(pipe_fd[1], "\n", 1);
+        free(line);
+    }
+    close(pipe_fd[1]);
+    return (0);
+}
+
+int	heredoc(t_bin_tree_node *node)
+{
+    int         pipe_fd[2];
+    char        *line;
+    char        *delimiter;
+
+    delimiter = node->r->val[0]->value;
+    if (pipe(pipe_fd) < 0)
+        return (perror("pipe creation failed"), -1);        // actual error message?
+    while (1)
+    {
+        line = readline("crash_doc 📄 ");
+        if (!line || ft_strncmp(line, delimiter, ft_strlen(delimiter)) == 0)
+        {
+            free(line);
+            break ;
+        }
+        write(pipe_fd[1], line, ft_strlen(line));
+        write(pipe_fd[1], "\n", 1);
+        free(line);
+    }
+    close(pipe_fd[1]);
+    node->l->input_fd = pipe_fd[0];
 	return (0);
 }
 
@@ -43,7 +84,7 @@ int	redirect(t_bin_tree_node *node, t_program_data *program_data)
 	if (node->output_fd != 1)
 		node->l->output_fd = node->output_fd;
 	if (ft_strncmp(node->val[0]->value, "<<", 2) == 0)
-		return (heredoc(node, program_data), 0);
+		return (heredoc(node));
 	// printf("node->val[0]->value: %s\n", node->val[1]->value);
 	if (ft_strncmp(node->val[0]->value, "<", 1) == 0)
 		flags = O_RDONLY;

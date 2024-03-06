@@ -1,9 +1,14 @@
 # CHANGELOG minishell by nburchha & fschuber
-### freddy bugfix - 0.1.0
-- fixed whitespace crashing program execution, which was surprisingly hard
+
+## v0.18.0 - 06.03.24 - Freddy
+- implemented here_doc
+- parents now return childs exit status
+- fixed some bugs in the executer
+- fixed new line not resetting program return value
 
 ## v0.17.0 - 04.03.24 - Freddy
 - Added ft_isspace to libft submodule, removed from ms_split
+- fixed whitespace crashing program execution, which was surprisingly hard
 
 ## v0.16.0 - 04.03.24 - Freddy
 - made executable execution while specifying a path work

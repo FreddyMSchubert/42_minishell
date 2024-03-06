@@ -11,30 +11,35 @@
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+#include <sys/wait.h>
+#include <unistd.h>
 
 pid_t	execute(t_bin_tree_node *tree, t_program_data *program_data)
 {
 	int	last_pid;
 
+	last_pid = -1;
+	// leaves
 	if (program_data->exit_flag == 1 || !tree)
 		return (program_data->exit_status);
 	if (tree->l == NULL && tree->r == NULL)
 		last_pid = execute_node(tree, program_data);
 	else
 	{
+	// branches
 		if (tree->val[0]->type == TOK_LOG_OP)
 			last_pid = logical_op(tree, program_data);
 		else if (tree->val[0]->type == TOK_PIPE)
 			setup_pipe(tree, program_data);
 		else if (tree->val[0]->type == TOK_REDIR)
 			redirect(tree, program_data);
-		// this is just temporary so everything runs through
 		if (tree->l->val[0]->type < tree->r->val[0]->type && tree->r->val[0]->type == TOK_REDIR)
-		{
 			redirect(tree->r, program_data);
+		if (tree->val[0]->type == TOK_REDIR || tree->val[0]->type == TOK_PIPE)
+		{
+		    last_pid = execute(tree->l, program_data);
+            last_pid = execute(tree->r, program_data);
 		}
-		last_pid = execute(tree->l, program_data);
-		last_pid = execute(tree->r, program_data);
 	}
 	return (last_pid);
 }
@@ -43,7 +48,7 @@ int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 {
 	int	cmd_start_index;
 	pid_t	pid;
-	// int	return_value;
+	int	return_value;
 
 	// printf("node_exec: %s, in_fd: %d, out_fd: %d\n", node->val[0]->value, node->input_fd, node->output_fd);
 	cmd_start_index = 0;
@@ -55,6 +60,8 @@ int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 	if (pid == -1)
 	{
 		perror("fork failed");
+		close(node->input_fd);
+		close(node->output_fd);
 		return (-1);
 	}
 	else if (pid == 0) // child
@@ -64,6 +71,8 @@ int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 			if (dup2(node->input_fd, STDIN_FILENO) == -1)
 			{
 				perror("dup2 input redirect failed");
+				close(node->input_fd);
+				close(node->output_fd);
 				return (-1);
 			}
 			close(node->input_fd);
@@ -73,6 +82,8 @@ int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 			if (dup2(node->output_fd, STDOUT_FILENO) == -1)
 			{
 				perror("dup2 output redirect failed");
+				close(node->input_fd);
+				close(node->output_fd);
 				return (-1);
 			}
 			close(node->output_fd);
@@ -93,11 +104,10 @@ int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 			close(node->output_fd);
 		if (node->input_fd != STDIN_FILENO)
 			close(node->input_fd);
-		return (pid);
-	// 	if (WIFEXITED(return_value))
-	// 		return (WEXITSTATUS(return_value));
-	// 	else
-	// 		return (-1); // child didn't exit normally e.g. terminated by signal
+       	if (WIFEXITED(return_value))
+            program_data->exit_status = WEXITSTATUS(return_value);
+        else
+      		program_data->exit_status = -1;
 	}
 	return (program_data->exit_status);
 }

@@ -91,9 +91,10 @@ int	execute_input(t_program_data *program_data, char *input)
 		print_binary_tree(tree, 0);
 	if (VERBOSE == 1)
 		ft_printf("\n\n\n");
-	// --- executer 
-	pid_t last_pid = execute(tree, program_data);//, ft_lstnew(NULL));// t_list *pids = 
-	waitpid(last_pid, &program_data->exit_status, 0);
+	// --- executer
+	pid_t last_pid = execute(tree, program_data);//, ft_lstnew(NULL));// t_list *pids =
+	if (last_pid != -1)
+	   waitpid(last_pid, &program_data->exit_status, 0);
 	return (0);
 }
 
@@ -114,6 +115,7 @@ int	run_crash_interface(t_program_data *program_data)
 				append_element(program_data->gc, input);
 			cleanup(program_data->gc);
 			program_data->gc = create_garbage_collector();
+			program_data->exit_status = 0;
 			continue ;
 		}
 		else
