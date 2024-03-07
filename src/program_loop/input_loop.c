@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/07 10:49:37 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/07 12:00:48 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,9 +93,9 @@ int	execute_input(t_program_data *program_data, char *input)
 	if (VERBOSE == 1)
 		ft_printf("\n\n\n");
 	// --- executer
-	pid_t last_pid = execute(tree, program_data);//, ft_lstnew(NULL));// t_list *pids =
+	pid_t last_pid = execute(tree, program_data);
 	if (last_pid != -1)
-	   waitpid(last_pid, &program_data->exit_status, 0);
+		waitpid(last_pid, &program_data->exit_status, 0);
 	return (0);
 }
 

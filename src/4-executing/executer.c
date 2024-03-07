@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/07 11:07:05 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/07 11:59:53 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ pid_t	execute(t_bin_tree_node *tree, t_program_data *program_data)
 			redirect(tree->r, program_data);
 		if (tree->val[0]->type == TOK_REDIR || tree->val[0]->type == TOK_PIPE)
 		{
-		    last_pid = execute(tree->l, program_data);
-            last_pid = execute(tree->r, program_data);
+			last_pid = execute(tree->l, program_data);
+			last_pid = execute(tree->r, program_data);
 		}
 	}
 	return (last_pid);
@@ -48,7 +48,6 @@ int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 {
 	int	cmd_start_index;
 	pid_t	pid;
-	int	return_value;
 
 	// printf("node_exec: %s, in_fd: %d, out_fd: %d\n", node->val[0]->value, node->input_fd, node->output_fd);
 	cmd_start_index = 0;
@@ -60,8 +59,10 @@ int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 	if (pid == -1)
 	{
 		perror("fork failed");
-		close(node->input_fd);
-		close(node->output_fd);
+		if (node->output_fd != STDOUT_FILENO)
+			close(node->output_fd);
+		if (node->input_fd != STDIN_FILENO)
+			close(node->input_fd);
 		return (-1);
 	}
 	else if (pid == 0) // child
@@ -71,8 +72,9 @@ int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 			if (dup2(node->input_fd, STDIN_FILENO) == -1)
 			{
 				perror("dup2 input redirect failed");
+				if (node->output_fd != STDOUT_FILENO)
+					close(node->output_fd);
 				close(node->input_fd);
-				close(node->output_fd);
 				exit(-1);
 			}
 			close(node->input_fd);
@@ -82,8 +84,9 @@ int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 			if (dup2(node->output_fd, STDOUT_FILENO) == -1)
 			{
 				perror("dup2 output redirect failed");
-				close(node->input_fd);
 				close(node->output_fd);
+				if (node->input_fd != STDIN_FILENO)
+					close(node->input_fd);
 				exit(-1);
 			}
 			close(node->output_fd);
@@ -104,10 +107,7 @@ int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 			close(node->output_fd);
 		if (node->input_fd != STDIN_FILENO)
 			close(node->input_fd);
-       	if (WIFEXITED(return_value))
-            program_data->exit_status = WEXITSTATUS(return_value);
-        else
-      		program_data->exit_status = -1;
+		return (pid);
 	}
 	return (program_data->exit_status);
 }
