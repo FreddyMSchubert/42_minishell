@@ -6,12 +6,11 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/07 11:05:19 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/07 11:07:05 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-#include <stdlib.h>
 #include <sys/wait.h>
 #include <unistd.h>
 
@@ -74,7 +73,7 @@ int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 				perror("dup2 input redirect failed");
 				close(node->input_fd);
 				close(node->output_fd);
-				return (-1);
+				exit(-1);
 			}
 			close(node->input_fd);
 		}
@@ -85,7 +84,7 @@ int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 				perror("dup2 output redirect failed");
 				close(node->input_fd);
 				close(node->output_fd);
-				return (-1);
+				exit(-1);
 			}
 			close(node->output_fd);
 		}
