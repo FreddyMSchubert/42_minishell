@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/06 18:18:54 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/07 10:50:06 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,7 @@ t_token				**expander(t_token **tokens, t_program_data *program_data);
 char				*list_matching_files(const char *pattern);
 // --- 3-parsing
 // util
+t_token				**switch_args_for_redir(t_token **arr);
 t_token				**sub_tok_arr(t_token **token_arr, int start, int end);
 int					toklen(t_token **token_arr);
 int					first_non_ignored(t_token **token_arr);

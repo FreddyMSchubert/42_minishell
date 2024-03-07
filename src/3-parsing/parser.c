@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 12:13:31 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/06 18:19:57 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/07 11:04:40 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,33 @@ static int	get_dominant_operator(t_token **arr)
 	return (-1);
 }
 
+t_token	**switch_args_for_redir(t_token **arr)
+{
+	t_token	*temp;
+	int	redir_index;
+	int	args_start_index;
+
+	redir_index = -1;
+	print_tokens(arr);
+	while (arr && arr[++redir_index])
+	{
+		args_start_index = 0;
+		if (arr[redir_index]->type == TOK_REDIR)
+			args_start_index = redir_index + 1;
+		if (args_start_index > 0 && arr[++args_start_index] && arr[args_start_index]->type == TOK_CMD_ARG)
+		{
+			printf("args_start_index: %d\n", args_start_index);
+			printf("redir_index: %d\n", redir_index);
+			temp = arr[args_start_index];
+			arr[args_start_index] = arr[redir_index + 1];
+			arr[redir_index + 1] = arr[redir_index];
+			arr[redir_index] = temp;
+		}
+	}
+	print_tokens(arr);
+	return (arr);
+}
+
 /*
     Gets a token array as input. Returns a functional binary tree structure.
 	dom_op_i = dominant operator index
@@ -112,6 +139,7 @@ t_bin_tree_node	*tok_to_bin_tree(t_token **arr)
 {
 	t_bin_tree_node		*node;
 	int					dom_op_i;
+	int					count_tokens_in_node;
 
 	if (VERBOSE == 1)
 	{
@@ -127,11 +155,12 @@ t_bin_tree_node	*tok_to_bin_tree(t_token **arr)
 	dom_op_i = get_dominant_operator(arr);
 	if (dom_op_i == -1)
 		return (node->val = arr, node->l = NULL, node->r = NULL, node);
+	count_tokens_in_node = 0;
 	node->val = malloc(sizeof(t_token) * 2);
 	if (!node->val)
 		return (free(node), NULL);
-	node->val[1] = NULL;
 	node->val[0] = arr[dom_op_i];
+	node->val[1] = NULL;
 	node->l = tok_to_bin_tree(sub_tok_arr(arr, 0, dom_op_i - 1));
 	if (node->l)
 		node->l->parent = node;

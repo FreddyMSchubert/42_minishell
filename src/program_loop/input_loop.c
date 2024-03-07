@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/06 18:23:17 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/07 10:49:37 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ int	execute_input(t_program_data *program_data, char *input)
 	if (VERBOSE == 1)
 		ft_printf("token sequence is valid\n");
 	// --- parser
+	tokenified_input = switch_args_for_redir(tokenified_input);
 	tree = tok_to_bin_tree(tokenified_input);
 	tree->parent = NULL;
 
