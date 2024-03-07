@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 12:13:31 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/07 11:04:40 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/07 11:08:46 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,6 @@ t_token	**switch_args_for_redir(t_token **arr)
 	int	args_start_index;
 
 	redir_index = -1;
-	print_tokens(arr);
 	while (arr && arr[++redir_index])
 	{
 		args_start_index = 0;
@@ -119,15 +118,12 @@ t_token	**switch_args_for_redir(t_token **arr)
 			args_start_index = redir_index + 1;
 		if (args_start_index > 0 && arr[++args_start_index] && arr[args_start_index]->type == TOK_CMD_ARG)
 		{
-			printf("args_start_index: %d\n", args_start_index);
-			printf("redir_index: %d\n", redir_index);
 			temp = arr[args_start_index];
 			arr[args_start_index] = arr[redir_index + 1];
 			arr[redir_index + 1] = arr[redir_index];
 			arr[redir_index] = temp;
 		}
 	}
-	print_tokens(arr);
 	return (arr);
 }
 
