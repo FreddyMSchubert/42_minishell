@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-#include <cstdlib>
 #include <sys/wait.h>
 #include <unistd.h>
 
@@ -22,28 +21,41 @@ int    reorder_args_and_redirect(t_bin_tree_node *tree, t_program_data *program_
     int previous_l_len;
     t_token **temp;
 
+    if (tree->l == NULL)
+    {
+        tree->l = malloc(sizeof(t_bin_tree_node));
+        if (!tree->l)
+            return (perror("malloc for redirect reallocation failed"), -1);
+        tree->l->val = NULL;
+        tree->l->l = NULL;
+        tree->l->r = NULL;
+        tree->l->parent = NULL;
+        tree->l->output_fd = STDOUT_FILENO;
+        tree->l->input_fd = STDIN_FILENO;
+    }
     args_amount = 1;
     // get amount of args
     previous_l_len = 0;
-    while (tree->r->val[args_amount])
+    while (tree->r != NULL && tree->r->val != NULL && tree->r->val[args_amount])
         args_amount++;
     args_amount--;
     // get length of previous command
-    while (tree->l->val[previous_l_len])
+    while (tree->l != NULL && tree->l->val != NULL && tree->l->val[previous_l_len])
         previous_l_len++;
     // create new array left
-    temp = malloc(sizeof(t_token) * (previous_l_len + args_amount + 1));
+    temp = malloc(sizeof(t_token *) * (previous_l_len + args_amount + 1));
     if (!temp)
         return (perror("malloc for redirect reallocation failed"), -1);
     temp[previous_l_len + args_amount] = NULL;
-    for (int i = 0; i < previous_l_len; i++)
+    for (int i = 0; i < previous_l_len && tree->l && tree->l->val && tree->l->val[i]; i++)
         temp[i] = tree->l->val[i];
-    for (int i = 0; i < args_amount; i++)
+    for (int i = 0; i < args_amount && tree->r && tree->r->val && tree->r->val[i + 1]; i++)
         temp[previous_l_len + i] = tree->r->val[i + 1];
-    free(tree->l->val);
+    if (tree->l->val)
+        free(tree->l->val);
     tree->l->val = temp;
     // create new array right
-    temp = malloc(sizeof(t_token) * (1 + 1));
+    temp = malloc(sizeof(t_token *) * (1 + 1));
     if (!temp)
         return (perror("malloc for redirect reallocation failed"), -1);
     temp[1] = NULL;
@@ -117,7 +129,7 @@ int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 				perror("dup2 input redirect failed");
 				close(node->input_fd);
 				close(node->output_fd);
-				return (-1);
+				exit(-1);
 			}
 			close(node->input_fd);
 		}
@@ -128,7 +140,7 @@ int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 				perror("dup2 output redirect failed");
 				close(node->input_fd);
 				close(node->output_fd);
-				return (-1);
+				exit(-1);
 			}
 			close(node->output_fd);
 		}
