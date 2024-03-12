@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 06:54:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/26 12:51:29 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/12 14:17:06 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,6 @@ static t_token *detect_token_type(char *input, int is_first_or_after_operator)
 	token = malloc(sizeof(t_token));
 	if (!token)
 		return (NULL);
-	if (ft_strncmp(input, "'", 1) == 0)
-		token->type = TOK_S_QUOTE;
-	else if (ft_strncmp(input, "\"", 1) == 0)
-		token->type = TOK_D_QUOTE;
-	// else if (input[0] == '$' && input[1] && input[1] != '?')
-	// 	token->type = TOK_VAR_EXP;
-	// else if (input[0] == '$' && input[1] && input[1] == '?')
-		// token->type = TOK_EXIT_STAT;
 	else if (check_same_string(input, "<") == 0 ||
 			check_same_string(input, "<<") == 0 ||
 			check_same_string(input, ">") == 0 ||
@@ -68,8 +60,6 @@ static t_token *detect_token_type(char *input, int is_first_or_after_operator)
 	else if (check_same_string(input, "&&") == 0 ||
 			check_same_string(input, "||") == 0)
 		token->type = TOK_LOG_OP;
-	// else if (ft_strchr(input, '*') != NULL)
-	// 	token->type = TOK_WILDCARD;
 	else if (is_first_or_after_operator && 
 			(check_same_string(input, "echo") == 0 ||
 			check_same_string(input, "cd") == 0 ||
@@ -97,16 +87,6 @@ static t_token *detect_token_type(char *input, int is_first_or_after_operator)
 	token->ignored = 0;
 	return (token);
 }
-
-// the following can be on other arguments without space in between
-// ' " < << >> > | && || ;
-// static int is_operator_symbol(char c)
-// {
-// 	if (c == '<' || //c == '\'' || c == '\"' || 
-// 		c == '>' || c == '|' || c == '&' || c == '(' || c == ')')
-// 		return (0);
-// 	return (1);
-// }
 
 int	calc_additional_spaces(char *input)
 {
@@ -145,7 +125,6 @@ char *put_space_between_tokens(char *input, t_program_data *data)
 	int		i;
 	int		j;
 	char	*new_input;
-	int		in_quote;
 	int		new_input_len;
 	int		cur_symbol; // 0 for space, 1 for word, 2 operator, 3 for quotes
 
@@ -158,17 +137,9 @@ char *put_space_between_tokens(char *input, t_program_data *data)
 	i = 0;
 	j = 0;
 	cur_symbol = 0;
-	in_quote = 0;
 	while (j < new_input_len && input[i])
 	{
-		if ((input[i] == '\'' || input[i] == '\"'))
-		{
-			if (!in_quote && cur_symbol != 0) // Before entering a quote
-				new_input[j++] = ' ';
-			if (!in_quote)
-				in_quote = input[i] % 4 - 1; // "=1 '=2
-		}
-		else if (!in_quote && is_operator_symbol(input[i], input[i + 1]) > 0)
+	if (is_operator_symbol(input[i], input[i + 1]) > 0)
 		{
 			if (cur_symbol != 0)
 				new_input[j++] = ' ';
@@ -176,7 +147,7 @@ char *put_space_between_tokens(char *input, t_program_data *data)
 		}
 		else if (input[i] == ' ')
 			cur_symbol = 0;
-		else if (input[i] != ' ' && !in_quote)
+		else if (input[i] != ' ')
 		{
 			if (cur_symbol == 2 || (cur_symbol == 1 && is_operator_symbol(input[i], input[i + 1]) > 0))
 				new_input[j++] = ' ';
@@ -186,7 +157,6 @@ char *put_space_between_tokens(char *input, t_program_data *data)
 			new_input[j++] = input[i++];
 		new_input[j++] = input[i++];
 	}
-	// printf("new_input: %s\n", new_input);
 	return (new_input);
 }
 

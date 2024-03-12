@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 09:20:32 by nburchha          #+#    #+#             */
-/*   Updated: 2024/02/28 14:47:19 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/12 14:20:43 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ char	*isolate_var(char *var)
 		return (NULL);
 	while (var[++i])
 	{
-		if (var[i] == ' ')
+		if (var[i] == ' ' || var[i] == '\'' || var[i] == '\"'
+			|| is_operator_symbol(var[i], var[i + 1]))
 		{
 			var[i] = '\0';
 			break ;
@@ -84,18 +85,59 @@ char	*get_expanded_str(char *input, char *envcp_value,
 	return (expanded_str);
 }
 
+static bool	is_in_quote(char *str, char *quote, char *current_char)
+{
+	int		i;
+	bool	in_quote;
+
+	i = -1;
+	in_quote = false;
+	while (&str[i] != current_char && str[++i])
+	{
+		if (ft_strchr(quote, str[i]) != NULL)
+			in_quote = !in_quote;
+	}
+	return (in_quote);
+}
+
+char	*get_rid_of_quotes(char *str)
+{
+	int		i;
+	int		j;
+	char	*new_str;
+	bool	s_quote;
+	bool	d_quote;
+
+	s_quote = false;
+	d_quote = false;
+	i = -1;
+	j = 0;
+	new_str = ft_calloc(ft_strlen(str) + 1, sizeof(char));
+	if (!new_str)
+		return (NULL);
+	while (str[++i])
+	{
+		if (!d_quote && str[i] != '\'' && !s_quote && str[i] != '\"')
+			new_str[j++] = str[i];
+	}
+	return (new_str);
+}
+
 t_token	**expander(t_token **tokens, t_program_data *program_data)
 {
 	int		i;
 	char	*envcp_value;
 	char	*env_var;
+	char	*tmp;
 
-	// char	*tmp;
 	i = -1;
 	while (tokens[++i])
 	{
-		if (tokens[i]->type != TOK_S_QUOTE && ft_strnstr(tokens[i]->value, "$?",
-				ft_strlen(tokens[i]->value)) != NULL)
+		//exit code
+		if (ft_strnstr(tokens[i]->value, "$?",
+				ft_strlen(tokens[i]->value)) != NULL
+			&& !is_in_quote(tokens[i]->value, "\'", ft_strnstr(tokens[i]->value,
+					"$?", ft_strlen(tokens[i]->value))))
 		{
 			envcp_value = ft_itoa(program_data->exit_status);
 			if (!envcp_value)
@@ -104,30 +146,34 @@ t_token	**expander(t_token **tokens, t_program_data *program_data)
 			tokens[i]->value = get_expanded_str(tokens[i]->value, envcp_value,
 					program_data, "?");
 		}
-		else if (tokens[i]->type != TOK_S_QUOTE && ft_strchr(tokens[i]->value,
-				'$') != NULL)
+		//expansion
+		else if (ft_strchr(tokens[i]->value, '$') != NULL
+			&& !is_in_quote(tokens[i]->value, "\'", ft_strchr(tokens[i]->value,
+					'$')))
 		{
 			env_var = isolate_var(ft_strdup(ft_strchr(tokens[i]->value, '$')
 						+ 1));
 			if (!env_var)
 				exit_error("malloc failed", 1, program_data->gc);
-			// printf("env_var: %s\n", env_var);
 			append_element(program_data->gc, env_var);
 			envcp_value = get_envcp(env_var, program_data);
-			// printf("envcp_value: %s\n", envcp_value);
 			if (!envcp_value)
 				exit_error("malloc failed", 1, program_data->gc);
 			append_element(program_data->gc, envcp_value);
 			tokens[i]->value = get_expanded_str(tokens[i]->value, envcp_value,
 					program_data, env_var);
 		}
+		//wildcard
 		else if (tokens[i]->type == TOK_CMD_ARG && ft_strchr(tokens[i]->value,
-				'*') != NULL) // wildcard, need to take* with the rest in front or behind delimitted by spaces
+				'*') != NULL && !is_in_quote(tokens[i]->value, "'",
+				ft_strchr(tokens[i]->value, '*'))
+			&& !is_in_quote(tokens[i]->value, "\"", ft_strchr(tokens[i]->value,
+				'*'))) // wildcard, need to take* with the rest in front or behind delimitted by spaces
 		{
-			tokens[i]->value = list_matching_files(tokens[i]->value);
-			if (!tokens[i]->value)
+			tmp = list_matching_files(get_rid_of_quotes(tokens[i]->value));
+			if (tmp)
 			{
-				tokens[i]->value = ft_strdup("*");
+				tokens[i]->value = tmp;
 				append_element(program_data->gc, tokens[i]->value);
 			}
 		}

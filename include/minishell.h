@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/07 10:50:06 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/12 14:15:07 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ t_token				**lexer(char *input, t_program_data *data);
 char				**ms_split(char *input);
 int					count_tokens(const char *s);
 int					is_operator_symbol(char c, char d);
+char				*get_rid_of_quotes(char *str);
 
 // --- 1-validation
 int					validator(t_token **token_arr);
