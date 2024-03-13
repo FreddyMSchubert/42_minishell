@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 16:07:34 by nburchha          #+#    #+#             */
-/*   Updated: 2024/03/11 12:29:39 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/13 12:22:07 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/minishell.h"
+
+extern int	g_sigint_received;
 
 char *get_filename(t_bin_tree_node *node)
 {
@@ -22,52 +24,37 @@ char *get_filename(t_bin_tree_node *node)
 	return (temp->val[0]->value);
 }
 
-int	heredoc_to_pipe(char *delimiter, int pipe_fd[2])
-{
-    char	*line;
-
-    line = NULL;
-    if (pipe(pipe_fd) < 0)
-        return (perror("pipe creation failed"), -1);        // actual error message?
-    while (1)
-    {
-        line = readline("crash_doc 📄 ");
-        if (!line || ft_strncmp(line, delimiter, ft_strlen(delimiter)) == 0)
-        {
-            free(line);
-            break ;
-        }
-        write(pipe_fd[1], line, ft_strlen(line));
-        write(pipe_fd[1], "\n", 1);
-        free(line);
-    }
-    close(pipe_fd[1]);
-    return (0);
-}
-
 int	heredoc(t_bin_tree_node *node)
 {
-    int         pipe_fd[2];
-    char        *line;
-    char        *delimiter;
+	int		pipe_fd[2];
+	char	*line;
+	char	*delimiter;
 
-    delimiter = node->r->val[0]->value;
-    if (pipe(pipe_fd) < 0)
-        return (perror("pipe creation failed"), -1);        // actual error message?
-    while (1)
-    {
-        line = readline("crash_doc 📄 ");
-        if (!line || ft_strncmp(line, delimiter, ft_strlen(delimiter)) == 0)
-        {
-            free(line);
-            break ;
-        }
-        write(pipe_fd[1], line, ft_strlen(line));
-        write(pipe_fd[1], "\n", 1);
-        free(line);
-    }
-    close(pipe_fd[1]);
-    node->l->input_fd = pipe_fd[0];
+	delimiter = node->r->val[0]->value;
+	if (pipe(pipe_fd) < 0)
+		return (-1);
+	while (g_sigint_received != SIGINT)
+	{
+		line = readline("crash_doc 📄 ");
+		if (!line || ft_strncmp(line, delimiter, ft_strlen(delimiter)) == 0 || \
+			g_sigint_received == SIGINT)
+		{
+			free(line);
+			break ;
+		}
+		write(pipe_fd[1], line, ft_strlen(line));
+		write(pipe_fd[1], "\n", 1);
+		free(line);
+	}
+	if (g_sigint_received == SIGINT)
+	{
+		close(pipe_fd[0]);
+		close(pipe_fd[1]);
+		g_sigint_received = 0;
+		return (-2);
+	}
+	close(pipe_fd[1]);
+	node->l->input_fd = pipe_fd[0];
 	return (0);
 }
 

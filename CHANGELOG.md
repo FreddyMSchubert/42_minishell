@@ -1,5 +1,8 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+## v0.21.0 - 13.03.24 - Freddy
+- Added signals. ctrl-c & ctrl-d & ctrl-\
+
 ## v0.20.0 - 07.03.24 - Freddy
 - fixed reorder args and redirect function segfaulting when left is null
 - fixed urgent bug in child processes of normal executions, which return instead of exiting on error, therefore causing mayhem in the rest of the program
