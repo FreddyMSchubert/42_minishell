@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/07 11:59:53 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/13 12:24:08 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,10 @@ pid_t	execute(t_bin_tree_node *tree, t_program_data *program_data)
 	else
 	{
 	// branches
-		if (tree->val[0]->type == TOK_LOG_OP)
-			last_pid = logical_op(tree, program_data);
+		if (tree->val[0]->type == TOK_LOG_AND)
+			return (logical_and(tree, program_data));
+		else if (tree->val[0]->type == TOK_LOG_OR)
+			return (logical_or(tree, program_data));
 		else if (tree->val[0]->type == TOK_PIPE)
 			setup_pipe(tree, program_data);
 		else if (tree->val[0]->type == TOK_REDIR)

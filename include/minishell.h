@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/07 10:50:06 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/13 12:24:24 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,18 +35,13 @@
 // ----- TOKEN TYPES
 
 #define TOK_CMD_ARG 0      // Commands or Arguments
-#define TOK_S_QUOTE 1      // Single Quotes (')
-#define TOK_D_QUOTE 2      // Double Quotes (")
-// #define TOK_VAR_EXP 3      // Dollar Sign ($) for variable expansion
-#define TOK_EXIT_STAT 4    // Exit Status ($?)
-#define TOK_REDIR 5        // Redirections (<, >, >>, <<)
-#define TOK_PIPE 6         // Pipe (|)
-#define TOK_LOG_OP 7       // Logical Operators (&&, ||)
-// #define TOK_WILDCARD 8     // Wildcard (*)
-#define TOK_BUILTIN 9      // Builtins (echo, cd, pwd, export, unset, env, exit)
-#define TOK_CTRL_SEQ 10    // Control Sequences (Ctrl-C, Ctrl-D, Ctrl-Z)
-#define TOK_OPEN_BRACE 11  // Open Brace -> (
-#define TOK_CLOSE_BRACE 12 // Close Brace -> )
+#define TOK_BUILTIN 1      // Builtins (echo, cd, pwd, export, unset, env, exit)
+#define TOK_REDIR 2        // Redirections (<, >, >>, <<)
+#define TOK_PIPE 3         // Pipe (|)
+#define TOK_LOG_OR 4       // Logical OR ||
+#define TOK_LOG_AND 5       // Logical AND &&
+#define TOK_OPEN_BRACE 6  // Open Brace -> (
+#define TOK_CLOSE_BRACE 7 // Close Brace -> )
 
 // ----- STRUCTS
 
@@ -138,7 +133,7 @@ int				execute(t_bin_tree_node *tree, t_program_data *data);
 int					execute_node(t_bin_tree_node *node, t_program_data *data);
 int	execute_input(t_program_data *program_data, char *input);
 // operators
-int					logical_op(t_bin_tree_node *node, t_program_data *data);
+// int					logical_op(t_bin_tree_node *node, t_program_data *data);
 int					logical_and(t_bin_tree_node *node, t_program_data *data);
 int					logical_or(t_bin_tree_node *node, t_program_data *data);
 int					redirect(t_bin_tree_node *node, t_program_data *program_data);

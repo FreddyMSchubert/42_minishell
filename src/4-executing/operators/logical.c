@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 08:32:19 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/06 12:25:06 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/13 12:25:56 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,35 +14,35 @@
 
 // check end of tree null
 
-int	logical_op(t_bin_tree_node *node, t_program_data *program_data)
-{
-	if (ft_strncmp(node->val[0]->value, "&&", 2) == 0)
-		return (logical_and(node, program_data));
-	if (ft_strncmp(node->val[0]->value, "||", 2) == 0)
-		return (logical_or(node, program_data));
-	return (-1);
-}
+// int	logical_op(t_bin_tree_node *node, t_program_data *program_data)
+// {
+// 	if (ft_strncmp(node->val[0]->value, "&&", 2) == 0)
+// 		return (logical_and(node, program_data));
+// 	if (ft_strncmp(node->val[0]->value, "||", 2) == 0)
+// 		return (logical_or(node, program_data));
+// 	return (-1);
+// }
 
 int	logical_and(t_bin_tree_node *node, t_program_data *program_data)
 {
-	int	status;
+	int	pid;
 
-	status = 0; // this will never occur just to silence warning
+	pid = -1; // this will never occur just to silence warning
 	if (node->l != NULL)
-		status = execute_node(node->l, program_data);
-	if (status == 0 && node->r != NULL)
-		status = execute_node(node->r, program_data);
-	return (status);
+		pid = execute(node->l, program_data);
+	if (program_data->exit_status == 0 && node->r != NULL)
+		pid = execute(node->r, program_data);
+	return (pid);
 }
 
 int	logical_or(t_bin_tree_node *node, t_program_data *program_data)
 {
-	int	status;
+	int	pid;
 
-	status = 0; // this will never occur just to silence warning
+	pid = 0; // this will never occur just to silence warning
 	if (node->l != NULL)
-		status = execute_node(node->l, program_data);
-	if (status != 0 && node->r != NULL)
-		status = execute_node(node->r, program_data);
-	return (status);
+		pid = execute(node->l, program_data);
+	if (program_data->exit_status != 0 && node->r != NULL)
+		pid = execute(node->r, program_data);
+	return (pid);
 }

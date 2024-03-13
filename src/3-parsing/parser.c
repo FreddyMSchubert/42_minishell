@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 12:13:31 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/07 11:08:46 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/13 12:15:28 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,10 @@ static int	check_substring(t_token **token_arr)
 */
 static int	adjust_operator_priority(int current_priority)
 {
-	if (current_priority == TOK_LOG_OP)
-		return (TOK_PIPE);
-	else if (current_priority == TOK_PIPE)
-		return (TOK_REDIR);
-	return (current_priority);
+	if (current_priority > TOK_REDIR)
+		return (current_priority - 1);
+	else
+		return (0);
 }
 
 /*
@@ -80,7 +79,7 @@ static int	get_dominant_operator(t_token **arr)
 	int		target_tok;
 	int		depth;
 
-	target_tok = TOK_LOG_OP;
+	target_tok = TOK_LOG_AND;
 	while (check_substring(arr) != 0)
 		;
 	operator_counter = 0;

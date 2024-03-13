@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 09:20:32 by nburchha          #+#    #+#             */
-/*   Updated: 2024/02/28 14:47:19 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/13 12:22:20 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,8 +94,8 @@ t_token	**expander(t_token **tokens, t_program_data *program_data)
 	i = -1;
 	while (tokens[++i])
 	{
-		if (tokens[i]->type != TOK_S_QUOTE && ft_strnstr(tokens[i]->value, "$?",
-				ft_strlen(tokens[i]->value)) != NULL)
+		if (ft_strnstr(tokens[i]->value, "$?",
+				ft_strlen(tokens[i]->value)) != NULL) //tokens[i]->type != TOK_S_QUOTE && 
 		{
 			envcp_value = ft_itoa(program_data->exit_status);
 			if (!envcp_value)
@@ -104,8 +104,7 @@ t_token	**expander(t_token **tokens, t_program_data *program_data)
 			tokens[i]->value = get_expanded_str(tokens[i]->value, envcp_value,
 					program_data, "?");
 		}
-		else if (tokens[i]->type != TOK_S_QUOTE && ft_strchr(tokens[i]->value,
-				'$') != NULL)
+		else if (ft_strchr(tokens[i]->value, '$') != NULL) // tokens[i]->type != TOK_S_QUOTE && 
 		{
 			env_var = isolate_var(ft_strdup(ft_strchr(tokens[i]->value, '$')
 						+ 1));

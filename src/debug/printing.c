@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 07:42:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/06 10:27:51 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/13 12:21:20 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,22 +47,16 @@ void	print_token(t_token *token)
 	printf("  Type: ");
 	if (token->type == TOK_CMD_ARG)
 		printf("Command or Argument");
-	else if (token->type == TOK_S_QUOTE)
-		printf("Single Quote");
-	else if (token->type == TOK_D_QUOTE)
-		printf("Double Quote");
-	else if (token->type == TOK_EXIT_STAT)
-		printf("Exit Status");
 	else if (token->type == TOK_REDIR)
 		printf("Redirection");
 	else if (token->type == TOK_PIPE)
 		printf("Pipe");
-	else if (token->type == TOK_LOG_OP)
-		printf("Logical Operator");
+	else if (token->type == TOK_LOG_OR)
+		printf("Logical OR");
+	else if (token->type == TOK_LOG_AND)
+		printf("Logical AND");
 	else if (token->type == TOK_BUILTIN)
 		printf("Builtin");
-	else if (token->type == TOK_CTRL_SEQ)
-		printf("Control Sequence");
 	else if (token->type == TOK_OPEN_BRACE)
 		printf("Open Brace");
 	else if (token->type == TOK_CLOSE_BRACE)

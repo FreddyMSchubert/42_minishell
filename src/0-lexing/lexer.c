@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 06:54:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/26 12:51:29 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/13 12:17:44 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,26 +50,17 @@ static t_token *detect_token_type(char *input, int is_first_or_after_operator)
 	token = malloc(sizeof(t_token));
 	if (!token)
 		return (NULL);
-	if (ft_strncmp(input, "'", 1) == 0)
-		token->type = TOK_S_QUOTE;
-	else if (ft_strncmp(input, "\"", 1) == 0)
-		token->type = TOK_D_QUOTE;
-	// else if (input[0] == '$' && input[1] && input[1] != '?')
-	// 	token->type = TOK_VAR_EXP;
-	// else if (input[0] == '$' && input[1] && input[1] == '?')
-		// token->type = TOK_EXIT_STAT;
-	else if (check_same_string(input, "<") == 0 ||
+	if (check_same_string(input, "<") == 0 ||
 			check_same_string(input, "<<") == 0 ||
 			check_same_string(input, ">") == 0 ||
 			check_same_string(input, ">>") == 0)
 		token->type = TOK_REDIR;
 	else if (check_same_string(input, "|") == 0)
 		token->type = TOK_PIPE;
-	else if (check_same_string(input, "&&") == 0 ||
-			check_same_string(input, "||") == 0)
-		token->type = TOK_LOG_OP;
-	// else if (ft_strchr(input, '*') != NULL)
-	// 	token->type = TOK_WILDCARD;
+	else if (check_same_string(input, "&&") == 0)
+		token->type = TOK_LOG_AND;
+	else if (check_same_string(input, "||") == 0)
+		token->type = TOK_LOG_OR;
 	else if (is_first_or_after_operator && 
 			(check_same_string(input, "echo") == 0 ||
 			check_same_string(input, "cd") == 0 ||
@@ -79,21 +70,13 @@ static t_token *detect_token_type(char *input, int is_first_or_after_operator)
 			check_same_string(input, "env") == 0 ||
 			check_same_string(input, "exit") == 0))
 		token->type = TOK_BUILTIN;
-	else if (check_same_string(input, "\x03") == 0 ||
-			check_same_string(input, "\x04") == 0 ||
-			check_same_string(input, "\x1A") == 0)
-		token->type = TOK_CTRL_SEQ;
 	else if (check_same_string(input, "(") == 0)
 		token->type = TOK_OPEN_BRACE;
 	else if (check_same_string(input, ")") == 0)
 		token->type = TOK_CLOSE_BRACE;
 	else
 		token->type = TOK_CMD_ARG;
-	
-	if (token->type == TOK_S_QUOTE || token->type == TOK_D_QUOTE)
-		token->value = ft_substr(input, 1, ft_strlen(input) - 2);
-	else
-		token->value = ft_strdup(input);
+	token->value = ft_strdup(input);
 	token->ignored = 0;
 	return (token);
 }
