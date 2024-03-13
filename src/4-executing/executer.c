@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/13 12:24:08 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/13 12:30:17 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ pid_t	execute(t_bin_tree_node *tree, t_program_data *program_data)
 	int	last_pid;
 
 	last_pid = -1;
-	// leaves
 	if (program_data->exit_flag == 1 || !tree)
 		return (program_data->exit_status);
 	if (tree->l == NULL && tree->r == NULL)
@@ -34,9 +33,11 @@ pid_t	execute(t_bin_tree_node *tree, t_program_data *program_data)
 		else if (tree->val[0]->type == TOK_PIPE)
 			setup_pipe(tree, program_data);
 		else if (tree->val[0]->type == TOK_REDIR)
-			redirect(tree, program_data);
+			if (redirect(tree, program_data) == -2)
+				return (last_pid);
 		if (tree->l->val[0]->type < tree->r->val[0]->type && tree->r->val[0]->type == TOK_REDIR)
-			redirect(tree->r, program_data);
+			if (redirect(tree->r, program_data) == -2)
+				return (last_pid);
 		if (tree->val[0]->type == TOK_REDIR || tree->val[0]->type == TOK_PIPE)
 		{
 			last_pid = execute(tree->l, program_data);
@@ -48,7 +49,7 @@ pid_t	execute(t_bin_tree_node *tree, t_program_data *program_data)
 
 int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 {
-	int	cmd_start_index;
+	int		cmd_start_index;
 	pid_t	pid;
 
 	// printf("node_exec: %s, in_fd: %d, out_fd: %d\n", node->val[0]->value, node->input_fd, node->output_fd);

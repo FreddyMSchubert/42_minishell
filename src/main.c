@@ -6,11 +6,13 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:29:36 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/27 10:50:39 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/13 12:19:26 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+int	g_sigint_received;
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -21,6 +23,8 @@ int	main(int argc, char **argv, char **envp)
 	program_data.exit_status = 0;
 	program_data.envcp = ft_strarrdup(envp);
 	program_data.gc = create_garbage_collector();
+	g_sigint_received = 0;
+	setup_signals();
 	run_crash_interface(&program_data);
 	i = -1;
 	while (program_data.envcp[++i])

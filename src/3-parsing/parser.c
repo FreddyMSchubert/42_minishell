@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 12:13:31 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/13 12:15:28 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/13 12:29:51 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,8 +106,8 @@ static int	get_dominant_operator(t_token **arr)
 t_token	**switch_args_for_redir(t_token **arr)
 {
 	t_token	*temp;
-	int	redir_index;
-	int	args_start_index;
+	int		redir_index;
+	int		args_start_index;
 
 	redir_index = -1;
 	while (arr && arr[++redir_index])
@@ -134,7 +134,6 @@ t_bin_tree_node	*tok_to_bin_tree(t_token **arr)
 {
 	t_bin_tree_node		*node;
 	int					dom_op_i;
-	int					count_tokens_in_node;
 
 	if (VERBOSE == 1)
 	{
@@ -150,7 +149,6 @@ t_bin_tree_node	*tok_to_bin_tree(t_token **arr)
 	dom_op_i = get_dominant_operator(arr);
 	if (dom_op_i == -1)
 		return (node->val = arr, node->l = NULL, node->r = NULL, node);
-	count_tokens_in_node = 0;
 	node->val = malloc(sizeof(t_token) * 2);
 	if (!node->val)
 		return (free(node), NULL);

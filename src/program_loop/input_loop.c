@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   input_loop.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/07 12:00:48 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/13 12:20:57 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+extern int	g_sigint_received;
 
 static void	*print_heading(void)
 {
@@ -110,22 +112,31 @@ int	run_crash_interface(t_program_data *program_data)
 			input = readline("crash 💣 ");
 		else
 			input = readline("crash 💥 ");
+		if (g_sigint_received == SIGINT)
+		{
+			g_sigint_received = 0;
+			program_data->exit_status = 1;
+			if (input != NULL)
+				free(input);
+			continue ;
+		}
 		if (input == NULL || ft_isspace_str_all(input) == 1)
 		{
-		    if (input != NULL)
+			if (input != NULL)
 				append_element(program_data->gc, input);
 			cleanup(program_data->gc);
 			program_data->gc = create_garbage_collector();
 			program_data->exit_status = 0;
+			if (input == NULL)
+				break ;
 			continue ;
 		}
 		else
 		{
-		    append_element(program_data->gc, input);
+			append_element(program_data->gc, input);
 			add_history(input);
 		}
-		if (execute_input(program_data, input) == -1)
-			continue ;
+		execute_input(program_data, input);
 		cleanup(program_data->gc);
 		program_data->gc = create_garbage_collector();
 	}

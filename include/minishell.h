@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/13 12:24:24 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/13 12:29:11 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,15 @@
 #include <dirent.h>
 #include <unistd.h>
 #include <limits.h>
+#include <string.h>
 // readline
 #include <stdio.h> // needed in readline for FILE
 #include <readline/readline.h>
 #include <readline/history.h>
-#include <string.h>
+// signals
+#include <signal.h>
+#include <termios.h>
+#include <sys/ioctl.h>
 
 #include "./colors.h"
 
@@ -101,6 +105,8 @@ int					append_element(t_list *gc, void *content);
 void				append_element_array(t_list *gc, void *content);
 void				cleanup(t_list *gc);
 void				exit_error(char *message, int exit_code, t_list *gc);
+// signals
+int					setup_signals(void);
 
 // --- 0-lexing
 t_token				**lexer(char *input, t_program_data *data);
@@ -129,9 +135,9 @@ t_bin_tree_node		*tok_to_bin_tree(t_token **token_arr);
 
 // --- 4-executing
 // general
-int				execute(t_bin_tree_node *tree, t_program_data *data);
+int					execute(t_bin_tree_node *tree, t_program_data *data);
 int					execute_node(t_bin_tree_node *node, t_program_data *data);
-int	execute_input(t_program_data *program_data, char *input);
+int					execute_input(t_program_data *program_data, char *input);
 // operators
 // int					logical_op(t_bin_tree_node *node, t_program_data *data);
 int					logical_and(t_bin_tree_node *node, t_program_data *data);
