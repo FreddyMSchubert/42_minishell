@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/12 14:21:29 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/13 10:24:33 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,13 +109,16 @@ int	run_crash_interface(t_program_data *program_data)
 	print_logo();
 	while (program_data->exit_flag == 0)
 	{
-		if (program_data->exit_status == 0)
-			input = readline("crash 💣 ");
-		else
-			input = readline("crash 💥 ");
+		if (isatty(fileno(stdin)))
+		{
+			// if (program_data->exit_status == 0)
+				input = readline("crash 💣 ");
+			// else
+			// 	input = readline("crash 💥 ");
+		}
 		if (input == NULL || ft_isspace_str_all(input) == 1)
 		{
-		    if (input != NULL)
+			if (input != NULL)
 				append_element(program_data->gc, input);
 			cleanup(program_data->gc);
 			program_data->gc = create_garbage_collector();

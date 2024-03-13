@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:44:01 by nburchha          #+#    #+#             */
-/*   Updated: 2024/03/12 14:21:06 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/13 10:34:29 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,24 +68,26 @@ int	match(const char *pattern, const char *filename)
 	return (*p == '\0'); // Successful match if end of pattern
 }
 
-char	*list_matching_files(const char *pattern)
+char	**list_matching_files(const char *pattern)
 {
 	DIR				*dir;
 	struct dirent	*entry;
-	char			*result;
+	char			**result;
+	char			*tmp;
 
 	dir = opendir(".");
 	if (!dir)
 		return (perror("opendir() error"), NULL);
 	entry = readdir(dir);
 	result = NULL;
+	
 	while (entry != NULL)
 	{
 		if (entry->d_name[0] == '.')
 			;
 		else if (match(pattern, entry->d_name))
 		{
-			result = concatenate_matches_free_s1(result, entry->d_name);
+			tmp = concatenate_matches_free_s1(tmp, entry->d_name);
 			if (!result)
 				return (closedir(dir), NULL);
 		}
