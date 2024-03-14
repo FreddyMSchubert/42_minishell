@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/13 12:29:11 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/13 12:33:36 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,9 @@
 #define TOK_REDIR 2        // Redirections (<, >, >>, <<)
 #define TOK_PIPE 3         // Pipe (|)
 #define TOK_LOG_OR 4       // Logical OR ||
-#define TOK_LOG_AND 5       // Logical AND &&
-#define TOK_OPEN_BRACE 6  // Open Brace -> (
-#define TOK_CLOSE_BRACE 7 // Close Brace -> )
+#define TOK_LOG_AND 5      // Logical AND &&
+#define TOK_OPEN_BRACE 6   // Open Brace -> (
+#define TOK_CLOSE_BRACE 7  // Close Brace -> )
 
 // ----- STRUCTS
 

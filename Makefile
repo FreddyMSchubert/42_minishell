@@ -44,6 +44,7 @@ comp:
 	@make re
 	@make clean
 	@clear
+	./crash
 normcomp:
 	@git submodule update --init --remote
 	@cd ./include && norminette
