@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/14 10:22:17 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/14 10:52:58 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,8 +142,6 @@ int	execute_command(t_bin_tree_node *node, t_program_data *program_data,
 
 	cmd_path = create_cmd_struct(program_data->envcp, node->val,
 			cmd_start_index);
-	if (!cmd_path)
-		return (-1);
 	execve(cmd_path->path, cmd_path->args, program_data->envcp);
 	return (-1); // handle error
 }

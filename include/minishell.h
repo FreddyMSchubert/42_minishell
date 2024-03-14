@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/14 09:57:54 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/14 10:36:10 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ int					is_operator_symbol(char c, char d);
 int					same_str(char *str1, char *str2);
 
 // --- 1-validation
-int					validator(t_token **token_arr);
+int					validator(t_list *tokens);
 int					check_files(t_list *files, int flag);
 
 // --- 2-expanding

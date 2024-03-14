@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 12:13:31 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/14 09:57:48 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/14 10:40:25 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ static int	get_dominant_operator(t_token **arr)
 	while (check_substring(arr) != 0)
 		;
 	operator_counter = 0;
-	while (operator_counter < 3)
+	while (operator_counter < 4)
 	{
 		i = -1;
 		depth = 0;

@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/14 09:54:46 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/14 10:44:44 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,17 @@ int	execute_input(t_program_data *program_data, char *input)
 		ft_printf("Received input: %s\n", input);
 	// --- lexer
 	temp = lexer(input, program_data);
+	valid = validator(temp);
+	if (valid != 0)
+	{
+		if (VERBOSE == 1)
+			ft_printf("token sequence is invalid: %d\n", valid);
+		gc_cleanup(program_data->gc);
+		program_data->gc = create_garbage_collector();
+		return (-1);
+	}
+	if (VERBOSE == 1)
+		ft_printf("token sequence is valid\n");
 	tokenified_input = list_to_token_array(temp);
 	if (tokenified_input == NULL)
 		return (-1); // handle error
@@ -77,15 +88,6 @@ int	execute_input(t_program_data *program_data, char *input)
 		print_tokens(tokenified_input);
 	}
 	// --- validator
-	valid = validator(tokenified_input);
-	if (valid != 0)
-	{
-		gc_cleanup(program_data->gc);
-		program_data->gc = create_garbage_collector();
-		return (-1);
-	}
-	if (VERBOSE == 1)
-		ft_printf("token sequence is valid\n");
 	// --- parser
 	tokenified_input = switch_args_for_redir(tokenified_input);
 	tree = tok_to_bin_tree(tokenified_input);
