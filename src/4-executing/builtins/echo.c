@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:48:20 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/13 12:22:45 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/14 09:45:36 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,12 @@ int	execute_echo(t_token **inputs, int cmd_start_index)
 		n_flag = 1;
 		i = cmd_start_index + 2;
 	}
-	while (inputs[i] && inputs[i]->type == TOK_CMD_ARG)
+	while (inputs[i] && inputs[i]->type == TOK_WORD)
 	{
 		if (ft_printf("%s", inputs[i]->value) < 0)
 			return (1);
 		i++;
-		if (inputs[i] && inputs[i]->type == TOK_CMD_ARG)
+		if (inputs[i] && inputs[i]->type == TOK_WORD)
 			ft_printf(" ");
 	}
 	if (n_flag == 0)

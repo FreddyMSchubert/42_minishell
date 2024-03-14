@@ -1,5 +1,8 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+## [ArrayToList] - v1 - 14.03.24 - Freddy
+- switched lexer to lists. unable to test redirects and logical operators
+
 ## v0.21.0 - 13.03.24 - Freddy
 - Added signals. ctrl-c & ctrl-d & ctrl-\
 

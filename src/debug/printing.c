@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   printing.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 07:42:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/13 12:21:20 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/14 09:45:36 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	print_binary_tree(t_bin_tree_node *tree, int tabs)
 void	print_token(t_token *token)
 {
 	printf("  Type: ");
-	if (token->type == TOK_CMD_ARG)
+	if (token->type == TOK_WORD)
 		printf("Command or Argument");
 	else if (token->type == TOK_REDIR)
 		printf("Redirection");

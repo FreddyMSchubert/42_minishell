@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/13 12:20:57 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/14 09:54:46 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ static void	*print_logo(void)
 
 int	execute_input(t_program_data *program_data, char *input)
 {
+	t_list				*temp;
 	t_token				**tokenified_input;
 	int					valid;
 	t_bin_tree_node		*tree;
@@ -63,7 +64,8 @@ int	execute_input(t_program_data *program_data, char *input)
 	if (VERBOSE == 1)
 		ft_printf("Received input: %s\n", input);
 	// --- lexer
-	tokenified_input = lexer(input, program_data);
+	temp = lexer(input, program_data);
+	tokenified_input = list_to_token_array(temp);
 	if (tokenified_input == NULL)
 		return (-1); // handle error
 	if (VERBOSE == 1)
@@ -78,7 +80,7 @@ int	execute_input(t_program_data *program_data, char *input)
 	valid = validator(tokenified_input);
 	if (valid != 0)
 	{
-		cleanup(program_data->gc);
+		gc_cleanup(program_data->gc);
 		program_data->gc = create_garbage_collector();
 		return (-1);
 	}
@@ -123,8 +125,8 @@ int	run_crash_interface(t_program_data *program_data)
 		if (input == NULL || ft_isspace_str_all(input) == 1)
 		{
 			if (input != NULL)
-				append_element(program_data->gc, input);
-			cleanup(program_data->gc);
+				gc_append_element(program_data->gc, input);
+			gc_cleanup(program_data->gc);
 			program_data->gc = create_garbage_collector();
 			program_data->exit_status = 0;
 			if (input == NULL)
@@ -133,14 +135,14 @@ int	run_crash_interface(t_program_data *program_data)
 		}
 		else
 		{
-			append_element(program_data->gc, input);
+			gc_append_element(program_data->gc, input);
 			add_history(input);
 		}
 		execute_input(program_data, input);
-		cleanup(program_data->gc);
+		gc_cleanup(program_data->gc);
 		program_data->gc = create_garbage_collector();
 	}
-	cleanup(program_data->gc);
+	gc_cleanup(program_data->gc);
 	clear_history();
 	return (0);
 }

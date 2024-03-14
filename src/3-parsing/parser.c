@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 12:13:31 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/13 12:29:51 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/14 09:57:48 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ t_token	**switch_args_for_redir(t_token **arr)
 		args_start_index = 0;
 		if (arr[redir_index]->type == TOK_REDIR)
 			args_start_index = redir_index + 1;
-		if (args_start_index > 0 && arr[++args_start_index] && arr[args_start_index]->type == TOK_CMD_ARG)
+		if (args_start_index > 0 && arr[++args_start_index] && arr[args_start_index]->type == TOK_WORD)
 		{
 			temp = arr[args_start_index];
 			arr[args_start_index] = arr[redir_index + 1];
@@ -135,12 +135,6 @@ t_bin_tree_node	*tok_to_bin_tree(t_token **arr)
 	t_bin_tree_node		*node;
 	int					dom_op_i;
 
-	if (VERBOSE == 1)
-	{
-		ft_printf("tok_to_bin_tree called with ");
-		print_tokens(arr);
-		ft_printf("\n");
-	}
 	node = malloc(sizeof(t_bin_tree_node));
 	if (!node || !arr)
 		return (free(node), NULL);

@@ -6,26 +6,15 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 12:18:59 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/27 11:00:30 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/14 09:57:05 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "../../../include/minishell.h"
 
 /*
 	Garbage Collector has one dummy node at the start just as a reference.
 */
-
-/*
-	Logs message & exits program with exit_code,
-	but not before freeing all elements in the garbage collector
-*/
-void	exit_error(char *message, int exit_code, t_list *gc)
-{
-	ft_printf("%s\n", message);
-	cleanup(gc);
-	exit(exit_code);
-}
 
 t_list	*create_garbage_collector(void)
 {
@@ -39,7 +28,7 @@ t_list	*create_garbage_collector(void)
 	return (gc);
 }
 
-int	append_element(t_list *gc, void *content)
+int	gc_append_element(t_list *gc, void *content)
 {
 	t_list	*new_node;
 	t_list	*selected_node;
@@ -56,7 +45,7 @@ int	append_element(t_list *gc, void *content)
 	return (0);
 }
 
-void	append_element_array(t_list *gc, void *content)
+void	gc_append_element_array(t_list *gc, void *content)
 {
 	void	**array;
 	int		i;
@@ -65,14 +54,27 @@ void	append_element_array(t_list *gc, void *content)
 	i = 0;
 	while (array[i] != NULL)
 	{
-		append_element(gc, array[i]);
+		gc_append_element(gc, array[i]);
 		i++;
 	}
-	append_element(gc, content);
+	gc_append_element(gc, content);
+}
+
+void	gc_append_t_list(t_list *gc, t_list *linkedlist)
+{
+	t_list	*selected_node;
+
+	selected_node = linkedlist;
+	while (selected_node->next != NULL)
+	{
+		gc_append_element(gc, selected_node);
+		selected_node = selected_node->next;
+	}
+	gc_append_element(gc, selected_node);
 }
 
 // frees all elements in the garbage collector
-void	cleanup(t_list *gc)
+void	gc_cleanup(t_list *gc)
 {
 	t_list	*current;
 	t_list	*current2;

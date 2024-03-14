@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/13 12:33:36 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/14 09:57:54 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,14 +38,14 @@
 
 // ----- TOKEN TYPES
 
-#define TOK_CMD_ARG 0      // Commands or Arguments
-#define TOK_BUILTIN 1      // Builtins (echo, cd, pwd, export, unset, env, exit)
-#define TOK_REDIR 2        // Redirections (<, >, >>, <<)
-#define TOK_PIPE 3         // Pipe (|)
-#define TOK_LOG_OR 4       // Logical OR ||
-#define TOK_LOG_AND 5      // Logical AND &&
-#define TOK_OPEN_BRACE 6   // Open Brace -> (
-#define TOK_CLOSE_BRACE 7  // Close Brace -> )
+#define TOK_WORD 0			// Commands or Arguments
+#define TOK_BUILTIN 1		// Builtin (echo, cd, pwd, export, unset, env, exit)
+#define TOK_REDIR 2			// Redirections (<, >, >>, <<)
+#define TOK_PIPE 3			// Pipe (|)
+#define TOK_LOG_OR 4		// Logical OR ||
+#define TOK_LOG_AND 5		// Logical AND &&
+#define TOK_OPEN_BRACE 6	// Open Brace -> (
+#define TOK_CLOSE_BRACE 7	// Close Brace -> )
 
 // ----- STRUCTS
 
@@ -82,7 +82,7 @@ typedef struct s_cmd_path {
 // ----- SETTINGS
 
 // will output detailed logging if set to 1, and normal logging if 0
-#define VERBOSE 0
+#define VERBOSE 1
 
 // ----- FUNCTIONS
 
@@ -92,6 +92,7 @@ void				print_tokens(t_token **tokens);
 void				print_token(t_token *token);
 void				print_binary_tree(t_bin_tree_node *tree, int tabs);
 void				print_pipes(int in_fd, int out_fd);
+t_token				**list_to_token_array(t_list *list);
 // testing
 void				test_validator(void);
 void				test_lexer(char *input, t_program_data *data);
@@ -99,20 +100,23 @@ void				test_expander(t_program_data *data, t_token **tokens);
 
 // --- input loop
 int					run_crash_interface(t_program_data *program_data);
-// garbage collector
+// - garbage collector
 t_list				*create_garbage_collector(void);
-int					append_element(t_list *gc, void *content);
-void				append_element_array(t_list *gc, void *content);
-void				cleanup(t_list *gc);
+int					gc_append_element(t_list *gc, void *content);
+void				gc_append_element_array(t_list *gc, void *content);
+void				gc_append_t_list(t_list *gc, t_list *linkedlist);
+void				gc_cleanup(t_list *gc);
+// util
 void				exit_error(char *message, int exit_code, t_list *gc);
-// signals
+// - signals
 int					setup_signals(void);
 
 // --- 0-lexing
-t_token				**lexer(char *input, t_program_data *data);
+t_list				*lexer(char *input, t_program_data *data);
 char				**ms_split(char *input);
 int					count_tokens(const char *s);
 int					is_operator_symbol(char c, char d);
+int					same_str(char *str1, char *str2);
 
 // --- 1-validation
 int					validator(t_token **token_arr);
