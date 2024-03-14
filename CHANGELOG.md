@@ -1,5 +1,7 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+## [ArrayToList] - v3 - 14.03.24 - Freddy
+- switched expander to lists. some other fixes
 ## [ArrayToList] - v2 - 14.03.24 - Freddy
 - switched validator to lists. redirects and log ops seem to work fine now.
 ## [ArrayToList] - v1 - 14.03.24 - Freddy

@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/14 10:36:10 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/14 11:59:55 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ typedef struct s_cmd_path {
 
 // --- utils / debug
 // printing
-void				print_tokens(t_token **tokens);
+void				print_tokens(t_list *tokens);
 void				print_token(t_token *token);
 void				print_binary_tree(t_bin_tree_node *tree, int tabs);
 void				print_pipes(int in_fd, int out_fd);
@@ -124,7 +124,7 @@ int					check_files(t_list *files, int flag);
 
 // --- 2-expanding
 char				*get_envcp(char *var_name, t_program_data *program_data);
-t_token				**expander(t_token **tokens, t_program_data *program_data);
+t_list				*expander(t_list *tokens, t_program_data *program_data);
 char				*list_matching_files(const char *pattern);
 // --- 3-parsing
 // util

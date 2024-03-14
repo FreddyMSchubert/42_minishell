@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/14 10:44:44 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/14 12:04:05 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,17 +76,17 @@ int	execute_input(t_program_data *program_data, char *input)
 	}
 	if (VERBOSE == 1)
 		ft_printf("token sequence is valid\n");
-	tokenified_input = list_to_token_array(temp);
-	if (tokenified_input == NULL)
-		return (-1); // handle error
-	if (VERBOSE == 1)
-		print_tokens(tokenified_input);
-	expander(tokenified_input, program_data);
+	expander(temp, program_data);
 	if (VERBOSE == 1)
 	{
 		ft_printf("after expanding:\n");
-		print_tokens(tokenified_input);
+		print_tokens(temp);
 	}
+	tokenified_input = list_to_token_array(temp);
+	if (tokenified_input == NULL)
+		return (-1); // handle error
+	// if (VERBOSE == 1)
+	// 	print_tokens(temp);
 	// --- validator
 	// --- parser
 	tokenified_input = switch_args_for_redir(tokenified_input);
@@ -112,6 +112,7 @@ int	run_crash_interface(t_program_data *program_data)
 	print_logo();
 	while (program_data->exit_flag == 0)
 	{
+		ft_printf("%s", ANSI_COLOR_WHITE);
 		if (program_data->exit_status == 0)
 			input = readline("crash 💣 ");
 		else
