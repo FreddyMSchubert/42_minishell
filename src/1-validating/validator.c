@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 15:25:11 by nburchha          #+#    #+#             */
-/*   Updated: 2024/03/14 10:45:52 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/15 07:31:51 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,14 +53,14 @@ int	validator(t_list *tokens)
 	brace_opened = 0;
 	error_code = 0;
 	tok = tokens;
-	while (tok->next != NULL)
+	while (tok != NULL)
 	{
 		token = tok->content;
 		// printf("token_arr: %s\n", token->value);
 		// check for consecutive pipes and or logical operators
-		if (token->type >= 6 && token->type <= 7 && tok->next && \
-				((t_token *)tok->next->content)->type >= 6 \
-				&& ((t_token *)tok->next->content)->type <= 7)
+		if (token->type >= TOK_PIPE && token->type <= TOK_LOG_AND && tok->next && \
+				((t_token *)tok->next->content)->type >= TOK_PIPE \
+				&& ((t_token *)tok->next->content)->type <= TOK_LOG_AND)
 			return (1);
 
 		// check for unclosed braces
@@ -71,7 +71,7 @@ int	validator(t_list *tokens)
 
 		// check for valid word after < > >> <<
 		if (token->type == TOK_REDIR)
-			if (!tok->next || ((t_token *)tok->next->content)->type > 2)
+			if (!tok->next || ((t_token *)tok->next->content)->type > TOK_BUILTIN)
 				return (3);
 		// put in files into linked lists
 		if (token->type == TOK_REDIR && ft_strncmp(token->value, "<", 2) == 0 && tok->next)
@@ -88,7 +88,7 @@ int	validator(t_list *tokens)
 		tok = tok->next;
 	}
 	// check for | in beginning or end
-	if (((t_token *)tokens->content)->type == 6 || ((t_token *)tokens->content)->type == 6)
+	if (((t_token *)tokens->content)->type == TOK_PIPE || ((t_token *)tokens->content)->type == TOK_PIPE)
 		return (1);
 	if (brace_opened != 0)
 		return (2);

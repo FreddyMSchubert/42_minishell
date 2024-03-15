@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/14 11:59:55 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/15 07:24:30 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,22 @@
 #define TOK_LOG_AND 5		// Logical AND &&
 #define TOK_OPEN_BRACE 6	// Open Brace -> (
 #define TOK_CLOSE_BRACE 7	// Close Brace -> )
+
+/*
+#define TOK_CMD_ARG 0      // Commands or Arguments
+#define TOK_S_QUOTE 1      // Single Quotes (')
+#define TOK_D_QUOTE 2      // Double Quotes (")
+// #define TOK_VAR_EXP 3      // Dollar Sign ($) for variable expansion
+#define TOK_EXIT_STAT 4    // Exit Status ($?)
+#define TOK_REDIR 5        // Redirections (<, >, >>, <<)
+#define TOK_PIPE 6         // Pipe (|)
+#define TOK_LOG_OP 7       // Logical Operators (&&, ||)
+// #define TOK_WILDCARD 8     // Wildcard (*)
+#define TOK_BUILTIN 9      // Builtins (echo, cd, pwd, export, unset, env, exit)
+#define TOK_CTRL_SEQ 10    // Control Sequences (Ctrl-C, Ctrl-D, Ctrl-Z)
+#define TOK_OPEN_BRACE 11  // Open Brace -> (
+#define TOK_CLOSE_BRACE 12 // Close Brace -> )
+*/
 
 // ----- STRUCTS
 
@@ -129,13 +145,14 @@ char				*list_matching_files(const char *pattern);
 // --- 3-parsing
 // util
 t_token				**switch_args_for_redir(t_token **arr);
-t_token				**sub_tok_arr(t_token **token_arr, int start, int end);
-int					toklen(t_token **token_arr);
-int					first_non_ignored(t_token **token_arr);
-int					last_non_ignored(t_token **token_arr);
+t_list				*sub_token_t_list(t_list *tokens, int start, int end);
+int					toklen(t_list *tokens);
+int					first_non_ignored(t_list *tokens);
+int					last_non_ignored(t_list *tokens);
+t_token				**t_list_to_token_arr(t_list	*tokens);
+t_token				*get_token_at_index(t_list *tokens, int index);
 // parser
-t_bin_tree_node		*tok_to_bin_tree(t_token **token_arr);
-t_bin_tree_node		*tok_to_bin_tree(t_token **token_arr);
+t_bin_tree_node		*tok_to_bin_tree(t_list *tokens);
 
 // --- 4-executing
 // general

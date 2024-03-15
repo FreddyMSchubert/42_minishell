@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/14 12:04:05 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/15 07:30:35 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,16 +56,19 @@ static void	*print_logo(void)
 
 int	execute_input(t_program_data *program_data, char *input)
 {
-	t_list				*temp;
-	t_token				**tokenified_input;
+	t_list				*tokenified_input;
 	int					valid;
 	t_bin_tree_node		*tree;
 
 	if (VERBOSE == 1)
 		ft_printf("Received input: %s\n", input);
 	// --- lexer
-	temp = lexer(input, program_data);
-	valid = validator(temp);
+	tokenified_input = lexer(input, program_data);
+	if (tokenified_input == NULL)
+		return (-1); // handle error
+	if (VERBOSE == 1)
+		print_tokens(tokenified_input);
+	valid = validator(tokenified_input);
 	if (valid != 0)
 	{
 		if (VERBOSE == 1)
@@ -76,20 +79,13 @@ int	execute_input(t_program_data *program_data, char *input)
 	}
 	if (VERBOSE == 1)
 		ft_printf("token sequence is valid\n");
-	expander(temp, program_data);
+	expander(tokenified_input, program_data);
 	if (VERBOSE == 1)
 	{
 		ft_printf("after expanding:\n");
-		print_tokens(temp);
+		print_tokens(tokenified_input);
 	}
-	tokenified_input = list_to_token_array(temp);
-	if (tokenified_input == NULL)
-		return (-1); // handle error
-	// if (VERBOSE == 1)
-	// 	print_tokens(temp);
-	// --- validator
-	// --- parser
-	tokenified_input = switch_args_for_redir(tokenified_input);
+	// tokenified_input = switch_args_for_redir(tokenified_input);
 	tree = tok_to_bin_tree(tokenified_input);
 	tree->parent = NULL;
 

@@ -1,5 +1,9 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+## [ArrayToList] - v4 - 15.03.24 - Freddy
+- switched parser to lists. some other fixes
+- validator referencing wrong token numbering fixed. now uses macros instead of numbers.
+- some other validator logic fixes
 ## [ArrayToList] - v3 - 14.03.24 - Freddy
 - switched expander to lists. some other fixes
 ## [ArrayToList] - v2 - 14.03.24 - Freddy

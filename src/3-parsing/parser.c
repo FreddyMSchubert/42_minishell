@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 12:13:31 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/14 10:40:25 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/15 07:08:13 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,39 +16,42 @@
 	Checks whether the inputted token array is a substring
 	If so, the first and last tokens (=brackets) are set to ignored.
 */
-static int	check_substring(t_token **token_arr)
+static int	check_substring(t_list *tokens)
 {
-	int	counter;
-	int	depth;
-	int	changes_made;
+	int		depth;
+	int		counter;
+	int		changes_made;
+	t_list	*current;
 
-	counter = 0;
 	depth = 0;
+	counter = 0;
 	changes_made = 0;
-	while (token_arr[counter] != NULL)
+	current = tokens;
+	while (current != NULL)
 	{
-		if (token_arr[counter]->type == TOK_OPEN_BRACE && token_arr[counter]->ignored != 1)
+		if (((t_token *)current->content)->type == TOK_OPEN_BRACE && ((t_token *)current->content)->ignored != 1)
 			depth++;
-		else if (token_arr[counter]->type == TOK_CLOSE_BRACE && token_arr[counter]->ignored != 1)
+		else if (((t_token *)current->content)->type == TOK_CLOSE_BRACE && ((t_token *)current->content)->ignored != 1)
 			depth--;
-		if (depth == 0 && token_arr[counter + 1] != NULL && counter != last_non_ignored(token_arr) && token_arr[counter]->ignored != 1)
+		if (depth == 0 && current->next != NULL && counter != last_non_ignored(tokens) && ((t_token *)current->content)->ignored != 1)
 		{
 			depth = -1;
 			break ;
 		}
+		current = current->next;
 		counter++;
 	}
 	if (depth == 0)
 	{
-		if (token_arr[first_non_ignored(token_arr)]->type == TOK_OPEN_BRACE)
+		if (get_token_at_index(tokens, first_non_ignored(tokens))->type == TOK_OPEN_BRACE)
 		{
-			token_arr[first_non_ignored(token_arr)]->ignored = 1;
+			get_token_at_index(tokens, first_non_ignored(tokens))->ignored = 1;
 			changes_made++;
 		}
-		if (token_arr[last_non_ignored(token_arr)]->type == TOK_CLOSE_BRACE)
+		if (get_token_at_index(tokens, last_non_ignored(tokens))->type == TOK_CLOSE_BRACE)
 		{
+			get_token_at_index(tokens, last_non_ignored(tokens))->ignored = 1;
 			changes_made++;
-			token_arr[last_non_ignored(token_arr)]->ignored = 1;
 		}
 	}
 	return (changes_made);
@@ -67,91 +70,80 @@ static int	adjust_operator_priority(int current_priority)
 }
 
 /*
-    Finds the most dominant operator in a token array, returning its index.
-    Returns -1 if there is no dominant operator in the token array.
-    TOK_LOG_OP > TOK_PIPE > TOK_REDIR
-	3 in while condition because that's how many types of operators there are
+	Finds the most dominant operator in a token array, returning its index.
+	Returns -1 if there is no dominant operator in the token array.
+	TOK_LOG_AND > TOK_LOG_OP > TOK_PIPE > TOK_REDIR
+	4 in while condition because that's how many types of operators there are
 */
-static int	get_dominant_operator(t_token **arr)
+static int	get_dominant_operator(t_list *tokens)
 {
 	int		i;
-	int		operator_counter;
 	int		target_tok;
 	int		depth;
+	t_list	*current;
 
 	target_tok = TOK_LOG_AND;
-	while (check_substring(arr) != 0)
+	while (check_substring(tokens) != 0)
 		;
-	operator_counter = 0;
-	while (operator_counter < 4)
+	while (target_tok > 0)
 	{
-		i = -1;
+		current = tokens;
+		i = 0;
 		depth = 0;
-		while (arr[++i] != NULL)
+		while (current != NULL)
 		{
-			if (arr[i]->type == TOK_OPEN_BRACE && arr[i]->ignored == 0)
+			if (((t_token *)current->content)->type == TOK_OPEN_BRACE && \
+				((t_token *)current->content)->ignored == 0)
 				depth++;
-			else if (arr[i]->type == TOK_CLOSE_BRACE && arr[i]->ignored == 0)
+			else if (((t_token *)current->content)->type == TOK_CLOSE_BRACE && \
+						((t_token *)current->content)->ignored == 0)
 				depth--;
-			if (arr[i]->type == target_tok && depth == 0 && \
-								i >= 0 && i < toklen(arr))
+			if (((t_token *)current->content)->type == target_tok && depth == 0 && \
+								i >= 0 && i < toklen(tokens))
 				return (i);
+			i++;
+			current = current->next;
 		}
 		target_tok = adjust_operator_priority(target_tok);
-		operator_counter++;
 	}
 	return (-1);
 }
 
-t_token	**switch_args_for_redir(t_token **arr)
-{
-	t_token	*temp;
-	int		redir_index;
-	int		args_start_index;
-
-	redir_index = -1;
-	while (arr && arr[++redir_index])
-	{
-		args_start_index = 0;
-		if (arr[redir_index]->type == TOK_REDIR)
-			args_start_index = redir_index + 1;
-		if (args_start_index > 0 && arr[++args_start_index] && arr[args_start_index]->type == TOK_WORD)
-		{
-			temp = arr[args_start_index];
-			arr[args_start_index] = arr[redir_index + 1];
-			arr[redir_index + 1] = arr[redir_index];
-			arr[redir_index] = temp;
-		}
-	}
-	return (arr);
-}
-
 /*
-    Gets a token array as input. Returns a functional binary tree structure.
+	Gets a token array as input. Returns a functional binary tree structure.
 	dom_op_i = dominant operator index
 */
-t_bin_tree_node	*tok_to_bin_tree(t_token **arr)
+t_bin_tree_node	*tok_to_bin_tree(t_list *tokens)
 {
 	t_bin_tree_node		*node;
 	int					dom_op_i;
+	t_token				**arr;
 
+	if (!tokens)
+		return (NULL);
+	ft_printf("token boom: %s\n", ((t_token *)tokens->content)->value);
+	print_tokens(tokens);
 	node = malloc(sizeof(t_bin_tree_node));
-	if (!node || !arr)
+	if (!node || !tokens)
 		return (free(node), NULL);
 	node->input_fd = STDIN_FILENO;
 	node->output_fd = STDOUT_FILENO;
-	dom_op_i = get_dominant_operator(arr);
+	dom_op_i = get_dominant_operator(tokens);
 	if (dom_op_i == -1)
+	{
+		arr = t_list_to_token_arr(tokens);
 		return (node->val = arr, node->l = NULL, node->r = NULL, node);
+	}
+	ft_printf("dom_op_i: %d\n", dom_op_i);
 	node->val = malloc(sizeof(t_token) * 2);
 	if (!node->val)
-		return (free(node), NULL);
-	node->val[0] = arr[dom_op_i];
+		return (free(node->val), free(node), NULL);
+	node->val[0] = get_token_at_index(tokens, dom_op_i);
 	node->val[1] = NULL;
-	node->l = tok_to_bin_tree(sub_tok_arr(arr, 0, dom_op_i - 1));
+	node->l = tok_to_bin_tree(sub_token_t_list(tokens, 0, dom_op_i - 1));
 	if (node->l)
 		node->l->parent = node;
-	node->r = tok_to_bin_tree(sub_tok_arr(arr, dom_op_i + 1, toklen(arr) - 1));
+	node->r = tok_to_bin_tree(sub_token_t_list(tokens, dom_op_i + 1, toklen(tokens) - 1));
 	if (node->r)
 		node->r->parent = node;
 	return (node);
