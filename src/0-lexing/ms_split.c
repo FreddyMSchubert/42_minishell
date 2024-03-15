@@ -3,9 +3,8 @@
 /*                                                        :::      ::::::::   */
 /*   ms_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/07 15:40:24 by nburchha          #+#    #+#             */
 /*   Updated: 2024/03/15 10:42:01 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -26,23 +25,7 @@ int	count_tokens(const char *s)
 	in_quote = 0;
 	while ((int)ft_strlen(s) > i && s[++i])
 	{
-		// printf("%zu\n", ft_strlen(s));
-		if ((s[i] == '"' && in_quote != 2) || (s[i] == '\'' && in_quote != 1))
-		{
-			// printf("quote: %c\n", s[i]);
-			if (in_quote == 0)
-			{
-				if (s[i] != '\"')
-					in_quote = 2;
-				else
-					in_quote = 1;
-				count++;
-				in_word = 0;
-			}
-			else
-				in_quote = 0;
-		}
-		else if (is_operator_symbol(s[i], s[i + 1]))
+		if (is_operator_symbol(s[i], s[i + 1]))
 		{
 			// printf("operator: %c\n", s[i]);
 			if (is_operator_symbol(s[i], s[i + 1]) == 2)
@@ -112,15 +95,12 @@ char	**ms_split(char *input)
 	i = -1;
 	j = 0;
 	word_count = count_tokens(input);
-	// printf("input: %s\n", input);
-	// printf("word_count: %d\n", word_count);
 	if (word_count == -1)
 		return (free(input), NULL);
 	result = malloc((word_count + 1) * sizeof(char *));
 	if (!result)
 		return (free(input), NULL);
 	result[word_count] = NULL;
-	// printf("result[i]: %p\n", result[0]);
 	while (input[++i] && j < word_count)
 	{
 		// printf("input[i]: %c\n", input[i]);

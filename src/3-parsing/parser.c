@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 12:13:31 by fschuber          #+#    #+#             */
 /*   Updated: 2024/03/15 10:52:03 by fschuber         ###   ########.fr       */
@@ -68,6 +68,7 @@ static int	adjust_operator_priority(int current_priority)
 	else
 		return (0);
 }
+
 
 /*
 	Finds the most dominant operator in a token array, returning its index.

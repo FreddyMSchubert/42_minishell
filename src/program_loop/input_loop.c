@@ -111,6 +111,27 @@ int	execute_input(t_program_data *program_data, char *input)
 		program_data->gc = create_garbage_collector();
 		return (-1);
 	}
+	int	i = -1;
+	while (tokenified_input[++i])
+		tokenified_input[i]->value = get_rid_of_quotes(tokenified_input[i]->value);
+	if (VERBOSE == 1)
+		ft_printf("token sequence is valid\n");
+	expander(tokenified_input, program_data);
+	if (VERBOSE == 1)
+	{
+		ft_printf("after expanding:\n");
+		print_tokens(tokenified_input);
+	}
+	// --- validator
+	valid = validator(tokenified_input);
+	if (valid != 0)
+	{
+		if (VERBOSE == 1)
+			ft_printf("token sequence is invalid: %d\n", valid);
+		gc_cleanup(program_data->gc);
+		program_data->gc = create_garbage_collector();
+		return (-1);
+	}
 	if (VERBOSE == 1)
 		ft_printf("token sequence is valid\n");
 	expander(tokenified_input, program_data);
