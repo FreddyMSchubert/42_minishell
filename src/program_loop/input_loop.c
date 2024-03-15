@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/15 13:04:12 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/15 13:35:50 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,9 @@ static void	*print_logo(void)
 int	execute_input(t_program_data *program_data, char *input)
 {
 	t_list				*tokenified_input;
-	int					valid;
+	t_list				*tmp_lst;
 	t_bin_tree_node		*tree;
+	t_token				*tmp;
 
 	if (VERBOSE == 1)
 		ft_printf("Received input: %s\n", input);
@@ -102,18 +103,13 @@ int	execute_input(t_program_data *program_data, char *input)
 		return (-1); // handle error
 	if (VERBOSE == 1)
 		print_tokens(tokenified_input);
-	valid = validator(tokenified_input);
-	if (valid != 0)
+	tmp_lst = tokenified_input;
+	while (tmp_lst)
 	{
-		if (VERBOSE == 1)
-			ft_printf("token sequence is invalid: %d\n", valid);
-		gc_cleanup(program_data->gc);
-		program_data->gc = create_garbage_collector();
-		return (-1);
+		tmp = (t_token *)tmp_lst->content;
+		tmp->value = get_rid_of_quotes(tmp->value);
+		tmp_lst = tmp_lst->next;
 	}
-	int	i = -1;
-	while (tokenified_input[++i])
-		tokenified_input[i]->value = get_rid_of_quotes(tokenified_input[i]->value);
 	if (VERBOSE == 1)
 		ft_printf("token sequence is valid\n");
 	expander(tokenified_input, program_data);
@@ -123,23 +119,17 @@ int	execute_input(t_program_data *program_data, char *input)
 		print_tokens(tokenified_input);
 	}
 	// --- validator
-	valid = validator(tokenified_input);
-	if (valid != 0)
-	{
-		if (VERBOSE == 1)
-			ft_printf("token sequence is invalid: %d\n", valid);
-		gc_cleanup(program_data->gc);
-		program_data->gc = create_garbage_collector();
-		return (-1);
-	}
+	// valid = validator(tokenified_input);
+	// if (valid != 0)
+	// {
+	// 	if (VERBOSE == 1)
+	// 		ft_printf("token sequence is invalid: %d\n", valid);
+	// 	gc_cleanup(program_data->gc);
+	// 	program_data->gc = create_garbage_collector();
+	// 	return (-1);
+	// }
 	if (VERBOSE == 1)
 		ft_printf("token sequence is valid\n");
-	expander(tokenified_input, program_data);
-	if (VERBOSE == 1)
-	{
-		ft_printf("after expanding:\n");
-		print_tokens(tokenified_input);
-	}
 	// tokenified_input = switch_args_for_redir(tokenified_input);
 	tree = tok_to_bin_tree(tokenified_input);
 	tree->parent = NULL;
