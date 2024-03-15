@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input_loop.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/15 13:04:12 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/15 12:02:24 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ static void	*print_heading(void)
 
 static void	*print_logo(void)
 {
-	printf("\033[H\033[J");
+	// printf("\033[H\033[J");
 	print_heading();
 	printf("   Welcome to %sCRASH%s, %s! - crazy robust & advanced shell!\n", \
 							ANSI_COLOR_RED, ANSI_COLOR_RESET, getenv("USER"));
@@ -141,7 +141,7 @@ int	execute_input(t_program_data *program_data, char *input)
 		print_tokens(tokenified_input);
 	}
 	// tokenified_input = switch_args_for_redir(tokenified_input);
-	tree = tok_to_bin_tree(tokenified_input);
+	tree = tok_to_bin_tree(tokenified_input, program_data);
 	tree->parent = NULL;
 
 	// printf("node: %p\nparent: %p\nvalue: %s\n", tree, tree->parent, tree->val[0]->value);

@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 08:02:14 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/15 06:36:28 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/15 10:52:33 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ t_token	*get_token_at_index(t_list *tokens, int index)
 	return (NULL);
 }
 
-t_token	**t_list_to_token_arr(t_list	*tokens)
+t_token	**t_list_to_token_arr(t_list	*tokens, t_program_data	*program_data)
 {
 	t_token	**token_arr;
 	t_list	*temp;
@@ -45,6 +45,7 @@ t_token	**t_list_to_token_arr(t_list	*tokens)
 	token_arr = malloc(sizeof(t_token *) * (counter + 1));
 	if (!token_arr)
 		return (NULL);
+	gc_append_element(program_data->gc, token_arr);
 	token_arr[counter] = NULL;
 	counter = 0;
 	temp = tokens;
