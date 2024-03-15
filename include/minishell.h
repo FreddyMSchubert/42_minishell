@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/15 07:24:30 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/15 09:38:36 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,22 +47,6 @@
 #define TOK_OPEN_BRACE 6	// Open Brace -> (
 #define TOK_CLOSE_BRACE 7	// Close Brace -> )
 
-/*
-#define TOK_CMD_ARG 0      // Commands or Arguments
-#define TOK_S_QUOTE 1      // Single Quotes (')
-#define TOK_D_QUOTE 2      // Double Quotes (")
-// #define TOK_VAR_EXP 3      // Dollar Sign ($) for variable expansion
-#define TOK_EXIT_STAT 4    // Exit Status ($?)
-#define TOK_REDIR 5        // Redirections (<, >, >>, <<)
-#define TOK_PIPE 6         // Pipe (|)
-#define TOK_LOG_OP 7       // Logical Operators (&&, ||)
-// #define TOK_WILDCARD 8     // Wildcard (*)
-#define TOK_BUILTIN 9      // Builtins (echo, cd, pwd, export, unset, env, exit)
-#define TOK_CTRL_SEQ 10    // Control Sequences (Ctrl-C, Ctrl-D, Ctrl-Z)
-#define TOK_OPEN_BRACE 11  // Open Brace -> (
-#define TOK_CLOSE_BRACE 12 // Close Brace -> )
-*/
-
 // ----- STRUCTS
 
 typedef struct s_token {
@@ -98,7 +82,7 @@ typedef struct s_cmd_path {
 // ----- SETTINGS
 
 // will output detailed logging if set to 1, and normal logging if 0
-#define VERBOSE 1
+#define VERBOSE 0
 
 // ----- FUNCTIONS
 

@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 12:13:31 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/15 07:08:13 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/15 09:39:42 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,8 +121,6 @@ t_bin_tree_node	*tok_to_bin_tree(t_list *tokens)
 
 	if (!tokens)
 		return (NULL);
-	ft_printf("token boom: %s\n", ((t_token *)tokens->content)->value);
-	print_tokens(tokens);
 	node = malloc(sizeof(t_bin_tree_node));
 	if (!node || !tokens)
 		return (free(node), NULL);
@@ -134,7 +132,6 @@ t_bin_tree_node	*tok_to_bin_tree(t_list *tokens)
 		arr = t_list_to_token_arr(tokens);
 		return (node->val = arr, node->l = NULL, node->r = NULL, node);
 	}
-	ft_printf("dom_op_i: %d\n", dom_op_i);
 	node->val = malloc(sizeof(t_token) * 2);
 	if (!node->val)
 		return (free(node->val), free(node), NULL);

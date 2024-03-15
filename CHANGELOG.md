@@ -1,18 +1,22 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+### v0.23.1 - 15.03.24 - Freddy
+- logical operators dont wait until left child is finished to evaluate right child, making them pretty useless. fixed
+- removed unnecessary print statements accidentally pushed in arraytolist v4
+
 ## v0.23.0 - 15.03.24 - Freddy
 - Made Makefile colorful, more minimal compilation messages
 - updated logo & colored input prompt
 
-## [ArrayToList] - v4 - 15.03.24 - Freddy
+### [ArrayToList] - v4 - 15.03.24 - Freddy
 - switched parser to lists. some other fixes
 - validator referencing wrong token numbering fixed. now uses macros instead of numbers.
 - some other validator logic fixes
-## [ArrayToList] - v3 - 14.03.24 - Freddy
+### [ArrayToList] - v3 - 14.03.24 - Freddy
 - switched expander to lists. some other fixes
-## [ArrayToList] - v2 - 14.03.24 - Freddy
+### [ArrayToList] - v2 - 14.03.24 - Freddy
 - switched validator to lists. redirects and log ops seem to work fine now.
-## [ArrayToList] - v1 - 14.03.24 - Freddy
+### [ArrayToList] - v1 - 14.03.24 - Freddy
 - switched lexer to lists. unable to test redirects and logical operators
 
 ## v0.21.0 - 13.03.24 - Freddy
