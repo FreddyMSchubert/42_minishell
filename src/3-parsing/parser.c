@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 12:13:31 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/13 12:29:51 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/14 12:48:58 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ static int	adjust_operator_priority(int current_priority)
 		return (0);
 }
 
+
 /*
     Finds the most dominant operator in a token array, returning its index.
     Returns -1 if there is no dominant operator in the token array.
@@ -83,7 +84,7 @@ static int	get_dominant_operator(t_token **arr)
 	while (check_substring(arr) != 0)
 		;
 	operator_counter = 0;
-	while (operator_counter < 3)
+	while (operator_counter < 4)
 	{
 		i = -1;
 		depth = 0;

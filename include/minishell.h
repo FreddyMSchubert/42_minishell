@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/13 12:29:11 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/14 10:22:31 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ typedef struct s_cmd_path {
 // ----- SETTINGS
 
 // will output detailed logging if set to 1, and normal logging if 0
-#define VERBOSE 0
+#define VERBOSE 1
 
 // ----- FUNCTIONS
 
