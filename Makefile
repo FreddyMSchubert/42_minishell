@@ -10,10 +10,9 @@ CFLAGS		:=	-Wall -Werror -Wextra -g -fsanitize=address
 HEADER		:=	-I./include/
 LIBS		:=	-L$(LIBFT_DIR) -lft \
 				-L$(FTPRINTF_DIR) -lftprintf \
-				-L$(FTGNL_DIR) -lftgnl \
 				-lreadline
 
-$(NAME): pre_compile $(LIBFT_DIR)/libft.a $(FTPRINTF_DIR)/ftprintf.a $(FTGNL_DIR)/ftgnl.a $(OBJ) pre_link
+$(NAME): pre_compile $(LIBFT_DIR)/libft.a $(FTPRINTF_DIR)/ftprintf.a $(OBJ) pre_link
 	@echo "$(CYAN)Linking $(NAME)...$(NC)"
 	@cc $(CFLAGS) $(OBJ) $(LIBS) -o $(NAME) > /dev/null
 %.o: %.c
@@ -47,12 +46,10 @@ clean:
 	@rm -f $(OBJ) $(BOBJ) > /dev/null
 	@make -C $(LIBFT_DIR) clean > /dev/null
 	@make -C $(FTPRINTF_DIR) clean > /dev/null
-	@make -C $(FTGNL_DIR) clean > /dev/null
 fclean: clean
 	@echo "$(RED)Removing binaries...\n$(NC)"
 	@make -C $(LIBFT_DIR) fclean > /dev/null
 	@make -C $(FTPRINTF_DIR) fclean > /dev/null
-	@make -C $(FTGNL_DIR) fclean > /dev/null
 	@rm -f $(NAME) $(BNAME)
 re: fclean all
 

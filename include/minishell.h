@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/15 09:52:41 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/15 10:21:13 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,15 @@
 #include <limits.h>
 #include <string.h>
 // readline
-#include <stdio.h> // needed in readline for FILE
+#include <stdio.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 // signals
 #include <signal.h>
 #include <termios.h>
 #include <sys/ioctl.h>
+// waitpid
+#include <sys/wait.h>
 
 #include "./colors.h"
 

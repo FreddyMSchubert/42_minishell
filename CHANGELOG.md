@@ -1,5 +1,9 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+### v0.23.3 - 15.03.24 - Freddy
+- fully removed get_next_line (makefile wasnt in commit)
+- various small fixes
+
 ### v0.23.2 - 15.03.24 - Freddy
 - removed get_next_line because it's unnecessary (it was never here...)
 

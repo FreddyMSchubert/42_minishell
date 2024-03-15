@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 07:42:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/15 09:52:36 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/15 10:21:23 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,8 @@ void	print_token(t_token *token)
 
 void	print_tokens(t_list *tokens)
 {
-	int		i;
 	t_list	*tmp;
 
-	i = 0;
 	printf("Tokens:\n");
 	tmp = tokens;
 	while (tmp != NULL)

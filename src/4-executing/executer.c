@@ -6,13 +6,11 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/15 09:39:54 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/15 10:21:00 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-#include <sys/wait.h>
-#include <unistd.h>
 
 pid_t	execute(t_bin_tree_node *tree, t_program_data *program_data)
 {
