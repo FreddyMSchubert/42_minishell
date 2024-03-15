@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 15:40:24 by nburchha          #+#    #+#             */
-/*   Updated: 2024/03/14 09:47:24 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/15 12:57:32 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,23 +26,7 @@ int	count_tokens(const char *s)
 	in_quote = 0;
 	while ((int)ft_strlen(s) > i && s[++i])
 	{
-		// printf("%zu\n", ft_strlen(s));
-		if ((s[i] == '"' && in_quote != 2) || (s[i] == '\'' && in_quote != 1))
-		{
-			// printf("quote: %c\n", s[i]);
-			if (in_quote == 0)
-			{
-				if (s[i] != '\"')
-					in_quote = 2;
-				else
-					in_quote = 1;
-				count++;
-				in_word = 0;
-			}
-			else
-				in_quote = 0;
-		}
-		else if (is_operator_symbol(s[i], s[i + 1]))
+		if (is_operator_symbol(s[i], s[i + 1]))
 		{
 			// printf("operator: %c\n", s[i]);
 			if (is_operator_symbol(s[i], s[i + 1]) == 2)
@@ -112,45 +96,25 @@ char	**ms_split(char *input)
 	i = -1;
 	j = 0;
 	word_count = count_tokens(input);
-	// printf("input: %s\n", input);
-	// printf("word_count: %d\n", word_count);
 	if (word_count == -1)
 		return (NULL);
 	result = malloc((word_count + 1) * sizeof(char *));
 	if (!result)
 		return (NULL);
 	result[word_count] = NULL;
-	// printf("result[i]: %p\n", result[0]);
 	while (input[++i] && j < word_count)
 	{
-		// printf("input[i]: %c\n", input[i]);
-		if (input[i] == '"')
-		{
-			result[j++] = make_split_str(input, '"', &i);
-			// printf("double quote: %c\n", input[i]);
-			if (!result[j - 1])
-				return (free_split(result), NULL);
-		}
-		else if (input[i] == '\'')
-		{
-			result[j++] = make_split_str(input, '\'', &i);
-			if (!result[j - 1])
-				return (free_split(result), NULL);
-			// printf("single quote: %c\n", input[i]);
-		}
-		else if (is_operator_symbol(input[i], input[i + 1]))
+		if (is_operator_symbol(input[i], input[i + 1]))
 		{
 			result[j++] = make_split_str(input, ' ', &i);
 			if (!result[j - 1])
 				return (free_split(result), NULL);
-			// printf("operator symbol: %c\n", input[i]);
 		}
 		else if (!ft_isspace(input[i]))
 		{
 			result[j++] = make_split_str(input, ' ', &i);
 			if (!result[j - 1])
 				return (free_split(result), NULL);
-			// printf("word: %c\n", input[i]);
 		}
 	}
 	return (result);
