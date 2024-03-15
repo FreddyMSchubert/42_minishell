@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   validator.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 15:25:11 by nburchha          #+#    #+#             */
-/*   Updated: 2024/03/01 16:22:25 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/15 07:31:51 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ error codes:
 5 for allocation error
 */
 
-int	add_file_to_list(t_list **files, char *value, int *error_code)
+static int	add_file_to_list(t_list **files, char *value, int *error_code)
 {
 	t_list	*tmp;
 
@@ -39,53 +39,56 @@ int	add_file_to_list(t_list **files, char *value, int *error_code)
 	return (*error_code);
 }
 
-int	validator(t_token **token_arr)
+int	validator(t_list *tokens)
 {
-	int	i;
-	int	brace_opened;
-	int	error_code;
+	int		brace_opened;
+	int		error_code;
 	t_list	*files[3]; // 0 for input, 1 for output, 2 for append_out
+	t_list	*tok;
+	t_token	*token;
 
-	i = -1;
 	files[0] = NULL;
 	files[1] = NULL;
 	files[2] = NULL;
 	brace_opened = 0;
 	error_code = 0;
-	while (token_arr[++i] != NULL)
+	tok = tokens;
+	while (tok != NULL)
 	{
-		// printf("token_arr: %s\n", token_arr[i]->value);
+		token = tok->content;
+		// printf("token_arr: %s\n", token->value);
 		// check for consecutive pipes and or logical operators
-		if (token_arr[i]->type >= 6 && token_arr[i]->type <= 7)
-			if (token_arr[i + 1] && token_arr[i + 1]->type >= 6 && token_arr[i + 1]->type <= 7)
-				return (1);
-		
+		if (token->type >= TOK_PIPE && token->type <= TOK_LOG_AND && tok->next && \
+				((t_token *)tok->next->content)->type >= TOK_PIPE \
+				&& ((t_token *)tok->next->content)->type <= TOK_LOG_AND)
+			return (1);
 
 		// check for unclosed braces
-		if (token_arr[i]->type == TOK_OPEN_BRACE)
+		if (token->type == TOK_OPEN_BRACE)
 			brace_opened++;
-		else if (token_arr[i]->type == TOK_CLOSE_BRACE)
+		else if (token->type == TOK_CLOSE_BRACE)
 			brace_opened--;
 
 		// check for valid word after < > >> <<
-		if (token_arr[i]->type == TOK_REDIR)
-			if (!token_arr[i + 1] || token_arr[i + 1]->type > 2)
+		if (token->type == TOK_REDIR)
+			if (!tok->next || ((t_token *)tok->next->content)->type > TOK_BUILTIN)
 				return (3);
 		// put in files into linked lists
-		if (token_arr[i]->type == TOK_REDIR && ft_strncmp(token_arr[i]->value, "<", 2) == 0 && token_arr[i + 1])
-			if (add_file_to_list(&files[0], token_arr[i + 1]->value, &error_code) != 0)
+		if (token->type == TOK_REDIR && ft_strncmp(token->value, "<", 2) == 0 && tok->next)
+			if (add_file_to_list(&files[0], ((t_token *)tok->next->content)->value, &error_code) != 0)
 				return (error_code);
 		// put append files into linked lists
-		if (token_arr[i]->type == TOK_REDIR && ft_strncmp(token_arr[i]->value, ">>", 2) == 0 && token_arr[i + 1])
-			if (add_file_to_list(&files[2], token_arr[i + 1]->value, &error_code) != 0)
+		if (token->type == TOK_REDIR && ft_strncmp(token->value, ">>", 2) == 0 && tok->next)
+			if (add_file_to_list(&files[2], ((t_token *)tok->next->content)->value, &error_code) != 0)
 				return (error_code);
 		// put output files into linked lists
-		if (token_arr[i]->type == TOK_REDIR && ft_strncmp(token_arr[i]->value, ">", 2) == 0 && token_arr[i + 1])
-			if (add_file_to_list(&files[1], token_arr[i + 1]->value, &error_code) != 0)
+		if (token->type == TOK_REDIR && ft_strncmp(token->value, ">", 2) == 0 && tok->next)
+			if (add_file_to_list(&files[1], ((t_token *)tok->next->content)->value, &error_code) != 0)
 				return (error_code);
+		tok = tok->next;
 	}
 	// check for | in beginning or end
-	if (token_arr[0]->type == 6 || token_arr[i - 1]->type == 6)
+	if (((t_token *)tokens->content)->type == TOK_PIPE || ((t_token *)tokens->content)->type == TOK_PIPE)
 		return (1);
 	if (brace_opened != 0)
 		return (2);

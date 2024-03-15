@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 16:07:34 by nburchha          #+#    #+#             */
-/*   Updated: 2024/03/13 12:22:07 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/14 09:45:36 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char *get_filename(t_bin_tree_node *node)
 	t_bin_tree_node *temp;
 
 	temp = node->r;
-	while (temp->val[0]->type != TOK_CMD_ARG)
+	while (temp->val[0]->type != TOK_WORD)
 		temp = temp->l;
 	return (temp->val[0]->value);
 }

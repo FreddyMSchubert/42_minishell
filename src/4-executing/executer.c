@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/13 12:30:17 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/14 10:52:58 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,6 @@ int	execute_command(t_bin_tree_node *node, t_program_data *program_data,
 		int cmd_start_index)
 {
 	t_cmd_path	*cmd_path;
-	// int			return_value;
 
 	cmd_path = create_cmd_struct(program_data->envcp, node->val,
 			cmd_start_index);

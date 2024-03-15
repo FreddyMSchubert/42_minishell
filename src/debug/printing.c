@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   printing.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 07:42:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/13 12:21:20 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/14 11:59:24 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	print_binary_tree(t_bin_tree_node *tree, int tabs)
 void	print_token(t_token *token)
 {
 	printf("  Type: ");
-	if (token->type == TOK_CMD_ARG)
+	if (token->type == TOK_WORD)
 		printf("Command or Argument");
 	else if (token->type == TOK_REDIR)
 		printf("Redirection");
@@ -64,15 +64,32 @@ void	print_token(t_token *token)
 	printf(", \tValue: \"%s\", ignored: %d\n", token->value, token->ignored);
 }
 
-void	print_tokens(t_token **tokens)
+void	print_tokens(t_list *tokens)
 {
-	int	i;
+	int		i;
+	t_list	*tmp;
 
 	i = 0;
 	printf("Tokens:\n");
-	while (tokens[i] != NULL)
+	tmp = tokens;
+	while (tmp != NULL)
 	{
-		print_token(tokens[i]);
-		i++;
+		print_token(tmp->content);
+		tmp = tmp->next;
+	}
+}
+
+void	print_pipes(int in_fd, int out_fd)
+{
+	char	*str;
+
+	printf("print_pipe: %d %d\n", in_fd, out_fd);
+	while (1)
+	{
+		str = get_next_line(out_fd);
+		write(1, str, 42);
+		if (str == NULL)
+			break ;
+		free(str);
 	}
 }

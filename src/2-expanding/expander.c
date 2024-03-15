@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 09:20:32 by nburchha          #+#    #+#             */
-/*   Updated: 2024/03/13 12:22:20 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/14 12:05:54 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char	*get_envcp(char *env_var, t_program_data *program_data)
 	tmp = ft_strjoin(env_var, "=");
 	if (!tmp)
 		exit_error("malloc failed", 1, program_data->gc);
-	append_element(program_data->gc, tmp);
+	gc_append_element(program_data->gc, tmp);
 	while (program_data->envcp[++i])
 	{
 		if (ft_strncmp(program_data->envcp[i], tmp, ft_strlen(tmp)) == 0)
@@ -55,7 +55,7 @@ char	*isolate_var(char *var)
 	return (var);
 }
 
-char	*get_expanded_str(char *input, char *envcp_value,
+static char	*get_expanded_str(char *input, char *envcp_value,
 		t_program_data *program_data, char *env_var)
 {
 	char	*expanded_str;
@@ -68,7 +68,7 @@ char	*get_expanded_str(char *input, char *envcp_value,
 			- ft_strlen(env_var) + 1, sizeof(char));
 	if (!expanded_str)
 		exit_error("malloc failed", 1, program_data->gc);
-	append_element(program_data->gc, expanded_str);
+	gc_append_element(program_data->gc, expanded_str);
 	while (input[++i])
 	{
 		if (ft_strncmp(&input[i], "$", 1) == 0)
@@ -84,52 +84,54 @@ char	*get_expanded_str(char *input, char *envcp_value,
 	return (expanded_str);
 }
 
-t_token	**expander(t_token **tokens, t_program_data *program_data)
+// wildcard, need to take* with the rest in front or behind delimitted by spaces
+
+t_list	*expander(t_list *tokens, t_program_data *program_data)
 {
-	int		i;
 	char	*envcp_value;
 	char	*env_var;
+	t_list	*tok;
+	t_token	*token;
 
-	// char	*tmp;
-	i = -1;
-	while (tokens[++i])
+	tok = tokens;
+	while (tok != NULL)
 	{
-		if (ft_strnstr(tokens[i]->value, "$?",
-				ft_strlen(tokens[i]->value)) != NULL) //tokens[i]->type != TOK_S_QUOTE && 
+		token = tok->content;
+		if (ft_strnstr(token->value, "$?",
+				ft_strlen(token->value)) != NULL)
 		{
 			envcp_value = ft_itoa(program_data->exit_status);
 			if (!envcp_value)
 				exit_error("malloc failed", 1, program_data->gc);
-			append_element(program_data->gc, envcp_value);
-			tokens[i]->value = get_expanded_str(tokens[i]->value, envcp_value,
+			gc_append_element(program_data->gc, envcp_value);
+			token->value = get_expanded_str(token->value, envcp_value,
 					program_data, "?");
 		}
-		else if (ft_strchr(tokens[i]->value, '$') != NULL) // tokens[i]->type != TOK_S_QUOTE && 
+		else if (ft_strchr(token->value, '$') != NULL)
 		{
-			env_var = isolate_var(ft_strdup(ft_strchr(tokens[i]->value, '$')
+			env_var = isolate_var(ft_strdup(ft_strchr(token->value, '$')
 						+ 1));
 			if (!env_var)
 				exit_error("malloc failed", 1, program_data->gc);
-			// printf("env_var: %s\n", env_var);
-			append_element(program_data->gc, env_var);
+			gc_append_element(program_data->gc, env_var);
 			envcp_value = get_envcp(env_var, program_data);
-			// printf("envcp_value: %s\n", envcp_value);
 			if (!envcp_value)
 				exit_error("malloc failed", 1, program_data->gc);
-			append_element(program_data->gc, envcp_value);
-			tokens[i]->value = get_expanded_str(tokens[i]->value, envcp_value,
+			gc_append_element(program_data->gc, envcp_value);
+			token->value = get_expanded_str(token->value, envcp_value,
 					program_data, env_var);
 		}
-		else if (tokens[i]->type == TOK_CMD_ARG && ft_strchr(tokens[i]->value,
-				'*') != NULL) // wildcard, need to take* with the rest in front or behind delimitted by spaces
+		else if (token->type == TOK_WORD && ft_strchr(token->value,
+				'*') != NULL)
 		{
-			tokens[i]->value = list_matching_files(tokens[i]->value);
-			if (!tokens[i]->value)
+			token->value = list_matching_files(token->value);
+			if (!token->value)
 			{
-				tokens[i]->value = ft_strdup("*");
-				append_element(program_data->gc, tokens[i]->value);
+				token->value = ft_strdup("*");
+				gc_append_element(program_data->gc, token->value);
 			}
 		}
+		tok = tok->next;
 	}
 	return (tokens);
 }

@@ -1,5 +1,16 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+## [ArrayToList] - v4 - 15.03.24 - Freddy
+- switched parser to lists. some other fixes
+- validator referencing wrong token numbering fixed. now uses macros instead of numbers.
+- some other validator logic fixes
+## [ArrayToList] - v3 - 14.03.24 - Freddy
+- switched expander to lists. some other fixes
+## [ArrayToList] - v2 - 14.03.24 - Freddy
+- switched validator to lists. redirects and log ops seem to work fine now.
+## [ArrayToList] - v1 - 14.03.24 - Freddy
+- switched lexer to lists. unable to test redirects and logical operators
+
 ## v0.21.0 - 13.03.24 - Freddy
 - Added signals. ctrl-c & ctrl-d & ctrl-\
 

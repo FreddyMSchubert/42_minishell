@@ -3,24 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ms_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 15:40:24 by nburchha          #+#    #+#             */
-/*   Updated: 2024/02/21 17:34:04 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/14 09:47:24 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-/// @return 2 if valid operator symbol (<<, >>, ||, &&), 1 if single operator symbol, 0 if not operator symbol
-int	is_operator_symbol(char c, char d)
-{
-	if ((c == '<' && d == '<') || (c == '>' && d == '>') || (c == '|' && d == '|') || (c == '&' && d == '&'))
-		return (2);
-	else if (c == '<' || c == '>' || c == '|' || c == '&' || c == '(' || c == ')')
-		return (1);
-	return (0);
-}
 
 /// @brief counts how many pointers are needed in pointer array
 int	count_tokens(const char *s)
