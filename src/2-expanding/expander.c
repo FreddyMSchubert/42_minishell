@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 09:20:32 by nburchha          #+#    #+#             */
-/*   Updated: 2024/03/12 14:20:43 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/15 12:50:30 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ char	*isolate_var(char *var)
 		return (NULL);
 	while (var[++i])
 	{
-		if (var[i] == ' ' || var[i] == '\'' || var[i] == '\"'
+		if (var[i] == ' ' || var[i] == '\'' || var[i] == '\"' || var[i] == '$'
 			|| is_operator_symbol(var[i], var[i + 1]))
 		{
 			var[i] = '\0';
@@ -160,8 +160,10 @@ t_token	**expander(t_token **tokens, t_program_data *program_data)
 			if (!envcp_value)
 				exit_error("malloc failed", 1, program_data->gc);
 			append_element(program_data->gc, envcp_value);
-			tokens[i]->value = get_expanded_str(tokens[i]->value, envcp_value,
+			tmp = get_expanded_str(tokens[i]->value, envcp_value,
 					program_data, env_var);
+			if (tmp)
+				tokens[i]->value = tmp;
 		}
 		//wildcard
 		else if (tokens[i]->type == TOK_CMD_ARG && ft_strchr(tokens[i]->value,
