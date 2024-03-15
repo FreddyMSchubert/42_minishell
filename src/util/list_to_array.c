@@ -1,22 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test_expander.c                                    :+:      :+:    :+:   */
+/*   list_to_array.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/20 10:06:24 by nburchha          #+#    #+#             */
-/*   Updated: 2024/03/14 11:57:43 by fschuber         ###   ########.fr       */
+/*   Created: 2024/03/14 09:49:34 by fschuber          #+#    #+#             */
+/*   Updated: 2024/03/14 10:03:25 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-// void	test_expander(t_program_data *program_data, t_token **tokens)
-// {
-// 	printf("Tokens before expansion:\n");
-// 	print_tokens(tokens);
-// 	expander(tokens, program_data);
-// 	printf("Tokens after expansion:\n");
-// 	print_tokens(tokens);
-// }
+t_token	**list_to_token_array(t_list *list)
+{
+	t_token	**array;
+	int		i;
+	t_list	*temp;
+
+	temp = list;
+	i = 0;
+	while (temp)
+	{
+		i++;
+		temp = temp->next;
+	}
+	array = malloc(sizeof(t_token *) * (i + 1));
+	if (!array)
+		return (NULL);
+	i = 0;
+	while (list)
+	{
+		array[i] = ((t_token *)list->content);
+		list = list->next;
+		i++;
+	}
+	array[i] = NULL;
+	return (array);
+}

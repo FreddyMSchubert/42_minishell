@@ -1,22 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test_expander.c                                    :+:      :+:    :+:   */
+/*   gc_util.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/20 10:06:24 by nburchha          #+#    #+#             */
-/*   Updated: 2024/03/14 11:57:43 by fschuber         ###   ########.fr       */
+/*   Created: 2024/03/14 08:43:39 by fschuber          #+#    #+#             */
+/*   Updated: 2024/03/14 09:52:37 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "../../../include/minishell.h"
 
-// void	test_expander(t_program_data *program_data, t_token **tokens)
-// {
-// 	printf("Tokens before expansion:\n");
-// 	print_tokens(tokens);
-// 	expander(tokens, program_data);
-// 	printf("Tokens after expansion:\n");
-// 	print_tokens(tokens);
-// }
+/*
+	Logs message & exits program with exit_code,
+	but not before freeing all elements in the garbage collector
+*/
+void	exit_error(char *message, int exit_code, t_list *gc)
+{
+	ft_printf("%s\n", message);
+	gc_cleanup(gc);
+	exit(exit_code);
+}

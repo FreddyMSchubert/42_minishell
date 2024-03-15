@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/13 12:30:17 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/15 10:21:00 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-#include <sys/wait.h>
-#include <unistd.h>
 
 pid_t	execute(t_bin_tree_node *tree, t_program_data *program_data)
 {
@@ -56,7 +54,7 @@ int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 	cmd_start_index = 0;
 	while (node->val[cmd_start_index]->ignored == 1)
 		cmd_start_index++;
-	if (node->val[cmd_start_index]->type == TOK_BUILTIN && ft_strncmp(node->val[cmd_start_index]->value, "exit", 5) == 0 && node->input_fd == 0 && node->output_fd == 1)
+	if (node->val[cmd_start_index]->type == TOK_BUILTIN && ft_strncmp(node->val[cmd_start_index]->value, "exit", 5) == 0 && node->input_fd == STDIN_FILENO && node->output_fd == STDOUT_FILENO)
 		return (execute_exit(node->val, program_data, cmd_start_index));
 	pid = fork();
 	if (pid == -1)
@@ -112,7 +110,7 @@ int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 			close(node->input_fd);
 		return (pid);
 	}
-	return (program_data->exit_status);
+	return (42);	// this will never occur, just to silence warning
 }
 
 int	execute_builtin(t_bin_tree_node *node, t_program_data *program_data,
@@ -139,7 +137,6 @@ int	execute_command(t_bin_tree_node *node, t_program_data *program_data,
 		int cmd_start_index)
 {
 	t_cmd_path	*cmd_path;
-	// int			return_value;
 
 	cmd_path = create_cmd_struct(program_data->envcp, node->val,
 			cmd_start_index);

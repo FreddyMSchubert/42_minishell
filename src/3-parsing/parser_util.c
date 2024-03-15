@@ -6,64 +6,97 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 12:13:26 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/26 10:35:46 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/15 07:19:03 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 /*
-	Returns a pointer to a new token array, containing the tokens from start to end.
-	Does not free the original token array.
+	Returns a pointer to a new token t_list, containing the tokens
+		from start to end.
+	Does not free or change the original token t_list.
 	e.g. get_sub_token_arr({a, e, b, w, t, c, d}, 1, 3) -> {e, b, w}
 */
-t_token	**sub_tok_arr(t_token **token_arr, int start, int end)
+t_list	*sub_token_t_list(t_list *tokens, int start, int end)
 {
-	t_token			**sub_token_arr;
-	int				counter;
+	int		index;
+	t_list	*current_token;
+	t_list	*sub_token_list;
+	t_list	*temp;
 
 	if (start > end)
 		return (NULL);
-	sub_token_arr = malloc(sizeof(t_token *) * (end - start + 1 + 1));
-	if (!sub_token_arr)
-		return (NULL);
-	sub_token_arr[end - start + 1] = NULL;
-	counter = 0;
-	while (start <= end)
+	index = 0;
+	current_token = tokens;
+	sub_token_list = NULL;
+	while (current_token != NULL && index <= end)
 	{
-		sub_token_arr[counter] = token_arr[start];
-		counter++;
-		start++;
+		if (index >= start)
+		{
+			temp = ft_lstnew(current_token->content);
+			if (!temp)
+				return (NULL);
+			if (!sub_token_list)
+				sub_token_list = temp;
+			else
+				ft_lstadd_back(&sub_token_list, temp);
+		}
+		current_token = current_token->next;
+		index++;
 	}
-	return (sub_token_arr);
+	return (sub_token_list);
 }
 
-int	toklen(t_token **token_arr)
+int	toklen(t_list *tokens)
 {
-	int	counter;
+	int		counter;
+	t_list	*tok;
 
 	counter = 0;
-	while (token_arr[counter])
+	tok = tokens;
+	while (tok != NULL)
+	{
 		counter++;
+		tok = tok->next;
+	}
 	return (counter);
 }
 
-int	first_non_ignored(t_token **token_arr)
+// returns -42 if there isnt a non-ignored token
+int	first_non_ignored(t_list *tokens)
 {
-	int	counter;
+	int		counter;
+	t_list	*current;
 
 	counter = 0;
-	while (token_arr[counter] && token_arr[counter]->ignored == 1)
+	current = tokens;
+	while (current != NULL && ((t_token *)current->content)->ignored == 1)
+	{
 		counter++;
+		current = current->next;
+	}
+	if (current == NULL)
+		return (-42);
 	return (counter);
 }
 
-int	last_non_ignored(t_token **token_arr)
+// returns -42 if there isnt a non-ignored token
+int	last_non_ignored(t_list *tokens)
 {
-	int	counter;
+	t_list	*current;
+	int		counter;
+	int		last_non_ignored;
 
-	counter = toklen(token_arr) - 1;
-	while (counter >= 0 && token_arr[counter]->ignored == 1)
-		counter--;
-	return (counter);
+	counter = 0;
+	current = tokens;
+	last_non_ignored = -42;
+	while (current != NULL)
+	{
+		if (((t_token *)current->content)->ignored == 0)
+			last_non_ignored = counter;
+		counter++;
+		current = current->next;
+	}
+	return (last_non_ignored);
 }

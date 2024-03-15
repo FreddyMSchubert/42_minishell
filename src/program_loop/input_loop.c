@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/13 12:20:57 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/15 09:51:09 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,28 +14,62 @@
 
 extern int	g_sigint_received;
 
+static void	print_heading_line(char	*line, int linenbr)
+{
+	int		i;
+
+	i = -1;
+	while (line[++i] != '\0')
+	{
+		if (linenbr < 6)
+		{
+			if (line[i] == '(' || line[i] == ')')
+				printf("%s%c%s", ANSI_COLOR_RED, line[i], ANSI_COLOR_RESET);
+			else if (line[i] == '/' || line[i] == '\\')
+				printf("%s%c%s", ANSI_COLOR_YELLOW, line[i], ANSI_COLOR_RESET);
+			else if (line[i] == '|' || line[i] == '_' || line[i] == '\'' || line[i] == '`' || line[i] == '-' || line[i] == ',' || line[i] == '<')
+				printf("%s%c%s", ANSI_COLOR_CYAN, line[i], ANSI_COLOR_RESET);
+			else
+				printf("%c", line[i]);
+		}
+		else
+		{
+			if (line[i] == '(' || line[i] == ')')
+				printf("%s%c%s", ANSI_COLOR_RED, line[i], ANSI_COLOR_RESET);
+			else if (line[i] == '|' || line[i] == '/' || line[i] == '\\' || line[i] == '_' || line[i] == '\'' || line[i] == '`' || line[i] == '-' || line[i] == ',' || line[i] == '<')
+				printf("%s%c%s", ANSI_COLOR_CYAN, line[i], ANSI_COLOR_RESET);
+			else
+				printf("%c", line[i]);
+		
+		}
+	}
+}
+
+#define INPUT_FILE_LINES 10
+#define INPUT_FILE_LINE_LENGTH 47
+
 static void	*print_heading(void)
 {
 	int		fd;
-	char	*line;
-	int		color;
+	int		counter;
+	char	*buffer;
 
 	fd = open("./src/logo.txt", O_RDONLY);
 	if (fd < 0)
 		return (NULL);
-	color = 31;
-	line = get_next_line(fd);
-	while (line != NULL)
+	buffer = malloc(INPUT_FILE_LINE_LENGTH + 1);
+	if (buffer == NULL)
+		return (NULL);
+	buffer[INPUT_FILE_LINE_LENGTH] = '\0';
+	counter = 0;
+	while (counter < INPUT_FILE_LINES)
 	{
-		printf("\x1b[%dm%s%s", color, line, ANSI_COLOR_RESET);
-		free(line);
-		line = get_next_line(fd);
-		if (color >= 36)
-			color = 31;
-		else
-			color++;
+		if (read(fd, buffer, INPUT_FILE_LINE_LENGTH) < 0)
+			return (free(buffer), close(fd), NULL);
+		print_heading_line(buffer, counter);
+		counter++;
 	}
-	free (line);
+	free (buffer);
 	return (NULL);
 }
 
@@ -56,7 +90,7 @@ static void	*print_logo(void)
 
 int	execute_input(t_program_data *program_data, char *input)
 {
-	t_token				**tokenified_input;
+	t_list				*tokenified_input;
 	int					valid;
 	t_bin_tree_node		*tree;
 
@@ -68,24 +102,24 @@ int	execute_input(t_program_data *program_data, char *input)
 		return (-1); // handle error
 	if (VERBOSE == 1)
 		print_tokens(tokenified_input);
+	valid = validator(tokenified_input);
+	if (valid != 0)
+	{
+		if (VERBOSE == 1)
+			ft_printf("token sequence is invalid: %d\n", valid);
+		gc_cleanup(program_data->gc);
+		program_data->gc = create_garbage_collector();
+		return (-1);
+	}
+	if (VERBOSE == 1)
+		ft_printf("token sequence is valid\n");
 	expander(tokenified_input, program_data);
 	if (VERBOSE == 1)
 	{
 		ft_printf("after expanding:\n");
 		print_tokens(tokenified_input);
 	}
-	// --- validator
-	valid = validator(tokenified_input);
-	if (valid != 0)
-	{
-		cleanup(program_data->gc);
-		program_data->gc = create_garbage_collector();
-		return (-1);
-	}
-	if (VERBOSE == 1)
-		ft_printf("token sequence is valid\n");
-	// --- parser
-	tokenified_input = switch_args_for_redir(tokenified_input);
+	// tokenified_input = switch_args_for_redir(tokenified_input);
 	tree = tok_to_bin_tree(tokenified_input);
 	tree->parent = NULL;
 
@@ -109,9 +143,16 @@ int	run_crash_interface(t_program_data *program_data)
 	while (program_data->exit_flag == 0)
 	{
 		if (program_data->exit_status == 0)
+		{
+			ft_printf("%s", ANSI_COLOR_CYAN);
 			input = readline("crash 💣 ");
+		}
 		else
+		{
+			ft_printf("%s", ANSI_COLOR_RED);
 			input = readline("crash 💥 ");
+		}
+		ft_printf("%s", ANSI_COLOR_RESET);
 		if (g_sigint_received == SIGINT)
 		{
 			g_sigint_received = 0;
@@ -123,8 +164,8 @@ int	run_crash_interface(t_program_data *program_data)
 		if (input == NULL || ft_isspace_str_all(input) == 1)
 		{
 			if (input != NULL)
-				append_element(program_data->gc, input);
-			cleanup(program_data->gc);
+				gc_append_element(program_data->gc, input);
+			gc_cleanup(program_data->gc);
 			program_data->gc = create_garbage_collector();
 			program_data->exit_status = 0;
 			if (input == NULL)
@@ -133,14 +174,14 @@ int	run_crash_interface(t_program_data *program_data)
 		}
 		else
 		{
-			append_element(program_data->gc, input);
+			gc_append_element(program_data->gc, input);
 			add_history(input);
 		}
 		execute_input(program_data, input);
-		cleanup(program_data->gc);
+		gc_cleanup(program_data->gc);
 		program_data->gc = create_garbage_collector();
 	}
-	cleanup(program_data->gc);
+	gc_cleanup(program_data->gc);
 	clear_history();
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   logical.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 08:32:19 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/13 12:25:56 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/15 09:37:44 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ int	logical_and(t_bin_tree_node *node, t_program_data *program_data)
 	pid = -1; // this will never occur just to silence warning
 	if (node->l != NULL)
 		pid = execute(node->l, program_data);
+	if (pid != -1)
+		waitpid(pid, &program_data->exit_status, 0);
 	if (program_data->exit_status == 0 && node->r != NULL)
 		pid = execute(node->r, program_data);
 	return (pid);
@@ -42,6 +44,8 @@ int	logical_or(t_bin_tree_node *node, t_program_data *program_data)
 	pid = 0; // this will never occur just to silence warning
 	if (node->l != NULL)
 		pid = execute(node->l, program_data);
+	if (pid != -1)
+		waitpid(pid, &program_data->exit_status, 0);
 	if (program_data->exit_status != 0 && node->r != NULL)
 		pid = execute(node->r, program_data);
 	return (pid);
