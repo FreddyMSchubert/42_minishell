@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/15 07:30:35 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/15 09:09:59 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,54 @@
 
 extern int	g_sigint_received;
 
+static void	print_heading_line(char	*line, int linenbr)
+{
+	int		i;
+
+	i = -1;
+	while (line[++i] != '\0')
+	{
+		if (linenbr < 6)
+		{
+			if (line[i] == '(' || line[i] == ')')
+				printf("%s%c%s", ANSI_COLOR_RED, line[i], ANSI_COLOR_RESET);
+			else if (line[i] == '/' || line[i] == '\\')
+				printf("%s%c%s", ANSI_COLOR_YELLOW, line[i], ANSI_COLOR_RESET);
+			else if (line[i] == '|' || line[i] == '_' || line[i] == '\'' || line[i] == '`' || line[i] == '-' || line[i] == ',' || line[i] == '<')
+				printf("%s%c%s", ANSI_COLOR_CYAN, line[i], ANSI_COLOR_RESET);
+			else
+				printf("%c", line[i]);
+		}
+		else
+		{
+			if (line[i] == '(' || line[i] == ')')
+				printf("%s%c%s", ANSI_COLOR_RED, line[i], ANSI_COLOR_RESET);
+			else if (line[i] == '|' || line[i] == '/' || line[i] == '\\' || line[i] == '_' || line[i] == '\'' || line[i] == '`' || line[i] == '-' || line[i] == ',' || line[i] == '<')
+				printf("%s%c%s", ANSI_COLOR_CYAN, line[i], ANSI_COLOR_RESET);
+			else
+				printf("%c", line[i]);
+		
+		}
+	}
+}
+
 static void	*print_heading(void)
 {
 	int		fd;
 	char	*line;
-	int		color;
+	int		linenbr;
 
 	fd = open("./src/logo.txt", O_RDONLY);
 	if (fd < 0)
 		return (NULL);
-	color = 31;
+	linenbr = 0;
 	line = get_next_line(fd);
 	while (line != NULL)
 	{
-		printf("\x1b[%dm%s%s", color, line, ANSI_COLOR_RESET);
+		print_heading_line(line, linenbr);
 		free(line);
 		line = get_next_line(fd);
-		if (color >= 36)
-			color = 31;
-		else
-			color++;
+		linenbr++;
 	}
 	free (line);
 	return (NULL);
@@ -108,11 +136,17 @@ int	run_crash_interface(t_program_data *program_data)
 	print_logo();
 	while (program_data->exit_flag == 0)
 	{
-		ft_printf("%s", ANSI_COLOR_WHITE);
 		if (program_data->exit_status == 0)
+		{
+			ft_printf("%s", ANSI_COLOR_CYAN);
 			input = readline("crash 💣 ");
+		}
 		else
+		{
+			ft_printf("%s", ANSI_COLOR_RED);
 			input = readline("crash 💥 ");
+		}
+		ft_printf("%s", ANSI_COLOR_RESET);
 		if (g_sigint_received == SIGINT)
 		{
 			g_sigint_received = 0;

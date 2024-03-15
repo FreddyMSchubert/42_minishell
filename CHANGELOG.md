@@ -1,5 +1,9 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+## v0.23.0 - 15.03.24 - Freddy
+- Made Makefile colorful, more minimal compilation messages
+- updated logo & colored input prompt
+
 ## [ArrayToList] - v4 - 15.03.24 - Freddy
 - switched parser to lists. some other fixes
 - validator referencing wrong token numbering fixed. now uses macros instead of numbers.
