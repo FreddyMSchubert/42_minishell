@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/15 12:52:26 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/15 10:51:47 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,10 +135,10 @@ t_list				*sub_token_t_list(t_list *tokens, int start, int end);
 int					toklen(t_list *tokens);
 int					first_non_ignored(t_list *tokens);
 int					last_non_ignored(t_list *tokens);
-t_token				**t_list_to_token_arr(t_list	*tokens);
+t_token				**t_list_to_token_arr(t_list	*tokens, t_program_data	*program_data);
 t_token				*get_token_at_index(t_list *tokens, int index);
 // parser
-t_bin_tree_node		*tok_to_bin_tree(t_list *tokens);
+t_bin_tree_node		*tok_to_bin_tree(t_list *tokens, t_program_data *program_data);
 
 // --- 4-executing
 // general

@@ -1,5 +1,14 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+### v0.23.4 - 15.03.24 - Freddy
+- Malloc fixes
+	- missing getwd return free in 4/builtins/cd
+	- parser allocated nodes not appended to gc
+	- new arrays as created by t_list_to_token_arr not appended to gc
+	- new tokens as allocated by detect_token_type never got appended to gc. which is to say, every single token we ever used not allocated to gc. (same for their values)
+- added debug folder with debug files and run_valgrind. also added a suppression file that stops makes the annoying readline leaks not show up
+- added rl_clear_history at the end of the garbage collector cleanup
+
 ### v0.23.3 - 15.03.24 - Freddy
 - fully removed get_next_line (makefile wasnt in commit)
 - various small fixes
