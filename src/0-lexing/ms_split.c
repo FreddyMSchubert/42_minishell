@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 15:40:24 by nburchha          #+#    #+#             */
-/*   Updated: 2024/03/14 09:47:24 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/15 10:42:01 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,10 +115,10 @@ char	**ms_split(char *input)
 	// printf("input: %s\n", input);
 	// printf("word_count: %d\n", word_count);
 	if (word_count == -1)
-		return (NULL);
+		return (free(input), NULL);
 	result = malloc((word_count + 1) * sizeof(char *));
 	if (!result)
-		return (NULL);
+		return (free(input), NULL);
 	result[word_count] = NULL;
 	// printf("result[i]: %p\n", result[0]);
 	while (input[++i] && j < word_count)
@@ -129,31 +129,31 @@ char	**ms_split(char *input)
 			result[j++] = make_split_str(input, '"', &i);
 			// printf("double quote: %c\n", input[i]);
 			if (!result[j - 1])
-				return (free_split(result), NULL);
+				return (free(input), free_split(result), NULL);
 		}
 		else if (input[i] == '\'')
 		{
 			result[j++] = make_split_str(input, '\'', &i);
 			if (!result[j - 1])
-				return (free_split(result), NULL);
+				return (free(input), free_split(result), NULL);
 			// printf("single quote: %c\n", input[i]);
 		}
 		else if (is_operator_symbol(input[i], input[i + 1]))
 		{
 			result[j++] = make_split_str(input, ' ', &i);
 			if (!result[j - 1])
-				return (free_split(result), NULL);
+				return (free(input), free_split(result), NULL);
 			// printf("operator symbol: %c\n", input[i]);
 		}
 		else if (!ft_isspace(input[i]))
 		{
 			result[j++] = make_split_str(input, ' ', &i);
 			if (!result[j - 1])
-				return (free_split(result), NULL);
+				return (free(input), free_split(result), NULL);
 			// printf("word: %c\n", input[i]);
 		}
 	}
-	return (result);
+	return (free(input), result);
 }
 
 

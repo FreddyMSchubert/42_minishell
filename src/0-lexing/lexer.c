@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 06:54:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/14 09:45:12 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/15 11:00:31 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	is_builtin_string(char *input, int is_first_or_after_operator)
 /*
 	@brief	Receives one token as string, returns categorized token struct
 */
-static t_list	*detect_token_type(char *input, int is_first_or_after_operator)
+static t_list	*detect_token_type(char *input, int is_first_or_after_operator, t_program_data *program_data)
 {
 	t_token		*token;
 	t_list		*list;
@@ -38,6 +38,7 @@ static t_list	*detect_token_type(char *input, int is_first_or_after_operator)
 	token = malloc(sizeof(t_token));
 	if (!token || !list)
 		return (free(token), free(list), NULL);
+	gc_append_element(program_data->gc, token);
 	if (same_str(input, "<") == 0 || same_str(input, "<<") == 0 || \
 			same_str(input, ">") == 0 || same_str(input, ">>") == 0)
 		token->type = TOK_REDIR;
@@ -56,6 +57,7 @@ static t_list	*detect_token_type(char *input, int is_first_or_after_operator)
 	else
 		token->type = TOK_WORD;
 	token->value = ft_strdup(input);
+	gc_append_element(program_data->gc, token->value);
 	token->ignored = 0;
 	list->content = token;
 	list->next = NULL;
@@ -102,6 +104,8 @@ static int	calc_add_spaces(char *input)
 	in_quote = 0; // not in quote
 	in_quote = 1; // '=1
 	in_quote = 2; // "=2
+
+	new_input is to be freed by ms_split
 */
 static char	*put_space_between_tokens(char *input, t_program_data *data)
 {
@@ -176,7 +180,7 @@ t_list	*lexer(char *input, t_program_data *data)
 		if (counter == 0 || is_operator_symbol(*split_input[counter - 1], \
 							*split_input[counter]) != 0)
 			is_first_or_after_operator = 1;
-		ft_lstadd_back(&tokens, detect_token_type(split_input[counter], is_first_or_after_operator));
+		ft_lstadd_back(&tokens, detect_token_type(split_input[counter], is_first_or_after_operator, data));
 		if (ft_lstlast(tokens)->content == NULL)
 			return (gc_cleanup(data->gc), NULL);
 		counter++;

@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 12:18:59 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/14 09:57:05 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/15 12:14:03 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,4 +87,5 @@ void	gc_cleanup(t_list *gc)
 		free(current2->content);
 		free(current2);
 	}
+	rl_clear_history();
 }

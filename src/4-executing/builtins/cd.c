@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 06:19:23 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/06 18:22:51 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/15 10:32:11 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,7 @@ int	execute_cd(t_token **tokens, t_program_data *program_data, int cmd_start_ind
 		path = ft_strdup(tokens[cmd_start_index + 1]->value);
 	ret_val = chdir(path);
 	if (ret_val != 0)
-	{
-		broadcast_builtin_error("cd", -4, NULL);
-		return (errno);
-	}
+		return (broadcast_builtin_error("cd", -4, NULL), errno);
 	buffer = getcwd(NULL, 0);
 	if (!buffer)
 		return (-1); // handle error
@@ -42,6 +39,6 @@ int	execute_cd(t_token **tokens, t_program_data *program_data, int cmd_start_ind
 	set_envcp_var("OLDPWD", get_envcp_var("PWD", program_data->envcp), 0, program_data);
 	if (set_envcp_var("PWD", buffer, 0, program_data) == -1)
 		// return (broadcast_builtin_error("cd", -2, "PWD"), 1);
-		return (-2); // handle error
-	return (0);
+		return (free(buffer), -2); // handle error
+	return (free(buffer), 0);
 }

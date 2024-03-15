@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 12:13:31 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/15 09:39:42 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/15 10:52:03 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ static int	get_dominant_operator(t_list *tokens)
 	Gets a token array as input. Returns a functional binary tree structure.
 	dom_op_i = dominant operator index
 */
-t_bin_tree_node	*tok_to_bin_tree(t_list *tokens)
+t_bin_tree_node	*tok_to_bin_tree(t_list *tokens, t_program_data *program_data)
 {
 	t_bin_tree_node		*node;
 	int					dom_op_i;
@@ -124,12 +124,13 @@ t_bin_tree_node	*tok_to_bin_tree(t_list *tokens)
 	node = malloc(sizeof(t_bin_tree_node));
 	if (!node || !tokens)
 		return (free(node), NULL);
+	gc_append_element(program_data->gc, node);
 	node->input_fd = STDIN_FILENO;
 	node->output_fd = STDOUT_FILENO;
 	dom_op_i = get_dominant_operator(tokens);
 	if (dom_op_i == -1)
 	{
-		arr = t_list_to_token_arr(tokens);
+		arr = t_list_to_token_arr(tokens, program_data);
 		return (node->val = arr, node->l = NULL, node->r = NULL, node);
 	}
 	node->val = malloc(sizeof(t_token) * 2);
@@ -137,10 +138,10 @@ t_bin_tree_node	*tok_to_bin_tree(t_list *tokens)
 		return (free(node->val), free(node), NULL);
 	node->val[0] = get_token_at_index(tokens, dom_op_i);
 	node->val[1] = NULL;
-	node->l = tok_to_bin_tree(sub_token_t_list(tokens, 0, dom_op_i - 1));
+	node->l = tok_to_bin_tree(sub_token_t_list(tokens, 0, dom_op_i - 1), program_data);
 	if (node->l)
 		node->l->parent = node;
-	node->r = tok_to_bin_tree(sub_token_t_list(tokens, dom_op_i + 1, toklen(tokens) - 1));
+	node->r = tok_to_bin_tree(sub_token_t_list(tokens, dom_op_i + 1, toklen(tokens) - 1), program_data);
 	if (node->r)
 		node->r->parent = node;
 	return (node);
