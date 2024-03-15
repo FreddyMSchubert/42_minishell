@@ -1,5 +1,8 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+### v0.23.2 - 15.03.24 - Freddy
+- removed get_next_line because it's unnecessary (it was never here...)
+
 ### v0.23.1 - 15.03.24 - Freddy
 - logical operators dont wait until left child is finished to evaluate right child, making them pretty useless. fixed
 - removed unnecessary print statements accidentally pushed in arraytolist v4

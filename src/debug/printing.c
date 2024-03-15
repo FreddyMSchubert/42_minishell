@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 07:42:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/14 11:59:24 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/15 09:52:36 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,20 +76,5 @@ void	print_tokens(t_list *tokens)
 	{
 		print_token(tmp->content);
 		tmp = tmp->next;
-	}
-}
-
-void	print_pipes(int in_fd, int out_fd)
-{
-	char	*str;
-
-	printf("print_pipe: %d %d\n", in_fd, out_fd);
-	while (1)
-	{
-		str = get_next_line(out_fd);
-		write(1, str, 42);
-		if (str == NULL)
-			break ;
-		free(str);
 	}
 }

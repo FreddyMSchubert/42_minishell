@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/15 09:09:59 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/15 09:51:09 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,25 +45,31 @@ static void	print_heading_line(char	*line, int linenbr)
 	}
 }
 
+#define INPUT_FILE_LINES 10
+#define INPUT_FILE_LINE_LENGTH 47
+
 static void	*print_heading(void)
 {
 	int		fd;
-	char	*line;
-	int		linenbr;
+	int		counter;
+	char	*buffer;
 
 	fd = open("./src/logo.txt", O_RDONLY);
 	if (fd < 0)
 		return (NULL);
-	linenbr = 0;
-	line = get_next_line(fd);
-	while (line != NULL)
+	buffer = malloc(INPUT_FILE_LINE_LENGTH + 1);
+	if (buffer == NULL)
+		return (NULL);
+	buffer[INPUT_FILE_LINE_LENGTH] = '\0';
+	counter = 0;
+	while (counter < INPUT_FILE_LINES)
 	{
-		print_heading_line(line, linenbr);
-		free(line);
-		line = get_next_line(fd);
-		linenbr++;
+		if (read(fd, buffer, INPUT_FILE_LINE_LENGTH) < 0)
+			return (free(buffer), close(fd), NULL);
+		print_heading_line(buffer, counter);
+		counter++;
 	}
-	free (line);
+	free (buffer);
 	return (NULL);
 }
 

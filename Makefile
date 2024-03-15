@@ -2,7 +2,6 @@ NAME = ./crash
 
 LIBFT_DIR   := ./submodules/42_libft
 FTPRINTF_DIR:= ./submodules/42_ft_printf
-FTGNL_DIR   := ./submodules/42_get_next_line
 
 SRC = $(shell find ./src -name "*.c")
 OBJ = $(SRC:.c=.o)
@@ -27,9 +26,6 @@ $(LIBFT_DIR)/libft.a:
 $(FTPRINTF_DIR)/ftprintf.a:
 	@echo "$(YELLOW)Making ft_printf...$(NC)"
 	@make -C $(FTPRINTF_DIR) > /dev/null
-$(FTGNL_DIR)/ftgnl.a:
-	@echo "$(YELLOW)Making get_next_line...$(NC)"
-	@make -C $(FTGNL_DIR) > /dev/null
 
 RED=\033[0;31m		# removing stuff
 GREEN=\033[0;32m	# comp / normcomp / general messages
