@@ -10,6 +10,12 @@
 - [ ] invalid command
 - [ ] error conditions in each major program segment
 
+### v0.23.8 - 18.03.24 - Freddy
+- Removed some unnecessary print statements
+- added last pid printout, helpful for understanding valgrind logs
+- many tweaks and fixes and whatever ngl i lost track
+- child processes dont properly free everything on exit. envp works, but the garbage collector doesnt get properly cleaned. added child_process_exit to handle that stuff.
+
 ### v0.23.7 - 18.03.24 - Freddy
 - Added ft_lstlen to libft submodule for testing
 - garbage collector tweaks

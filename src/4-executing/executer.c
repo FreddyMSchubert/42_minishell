@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/18 07:52:04 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/18 10:08:49 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 			program_data->exit_status = execute_command(node, program_data,
 					cmd_start_index);
 		}
-		exit(program_data->exit_status);
+		child_process_exit(program_data, program_data->exit_status);
 	}
 	else if (pid > 0) // parent
 	{
@@ -138,8 +138,8 @@ int	execute_command(t_bin_tree_node *node, t_program_data *program_data,
 {
 	t_cmd_path	*cmd_path;
 
-	cmd_path = create_cmd_struct(program_data->envcp, node->val,
-			cmd_start_index);
+	cmd_path = create_cmd_struct(program_data->envcp, node->val, \
+			cmd_start_index, program_data);
 	execve(cmd_path->path, cmd_path->args, program_data->envcp);
 	return (-1); // handle error
 }

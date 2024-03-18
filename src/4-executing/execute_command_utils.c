@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_command_utils.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 06:36:17 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/26 12:49:44 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/18 10:20:03 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static char	*get_command_path(char **envp, char *command)
 	int		counter;
 
 	if (access(command, X_OK) == 0)
-	   return (ft_strdup(command));
+		return (ft_strdup(command));
 	while (ft_strncmp(envp[0], "PATH", 4) != 0)
 		envp++;
 	split_paths = ft_split(envp[0], ':');
@@ -42,8 +42,7 @@ static char	*get_command_path(char **envp, char *command)
 		free (path);
 		counter++;
 	}
-	ft_free_rec((void **)split_paths);
-	return (NULL);
+	return (ft_free_rec((void **)split_paths), NULL);
 }
 
 static int	get_non_ignored_tokens_amount(t_token	**cmd)
@@ -66,7 +65,7 @@ static int	get_non_ignored_tokens_amount(t_token	**cmd)
 	@brief	Creates a path struct consisting of a path string
 	@brief	and the arguments as an array of strings
 */
-t_cmd_path	*create_cmd_struct(char	**envp, t_token	**cmd, int cmd_start_index)
+t_cmd_path	*create_cmd_struct(char	**envp, t_token	**cmd, int cmd_start_index, t_program_data *program_data)
 {
 	t_cmd_path	*path;
 	char		**split_cmd;
@@ -78,10 +77,15 @@ t_cmd_path	*create_cmd_struct(char	**envp, t_token	**cmd, int cmd_start_index)
 	if (!path)
 		return (NULL); // handle error
 	path->path = get_command_path(envp, cmd[cmd_start_index]->value);
+	if (!path->path)
+		return (free(path), NULL); // handle error
+	gc_append_element(program_data->gc, path->path);
+	gc_append_element(program_data->gc, path);
 	non_ignored_tokens = get_non_ignored_tokens_amount(cmd);
 	split_cmd = malloc(sizeof(char *) * (non_ignored_tokens + 1));
 	if (!split_cmd)
 		return (free(path), NULL); // handle error
+	gc_append_element(program_data->gc, split_cmd);
 	split_cmd[non_ignored_tokens] = NULL;
 	cmd_i_counter = cmd_start_index;
 	split_cmd_i_counter = 0;

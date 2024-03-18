@@ -7,10 +7,10 @@ make re && make clean && \
 			--trace-children=yes \
 			--track-fds=yes \
 			--suppressions=./debug/readline.supp \
-			--log-file=./debug/log.txt \
 			--error-limit=no \
 			-s ./crash
 
 # --time-stamp=yes \
 # --gen-suppressions=all \
-## --verbose \
+# --verbose \
+#--log-file=./debug/log.txt \
