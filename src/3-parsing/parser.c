@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 12:13:31 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/15 10:52:03 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/18 08:00:10 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,12 +137,13 @@ t_bin_tree_node	*tok_to_bin_tree(t_list *tokens, t_program_data *program_data)
 	node->val = malloc(sizeof(t_token) * 2);
 	if (!node->val)
 		return (free(node->val), free(node), NULL);
+	gc_append_element(program_data->gc, node->val);
 	node->val[0] = get_token_at_index(tokens, dom_op_i);
 	node->val[1] = NULL;
-	node->l = tok_to_bin_tree(sub_token_t_list(tokens, 0, dom_op_i - 1), program_data);
+	node->l = tok_to_bin_tree(sub_token_t_list(tokens, 0, dom_op_i - 1, program_data), program_data);
 	if (node->l)
 		node->l->parent = node;
-	node->r = tok_to_bin_tree(sub_token_t_list(tokens, dom_op_i + 1, toklen(tokens) - 1), program_data);
+	node->r = tok_to_bin_tree(sub_token_t_list(tokens, dom_op_i + 1, toklen(tokens) - 1, program_data), program_data);
 	if (node->r)
 		node->r->parent = node;
 	return (node);

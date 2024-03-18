@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/18 06:49:56 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/18 07:58:40 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ char				*list_matching_files(const char *pattern);
 // --- 3-parsing
 // util
 t_token				**switch_args_for_redir(t_token **arr);
-t_list				*sub_token_t_list(t_list *tokens, int start, int end);
+t_list				*sub_token_t_list(t_list *tokens, int start, int end, t_program_data *program_data);
 int					toklen(t_list *tokens);
 int					first_non_ignored(t_list *tokens);
 int					last_non_ignored(t_list *tokens);

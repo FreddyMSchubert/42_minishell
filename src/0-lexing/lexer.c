@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 06:54:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/18 06:48:41 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/18 07:57:47 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ static t_list	*detect_token_type(char *input, int is_first_or_after_operator, t_
 	if (!token || !list)
 		return (free(token), free(list), NULL);
 	gc_append_element(program_data->gc, token);
+	gc_append_element(program_data->gc, list);
 	if (same_str(input, "<") == 0 || same_str(input, "<<") == 0 || \
 			same_str(input, ">") == 0 || same_str(input, ">>") == 0)
 		token->type = TOK_REDIR;

@@ -1,5 +1,26 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+#### Malloc check todo
+- [x] exit
+- [x] ls
+- [x] pipes
+- [x] multiple args
+- [ ] redirects & heredoc(check for file desc leaks?)
+- [ ] log ops
+- [ ] invalid command
+- [ ] error conditions in each major program segment
+
+### v0.23.7 - 18.03.24 - Freddy
+- Added ft_lstlen to libft submodule for testing
+- garbage collector tweaks
+- more detailed run command which tracks children + file descriptors
+- Malloc fixes
+	- further lexer detect_toen_type fixes
+	- parser new node allocation not being appended fix
+	- parser_util/sub_token_t_list not appending after calling ft_lstnew fixed
+- Fd fixes
+	- heading fd wasn't being closed in input_loop/print_heading
+
 ### v0.23.6 - 18.03.24 - Freddy
 - history not working bugfix
 - added log.txt to gitingore, deleted it from git

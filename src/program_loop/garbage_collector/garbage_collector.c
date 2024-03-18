@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 12:18:59 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/18 06:49:54 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/18 07:35:08 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ int	gc_append_element(t_list *gc, void *content)
 	while (selected_node->next != NULL)
 		selected_node = selected_node->next;
 	selected_node->next = new_node;
+	if (VERBOSE == 1)
+		ft_printf("appended element to garbage collector. there are now %d elements.\n", ft_lstlen(gc));
 	return (0);
 }
 
@@ -75,6 +77,7 @@ void	gc_append_t_list(t_list *gc, t_list *linkedlist)
 }
 
 // frees all elements in the garbage collector
+// after this, the garbage collector is freed, so it should be reinitialized
 void	gc_cleanup(t_list *gc)
 {
 	t_list	*current;

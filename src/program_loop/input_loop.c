@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/18 06:50:08 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/18 07:48:45 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static void	*print_heading(void)
 		return (NULL);
 	buffer = malloc(INPUT_FILE_LINE_LENGTH + 1);
 	if (buffer == NULL)
-		return (NULL);
+		return (close(fd), NULL);
 	buffer[INPUT_FILE_LINE_LENGTH] = '\0';
 	counter = 0;
 	while (counter < INPUT_FILE_LINES)
@@ -69,6 +69,7 @@ static void	*print_heading(void)
 		print_heading_line(buffer, counter);
 		counter++;
 	}
+	close (fd);
 	free (buffer);
 	return (NULL);
 }
@@ -193,7 +194,6 @@ int	run_crash_interface(t_program_data *program_data)
 		program_data->gc = create_garbage_collector();
 	}
 	gc_cleanup(program_data->gc);
-	free(program_data->gc);
 	rl_clear_history();
 	return (0);
 }
