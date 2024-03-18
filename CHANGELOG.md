@@ -1,5 +1,9 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+### v0.23.5 - 18.03.24 - Freddy
+- created log_to_supp.sh which takes in a valgrind log file generated with --gen-suppressions=all and extracts the suppressions for readline (or anything else really)
+- ran that, generated readline.supp which should adequately suppress anything useless to us while we work with valgrind
+
 ### v0.23.4 - 15.03.24 - Freddy
 - Malloc fixes
 	- missing getwd return free in 4/builtins/cd
