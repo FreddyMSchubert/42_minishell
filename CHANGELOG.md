@@ -1,5 +1,16 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+### v0.23.6 - 18.03.24 - Freddy
+- history not working bugfix
+- added log.txt to gitingore, deleted it from git
+- exit was directly exiting main program, not just setting exit flag bug fixed
+- some optimizations
+- some garbage collector logic improvements
+- malloc fixes
+	- mallocs not being freed on exit fixed
+	- expander/get_rid_of_quotes didnt append new_str to gc
+	- garbage collector itself was not being freed
+
 ### v0.23.5 - 18.03.24 - Freddy
 - created log_to_supp.sh which takes in a valgrind log file generated with --gen-suppressions=all and extracts the suppressions for readline (or anything else really)
 - ran that, generated readline.supp which should adequately suppress anything useless to us while we work with valgrind

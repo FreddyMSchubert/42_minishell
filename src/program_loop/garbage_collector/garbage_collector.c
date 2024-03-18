@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   garbage_collector.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 12:18:59 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/15 12:14:03 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/18 06:49:54 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ void	gc_append_t_list(t_list *gc, t_list *linkedlist)
 	selected_node = linkedlist;
 	while (selected_node->next != NULL)
 	{
+		gc_append_element(gc, selected_node->content);
 		gc_append_element(gc, selected_node);
 		selected_node = selected_node->next;
 	}
@@ -79,6 +80,8 @@ void	gc_cleanup(t_list *gc)
 	t_list	*current;
 	t_list	*current2;
 
+	if (VERBOSE == 1)
+		ft_printf("cleaning up garbage collector\n");
 	current = gc;
 	while (current != NULL)
 	{
@@ -87,5 +90,4 @@ void	gc_cleanup(t_list *gc)
 		free(current2->content);
 		free(current2);
 	}
-	rl_clear_history();
 }

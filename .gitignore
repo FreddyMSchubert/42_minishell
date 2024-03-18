@@ -5,3 +5,4 @@ minishell
 crash
 .DS_Store
 .devcontainer
+debug/log.txt

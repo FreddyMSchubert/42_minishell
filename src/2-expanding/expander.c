@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 09:20:32 by nburchha          #+#    #+#             */
-/*   Updated: 2024/03/15 13:37:44 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/18 06:22:22 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ static bool	is_in_quote(char *str, char *quote, char *current_char)
 	return (in_quote);
 }
 
-char	*get_rid_of_quotes(char *str)
+char	*get_rid_of_quotes(char *str, t_program_data *program_data)
 {
 	int		i;
 	int		j;
@@ -115,6 +115,7 @@ char	*get_rid_of_quotes(char *str)
 	new_str = ft_calloc(ft_strlen(str) + 1, sizeof(char));
 	if (!new_str)
 		return (NULL);
+	gc_append_element(program_data->gc, new_str);
 	while (str[++i])
 	{
 		if (!d_quote && str[i] != '\'' && !s_quote && str[i] != '\"')

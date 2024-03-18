@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 06:54:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/15 11:00:31 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/18 06:48:41 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ static t_list	*detect_token_type(char *input, int is_first_or_after_operator, t_
 	else
 		token->type = TOK_WORD;
 	token->value = ft_strdup(input);
+	ft_printf("appending token: %s\n", token->value);
 	gc_append_element(program_data->gc, token->value);
 	token->ignored = 0;
 	list->content = token;
@@ -182,11 +183,11 @@ t_list	*lexer(char *input, t_program_data *data)
 			is_first_or_after_operator = 1;
 		ft_lstadd_back(&tokens, detect_token_type(split_input[counter], is_first_or_after_operator, data));
 		if (ft_lstlast(tokens)->content == NULL)
-			return (gc_cleanup(data->gc), NULL);
+			return (NULL);
 		counter++;
 	}
 	counter = -1;
 	while (split_input[++counter])
 		free(split_input[counter]);
-	return (free (split_input), gc_append_t_list(data->gc, tokens), tokens);
+	return (free (split_input), tokens);
 }

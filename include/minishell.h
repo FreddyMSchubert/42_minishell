@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/15 10:51:47 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/18 06:49:56 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ char				**ms_split(char *input);
 int					count_tokens(const char *s);
 int					is_operator_symbol(char c, char d);
 int					same_str(char *str1, char *str2);
-char				*get_rid_of_quotes(char *str);
+char				*get_rid_of_quotes(char *str, t_program_data *program_data);
 
 // --- 1-validation
 int					validator(t_list *tokens);

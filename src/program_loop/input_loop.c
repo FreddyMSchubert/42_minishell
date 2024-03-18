@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input_loop.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/15 13:40:23 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/18 06:50:08 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ static void	*print_heading(void)
 
 static void	*print_logo(void)
 {
-	// printf("\033[H\033[J");
+	printf("\033[H\033[J");
 	print_heading();
 	printf("   Welcome to %sCRASH%s, %s! - crazy robust & advanced shell!\n", \
 							ANSI_COLOR_RED, ANSI_COLOR_RESET, getenv("USER"));
@@ -107,7 +107,7 @@ int	execute_input(t_program_data *program_data, char *input)
 	while (tmp_lst)
 	{
 		tmp = (t_token *)tmp_lst->content;
-		tmp->value = get_rid_of_quotes(tmp->value);
+		tmp->value = get_rid_of_quotes(tmp->value, program_data);
 		tmp_lst = tmp_lst->next;
 	}
 	if (VERBOSE == 1)
@@ -193,6 +193,7 @@ int	run_crash_interface(t_program_data *program_data)
 		program_data->gc = create_garbage_collector();
 	}
 	gc_cleanup(program_data->gc);
-	clear_history();
+	free(program_data->gc);
+	rl_clear_history();
 	return (0);
 }
