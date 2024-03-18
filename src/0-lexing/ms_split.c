@@ -5,7 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Updated: 2024/03/15 10:42:01 by fschuber         ###   ########.fr       */
+/*   Created: 2024/03/15 10:42:01 by fschuber          #+#    #+#             */
+/*   Updated: 2024/03/18 14:54:51 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,44 +97,21 @@ char	**ms_split(char *input)
 	j = 0;
 	word_count = count_tokens(input);
 	if (word_count == -1)
-		return (free(input), NULL);
+		return (NULL);
 	result = malloc((word_count + 1) * sizeof(char *));
 	if (!result)
-		return (free(input), NULL);
+		return (NULL);
 	result[word_count] = NULL;
 	while (input[++i] && j < word_count)
 	{
-		// printf("input[i]: %c\n", input[i]);
-		if (input[i] == '"')
-		{
-			result[j++] = make_split_str(input, '"', &i);
-			// printf("double quote: %c\n", input[i]);
-			if (!result[j - 1])
-				return (free(input), free_split(result), NULL);
-		}
-		else if (input[i] == '\'')
-		{
-			result[j++] = make_split_str(input, '\'', &i);
-			if (!result[j - 1])
-				return (free(input), free_split(result), NULL);
-			// printf("single quote: %c\n", input[i]);
-		}
-		else if (is_operator_symbol(input[i], input[i + 1]))
+		if (is_operator_symbol(input[i], input[i + 1]) || !ft_isspace(input[i]))
 		{
 			result[j++] = make_split_str(input, ' ', &i);
 			if (!result[j - 1])
-				return (free(input), free_split(result), NULL);
-			// printf("operator symbol: %c\n", input[i]);
-		}
-		else if (!ft_isspace(input[i]))
-		{
-			result[j++] = make_split_str(input, ' ', &i);
-			if (!result[j - 1])
-				return (free(input), free_split(result), NULL);
-			// printf("word: %c\n", input[i]);
+				return (free_split(result), NULL);
 		}
 	}
-	return (free(input), result);
+	return (result);
 }
 
 
