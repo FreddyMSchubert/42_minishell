@@ -15434,3 +15434,82 @@
    fun:run_crash_interface
    fun:main
 }
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   obj:/usr/bin/ls
+   obj:/usr/bin/ls
+   obj:/usr/bin/ls
+   fun:(below main)
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   obj:/usr/bin/ls
+   obj:/usr/bin/ls
+   obj:/usr/bin/ls
+   fun:(below main)
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   obj:/usr/bin/ls
+   obj:/usr/bin/ls
+   obj:/usr/bin/ls
+   obj:/usr/bin/ls
+   fun:(below main)
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   obj:/usr/bin/ls
+   obj:/usr/bin/ls
+   fun:(below main)
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   obj:/usr/bin/ls
+   obj:/usr/bin/ls
+   obj:/usr/bin/ls
+   fun:(below main)
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   obj:/usr/bin/ls
+   obj:/usr/bin/ls
+   obj:/usr/bin/ls
+   fun:(below main)
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   obj:/usr/bin/ls
+   obj:/usr/bin/ls
+   obj:/usr/bin/ls
+   fun:(below main)
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   obj:/usr/bin/ls
+   obj:/usr/bin/ls
+   fun:(below main)
+}

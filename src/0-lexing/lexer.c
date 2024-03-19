@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 06:54:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/18 14:40:40 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/18 08:34:00 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ static t_list	*detect_token_type(char *input, int is_first_or_after_operator, t_
 	if (!token || !list)
 		return (free(token), free(list), NULL);
 	gc_append_element(program_data->gc, token);
+	gc_append_element(program_data->gc, list);
 	if (same_str(input, "<") == 0 || same_str(input, "<<") == 0 || \
 			same_str(input, ">") == 0 || same_str(input, ">>") == 0)
 		token->type = TOK_REDIR;
@@ -57,7 +58,7 @@ static t_list	*detect_token_type(char *input, int is_first_or_after_operator, t_
 	else
 		token->type = TOK_WORD;
 	token->value = ft_strdup(input);
-	ft_printf("appending token: %s\n", token->value);
+	// ft_printf("appending token: %s\n", token->value);
 	gc_append_element(program_data->gc, token->value);
 	token->ignored = 0;
 	list->content = token;

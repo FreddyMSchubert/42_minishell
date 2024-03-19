@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_util.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 12:13:26 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/15 07:19:03 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/18 09:32:46 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 	Does not free or change the original token t_list.
 	e.g. get_sub_token_arr({a, e, b, w, t, c, d}, 1, 3) -> {e, b, w}
 */
-t_list	*sub_token_t_list(t_list *tokens, int start, int end)
+t_list	*sub_token_t_list(t_list *tokens, int start, int end, t_program_data *program_data)
 {
 	int		index;
 	t_list	*current_token;
@@ -37,6 +37,7 @@ t_list	*sub_token_t_list(t_list *tokens, int start, int end)
 			temp = ft_lstnew(current_token->content);
 			if (!temp)
 				return (NULL);
+			gc_append_element(program_data->gc, temp);
 			if (!sub_token_list)
 				sub_token_list = temp;
 			else

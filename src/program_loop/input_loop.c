@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/18 13:36:18 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/18 08:59:59 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static void	*print_heading(void)
 		return (NULL);
 	buffer = malloc(INPUT_FILE_LINE_LENGTH + 1);
 	if (buffer == NULL)
-		return (NULL);
+		return (close(fd), NULL);
 	buffer[INPUT_FILE_LINE_LENGTH] = '\0';
 	counter = 0;
 	while (counter < INPUT_FILE_LINES)
@@ -69,6 +69,7 @@ static void	*print_heading(void)
 		print_heading_line(buffer, counter);
 		counter++;
 	}
+	close (fd);
 	free (buffer);
 	return (NULL);
 }
@@ -141,8 +142,10 @@ int	execute_input(t_program_data *program_data, char *input)
 		ft_printf("\n\n\n");
 	// --- executer
 	pid_t last_pid = execute(tree, program_data);
+	ft_printf("process returned with pid %d\n", last_pid);
 	if (last_pid != -1)
 		waitpid(last_pid, &program_data->exit_status, 0);
+	ft_printf("done executing. now reprinting input prompt\n");
 	return (0);
 }
 
@@ -193,7 +196,6 @@ int	run_crash_interface(t_program_data *program_data)
 		program_data->gc = create_garbage_collector();
 	}
 	gc_cleanup(program_data->gc);
-	free(program_data->gc);
 	rl_clear_history();
 	return (0);
 }
