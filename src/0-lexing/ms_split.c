@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 10:42:01 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/18 14:54:51 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/18 15:22:56 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,14 +54,24 @@ int	count_tokens(const char *s)
 static char	*make_split_str(const char *s, char delim, int *i)
 {
 	size_t	size;
+	int		quote;
 
 	size = *i;
-	if (delim == '\'' || delim == '"')
+	quote = 0;
+	while (s[*i])
+	{
+		if (s[*i] == '\'' || s[*i] == '"')
+		{
+			if (quote == 0)
+				quote = s[*i];
+			else if (quote == s[*i])
+				quote = 0;
+		}
+		if (s[*i] == delim && !quote)
+			break ;
 		*i += 1;
-	while (s[*i] && s[*i] != delim)
-		*i += 1;
-	if (delim != '\'' && delim != '"')
-		*i -= 1;
+	}
+	*i -= 1;
 	return (ft_substr(s, size, *i - size + 1));
 }
 
@@ -92,9 +102,11 @@ char	**ms_split(char *input)
 	char			**result;
 	int				i;
 	int				j;
+	int				in_quote;
 
 	i = -1;
 	j = 0;
+	in_quote = 0;
 	word_count = count_tokens(input);
 	if (word_count == -1)
 		return (NULL);
@@ -104,12 +116,16 @@ char	**ms_split(char *input)
 	result[word_count] = NULL;
 	while (input[++i] && j < word_count)
 	{
-		if (is_operator_symbol(input[i], input[i + 1]) || !ft_isspace(input[i]))
+		if (!in_quote && (is_operator_symbol(input[i], input[i + 1]) || !ft_isspace(input[i])))
 		{
 			result[j++] = make_split_str(input, ' ', &i);
 			if (!result[j - 1])
 				return (free_split(result), NULL);
 		}
+		// if (input[i] == '\'' || input[i] == '"')
+		// {
+		// 	in_quote = input[i];
+		// }
 	}
 	return (result);
 }
