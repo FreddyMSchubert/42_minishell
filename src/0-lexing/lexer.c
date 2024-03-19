@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 06:54:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/18 06:48:41 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/18 08:34:00 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ static t_list	*detect_token_type(char *input, int is_first_or_after_operator, t_
 	if (!token || !list)
 		return (free(token), free(list), NULL);
 	gc_append_element(program_data->gc, token);
+	gc_append_element(program_data->gc, list);
 	if (same_str(input, "<") == 0 || same_str(input, "<<") == 0 || \
 			same_str(input, ">") == 0 || same_str(input, ">>") == 0)
 		token->type = TOK_REDIR;
@@ -57,7 +58,7 @@ static t_list	*detect_token_type(char *input, int is_first_or_after_operator, t_
 	else
 		token->type = TOK_WORD;
 	token->value = ft_strdup(input);
-	ft_printf("appending token: %s\n", token->value);
+	// ft_printf("appending token: %s\n", token->value);
 	gc_append_element(program_data->gc, token->value);
 	token->ignored = 0;
 	list->content = token;
@@ -125,29 +126,21 @@ static char	*put_space_between_tokens(char *input, t_program_data *data)
 	ni = 0;
 	cur_symbol = SYM_SPC;
 	in_quote = 0;
-	while (ni < ((int)ft_strlen(input) + calc_add_spaces(input)) && input[i])
+	while (ni < (int)ft_strlen(input) + calc_add_spaces(input) && input[i])
 	{
-		if ((input[i] == '\'' || input[i] == '\"'))
+		if (is_operator_symbol(input[i], input[i + 1]) > 0)
 		{
-			if (!in_quote && cur_symbol != SYM_SPC) // Before entering a quote
+			if (cur_symbol != 0)
 				new_input[ni++] = ' ';
-			if (!in_quote)
-				in_quote = input[i] % 4 - 1;
-		}
-		else if (!in_quote && is_operator_symbol(input[i], input[i + 1]) > 0)
-		{
-			if (cur_symbol != SYM_SPC)
-				new_input[ni++] = ' ';
-			cur_symbol = SYM_OPRTR;
+			cur_symbol = 2;
 		}
 		else if (input[i] == ' ')
-			cur_symbol = SYM_SPC;
-		else if (input[i] != ' ' && !in_quote)
+			cur_symbol = 0;
+		else if (input[i] != ' ')
 		{
-			if (cur_symbol == SYM_OPRTR || (cur_symbol == SYM_WRD && \
-					is_operator_symbol(input[i], input[i + 1]) > 0))
+			if (cur_symbol == 2 || (cur_symbol == 1 && is_operator_symbol(input[i], input[i + 1]) > 0))
 				new_input[ni++] = ' ';
-			cur_symbol = SYM_WRD;
+			cur_symbol = 1;
 		}
 		if (input[i] && is_operator_symbol(input[i], input[i + 1]) == 2)
 			new_input[ni++] = input[i++];

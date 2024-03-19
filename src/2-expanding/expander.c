@@ -115,12 +115,12 @@ char	*get_rid_of_quotes(char *str, t_program_data *program_data)
 	new_str = ft_calloc(ft_strlen(str) + 1, sizeof(char));
 	if (!new_str)
 		return (NULL);
-	gc_append_element(program_data->gc, new_str);
 	while (str[++i])
 	{
 		if (!d_quote && str[i] != '\'' && !s_quote && str[i] != '\"')
 			new_str[j++] = str[i];
 	}
+	gc_append_element(program_data->gc, new_str);
 	return (new_str);
 }
 
