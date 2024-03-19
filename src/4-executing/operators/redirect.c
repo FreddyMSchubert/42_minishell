@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 16:07:34 by nburchha          #+#    #+#             */
-/*   Updated: 2024/03/14 09:45:36 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/19 11:39:35 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,34 @@ char *get_filename(t_bin_tree_node *node)
 	return (temp->val[0]->value);
 }
 
-int	heredoc(t_bin_tree_node *node)
+static char	*expand_heredoc_line(char	*line, t_program_data *program_data)
+{
+	t_list	*list;
+	t_token	*token;
+	char	*expanded_line;
+
+	list = malloc (sizeof(t_list));
+	if (!list)
+		return (NULL);
+	token = malloc (sizeof(t_token));
+	if (!token)
+		return (NULL);
+	token->value = line;
+	token->type = TOK_WORD;
+	list->content = token;
+	list->next = NULL;
+	expander(list, program_data);
+	expanded_line = ft_strdup(((t_token *)list->content)->value);
+	free (token);
+	free (list);
+	return (expanded_line);
+}
+
+static int	heredoc(t_bin_tree_node *node, t_program_data	*program_data)
 {
 	int		pipe_fd[2];
 	char	*line;
+	char	*converted_line;
 	char	*delimiter;
 
 	delimiter = node->r->val[0]->value;
@@ -42,9 +66,13 @@ int	heredoc(t_bin_tree_node *node)
 			free(line);
 			break ;
 		}
-		write(pipe_fd[1], line, ft_strlen(line));
+		converted_line = expand_heredoc_line(line, program_data);
+		if (!converted_line)
+			return (-1); // handle error
+		write(pipe_fd[1], converted_line, ft_strlen(converted_line));
 		write(pipe_fd[1], "\n", 1);
 		free(line);
+		free(converted_line);
 	}
 	if (g_sigint_received == SIGINT)
 	{
@@ -71,7 +99,7 @@ int	redirect(t_bin_tree_node *node, t_program_data *program_data)
 	if (node->output_fd != 1)
 		node->l->output_fd = node->output_fd;
 	if (ft_strncmp(node->val[0]->value, "<<", 2) == 0)
-		return (heredoc(node));
+		return (heredoc(node, program_data));
 	// printf("node->val[0]->value: %s\n", node->val[1]->value);
 	if (ft_strncmp(node->val[0]->value, "<", 1) == 0)
 		flags = O_RDONLY;
