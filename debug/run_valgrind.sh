@@ -6,11 +6,11 @@ make re && make clean && \
 			--track-origins=yes \
 			--trace-children=yes \
 			--track-fds=yes \
+			--gen-suppressions=all \
 			--suppressions=./debug/readline.supp \
+			--log-file=./debug/log.txt \
 			--error-limit=no \
 			-s ./crash
 
 # --time-stamp=yes \
-# --gen-suppressions=all \
 # --verbose \
-#--log-file=./debug/log.txt \

@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/18 10:01:10 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/19 11:10:37 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,8 +153,8 @@ int					logical_or(t_bin_tree_node *node, t_program_data *data);
 int					redirect(t_bin_tree_node *node, t_program_data *program_data);
 void				setup_pipe(t_bin_tree_node *node, t_program_data *program_data);
 // "normal" commands
-int	execute_command(t_bin_tree_node *node, t_program_data *program_data, int cmd_start_index);
-t_cmd_path	*create_cmd_struct(char	**envp, t_token	**cmd, int cmd_start_index, t_program_data *program_data);
+int					execute_command(t_bin_tree_node *node, t_program_data *program_data, int cmd_start_index);
+t_cmd_path			*create_cmd_struct(char	**envp, t_token	**cmd, int cmd_start_index);
 // builtins
 int	execute_builtin(t_bin_tree_node *node, t_program_data *program_data, int cmd_start_index);
 int	execute_echo(t_token **inputs, int cmd_start_index);

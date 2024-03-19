@@ -5,10 +5,19 @@
 - [x] ls
 - [x] pipes
 - [x] multiple args
+- [x] ctrl-c + ctrl-d
 - [ ] redirects & heredoc(check for file desc leaks?)
 - [ ] log ops
-- [ ] invalid command
+- [x] invalid command
 - [ ] error conditions in each major program segment
+
+### v0.23.9 - 19.03.24 - Freddy
+- Added garbage collector element appending duplicate protection
+- added some weird ls leaks to the suppressions file
+- some more cases testing
+- malloc fixes
+	- child assets free after execve failed
+	- child process exit duplicate gc free problem solved
 
 ### v0.23.8 - 18.03.24 - Freddy
 - Removed some unnecessary print statements

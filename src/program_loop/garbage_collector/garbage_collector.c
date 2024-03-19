@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 12:18:59 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/18 07:35:08 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/19 11:15:28 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,12 @@ int	gc_append_element(t_list *gc, void *content)
 	new_node->next = NULL;
 	selected_node = gc;
 	while (selected_node->next != NULL)
+	{
+		if (selected_node->content == content)
+			return (free(new_node), -2);	// duplicated pointer
 		selected_node = selected_node->next;
+	}
 	selected_node->next = new_node;
-	if (VERBOSE == 1)
-		ft_printf("appended element to garbage collector. there are now %d elements.\n", ft_lstlen(gc));
 	return (0);
 }
 
