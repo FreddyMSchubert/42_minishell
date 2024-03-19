@@ -1,5 +1,9 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+## v0.24.0 - 19.03.24 - Freddy
+- made heredoc lines get expanded
+- currently, stuff inside "" is not yet not expanded. that logic has to be handled in the expander itself, this is only the heredoc side of the heredoc expansion for now.
+
 ### v0.23.6 - 18.03.24 - Freddy
 - history not working bugfix
 - added log.txt to gitingore, deleted it from git
