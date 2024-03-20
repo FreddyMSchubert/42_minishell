@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/18 13:36:18 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/19 13:24:38 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,33 +91,25 @@ static void	*print_logo(void)
 int	execute_input(t_program_data *program_data, char *input)
 {
 	t_list				*tokenified_input;
-	t_list				*tmp_lst;
+	// t_list				*tmp_lst;
 	t_bin_tree_node		*tree;
-	t_token				*tmp;
+	// t_token				*tmp;
 
 	if (VERBOSE == 1)
 		ft_printf("Received input: %s\n", input);
+	input = expand_values(input, program_data);
+	if (VERBOSE == 1)
+	{
+		ft_printf("after expanding:\n");
+		printf("input: %s\n", input);
+	}
+	input = get_rid_of_quotes(input, program_data);
 	// --- lexer
 	tokenified_input = lexer(input, program_data);
 	if (tokenified_input == NULL)
 		return (-1); // handle error
 	if (VERBOSE == 1)
 		print_tokens(tokenified_input);
-	tmp_lst = tokenified_input;
-	while (tmp_lst)
-	{
-		tmp = (t_token *)tmp_lst->content;
-		tmp->value = get_rid_of_quotes(tmp->value, program_data);
-		tmp_lst = tmp_lst->next;
-	}
-	if (VERBOSE == 1)
-		ft_printf("token sequence is valid\n");
-	expander(tokenified_input, program_data);
-	if (VERBOSE == 1)
-	{
-		ft_printf("after expanding:\n");
-		print_tokens(tokenified_input);
-	}
 	// --- validator
 	// valid = validator(tokenified_input);
 	// if (valid != 0)
@@ -128,8 +120,8 @@ int	execute_input(t_program_data *program_data, char *input)
 	// 	program_data->gc = create_garbage_collector();
 	// 	return (-1);
 	// }
-	if (VERBOSE == 1)
-		ft_printf("token sequence is valid\n");
+	// if (VERBOSE == 1)
+	// 	ft_printf("token sequence is valid\n");
 	// tokenified_input = switch_args_for_redir(tokenified_input);
 	tree = tok_to_bin_tree(tokenified_input, program_data);
 	tree->parent = NULL;
@@ -189,6 +181,7 @@ int	run_crash_interface(t_program_data *program_data)
 			add_history(input);
 		}
 		execute_input(program_data, input);
+		// test_expander(program_data, input);
 		gc_cleanup(program_data->gc);
 		program_data->gc = create_garbage_collector();
 	}

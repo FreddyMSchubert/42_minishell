@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/18 13:35:58 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/20 15:23:40 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ t_token				**list_to_token_array(t_list *list);
 // testing
 void				test_validator(void);
 void				test_lexer(char *input, t_program_data *data);
-void				test_expander(t_program_data *data, t_token **tokens);
+void				test_expander(t_program_data *data, char *input);
 
 // --- input loop
 int					run_crash_interface(t_program_data *program_data);
@@ -128,6 +128,7 @@ int					check_files(t_list *files, int flag);
 char				*get_envcp(char *var_name, t_program_data *program_data);
 t_list				*expander(t_list *tokens, t_program_data *program_data);
 char				*list_matching_files(const char *pattern);
+char *expand_values(char *str, t_program_data *program_data);
 // --- 3-parsing
 // util
 t_token				**switch_args_for_redir(t_token **arr);
