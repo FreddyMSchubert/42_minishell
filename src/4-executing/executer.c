@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/19 11:10:17 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/20 10:03:01 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,8 @@ int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 	}
 	else if (pid > 0) // parent
 	{
+		if (VERBOSE == 1)
+			ft_printf("child process %d: %s\n", pid, node->val[cmd_start_index]->value);
 		if (node->output_fd != STDOUT_FILENO)
 			close(node->output_fd);
 		if (node->input_fd != STDIN_FILENO)
@@ -147,7 +149,7 @@ int	execute_command(t_bin_tree_node *node, t_program_data *program_data,
 	i = 0;
 	while (cmd_path && cmd_path->args && cmd_path->args[i])
 	{
-		free(cmd_path->args[i]);
+		// free(cmd_path->args[i]);
 		i++;
 	}
 	if (cmd_path && cmd_path->args)

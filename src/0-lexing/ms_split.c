@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 10:42:01 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/18 15:22:56 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/20 09:49:32 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,11 +102,11 @@ char	**ms_split(char *input)
 	char			**result;
 	int				i;
 	int				j;
-	int				in_quote;
+	// int				in_quote;
 
 	i = -1;
 	j = 0;
-	in_quote = 0;
+	// in_quote = 0;
 	word_count = count_tokens(input);
 	if (word_count == -1)
 		return (NULL);
@@ -116,12 +116,15 @@ char	**ms_split(char *input)
 	result[word_count] = NULL;
 	while (input[++i] && j < word_count)
 	{
-		if (!in_quote && (is_operator_symbol(input[i], input[i + 1]) || !ft_isspace(input[i])))
-		{
-			result[j++] = make_split_str(input, ' ', &i);
-			if (!result[j - 1])
-				return (free_split(result), NULL);
-		}
+		//if (!in_quote)
+		//{
+			if ((is_operator_symbol(input[i], input[i + 1]) || !ft_isspace(input[i])))
+			{
+				result[j++] = make_split_str(input, ' ', &i);
+				if (!result[j - 1])
+					return (free_split(result), NULL);
+			}
+		//}
 		// if (input[i] == '\'' || input[i] == '"')
 		// {
 		// 	in_quote = input[i];

@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/20 08:50:39 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/20 09:37:11 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,8 @@ int	execute_input(t_program_data *program_data, char *input)
 		ft_printf("\n\n\n");
 	// --- executer
 	pid_t last_pid = execute(tree, program_data);
-	ft_printf("process returned with pid %d\n", last_pid);
 	if (last_pid != -1)
 		waitpid(last_pid, &program_data->exit_status, 0);
-	ft_printf("done executing. now reprinting input prompt\n");
 	return (0);
 }
 

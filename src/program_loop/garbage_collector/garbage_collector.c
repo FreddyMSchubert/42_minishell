@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 12:18:59 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/19 11:15:28 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/20 10:01:36 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,8 @@ void	gc_cleanup(t_list *gc)
 		current2 = current;
 		current = current->next;
 		free(current2->content);
+		current2->content = NULL;
 		free(current2);
+		current2 = NULL;
 	}
 }

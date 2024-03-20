@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 06:54:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/20 08:49:50 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/20 09:43:35 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,7 @@ static char	*put_space_between_tokens(char *input, t_program_data *data)
 	new_input = ft_calloc((ft_strlen(input) + calc_add_spaces(input) + 1), 1);
 	if (!new_input)
 		return (NULL);
+	gc_append_element(data->gc, new_input);
 	i = 0;
 	ni = 0;
 	cur_symbol = SYM_SPC;
@@ -162,7 +163,7 @@ t_list	*lexer(char *input, t_program_data *data)
 	if (!split_input)
 		return (NULL);
 	token_amount = 0;
-	while (split_input[token_amount])
+	while (split_input && split_input[token_amount])
 		token_amount++;
 	counter = 0;
 	tokens = NULL;

@@ -6,12 +6,20 @@
 - [x] pipes
 - [x] multiple args
 - [x] ctrl-c + ctrl-d
-- [ ] redirects & heredoc(check for file desc leaks?)
-- [ ] log ops
+- [x] redirects & heredoc(check for file desc leaks?)
+- [x] log ops
+- [x] a bunch of brackets
 - [x] invalid command
 - [ ] error conditions in each major program segment
 
-## v0.24.1 - 20.03.24 - Freddy
+### v0.24.2 - 20.03.24 - Freddy
+- memory leak fixes
+	- new input, as allocated by put spaces between tokens, freed in ms split
+	- gänsefüsschen removed string double free
+- added pid printout, very helpful
+- removed some unnecessary print statements
+
+### v0.24.1 - 20.03.24 - Freddy
 - input loop reordering. moved all visual / unnecessary stuff into own file; some refactorings in those functions
 - stopped makefile from printing unwanted tabs & some other changes
 

@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 08:50:24 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/20 09:12:02 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/20 09:18:44 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ static void	*print_heading(void)
 
 void	*print_logo(void)
 {
-	// printf("\033[H\033[J");
+	printf("\033[H\033[J");
 	print_heading();
 	printf("   Welcome to %sCRASH%s, %s! - crazy robust & advanced shell!\n", \
 							ANSI_COLOR_RED, ANSI_COLOR_RESET, getenv("USER"));
