@@ -11,6 +11,10 @@
 - [x] invalid command
 - [ ] error conditions in each major program segment
 
+## v0.24.1 - 20.03.24 - Freddy
+- input loop reordering. moved all visual / unnecessary stuff into own file; some refactorings in those functions
+- stopped makefile from printing unwanted tabs & some other changes
+
 ## v0.24.0 - 19.03.24 - Freddy
 - made heredoc lines get expanded
 - currently, stuff inside "" is not yet not expanded. that logic has to be handled in the expander itself, this is only the heredoc side of the heredoc expansion for now.

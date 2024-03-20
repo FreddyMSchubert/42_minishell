@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/19 11:10:37 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/20 08:57:44 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,10 +107,12 @@ int					gc_append_element(t_list *gc, void *content);
 void				gc_append_element_array(t_list *gc, void *content);
 void				gc_append_t_list(t_list *gc, t_list *linkedlist);
 void				gc_cleanup(t_list *gc);
-// util
+// - util
 void				exit_error(char *message, int exit_code, t_list *gc);
 // - signals
 int					setup_signals(void);
+// - visuals
+void				*print_logo(void);
 
 // --- 0-lexing
 t_list				*lexer(char *input, t_program_data *data);
