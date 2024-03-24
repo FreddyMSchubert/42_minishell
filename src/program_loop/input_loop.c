@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input_loop.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: niklasburchhardt <niklasburchhardt@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/19 13:24:38 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/03/24 10:31:05 by niklasburch      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,10 +99,7 @@ int	execute_input(t_program_data *program_data, char *input)
 		ft_printf("Received input: %s\n", input);
 	input = expand_values(input, program_data);
 	if (VERBOSE == 1)
-	{
-		ft_printf("after expanding:\n");
-		printf("input: %s\n", input);
-	}
+		ft_printf("after expanding: %s\n", input);
 	input = get_rid_of_quotes(input, program_data);
 	// --- lexer
 	tokenified_input = lexer(input, program_data);
@@ -187,6 +184,6 @@ int	run_crash_interface(t_program_data *program_data)
 	}
 	gc_cleanup(program_data->gc);
 	free(program_data->gc);
-	rl_clear_history();
+	clear_history();
 	return (0);
 }
