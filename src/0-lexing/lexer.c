@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 06:54:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/25 08:11:32 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/25 09:51:43 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ static t_list	*detect_token_type(char *input, int is_first_or_after_operator, t_
 	token->value = ft_strdup(input);
 	// ft_printf("appending token: %s\n", token->value);
 	gc_append_element(program_data->gc, token->value);
-	token->ignored = 0;
 	list->content = token;
 	list->next = NULL;
 	return (list);

@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/20 10:03:01 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/25 09:57:10 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,15 +47,11 @@ pid_t	execute(t_bin_tree_node *tree, t_program_data *program_data)
 
 int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 {
-	int		cmd_start_index;
 	pid_t	pid;
 
 	// printf("node_exec: %s, in_fd: %d, out_fd: %d\n", node->val[0]->value, node->input_fd, node->output_fd);
-	cmd_start_index = 0;
-	while (node->val[cmd_start_index]->ignored == 1)
-		cmd_start_index++;
-	if (node->val[cmd_start_index]->type == TOK_BUILTIN && ft_strncmp(node->val[cmd_start_index]->value, "exit", 5) == 0 && node->input_fd == STDIN_FILENO && node->output_fd == STDOUT_FILENO)
-		return (execute_exit(node->val, program_data, cmd_start_index));
+	if (node->val[0]->type == TOK_BUILTIN && ft_strncmp(node->val[0]->value, "exit", 5) == 0 && node->input_fd == STDIN_FILENO && node->output_fd == STDOUT_FILENO)
+		return (execute_exit(node->val, program_data, 0));
 	pid = fork();
 	if (pid == -1)
 	{
@@ -92,20 +88,18 @@ int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 			}
 			close(node->output_fd);
 		}
-		if (node->val[cmd_start_index]->type == TOK_BUILTIN)
-			program_data->exit_status = execute_builtin(node, program_data,
-					cmd_start_index);
+		if (node->val[0]->type == TOK_BUILTIN)
+			program_data->exit_status = execute_builtin(node, program_data,0);
 		else
 		{
-			program_data->exit_status = execute_command(node, program_data,
-					cmd_start_index);
+			program_data->exit_status = execute_command(node, program_data, 0);
 		}
 		child_process_exit(program_data, program_data->exit_status);
 	}
 	else if (pid > 0) // parent
 	{
 		if (VERBOSE == 1)
-			ft_printf("child process %d: %s\n", pid, node->val[cmd_start_index]->value);
+			ft_printf("child process %d: %s\n", pid, node->val[0]->value);
 		if (node->output_fd != STDOUT_FILENO)
 			close(node->output_fd);
 		if (node->input_fd != STDIN_FILENO)

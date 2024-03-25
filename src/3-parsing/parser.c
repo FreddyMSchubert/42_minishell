@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 12:13:31 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/25 09:28:15 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/25 09:50:58 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,26 @@
 
 /*
 	Checks whether the inputted token array is a substring
-	If so, the first and last tokens (=brackets) are set to ignored.
+	If so, it returns the first token after the substring start and next nulls 
+	the last token before the substring end
+	returns NULL if no substring is found
 */
-static int	check_substring(t_list *tokens)
+static t_list	*check_substring(t_list *tokens)
 {
 	int		depth;
 	int		counter;
-	int		changes_made;
 	t_list	*current;
 
 	depth = 0;
 	counter = 0;
-	changes_made = 0;
 	current = tokens;
 	while (current != NULL)
 	{
-		if (((t_token *)current->content)->type == TOK_OPEN_BRACE && ((t_token *)current->content)->ignored != 1)
+		if (((t_token *)current->content)->type == TOK_OPEN_BRACE)
 			depth++;
-		else if (((t_token *)current->content)->type == TOK_CLOSE_BRACE && ((t_token *)current->content)->ignored != 1)
+		else if (((t_token *)current->content)->type == TOK_CLOSE_BRACE)
 			depth--;
-		if (depth == 0 && current->next != NULL && counter != last_non_ignored(tokens) && ((t_token *)current->content)->ignored != 1)
+		if (depth == 0 && current->next != NULL)
 		{
 			depth = -1;
 			break ;
@@ -43,18 +43,17 @@ static int	check_substring(t_list *tokens)
 	}
 	if (depth == 0)
 	{
-		if (get_token_at_index(tokens, first_non_ignored(tokens))->type == TOK_OPEN_BRACE)
+		current = tokens;
+		while (counter < toklen(tokens))
 		{
-			get_token_at_index(tokens, first_non_ignored(tokens))->ignored = 1;
-			changes_made++;
+			if (((t_token *)current->next->content)->type == TOK_CLOSE_BRACE \
+						&& current->next->next == NULL)
+				current->next = NULL;
+			current = current->next;
 		}
-		if (get_token_at_index(tokens, last_non_ignored(tokens))->type == TOK_CLOSE_BRACE)
-		{
-			get_token_at_index(tokens, last_non_ignored(tokens))->ignored = 1;
-			changes_made++;
-		}
+		return (tokens->next);
 	}
-	return (changes_made);
+	return (NULL);
 }
 
 /*
@@ -68,7 +67,6 @@ static int	adjust_operator_priority(int current_priority)
 	else
 		return (0);
 }
-
 
 /*
 	Finds the most dominant operator in a token array, returning its index.
@@ -84,8 +82,14 @@ static int	get_dominant_operator(t_list *tokens)
 	t_list	*current;
 
 	target_tok = TOK_LOG_AND;
-	while (check_substring(tokens) != 0)
-		;
+	i = 0;
+	while (i == 0)
+	{
+		current = tokens;
+		tokens = check_substring(tokens);
+		if (current != tokens)
+			i = -1;
+	}
 	while (target_tok > 0)
 	{
 		current = tokens;
@@ -93,14 +97,12 @@ static int	get_dominant_operator(t_list *tokens)
 		depth = 0;
 		while (current != NULL)
 		{
-			if (((t_token *)current->content)->type == TOK_OPEN_BRACE && \
-				((t_token *)current->content)->ignored == 0)
+			if (((t_token *)current->content)->type == TOK_OPEN_BRACE)
 				depth++;
-			else if (((t_token *)current->content)->type == TOK_CLOSE_BRACE && \
-						((t_token *)current->content)->ignored == 0)
+			else if (((t_token *)current->content)->type == TOK_CLOSE_BRACE)
 				depth--;
-			if (((t_token *)current->content)->type == target_tok && depth == 0 && \
-								i >= 0 && i < toklen(tokens))
+			if (((t_token *)current->content)->type == target_tok && \
+							depth == 0 && i >= 0 && i < toklen(tokens))
 				return (i);
 			i++;
 			current = current->next;

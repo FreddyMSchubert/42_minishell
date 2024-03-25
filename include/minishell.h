@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/25 08:08:46 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/25 09:51:23 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,8 @@
 typedef struct s_token {
 	char			type;
 	char			*value;
-	char			ignored;
 }	t_token;
-// char used for type to save space, as there are only 12 types
-// ignored is 0 if not, 1 if ignored
+// char used for type to save space, as there are only 8 types
 
 typedef struct s_bin_tree_node	t_bin_tree_node;
 typedef struct s_bin_tree_node {
@@ -136,8 +134,6 @@ char				*list_matching_files(const char *pattern);
 t_token				**switch_args_for_redir(t_token **arr);
 t_list				*sub_token_t_list(t_list *tokens, int start, int end, t_program_data *program_data);
 int					toklen(t_list *tokens);
-int					first_non_ignored(t_list *tokens);
-int					last_non_ignored(t_list *tokens);
 t_token				**t_list_to_token_arr(t_list	*tokens, t_program_data	*program_data);
 t_token				*get_token_at_index(t_list *tokens, int index);
 // parser
