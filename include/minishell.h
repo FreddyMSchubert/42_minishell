@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/20 09:37:01 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/25 08:08:46 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ typedef struct s_cmd_path {
 // ----- SETTINGS
 
 // will output detailed logging if set to 1, and normal logging if 0
-#define VERBOSE 0
+#define VERBOSE 1
 
 // ----- FUNCTIONS
 
@@ -119,6 +119,7 @@ t_list				*lexer(char *input, t_program_data *data);
 char				**ms_split(char *input);
 int					count_tokens(const char *s);
 int					is_operator_symbol(char c, char d);
+int					is_redirect(char c);
 int					same_str(char *str1, char *str2);
 char				*get_rid_of_quotes(char *str, t_program_data *program_data);
 

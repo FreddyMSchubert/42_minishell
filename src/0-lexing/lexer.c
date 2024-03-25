@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 06:54:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/20 09:43:35 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/25 08:11:32 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,8 +170,8 @@ t_list	*lexer(char *input, t_program_data *data)
 	while (counter < token_amount)
 	{
 		is_first_or_after_operator = 0;
-		if (counter == 0 || is_operator_symbol(*split_input[counter - 1], \
-							*split_input[counter]) != 0)
+		if (counter == 0 || (is_operator_symbol(*split_input[counter - 1], \
+				*split_input[counter]) != 0 && is_redirect(*split_input[counter - 1]) == 0))
 			is_first_or_after_operator = 1;
 		ft_lstadd_back(&tokens, detect_token_type(split_input[counter], is_first_or_after_operator, data));
 		if (ft_lstlast(tokens)->content == NULL)

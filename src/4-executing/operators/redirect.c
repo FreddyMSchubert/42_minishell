@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 16:07:34 by nburchha          #+#    #+#             */
-/*   Updated: 2024/03/19 11:39:35 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/25 08:00:33 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 extern int	g_sigint_received;
 
-char *get_filename(t_bin_tree_node *node)
+char	*get_filename(t_bin_tree_node *node)
 {
-	t_bin_tree_node *temp;
+	t_bin_tree_node	*temp;
 
 	temp = node->r;
 	while (temp->val[0]->type != TOK_WORD)

@@ -1,16 +1,8 @@
 # CHANGELOG minishell by nburchha & fschuber
 
-#### Malloc check todo
-- [x] exit
-- [x] ls
-- [x] pipes
-- [x] multiple args
-- [x] ctrl-c + ctrl-d
-- [x] redirects & heredoc(check for file desc leaks?)
-- [x] log ops
-- [x] a bunch of brackets
-- [x] invalid command
-- [ ] error conditions in each major program segment
+### v0.24.3 - 25.03.24 - Freddy
+- redirect/get_filename NULL segfault fix
+- false lexer builtin token type fix
 
 ### v0.24.2 - 20.03.24 - Freddy
 - memory leak fixes
