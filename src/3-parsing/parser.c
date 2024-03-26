@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 12:13:31 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/25 09:50:58 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/26 05:34:23 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,36 +21,35 @@
 static t_list	*check_substring(t_list *tokens)
 {
 	int		depth;
-	int		counter;
 	t_list	*current;
+	t_list	*prev;
+	t_list	*before_last_close_brace;
 
 	depth = 0;
-	counter = 0;
 	current = tokens;
+	before_last_close_brace = NULL;
 	while (current != NULL)
 	{
 		if (((t_token *)current->content)->type == TOK_OPEN_BRACE)
 			depth++;
 		else if (((t_token *)current->content)->type == TOK_CLOSE_BRACE)
+		{
 			depth--;
+			if (prev)
+				before_last_close_brace = prev;
+		}
 		if (depth == 0 && current->next != NULL)
 		{
 			depth = -1;
 			break ;
 		}
+		prev = current;
 		current = current->next;
-		counter++;
 	}
 	if (depth == 0)
 	{
-		current = tokens;
-		while (counter < toklen(tokens))
-		{
-			if (((t_token *)current->next->content)->type == TOK_CLOSE_BRACE \
-						&& current->next->next == NULL)
-				current->next = NULL;
-			current = current->next;
-		}
+		if (before_last_close_brace)
+			before_last_close_brace->next = NULL;
 		return (tokens->next);
 	}
 	return (NULL);
@@ -74,7 +73,7 @@ static int	adjust_operator_priority(int current_priority)
 	TOK_LOG_AND > TOK_LOG_OP > TOK_PIPE > TOK_REDIR
 	4 in while condition because that's how many types of operators there are
 */
-static int	get_dominant_operator(t_list *tokens)
+static int	get_dominant_operator(t_list **tokens)
 {
 	int		i;
 	int		target_tok;
@@ -82,17 +81,18 @@ static int	get_dominant_operator(t_list *tokens)
 	t_list	*current;
 
 	target_tok = TOK_LOG_AND;
-	i = 0;
-	while (i == 0)
+	(current = check_substring(*tokens));
+	while (current != NULL)
 	{
-		current = tokens;
-		tokens = check_substring(tokens);
-		if (current != tokens)
-			i = -1;
+		if (current != *tokens)
+			*tokens = current;
+		else
+			break ;
+		(current = check_substring(*tokens));
 	}
 	while (target_tok > 0)
 	{
-		current = tokens;
+		current = *tokens;
 		i = 0;
 		depth = 0;
 		while (current != NULL)
@@ -102,7 +102,7 @@ static int	get_dominant_operator(t_list *tokens)
 			else if (((t_token *)current->content)->type == TOK_CLOSE_BRACE)
 				depth--;
 			if (((t_token *)current->content)->type == target_tok && \
-							depth == 0 && i >= 0 && i < toklen(tokens))
+							depth == 0 && i >= 0 && i < toklen(*tokens))
 				return (i);
 			i++;
 			current = current->next;
@@ -122,15 +122,13 @@ t_bin_tree_node	*tok_to_bin_tree(t_list *tokens, t_program_data *program_data)
 	int					dom_op_i;
 	t_token				**arr;
 
-	if (!tokens)
-		return (NULL);
 	node = malloc(sizeof(t_bin_tree_node));
 	if (!node || !tokens)
 		return (free(node), NULL);
 	gc_append_element(program_data->gc, node);
 	node->input_fd = STDIN_FILENO;
 	node->output_fd = STDOUT_FILENO;
-	dom_op_i = get_dominant_operator(tokens);
+	dom_op_i = get_dominant_operator(&tokens);
 	if (dom_op_i == -1)
 	{
 		arr = t_list_to_token_arr(tokens, program_data);

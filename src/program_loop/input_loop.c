@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/20 09:37:11 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/26 04:41:28 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ int	execute_input(t_program_data *program_data, char *input)
 	t_list				*tmp_lst;
 	t_bin_tree_node		*tree;
 	t_token				*tmp;
+	pid_t				last_pid;
 
 	if (VERBOSE == 1)
 		ft_printf("Received input: %s\n", input);
@@ -60,13 +61,12 @@ int	execute_input(t_program_data *program_data, char *input)
 	tree = tok_to_bin_tree(tokenified_input, program_data);
 	tree->parent = NULL;
 
-	// printf("node: %p\nparent: %p\nvalue: %s\n", tree, tree->parent, tree->val[0]->value);
 	if (VERBOSE == 1)
 		print_binary_tree(tree, 0);
 	if (VERBOSE == 1)
 		ft_printf("\n\n\n");
 	// --- executer
-	pid_t last_pid = execute(tree, program_data);
+	last_pid = execute(tree, program_data);
 	if (last_pid != -1)
 		waitpid(last_pid, &program_data->exit_status, 0);
 	return (0);
