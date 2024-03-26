@@ -1,5 +1,8 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+### v0.25.2 - 26.03.24 - Freddy
+- cleanup of removal of command_start_index leftover code weirdness
+
 ### v0.25.1 - 26.03.24 - Freddy
 - some general refactorings
 - parser bracket logic fix
