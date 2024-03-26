@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 12:13:26 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/18 09:32:46 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/25 09:32:06 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,40 +64,48 @@ int	toklen(t_list *tokens)
 	return (counter);
 }
 
-// returns -42 if there isnt a non-ignored token
-int	first_non_ignored(t_list *tokens)
+t_token	*get_token_at_index(t_list *tokens, int index)
 {
 	int		counter;
-	t_list	*current;
+	t_list	*tok;
 
 	counter = 0;
-	current = tokens;
-	while (current != NULL && ((t_token *)current->content)->ignored == 1)
+	tok = tokens;
+	while (tok != NULL)
 	{
+		if (counter == index)
+			return (tok->content);
 		counter++;
-		current = current->next;
+		tok = tok->next;
 	}
-	if (current == NULL)
-		return (-42);
-	return (counter);
+	return (NULL);
 }
 
-// returns -42 if there isnt a non-ignored token
-int	last_non_ignored(t_list *tokens)
+t_token	**t_list_to_token_arr(t_list	*tokens, t_program_data	*program_data)
 {
-	t_list	*current;
+	t_token	**token_arr;
+	t_list	*temp;
 	int		counter;
-	int		last_non_ignored;
 
 	counter = 0;
-	current = tokens;
-	last_non_ignored = -42;
-	while (current != NULL)
+	temp = tokens;
+	while (temp)
 	{
-		if (((t_token *)current->content)->ignored == 0)
-			last_non_ignored = counter;
 		counter++;
-		current = current->next;
+		temp = temp->next;
 	}
-	return (last_non_ignored);
+	token_arr = malloc(sizeof(t_token *) * (counter + 1));
+	if (!token_arr)
+		return (NULL);
+	gc_append_element(program_data->gc, token_arr);
+	token_arr[counter] = NULL;
+	counter = 0;
+	temp = tokens;
+	while (temp)
+	{
+		token_arr[counter] = temp->content;
+		counter++;
+		temp = temp->next;
+	}
+	return (token_arr);
 }

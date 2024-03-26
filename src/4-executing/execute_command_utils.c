@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 06:36:17 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/19 11:10:07 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/25 09:56:49 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,20 +45,14 @@ static char	*get_command_path(char **envp, char *command)
 	return (ft_free_rec((void **)split_paths), NULL);
 }
 
-static int	get_non_ignored_tokens_amount(t_token	**cmd)
+static int	get_token_arr_len(t_token	**cmd)
 {
 	int	i;
-	int	j;
 
 	i = 0;
-	j = 0;
 	while (cmd[i])
-	{
-		if (cmd[i]->ignored == 0)
-			j++;
 		i++;
-	}
-	return (j);
+	return (i);
 }
 
 /*
@@ -71,7 +65,7 @@ t_cmd_path	*create_cmd_struct(char	**envp, t_token	**cmd, int cmd_start_index)
 	char		**split_cmd;
 	int			cmd_i_counter;
 	int			split_cmd_i_counter;
-	int			non_ignored_tokens;
+	int			token_amount;
 
 	path = malloc(sizeof(t_cmd_path));
 	if (!path)
@@ -79,20 +73,17 @@ t_cmd_path	*create_cmd_struct(char	**envp, t_token	**cmd, int cmd_start_index)
 	path->path = get_command_path(envp, cmd[cmd_start_index]->value);
 	if (!path->path)
 		return (free(path), NULL); // handle error
-	non_ignored_tokens = get_non_ignored_tokens_amount(cmd);
-	split_cmd = malloc(sizeof(char *) * (non_ignored_tokens + 1));
+	token_amount = get_token_arr_len(cmd);
+	split_cmd = malloc(sizeof(char *) * (token_amount + 1));
 	if (!split_cmd)
 		return (free(path), NULL); // handle error
-	split_cmd[non_ignored_tokens] = NULL;
+	split_cmd[token_amount] = NULL;
 	cmd_i_counter = cmd_start_index;
 	split_cmd_i_counter = 0;
 	while (cmd[cmd_i_counter])
 	{
-		if (cmd[cmd_i_counter]->ignored == 0)
-		{
-			split_cmd[split_cmd_i_counter] = cmd[cmd_i_counter]->value;
-			split_cmd_i_counter++;
-		}
+		split_cmd[split_cmd_i_counter] = cmd[cmd_i_counter]->value;
+		split_cmd_i_counter++;
 		cmd_i_counter++;
 	}
 	path->args = split_cmd;

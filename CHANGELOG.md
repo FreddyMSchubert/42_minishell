@@ -1,5 +1,17 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+### v0.25.2 - 26.03.24 - Freddy
+- cleanup of removal of command_start_index leftover code weirdness
+
+### v0.25.1 - 26.03.24 - Freddy
+- some general refactorings
+- parser bracket logic fix
+- other minor fixes
+
+## v0.25.0 - 25.03.24 - Freddy
+- started substring update to remove ignore flag
+- currently dysfunctional
+
 ### v0.24.3 - 25.03.24 - Freddy
 - redirect/get_filename NULL segfault fix
 - false lexer builtin token type fix

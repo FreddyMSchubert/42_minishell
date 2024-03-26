@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/25 08:08:46 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/26 05:44:19 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,16 +50,16 @@
 
 // ----- STRUCTS
 
-typedef struct s_token {
+typedef struct s_token
+{
 	char			type;
 	char			*value;
-	char			ignored;
 }	t_token;
-// char used for type to save space, as there are only 12 types
-// ignored is 0 if not, 1 if ignored
+// char used for type to save space, as there are only 8 types
 
 typedef struct s_bin_tree_node	t_bin_tree_node;
-typedef struct s_bin_tree_node {
+typedef struct s_bin_tree_node
+{
 	t_token			**val;
 	t_bin_tree_node	*l;
 	t_bin_tree_node	*r;
@@ -68,14 +68,16 @@ typedef struct s_bin_tree_node {
 	int				output_fd;
 }	t_bin_tree_node;
 
-typedef struct s_program_data {
+typedef struct s_program_data
+{
 	char			exit_flag;		// 0 by default, 1 to exit & cleanup
 	int				exit_status;	// exit status to be returned
 	char			**envcp;		// internal copy of envp
 	t_list			*gc;			// garbage collector
 }	t_program_data;
 
-typedef struct s_cmd_path {
+typedef struct s_cmd_path
+{
 	char			*path;
 	char			**args;
 }				t_cmd_path;
@@ -83,7 +85,7 @@ typedef struct s_cmd_path {
 // ----- SETTINGS
 
 // will output detailed logging if set to 1, and normal logging if 0
-#define VERBOSE 1
+#define VERBOSE 0
 
 // ----- FUNCTIONS
 
@@ -136,8 +138,6 @@ char				*list_matching_files(const char *pattern);
 t_token				**switch_args_for_redir(t_token **arr);
 t_list				*sub_token_t_list(t_list *tokens, int start, int end, t_program_data *program_data);
 int					toklen(t_list *tokens);
-int					first_non_ignored(t_list *tokens);
-int					last_non_ignored(t_list *tokens);
 t_token				**t_list_to_token_arr(t_list	*tokens, t_program_data	*program_data);
 t_token				*get_token_at_index(t_list *tokens, int index);
 // parser
@@ -156,10 +156,8 @@ int					logical_or(t_bin_tree_node *node, t_program_data *data);
 int					redirect(t_bin_tree_node *node, t_program_data *program_data);
 void				setup_pipe(t_bin_tree_node *node, t_program_data *program_data);
 // "normal" commands
-int					execute_command(t_bin_tree_node *node, t_program_data *program_data, int cmd_start_index);
 t_cmd_path			*create_cmd_struct(char	**envp, t_token	**cmd, int cmd_start_index);
 // builtins
-int	execute_builtin(t_bin_tree_node *node, t_program_data *program_data, int cmd_start_index);
 int	execute_echo(t_token **inputs, int cmd_start_index);
 int					execute_env(t_program_data *program_data);
 int	execute_exit(t_token **tokens, t_program_data *program_data, int cmd_start_index);

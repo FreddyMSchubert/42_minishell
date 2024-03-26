@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   printing.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 07:42:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/15 10:21:23 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/03/25 09:53:23 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	print_token(t_token *token)
 		printf("Open Brace");
 	else if (token->type == TOK_CLOSE_BRACE)
 		printf("Close Brace");
-	printf(", \tValue: \"%s\", ignored: %d\n", token->value, token->ignored);
+	printf(", \tValue: \"%s\"\n", token->value);
 }
 
 void	print_tokens(t_list *tokens)
