@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: niklasburchhardt <niklasburchhardt@stud    +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 06:54:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/24 10:19:50 by niklasburch      ###   ########.fr       */
+/*   Updated: 2024/03/20 15:11:03 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ static char	*put_space_between_tokens(char *input, t_program_data *data)
 	int		i;
 	int		ni;
 	char	*new_input;
-	// int		in_quote;
+	int		in_quote;
 	int		cur_symbol;
 
 	if (count_tokens(input) == -1)
@@ -124,7 +124,7 @@ static char	*put_space_between_tokens(char *input, t_program_data *data)
 	i = 0;
 	ni = 0;
 	cur_symbol = SYM_SPC;
-	// in_quote = 0;
+	in_quote = 0;
 	while (ni < (int)ft_strlen(input) + calc_add_spaces(input) && input[i])
 	{
 		if (is_operator_symbol(input[i], input[i + 1]) > 0)
