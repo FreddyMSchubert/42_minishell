@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/19 13:24:38 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/02 14:12:45 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ int	execute_input(t_program_data *program_data, char *input)
 		ft_printf("after expanding:\n");
 		printf("input: %s\n", input);
 	}
-	input = get_rid_of_quotes(input, program_data);
+	// input = get_rid_of_quotes(input, program_data);
 	// --- lexer
 	tokenified_input = lexer(input, program_data);
 	if (tokenified_input == NULL)
@@ -168,7 +168,7 @@ int	run_crash_interface(t_program_data *program_data)
 		{
 			if (input != NULL)
 				gc_append_element(program_data->gc, input);
-			gc_cleanup(program_data->gc);
+			// gc_cleanup(program_data->gc);
 			program_data->gc = create_garbage_collector();
 			program_data->exit_status = 0;
 			if (input == NULL)
@@ -182,7 +182,7 @@ int	run_crash_interface(t_program_data *program_data)
 		}
 		execute_input(program_data, input);
 		// test_expander(program_data, input);
-		gc_cleanup(program_data->gc);
+		// gc_cleanup(program_data->gc);
 		program_data->gc = create_garbage_collector();
 	}
 	gc_cleanup(program_data->gc);

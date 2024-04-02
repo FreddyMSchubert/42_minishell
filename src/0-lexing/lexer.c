@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 06:54:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/20 15:11:03 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/02 14:26:39 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,26 +125,27 @@ static char	*put_space_between_tokens(char *input, t_program_data *data)
 	ni = 0;
 	cur_symbol = SYM_SPC;
 	in_quote = 0;
-	while (ni < (int)ft_strlen(input) + calc_add_spaces(input) && input[i])
+	while (input[i]) //ni < (int)ft_strlen(input) + calc_add_spaces(input) && 
 	{
 		if (is_operator_symbol(input[i], input[i + 1]) > 0)
 		{
-			if (cur_symbol != 0)
+			if (cur_symbol != SYM_SPC)
 				new_input[ni++] = ' ';
-			cur_symbol = 2;
+			cur_symbol = SYM_OPRTR;
 		}
 		else if (input[i] == ' ')
-			cur_symbol = 0;
+			cur_symbol = SYM_SPC;
 		else if (input[i] != ' ')
 		{
-			if (cur_symbol == 2 || (cur_symbol == 1 && is_operator_symbol(input[i], input[i + 1]) > 0))
+			if (cur_symbol == SYM_OPRTR || (cur_symbol == SYM_WRD && is_operator_symbol(input[i], input[i + 1]) > 0))
 				new_input[ni++] = ' ';
-			cur_symbol = 1;
+			cur_symbol = SYM_WRD;
 		}
 		if (input[i] && is_operator_symbol(input[i], input[i + 1]) == 2)
 			new_input[ni++] = input[i++];
 		new_input[ni++] = input[i++];
 	}
+	printf("pu_space: %s\n", new_input);
 	return (new_input);
 }
 
@@ -159,7 +160,10 @@ t_list	*lexer(char *input, t_program_data *data)
 	int		counter;
 	int		is_first_or_after_operator;
 
-	split_input = ms_split(put_space_between_tokens(input, data));
+	split_input = ms_split(put_space_between_tokens(input, data), data);
+	int i = -1;
+	while (split_input && split_input[++i])
+		ft_printf("split_input[%d]: %s\n", i, split_input[i]);
 	if (!split_input)
 		return (NULL);
 	token_amount = 0;
@@ -181,5 +185,5 @@ t_list	*lexer(char *input, t_program_data *data)
 	counter = -1;
 	while (split_input[++counter])
 		free(split_input[counter]);
-	return (free (split_input), tokens);
+	return (free(split_input), tokens);
 }

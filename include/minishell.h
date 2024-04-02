@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/20 15:23:40 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/02 13:52:04 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ int					setup_signals(void);
 
 // --- 0-lexing
 t_list				*lexer(char *input, t_program_data *data);
-char				**ms_split(char *input);
+char				**ms_split(char *input, t_program_data *data);
 int					count_tokens(const char *s);
 int					is_operator_symbol(char c, char d);
 int					same_str(char *str1, char *str2);

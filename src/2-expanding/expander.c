@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 09:20:32 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/02 10:24:19 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/02 14:01:10 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,75 +135,9 @@ char	*get_rid_of_quotes(char *str, t_program_data *program_data)
 		// printf("str[%d]: %c\n", i, str[i]);
 	}
 	new_str[j] = '\0';
-	// printf("get_rid_of_quotes: %s\n", new_str);
+	printf("get_rid_of_quotes: %s\n", new_str);
 	return (new_str);
 }
-
-// wildcard, need to take* with the rest in front or behind delimitted by spaces
-
-// t_list	*expander(t_list *tokens, t_program_data *program_data)
-// {
-// 	char	*envcp_value;
-// 	char	*env_var;
-// 	t_list	*tok;
-// 	t_token	*token;
-// 	char	*tmp;
-
-// 	tok = tokens;
-// 	while (tok != NULL)
-// 	{
-// 		token = (t_token *)tok->content;
-// 		//exit code
-// 		if (ft_strnstr(token->value, "$?",
-// 				ft_strlen(token->value)) != NULL
-// 			&& !is_in_quote(token->value, "\'", ft_strnstr(token->value,
-// 					"$?", ft_strlen(token->value))))
-// 		{
-// 			envcp_value = ft_itoa(program_data->exit_status);
-// 			if (!envcp_value)
-// 				exit_error("malloc failed", 1, program_data->gc);
-// 			gc_append_element(program_data->gc, envcp_value);
-// 			token->value = get_expanded_str(token->value, envcp_value,
-// 					program_data, "?");
-// 		}
-// 		//expansion
-// 		else if (ft_strchr(token->value, '$') != NULL
-// 			&& !is_in_quote(token->value, "\'", ft_strchr(token->value,
-// 					'$')))
-// 		{
-// 			env_var = isolate_var(ft_strdup(ft_strchr(token->value, '$')
-// 						+ 1));
-// 			if (!env_var)
-// 				exit_error("malloc failed", 1, program_data->gc);
-// 			// printf("env_var: %s\n", env_var);
-// 			gc_append_element(program_data->gc, env_var);
-// 			envcp_value = get_envcp(env_var, program_data);
-// 			if (!envcp_value)
-// 				exit_error("malloc failed", 1, program_data->gc);
-// 			gc_append_element(program_data->gc, envcp_value);
-// 			tmp = get_expanded_str(token->value, envcp_value,
-// 					program_data, env_var);
-// 			if (tmp)
-// 				token->value = tmp;
-// 		}
-// 		//wildcard
-// 		else if (token->type == TOK_WORD && ft_strchr(token->value,
-// 				'*') != NULL && !is_in_quote(token->value, "'",
-// 				ft_strchr(token->value, '*'))
-// 			&& !is_in_quote(token->value, "\"", ft_strchr(token->value,
-// 				'*'))) // wildcard, need to take* with the rest in front or behind delimitted by spaces
-// 		{
-// 			tmp = list_matching_files(token->value);
-// 			if (tmp)
-// 			{
-// 				token->value = tmp;
-// 				gc_append_element(program_data->gc, token->value);
-// 			}
-// 		}
-// 		tok = tok->next;
-// 	}
-// 	return (tokens);
-// }
 
 /// @brief retrieves the pattern of a wildcard
 char	*get_pattern(char *str, int index)
@@ -233,18 +167,15 @@ char *expand_values(char *str, t_program_data *program_data)
 	new_str = ft_calloc(ft_strlen(str) + 1, sizeof(char));
 	while (str[++i])
 	{
-		if (ft_strnstr(&str[i], "$?", 2) != NULL
+		if (str[i] == '~')
+			new_str = ft_strjoinfree(new_str, get_envcp("HOME", program_data));
+		else if (ft_strnstr(&str[i], "$?", 2) != NULL
 			&& !is_in_quote(str, "\'", &str[i]))
 		{
 			envcp_value = ft_itoa(program_data->exit_status);
-			// printf("envcp_value: %s\n", envcp_value);
 			if (!envcp_value)
 				exit_error("malloc failed", 1, program_data->gc);
-			// j += ft_strlen(envcp_value);
-			// printf("strlen of expansion: %zu\n", ft_strlen(envcp_value));
-			// gc_append_element(program_data->gc, envcp_value);
 			new_str = ft_strjoinfree(new_str, envcp_value);
-			// printf("new_str: %s\n", new_str);
 			i++;
 		}
 		else if (ft_strchr(&str[i], '$') == &str[i]
@@ -258,30 +189,30 @@ char *expand_values(char *str, t_program_data *program_data)
 			envcp_value = get_envcp(env_var, program_data);
 			if (!envcp_value)
 				exit_error("malloc failed", 1, program_data->gc);
-			// gc_append_element(program_data->gc, envcp_value);
-			// j += ft_strlen(envcp_value);
-			// printf("strlen of expansion: %zu\n", ft_strlen(envcp_value));
 			new_str = ft_strjoinfree(new_str, envcp_value);
 		}
 		//wildcard
-		else if (ft_strchr(&str[i], '*') && !is_in_quote(str, "'", &str[i])
+		else if (str[i] == '*' && !is_in_quote(str, "'", &str[i])
 			&& !is_in_quote(str, "\"", &str[i])) // wildcard, need to take* with the rest in front or behind delimitted by spaces
 		{
-			tmp = list_matching_files(ft_strdup(strtok(&str[i], " <>|&()")));
+			printf("str[i]: .%c.\n", str[i]);
+			tmp = list_matching_files(get_pattern(str, i));
 			printf("tmp: %s\n", tmp);
 			if (tmp)
 			{
 				new_str = ft_strjoinfree(new_str, tmp);
 				while (str[i] && str[i] != ' ' && !is_operator_symbol(str[i], ' '))
 					i++;
+				if (str[i] && (str[i] == ' ' || is_operator_symbol(str[i], ' ')))
+					new_str = ft_strjoinfree(new_str, ft_substr(&str[i], 0, 1));
 			}
 			else
 				new_str = ft_strjoinfree(new_str, ft_substr(&str[i], 0, 1));
 		}
 		else
 			new_str = ft_strjoinfree(new_str, ft_substr(&str[i], 0, 1));
-		// printf("new_str in loop: %s\n", new_str);
 	}
-	// printf("new_str: %s\n", new_str);
+	gc_append_element(program_data->gc, new_str);
+	printf("new_str: %s\n", new_str);
 	return (new_str);
 }
