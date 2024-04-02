@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 06:19:23 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/02 13:02:07 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/02 13:18:42 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,14 @@
 	If no arguments are given, cd changes to the user's temp directory.
 	Otherwise, chdir changes directory and getcwd gets the new path.
 */
-int	execute_cd(t_token **tokens, t_program_data *program_data, int cmd_start_index)
+int	execute_cd(t_token **tokens, t_program_data *program_data)
 {
 	char	*path;
 	char	*buffer;
 	char	*temp;
 	int		ret_val;
 
-	if (tokens[cmd_start_index + 1] == NULL)
+	if (tokens[1] == NULL)
 	{
 		temp = get_envcp_var("HOME", program_data->envcp);
 		if (temp)
@@ -30,7 +30,7 @@ int	execute_cd(t_token **tokens, t_program_data *program_data, int cmd_start_ind
 		else
 			return (builtin_err("cd", -3, "HOME"), 1);
 	}
-	else if (tokens[cmd_start_index + 1]->value[0] == '-')
+	else if (tokens[1]->value[0] == '-')
 	{
 		temp = get_envcp_var("OLDPWD", program_data->envcp);
 		if (temp)
@@ -39,7 +39,7 @@ int	execute_cd(t_token **tokens, t_program_data *program_data, int cmd_start_ind
 			return (free(temp), free(path), builtin_err("cd", -3, "OLDPWD"), 1);
 	}
 	else
-		path = ft_strdup(tokens[cmd_start_index + 1]->value);
+		path = ft_strdup(tokens[1]->value);
 	ret_val = chdir(path);
 	if (ret_val != 0)
 		return (builtin_err("cd", -4, NULL), errno);

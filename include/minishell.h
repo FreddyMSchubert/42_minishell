@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/02 12:28:37 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/02 13:24:17 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,23 +150,23 @@ t_bin_tree_node		*tok_to_bin_tree(t_list *tokens, t_program_data *program_data);
 int					execute(t_bin_tree_node *tree, t_program_data *data);
 int					execute_node(t_bin_tree_node *node, t_program_data *data);
 int					execute_input(t_program_data *program_data, char *input);
-void				child_process_exit(t_program_data	*program_data, int	exitcode);
+void				child_process_exit(t_program_data	*data, int	exitcode);
 // operators
-// int					logical_op(t_bin_tree_node *node, t_program_data *data);
 int					logical_and(t_bin_tree_node *node, t_program_data *data);
 int					logical_or(t_bin_tree_node *node, t_program_data *data);
-int					redirect(t_bin_tree_node *node, t_program_data *program_data);
-void				setup_pipe(t_bin_tree_node *node, t_program_data *program_data);
+int					redirect(t_bin_tree_node *node, t_program_data *data);
+void				setup_pipe(t_bin_tree_node *node, t_program_data *data);
 // "normal" commands
-t_cmd_path			*create_cmd_struct(char	**envp, t_token	**cmd, int cmd_start_index);
+t_cmd_path			*create_cmd_struct(char	**envp, t_token	**cmd);
 // builtins
-int	execute_echo(t_token **inputs, int cmd_start_index);
-int					execute_env(t_program_data *program_data);
-int	execute_exit(t_token **tokens, t_program_data *program_data, int cmd_start_index);
-int	execute_cd(t_token **tokens, t_program_data *program_data, int cmd_start_index);
-int					execute_pwd(void);
-int	execute_export(t_token **node, t_program_data *program_data, int cmd_start_index);
-int	execute_unset(t_token **node, t_program_data *program_data, int cmd_start_index);
+int					execute_echo(t_token **inputs, int out_fd);
+int					execute_env(t_program_data *program_data, int out_fd);
+int					execute_exit(t_token **tokens, t_program_data *data, \
+								int out_fd);
+int					execute_cd(t_token **tokens, t_program_data *program_data);
+int					execute_pwd(int out_fd);
+int					execute_export(t_token **node, t_program_data *data);
+int					execute_unset(t_token **node, t_program_data *data);
 // env utils
 char				*get_envcp_var(char *var, char **envcp);
 int					set_envcp_var(char *var, char *value, char createnew, \

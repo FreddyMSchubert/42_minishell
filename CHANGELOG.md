@@ -1,6 +1,11 @@
 # CHANGELOG minishell by nburchha & fschuber
 
-### v0.26.0 - 02.04.24 - Freddy
+## v0.27.0 - 02.04.24 - Freddy
+- moved builtins out of child processes
+	- made all of htem print to the outfd using ft_putstr_fd
+- fully removed wholly unnecessary cmd_start_index variable
+
+## v0.26.0 - 02.04.24 - Freddy
 - changes to make testing easy
 	- added DEBUG macro
 	- renamed executable to minishell

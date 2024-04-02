@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 09:38:36 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/02 09:57:07 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/02 13:19:48 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static int	export_error_return(int error_code)
 	return (1);
 }
 
-int	execute_export(t_token **node, t_program_data *program_data, int cmd_start_index)
+int	execute_export(t_token **node, t_program_data *program_data)
 {
 	int		i;
 	int		equ_pos;
@@ -33,7 +33,7 @@ int	execute_export(t_token **node, t_program_data *program_data, int cmd_start_i
 	char	*var;
 	char	*value;
 
-	i = cmd_start_index;
+	i = 0;
 	while (node[++i])
 	{
 		equ_pos_char = ft_strchr(node[i]->value, '=');

@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 06:36:17 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/02 12:47:27 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/02 13:24:07 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static int	get_token_arr_len(t_token	**cmd)
 	@brief	Creates a path struct consisting of a path string
 	@brief	and the arguments as an array of strings
 */
-t_cmd_path	*create_cmd_struct(char	**envp, t_token	**cmd, int cmd_start_index)
+t_cmd_path	*create_cmd_struct(char	**envp, t_token	**cmd)
 {
 	t_cmd_path	*path;
 	char		**split_cmd;
@@ -70,7 +70,7 @@ t_cmd_path	*create_cmd_struct(char	**envp, t_token	**cmd, int cmd_start_index)
 	path = malloc(sizeof(t_cmd_path));
 	if (!path)
 		return (exec_error(-1), NULL);
-	path->path = get_command_path(envp, cmd[cmd_start_index]->value);
+	path->path = get_command_path(envp, cmd[0]->value);
 	if (!path->path)
 		return (free(path), NULL);
 	token_amount = get_token_arr_len(cmd);
@@ -78,7 +78,7 @@ t_cmd_path	*create_cmd_struct(char	**envp, t_token	**cmd, int cmd_start_index)
 	if (!split_cmd)
 		return (free(path), exec_error(-1), NULL);
 	split_cmd[token_amount] = NULL;
-	cmd_i_counter = cmd_start_index;
+	cmd_i_counter = 0;
 	split_cmd_i_counter = 0;
 	while (cmd[cmd_i_counter])
 	{
