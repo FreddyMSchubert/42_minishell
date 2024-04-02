@@ -1,5 +1,9 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+### v0.25.3 - 02.04.24 - Freddy
+- error handling
+- multiple fixes
+
 ### v0.25.2 - 26.03.24 - Freddy
 - cleanup of removal of command_start_index leftover code weirdness
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/26 05:44:19 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/02 10:05:28 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,6 +178,7 @@ int					delete_envcp_var(char *var, char **envcp);
 char				*strjoin_null_compatible(char const *s1, char const *s2);
 // errors
 void				broadcast_validator_error(int error, char *arg);
-void				broadcast_builtin_error(char *builtin, int error, char *arg);
+void				builtin_err(char *builtin, int error, char *arg);
+void				exec_error(int error);
 // general
 char				*ft_strjoinfree(char *s1, char *s2);

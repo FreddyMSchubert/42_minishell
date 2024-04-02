@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input_loop.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/26 04:41:28 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/02 10:17:49 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	execute_input(t_program_data *program_data, char *input)
 	// --- lexer
 	tokenified_input = lexer(input, program_data);
 	if (tokenified_input == NULL)
-		return (-1); // handle error
+		return (ft_putstr_fd("crash: error lexing input", STDERR_FILENO), -1);
 	if (VERBOSE == 1)
 		print_tokens(tokenified_input);
 	tmp_lst = tokenified_input;

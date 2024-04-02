@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/26 05:42:23 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/02 10:07:46 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,24 +67,17 @@ static int	execute_builtin(t_bin_tree_node *node, t_program_data *program_data)
 static int	execute_command(t_bin_tree_node *node, t_program_data *program_data)
 {
 	t_cmd_path	*cmd_path;
-	int			i;
 
 	cmd_path = create_cmd_struct(program_data->envcp, node->val, 0);
 	if (cmd_path)
 		execve(cmd_path->path, cmd_path->args, program_data->envcp);
 	if (cmd_path && cmd_path->path)
 		free(cmd_path->path);
-	i = 0;
-	while (cmd_path && cmd_path->args && cmd_path->args[i])
-	{
-		// free(cmd_path->args[i]);
-		i++;
-	}
 	if (cmd_path && cmd_path->args)
 		free(cmd_path->args);
 	if (cmd_path)
 		free(cmd_path);
-	return (-1); // handle error
+	return (exec_error(-3), -1);
 }
 
 

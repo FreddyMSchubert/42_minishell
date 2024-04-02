@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_util.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 06:59:51 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/25 08:11:01 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/02 09:48:31 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 int	is_redirect(char c)
 {
-	ft_printf("is_redirect: %c\n", c);
 	if (c == '<' || c == '>')
 		return (1);
 	return (0);

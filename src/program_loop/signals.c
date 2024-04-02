@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/11 12:15:06 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/20 08:58:39 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/02 10:11:14 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,22 +32,12 @@ static void	sigint_handler(int signo)
 
 int	setup_signals(void)
 {
-	// struct termios		terminal_settings;
 	struct sigaction	signal_action;
 
-/*
-	if (isatty (STDIN_FILENO) != 0)
-	{
-		if (tcgetattr(STDIN_FILENO, &terminal_settings) == -1)
-			return (-1); // handle error
-		terminal_settings.c_lflag &= ~ECHOCTL;
-		if (tcsetattr(STDIN_FILENO, TCSANOW, &terminal_settings) == -1)
-			return (-1); // handle error
-	}*/
 	ft_memset(&signal_action, 0, sizeof(signal_action));
 	signal_action.sa_handler = &sigint_handler;
 	if (sigaction(SIGINT, &signal_action, NULL) == -1)
-		return (-1); // handle error
+		return (ft_putstr_fd("crash: sigs: error inserting sigint handler", STDERR_FILENO), -1);
 	signal(SIGQUIT, SIG_IGN);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 07:17:01 by fschuber          #+#    #+#             */
-/*   Updated: 2024/02/27 10:10:49 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/02 10:09:52 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ char	*get_envcp_var(char *var, char **envcp)
 			return (envcp[env_i] + env_i_i + 1);
 		env_i++;
 	}
-	ft_printf("there is no path!\n");
 	return (NULL);
 }
 
@@ -86,7 +85,7 @@ int	set_envcp_var(char *var, char *val, char createnew, t_program_data *data)
 			data->envcp[i] = ft_strjoinfree(ft_strjoin(var, "="), \
 											ft_strdup(val));
 			if (!data->envcp[i])
-				return (-1); // handle error
+				return (-1);
 			return (0);
 		}
 	}
@@ -119,5 +118,5 @@ int	delete_envcp_var(char *var, char **envcp)
 			return (0);
 		}
 	}
-	return (broadcast_builtin_error("cd", -3, var), -1);
+	return (builtin_err("cd", -3, var), -1);
 }

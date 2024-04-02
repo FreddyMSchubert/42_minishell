@@ -6,12 +6,15 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 06:19:23 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/15 10:32:11 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/02 10:09:43 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/minishell.h"
-
+/*
+	If no arguments are given, cd changes to the user's home directory.
+	Otherwise, chdir changes directory and getcwd gets the new path.
+*/
 int	execute_cd(t_token **tokens, t_program_data *program_data, int cmd_start_index)
 {
 	char	*path;
@@ -25,20 +28,20 @@ int	execute_cd(t_token **tokens, t_program_data *program_data, int cmd_start_ind
 		if (home)
 			path = ft_strdup(home);
 		else
-			return (1); // handle error
+			return (builtin_err("cd", -3, "HOME"), 1);
 	}
 	else
 		path = ft_strdup(tokens[cmd_start_index + 1]->value);
 	ret_val = chdir(path);
 	if (ret_val != 0)
-		return (broadcast_builtin_error("cd", -4, NULL), errno);
+		return (builtin_err("cd", -4, NULL), errno);
 	buffer = getcwd(NULL, 0);
 	if (!buffer)
-		return (-1); // handle error
+		return (builtin_err("cd", -5, "getcwd failed"), -1);
 	free(path);
-	set_envcp_var("OLDPWD", get_envcp_var("PWD", program_data->envcp), 0, program_data);
+	if (set_envcp_var("OLDPWD", get_envcp_var("PWD", program_data->envcp), 0, program_data) == -1)
+		return (free(buffer), builtin_err("cd", -2, "OLDPWD"), -2);
 	if (set_envcp_var("PWD", buffer, 0, program_data) == -1)
-		// return (broadcast_builtin_error("cd", -2, "PWD"), 1);
-		return (free(buffer), -2); // handle error
+		return (free(buffer), builtin_err("cd", -2, "PWD"), -2);
 	return (free(buffer), 0);
 }

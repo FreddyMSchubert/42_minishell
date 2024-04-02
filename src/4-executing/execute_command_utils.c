@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_command_utils.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 06:36:17 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/25 09:56:49 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/02 10:14:10 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static char	*get_command_path(char **envp, char *command)
 		envp++;
 	split_paths = ft_split(envp[0], ':');
 	if (split_paths == NULL)
-		return (NULL); // handle error
+		return (exec_error(-1), NULL);
 	counter = 0;
 	while (split_paths[counter])
 	{
@@ -69,14 +69,14 @@ t_cmd_path	*create_cmd_struct(char	**envp, t_token	**cmd, int cmd_start_index)
 
 	path = malloc(sizeof(t_cmd_path));
 	if (!path)
-		return (NULL); // handle error
+		return (exec_error(-1), NULL);
 	path->path = get_command_path(envp, cmd[cmd_start_index]->value);
 	if (!path->path)
-		return (free(path), NULL); // handle error
+		return (free(path), exec_error(-2), NULL);
 	token_amount = get_token_arr_len(cmd);
 	split_cmd = malloc(sizeof(char *) * (token_amount + 1));
 	if (!split_cmd)
-		return (free(path), NULL); // handle error
+		return (free(path), exec_error(-1), NULL);
 	split_cmd[token_amount] = NULL;
 	cmd_i_counter = cmd_start_index;
 	split_cmd_i_counter = 0;
