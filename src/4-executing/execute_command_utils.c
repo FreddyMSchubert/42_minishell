@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 06:36:17 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/02 10:14:10 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/02 12:47:27 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ t_cmd_path	*create_cmd_struct(char	**envp, t_token	**cmd, int cmd_start_index)
 		return (exec_error(-1), NULL);
 	path->path = get_command_path(envp, cmd[cmd_start_index]->value);
 	if (!path->path)
-		return (free(path), exec_error(-2), NULL);
+		return (free(path), NULL);
 	token_amount = get_token_arr_len(cmd);
 	split_cmd = malloc(sizeof(char *) * (token_amount + 1));
 	if (!split_cmd)

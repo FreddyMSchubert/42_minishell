@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/02 10:17:49 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/02 12:28:25 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,20 +76,27 @@ int	run_crash_interface(t_program_data *program_data)
 {
 	char	*input;
 
-	print_logo();
+	if (DEBUG == 0)
+		print_logo();
 	while (program_data->exit_flag == 0)
 	{
-		if (program_data->exit_status == 0)
+		if (DEBUG == 0)
 		{
-			ft_printf("%s", ANSI_COLOR_CYAN);
-			input = readline("crash 💣 ");
+			if (program_data->exit_status == 0)
+			{
+				ft_printf("%s", ANSI_COLOR_CYAN);
+				input = readline("crash 💣 ");
+			}
+			else
+			{
+				ft_printf("%s", ANSI_COLOR_RED);
+				input = readline("crash 💥 ");
+			}
+			ft_printf("%s", ANSI_COLOR_RESET);
 		}
 		else
-		{
-			ft_printf("%s", ANSI_COLOR_RED);
-			input = readline("crash 💥 ");
-		}
-		ft_printf("%s", ANSI_COLOR_RESET);
+			if (isatty(fileno(stdin)))
+				input = readline("testerinput $> ");
 		if (g_sigint_received == SIGINT)
 		{
 			g_sigint_received = 0;

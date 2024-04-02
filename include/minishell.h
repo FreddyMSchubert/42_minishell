@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/02 10:05:28 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/02 12:28:37 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,8 @@ typedef struct s_cmd_path
 
 // will output detailed logging if set to 1, and normal logging if 0
 #define VERBOSE 0
+// will make everything work with tester provided executable is called minishell
+#define DEBUG 1
 
 // ----- FUNCTIONS
 

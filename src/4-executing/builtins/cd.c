@@ -6,29 +6,37 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 06:19:23 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/02 10:09:43 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/02 13:02:07 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/minishell.h"
 /*
-	If no arguments are given, cd changes to the user's home directory.
+	If no arguments are given, cd changes to the user's temp directory.
 	Otherwise, chdir changes directory and getcwd gets the new path.
 */
 int	execute_cd(t_token **tokens, t_program_data *program_data, int cmd_start_index)
 {
 	char	*path;
 	char	*buffer;
-	char	*home;
+	char	*temp;
 	int		ret_val;
 
 	if (tokens[cmd_start_index + 1] == NULL)
 	{
-		home = get_envcp_var("HOME", program_data->envcp);
-		if (home)
-			path = ft_strdup(home);
+		temp = get_envcp_var("HOME", program_data->envcp);
+		if (temp)
+			path = ft_strdup(temp);
 		else
 			return (builtin_err("cd", -3, "HOME"), 1);
+	}
+	else if (tokens[cmd_start_index + 1]->value[0] == '-')
+	{
+		temp = get_envcp_var("OLDPWD", program_data->envcp);
+		if (temp)
+			path = ft_strdup(temp);
+		if (!temp || !path)
+			return (free(temp), free(path), builtin_err("cd", -3, "OLDPWD"), 1);
 	}
 	else
 		path = ft_strdup(tokens[cmd_start_index + 1]->value);

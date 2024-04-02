@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 10:02:28 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/02 10:16:25 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/02 12:49:02 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	exec_error(int error)
 {
-	ft_putstr_fd("crash: envp: ", STDERR_FILENO);
+	ft_putstr_fd("crash: ", STDERR_FILENO);
 	if (error == -1)
 		ft_putstr_fd("dynamic allocation error\n", STDERR_FILENO);
 	else if (error == -2)

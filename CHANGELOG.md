@@ -1,5 +1,11 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+### v0.26.0 - 02.04.24 - Freddy
+- changes to make testing easy
+	- added DEBUG macro
+	- renamed executable to minishell
+- made cd - work (theoretically), but cant test that yet lol
+
 ### v0.25.4 - 02.04.24 - Freddy
 - made Makefile put object files into ./obj folder for cleanliness
 
