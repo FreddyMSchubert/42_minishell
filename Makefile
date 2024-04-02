@@ -4,7 +4,10 @@ LIBFT_DIR   := ./submodules/42_libft
 FTPRINTF_DIR:= ./submodules/42_ft_printf
 
 SRC = $(shell find ./src -name "*.c")
-OBJ = $(SRC:.c=.o)
+OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+
+SRC_DIR = ./src
+OBJ_DIR = ./obj
 
 CFLAGS		:=	-Wall -Werror -Wextra -g #-fsanitize=address
 HEADER		:=	-I./include/
@@ -14,10 +17,11 @@ LIBS		:=	-L$(LIBFT_DIR) -lft \
 
 $(NAME): pre_compile $(LIBFT_DIR)/libft.a $(FTPRINTF_DIR)/ftprintf.a $(OBJ) pre_link
 	@echo "$(CYAN)Linking $(NAME)...$(NC)"
-	@cc $(CFLAGS) $(OBJ) $(LIBS) -o $(NAME) > /dev/null
-%.o: %.c
+	@cc $(CFLAGS) $(OBJ) $(LIBS) -o $(NAME)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	@mkdir -p $(@D)
 	@printf "$(PURPLE)$(notdir $<) $(NC)"
-	@cc -c $< $(CFLAGS) $(HEADER) -o $@ > /dev/null
+	@cc -c $< $(CFLAGS) $(HEADER) -o $@
 
 $(LIBFT_DIR)/libft.a:
 	@echo "$(YELLOW)Making libft...$(NC)"

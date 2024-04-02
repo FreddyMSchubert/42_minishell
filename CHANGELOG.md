@@ -1,5 +1,8 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+### v0.25.4 - 02.04.24 - Freddy
+- made Makefile put object files into ./obj folder for cleanliness
+
 ### v0.25.3 - 02.04.24 - Freddy
 - error handling
 - multiple fixes
