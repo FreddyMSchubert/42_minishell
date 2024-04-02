@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 06:54:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/02 14:26:39 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/02 14:37:24 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,9 +161,6 @@ t_list	*lexer(char *input, t_program_data *data)
 	int		is_first_or_after_operator;
 
 	split_input = ms_split(put_space_between_tokens(input, data), data);
-	int i = -1;
-	while (split_input && split_input[++i])
-		ft_printf("split_input[%d]: %s\n", i, split_input[i]);
 	if (!split_input)
 		return (NULL);
 	token_amount = 0;

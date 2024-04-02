@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/02 14:12:45 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/02 17:17:48 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,9 +91,7 @@ static void	*print_logo(void)
 int	execute_input(t_program_data *program_data, char *input)
 {
 	t_list				*tokenified_input;
-	// t_list				*tmp_lst;
 	t_bin_tree_node		*tree;
-	// t_token				*tmp;
 
 	if (VERBOSE == 1)
 		ft_printf("Received input: %s\n", input);
@@ -103,7 +101,6 @@ int	execute_input(t_program_data *program_data, char *input)
 		ft_printf("after expanding:\n");
 		printf("input: %s\n", input);
 	}
-	// input = get_rid_of_quotes(input, program_data);
 	// --- lexer
 	tokenified_input = lexer(input, program_data);
 	if (tokenified_input == NULL)
@@ -122,7 +119,9 @@ int	execute_input(t_program_data *program_data, char *input)
 	// }
 	// if (VERBOSE == 1)
 	// 	ft_printf("token sequence is valid\n");
-	// tokenified_input = switch_args_for_redir(tokenified_input);
+	test_redir_switch(tokenified_input);
+	return (0);
+	tokenified_input = switch_args_for_redir(tokenified_input);
 	tree = tok_to_bin_tree(tokenified_input, program_data);
 	tree->parent = NULL;
 
@@ -168,7 +167,7 @@ int	run_crash_interface(t_program_data *program_data)
 		{
 			if (input != NULL)
 				gc_append_element(program_data->gc, input);
-			// gc_cleanup(program_data->gc);
+			gc_cleanup(program_data->gc);
 			program_data->gc = create_garbage_collector();
 			program_data->exit_status = 0;
 			if (input == NULL)
@@ -181,8 +180,7 @@ int	run_crash_interface(t_program_data *program_data)
 			add_history(input);
 		}
 		execute_input(program_data, input);
-		// test_expander(program_data, input);
-		// gc_cleanup(program_data->gc);
+		gc_cleanup(program_data->gc);
 		program_data->gc = create_garbage_collector();
 	}
 	gc_cleanup(program_data->gc);
