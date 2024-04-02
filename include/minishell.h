@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/02 13:24:17 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/02 14:22:29 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,8 +171,7 @@ int					execute_unset(t_token **node, t_program_data *data);
 char				*get_envcp_var(char *var, char **envcp);
 int					set_envcp_var(char *var, char *value, char createnew, \
 									t_program_data *program_data);
-int					create_envcp_var(char *var, char *value, char **envcp, \
-									t_program_data *program_data);
+int					create_envcp_var(char *vr, char *vl, t_program_data *data);
 int					delete_envcp_var(char *var, char **envcp);
 
 // --- util

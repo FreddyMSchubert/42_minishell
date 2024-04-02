@@ -1,6 +1,6 @@
 # CHANGELOG minishell by nburchha & fschuber
 
-## v0.27.0 - 02.04.24 - Freddy
+## v0.27.0 - 02.04.24 - Freddy - 1670 / 2823
 - moved builtins out of child processes
 	- made all of htem print to the outfd using ft_putstr_fd
 - fully removed wholly unnecessary cmd_start_index variable

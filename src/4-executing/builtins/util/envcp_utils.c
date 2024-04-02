@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 07:17:01 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/02 10:09:52 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/02 14:25:36 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,26 +39,40 @@ char	*get_envcp_var(char *var, char **envcp)
 }
 
 // creates a new environment variable with the given value
-int	create_envcp_var(char *var, char *value, char **envcp, \
-					t_program_data *program_data)
+int	create_envcp_var(char *var, char *value, t_program_data *data)
 {
 	char	*newenvcp;
 	char	**temp;
 	int		i;
 
+	// print out the envcp
+	printf("envcp before: \n");
+	i = 0;
+	while (data->envcp[i])
+	{
+		printf("%s\n", data->envcp[i]);
+		i++;
+	}
 	newenvcp = ft_strjoinfree(ft_strjoin(var, "="), ft_strdup(value));
 	if (!newenvcp)
 		return (-1);
 	i = 0;
-	while (envcp[i])
+	while (data->envcp[i])
 		i++;
-	temp = (char **)realloc(envcp, sizeof(char *) * (i + 2));
+	temp = (char **)realloc(data->envcp, sizeof(char *) * (i + 2));
 	if (!temp)
 		return (free(newenvcp), -2);
-	program_data->envcp = temp;
-	envcp = temp;
-	envcp[i] = newenvcp;
-	envcp[i + 1] = NULL;
+	data->envcp = temp;
+	data->envcp[i] = newenvcp;
+	data->envcp[i + 1] = NULL;
+	// print out the envcp
+	printf("envcp after: \n");
+	i = 0;
+	while (data->envcp[i])
+	{
+		printf("%s\n", data->envcp[i]);
+		i++;
+	}
 	return (0);
 }
 
@@ -90,7 +104,7 @@ int	set_envcp_var(char *var, char *val, char createnew, t_program_data *data)
 		}
 	}
 	if (createnew)
-		return (create_envcp_var(var, val, data->envcp, data));
+		return (create_envcp_var(var, val, data));
 	return (-2);
 }
 
