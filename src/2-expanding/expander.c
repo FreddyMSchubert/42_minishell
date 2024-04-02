@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 09:20:32 by nburchha          #+#    #+#             */
-/*   Updated: 2024/03/20 15:29:52 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/02 10:24:19 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,7 +264,7 @@ char *expand_values(char *str, t_program_data *program_data)
 			new_str = ft_strjoinfree(new_str, envcp_value);
 		}
 		//wildcard
-		else if (ft_strchr(strtok(&str[i], " <>|&()"), '*') && !is_in_quote(str, "'", &str[i])
+		else if (ft_strchr(&str[i], '*') && !is_in_quote(str, "'", &str[i])
 			&& !is_in_quote(str, "\"", &str[i])) // wildcard, need to take* with the rest in front or behind delimitted by spaces
 		{
 			tmp = list_matching_files(ft_strdup(strtok(&str[i], " <>|&()")));
