@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 09:38:36 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/02 14:08:12 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/03 09:53:07 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,11 @@ int	execute_export(t_token **tokens, t_program_data *program_data)
 	i = 0;
 	while (tokens[++i])
 	{
-		ft_printf("exporting %s\n", tokens[i]->value);
 		equ_pos_char = ft_strchr(tokens[i]->value, '=');
 		if (equ_pos_char != NULL && equ_pos_char - tokens[i]->value > 0)
 			equ_pos = equ_pos_char - tokens[i]->value;
 		else
 			return (export_error_return(2, tokens[i]->value));
-		ft_printf("equ_pos: %d\n", equ_pos);
 		var = ft_substr(tokens[i]->value, 0, equ_pos);
 		if (!var)
 			return (export_error_return(4, NULL));
@@ -53,8 +51,6 @@ int	execute_export(t_token **tokens, t_program_data *program_data)
 							ft_strlen(tokens[i]->value) - equ_pos - 1);
 		if (!value)
 			return (export_error_return(4, NULL));
-		ft_printf("var: %s\n", var);
-		ft_printf("value: %s\n", value);
 		if (set_envcp_var(var, value, 1, program_data) != 0)
 			return (export_error_return(3, NULL));
 	}
