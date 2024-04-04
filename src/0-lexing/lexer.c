@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 06:54:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/04 14:27:39 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/04 17:02:58 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,16 +125,11 @@ static char	*put_space_between_tokens(char *input, t_program_data *data)
 	i = 0;
 	j = 0;
 	cur_symbol = SYM_SPC;
-	// in_quote = 0;
+	in_quote = 0;
 	while (input[i] && j < (int)ft_strlen(input) + calc_add_spaces(input))
 	{
-		if ((input[i] == '\'' || input[i] == '\"'))
-		{
-			if (!in_quote && cur_symbol != 0) // Before entering a quote
-				new_input[j++] = ' ';
-			if (!in_quote)
-				in_quote = input[i] % 4 - 1; // "=1 '=2
-		}
+		if ((input[i] == '\'' && in_quote != 2) || (input[i] == '\"' && in_quote != 1)) //"=2 '=1
+			in_quote = input[i] % 4 - 1;
 		else if (!in_quote && is_operator_symbol(input[i], input[i + 1]) > 0)
 		{
 			if (cur_symbol != 0)
@@ -153,7 +148,7 @@ static char	*put_space_between_tokens(char *input, t_program_data *data)
 			new_input[j++] = input[i++];
 		new_input[j++] = input[i++];
 	}
-	printf("pu_space: %s\n", new_input);
+	// printf("pu_space: %s\n", new_input);
 	return (new_input);
 }
 

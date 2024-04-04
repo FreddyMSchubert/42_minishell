@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 09:20:32 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/03 14:47:51 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/04 16:33:12 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ static bool	is_in_quote(char *str, char *quote, char *current_char)
 		return (s_quote);
 }
 
-char	*get_rid_of_quotes(char *str, t_program_data *program_data)
+char	*get_rid_of_quotes(char *str)
 {
 	int		i;
 	int		j;
@@ -119,11 +119,9 @@ char	*get_rid_of_quotes(char *str, t_program_data *program_data)
 	d_quote = false;
 	i = -1;
 	j = 0;
-	// printf("get_rid_of_quotes: %s, len: %zu\n", str, ft_strlen(str));
 	new_str = ft_calloc(ft_strlen(str) + 1, sizeof(char));
 	if (!new_str)
 		return (NULL);
-	gc_append_element(program_data->gc, new_str);
 	while (str[++i])
 	{
 		if (str[i] == '\'' && !d_quote)
@@ -132,10 +130,8 @@ char	*get_rid_of_quotes(char *str, t_program_data *program_data)
 			d_quote = !d_quote;
 		else
 			new_str[j++] = str[i];
-		// printf("str[%d]: %c\n", i, str[i]);
 	}
 	new_str[j] = '\0';
-	// printf("get_rid_of_quotes: %s\n", new_str);
 	return (new_str);
 }
 
@@ -200,6 +196,10 @@ char *expand_values(char *str, t_program_data *program_data)
 			// printf("tmp: %s\n", tmp);
 			if (tmp)
 			{
+				char *tmp2 = ft_strrchr(new_str, ' ');
+				// printf("tmp2: %s\n", tmp2);
+				if (tmp2)
+					*(tmp2 + 1) = '\0';
 				new_str = ft_strjoinfree(new_str, tmp);
 				while (str[i] && str[i] != ' ' && !is_operator_symbol(str[i], ' '))
 					i++;

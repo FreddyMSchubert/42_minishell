@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 10:42:01 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/04 14:22:03 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/04 17:01:02 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,13 @@ int	count_tokens(const char *s)
 					in_quote = 2;
 				else
 					in_quote = 1;
-				count++;
-				in_word = 0;
+				// count++;
+				// in_word = 0;
 			}
 			else
 				in_quote = 0;
 		}
-		else if (is_operator_symbol(s[i], s[i + 1]))
+		if (is_operator_symbol(s[i], s[i + 1]))
 		{
 			// printf("operator: %c\n", s[i]);
 			if (is_operator_symbol(s[i], s[i + 1]) == 2)
@@ -59,8 +59,8 @@ int	count_tokens(const char *s)
 		else if (ft_isspace(s[i]) && !in_quote)
 			in_word = 0;
 	}
-	if (in_quote)
-		return (-1);
+	// if (in_quote)
+	// 	return (-1);
 	return (count);
 }
 
@@ -139,7 +139,7 @@ char	**ms_split(char *input, t_program_data *data)
 		// printf("input[i]: %s\n", &input[i]);
 		if (is_operator_symbol(input[i], input[i + 1]) || !ft_isspace(input[i]))
 		{
-			result[j++] = get_rid_of_quotes(make_split_str(input, ' ', &i, data), data);
+			result[j++] = get_rid_of_quotes(make_split_str(input, ' ', &i, data));
 			if (!result[j - 1])
 				return (free_split(result), NULL);
 		}
