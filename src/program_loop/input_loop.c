@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/04 17:23:39 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/04 17:24:21 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	execute_input(t_program_data *program_data, char *input)
 {
 	t_list				*tokenified_input;
 	t_bin_tree_node		*tree;
-	t_token				*tmp;
+	// t_token				*tmp;
 	pid_t				last_pid;
 
 	if (VERBOSE == 1)

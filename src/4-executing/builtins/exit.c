@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 13:54:08 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/02 13:19:39 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/04 18:20:48 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,7 @@ int	execute_exit(t_token **tokens, t_program_data *program_data, int out_fd)
 	gc_cleanup(program_data->gc);
 	program_data->gc = create_garbage_collector();
 	ft_putstr_fd("exit\n", out_fd);
+	// if (out_fd != STDOUT_FILENO)
+	// 	close(out_fd);
 	return(program_data->exit_status);
 }

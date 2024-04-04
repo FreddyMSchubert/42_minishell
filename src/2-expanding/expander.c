@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 09:20:32 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/04 17:23:02 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/04 17:25:26 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,7 @@ char	*get_pattern(char *str, int index)
 }
 
 
-//does the same as the above function, but with a string instead of a list, expands all $ and wildcards
+//expands all $ and wildcards in a string
 char *expand_values(char *str, t_program_data *program_data)
 {
 	int	i;
