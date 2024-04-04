@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 10:42:01 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/02 14:03:17 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/04 14:22:03 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,23 @@ int	count_tokens(const char *s)
 	in_quote = 0;
 	while ((int)ft_strlen(s) > i && s[++i])
 	{
-		if (is_operator_symbol(s[i], s[i + 1]))
+		// printf("%zu\n", ft_strlen(s));
+		if ((s[i] == '"' && in_quote != 2) || (s[i] == '\'' && in_quote != 1))
+		{
+			// printf("quote: %c\n", s[i]);
+			if (in_quote == 0)
+			{
+				if (s[i] != '\"')
+					in_quote = 2;
+				else
+					in_quote = 1;
+				count++;
+				in_word = 0;
+			}
+			else
+				in_quote = 0;
+		}
+		else if (is_operator_symbol(s[i], s[i + 1]))
 		{
 			// printf("operator: %c\n", s[i]);
 			if (is_operator_symbol(s[i], s[i + 1]) == 2)
@@ -111,6 +127,7 @@ char	**ms_split(char *input, t_program_data *data)
 	i = -1;
 	j = 0;
 	word_count = count_tokens(input);
+	// printf("word_count: %d\n", word_count);
 	if (word_count == -1)
 		return (NULL);
 	result = malloc((word_count + 1) * sizeof(char *));
@@ -119,6 +136,7 @@ char	**ms_split(char *input, t_program_data *data)
 	result[word_count] = NULL;
 	while (input[++i] && j < word_count)
 	{
+		// printf("input[i]: %s\n", &input[i]);
 		if (is_operator_symbol(input[i], input[i + 1]) || !ft_isspace(input[i]))
 		{
 			result[j++] = get_rid_of_quotes(make_split_str(input, ' ', &i, data), data);
