@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/02 17:17:48 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/04 12:29:35 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,9 +119,7 @@ int	execute_input(t_program_data *program_data, char *input)
 	// }
 	// if (VERBOSE == 1)
 	// 	ft_printf("token sequence is valid\n");
-	test_redir_switch(tokenified_input);
-	return (0);
-	tokenified_input = switch_args_for_redir(tokenified_input);
+	tokenified_input = switch_redir_args(tokenified_input);
 	tree = tok_to_bin_tree(tokenified_input, program_data);
 	tree->parent = NULL;
 

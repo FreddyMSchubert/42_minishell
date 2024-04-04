@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/02 17:17:12 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/04 10:19:43 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,9 +93,9 @@ void				print_tokens(t_list *tokens);
 void				print_token(t_token *token);
 void				print_binary_tree(t_bin_tree_node *tree, int tabs);
 void				print_pipes(int in_fd, int out_fd);
-void test_redir_switch(t_list *tokens);
 t_token				**list_to_token_array(t_list *list);
 // testing
+t_list				*test_redir_switch(t_list *tokens);
 void				test_validator(void);
 void				test_lexer(char *input, t_program_data *data);
 void				test_expander(t_program_data *data, char *input);
@@ -132,7 +132,7 @@ char				*list_matching_files(const char *pattern);
 char *expand_values(char *str, t_program_data *program_data);
 // --- 3-parsing
 // util
-t_list				*switch_args_for_redir(t_list *tokens);
+t_list				*switch_redir_args(t_list *tokens);
 t_list				*sub_token_t_list(t_list *tokens, int start, int end);
 int					toklen(t_list *tokens);
 int					first_non_ignored(t_list *tokens);

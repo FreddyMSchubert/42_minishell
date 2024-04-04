@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 09:20:32 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/02 14:01:10 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/03 14:47:51 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,7 @@ char	*get_rid_of_quotes(char *str, t_program_data *program_data)
 		// printf("str[%d]: %c\n", i, str[i]);
 	}
 	new_str[j] = '\0';
-	printf("get_rid_of_quotes: %s\n", new_str);
+	// printf("get_rid_of_quotes: %s\n", new_str);
 	return (new_str);
 }
 
@@ -195,9 +195,9 @@ char *expand_values(char *str, t_program_data *program_data)
 		else if (str[i] == '*' && !is_in_quote(str, "'", &str[i])
 			&& !is_in_quote(str, "\"", &str[i])) // wildcard, need to take* with the rest in front or behind delimitted by spaces
 		{
-			printf("str[i]: .%c.\n", str[i]);
+			// printf("str[i]: .%c.\n", str[i]);
 			tmp = list_matching_files(get_pattern(str, i));
-			printf("tmp: %s\n", tmp);
+			// printf("tmp: %s\n", tmp);
 			if (tmp)
 			{
 				new_str = ft_strjoinfree(new_str, tmp);
@@ -213,6 +213,6 @@ char *expand_values(char *str, t_program_data *program_data)
 			new_str = ft_strjoinfree(new_str, ft_substr(&str[i], 0, 1));
 	}
 	gc_append_element(program_data->gc, new_str);
-	printf("new_str: %s\n", new_str);
+	// printf("new_str: %s\n", new_str);
 	return (new_str);
 }
