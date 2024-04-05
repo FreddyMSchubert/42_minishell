@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 16:07:34 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/02 10:14:46 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/04 17:26:42 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,28 +24,28 @@ char	*get_filename(t_bin_tree_node *node)
 	return (temp->val[0]->value);
 }
 
-static char	*expand_heredoc_line(char	*line, t_program_data *program_data)
-{
-	t_list	*list;
-	t_token	*token;
-	char	*expanded_line;
+// static char	*expand_heredoc_line(char	*line, t_program_data *program_data)
+// {
+// 	t_list	*list;
+// 	t_token	*token;
+// 	char	*expanded_line;
 
-	list = malloc (sizeof(t_list));
-	if (!list)
-		return (NULL);
-	token = malloc (sizeof(t_token));
-	if (!token)
-		return (NULL);
-	token->value = line;
-	token->type = TOK_WORD;
-	list->content = token;
-	list->next = NULL;
-	expander(list, program_data);
-	expanded_line = ft_strdup(((t_token *)list->content)->value);
-	free (token);
-	free (list);
-	return (expanded_line);
-}
+// 	list = malloc (sizeof(t_list));
+// 	if (!list)
+// 		return (NULL);
+// 	token = malloc (sizeof(t_token));
+// 	if (!token)
+// 		return (NULL);
+// 	token->value = line;
+// 	token->type = TOK_WORD;
+// 	list->content = token;
+// 	list->next = NULL;
+// 	expander(list, program_data);
+// 	expanded_line = ft_strdup(((t_token *)list->content)->value);
+// 	free (token);
+// 	free (list);
+// 	return (expanded_line);
+// }
 
 static int	heredoc(t_bin_tree_node *node, t_program_data	*program_data)
 {
@@ -66,7 +66,7 @@ static int	heredoc(t_bin_tree_node *node, t_program_data	*program_data)
 			free(line);
 			break ;
 		}
-		converted_line = expand_heredoc_line(line, program_data);
+		converted_line = expand_values(line, program_data);
 		if (!converted_line)
 			return (ft_putstr_fd("crash: redir: error expanding heredoc", STDERR_FILENO), -1);
 		write(pipe_fd[1], converted_line, ft_strlen(converted_line));

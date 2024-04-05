@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 13:40:52 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/02 13:17:04 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/04 18:02:51 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,5 +23,7 @@ int	execute_env(t_program_data *program_data, int out_fd)
 		ft_putchar_fd('\n', out_fd);
 		i++;
 	}
+	if (out_fd != STDOUT_FILENO)
+		close(out_fd);
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 06:54:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/25 09:51:43 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/04 17:21:21 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,8 @@ static int	calc_add_spaces(char *input)
 		else if (cur_symbol < 3)
 			cur_symbol = 1;
 	}
-	if (count_tokens(input) == -1)
-		return (-1);
+	if (count_tokens(input) == -1 || count_tokens(input) - spaces - 1 < 0)
+		return (0);
 	return (count_tokens(input) - spaces - 1);
 }
 
@@ -111,39 +111,45 @@ static int	calc_add_spaces(char *input)
 static char	*put_space_between_tokens(char *input, t_program_data *data)
 {
 	int		i;
-	int		ni;
+	int		j;
 	char	*new_input;
 	int		cur_symbol;
+	int		in_quote;
 
 	if (count_tokens(input) == -1)
 		exit_error("Syntax error", 258, data->gc);
+	// printf("calc_add_spaces: %d\n", calc_add_spaces(input));
 	new_input = ft_calloc((ft_strlen(input) + calc_add_spaces(input) + 1), 1);
 	if (!new_input)
 		return (NULL);
 	gc_append_element(data->gc, new_input);
 	i = 0;
-	ni = 0;
+	j = 0;
 	cur_symbol = SYM_SPC;
-	while (ni < (int)ft_strlen(input) + calc_add_spaces(input) && input[i])
+	in_quote = 0;
+	while (input[i] && j < (int)ft_strlen(input) + calc_add_spaces(input))
 	{
-		if (is_operator_symbol(input[i], input[i + 1]) > 0)
+		if ((input[i] == '\'' && in_quote != 2) || (input[i] == '\"' && in_quote != 1)) //"=2 '=1
+			in_quote = input[i] % 4 - 1;
+		else if (!in_quote && is_operator_symbol(input[i], input[i + 1]) > 0)
 		{
 			if (cur_symbol != 0)
-				new_input[ni++] = ' ';
+				new_input[j++] = ' ';
 			cur_symbol = 2;
 		}
 		else if (input[i] == ' ')
 			cur_symbol = 0;
-		else if (input[i] != ' ')
+		else if (input[i] != ' ' && !in_quote)
 		{
 			if (cur_symbol == 2 || (cur_symbol == 1 && is_operator_symbol(input[i], input[i + 1]) > 0))
-				new_input[ni++] = ' ';
+				new_input[j++] = ' ';
 			cur_symbol = 1;
 		}
 		if (input[i] && is_operator_symbol(input[i], input[i + 1]) == 2)
-			new_input[ni++] = input[i++];
-		new_input[ni++] = input[i++];
+			new_input[j++] = input[i++];
+		new_input[j++] = input[i++];
 	}
+	// printf("pu_space: %s\n", new_input);
 	return (new_input);
 }
 
@@ -158,7 +164,7 @@ t_list	*lexer(char *input, t_program_data *data)
 	int		counter;
 	int		is_first_or_after_operator;
 
-	split_input = ms_split(put_space_between_tokens(input, data));
+	split_input = ms_split(put_space_between_tokens(input, data), data);
 	if (!split_input)
 		return (NULL);
 	token_amount = 0;
@@ -180,5 +186,5 @@ t_list	*lexer(char *input, t_program_data *data)
 	counter = -1;
 	while (split_input[++counter])
 		free(split_input[counter]);
-	return (free (split_input), tokens);
+	return (free(split_input), tokens);
 }

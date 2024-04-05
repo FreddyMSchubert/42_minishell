@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/04 13:31:02 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/05 10:24:29 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,34 +17,24 @@ extern int	g_sigint_received;
 int	execute_input(t_program_data *program_data, char *input)
 {
 	t_list				*tokenified_input;
-	t_list				*tmp_lst;
 	t_bin_tree_node		*tree;
-	t_token				*tmp;
+	// t_token				*tmp;
 	pid_t				last_pid;
 
 	if (VERBOSE == 1)
 		ft_printf("Received input: %s\n", input);
+	input = expand_values(input, program_data);
+	if (VERBOSE == 1)
+	{
+		ft_printf("after expanding:\n");
+		printf("input: %s\n", input);
+	}
 	// --- lexer
 	tokenified_input = lexer(input, program_data);
 	if (tokenified_input == NULL)
 		return (ft_putstr_fd("crash: error lexing input", STDERR_FILENO), -1);
 	if (VERBOSE == 1)
 		print_tokens(tokenified_input);
-	tmp_lst = tokenified_input;
-	while (tmp_lst)
-	{
-		tmp = (t_token *)tmp_lst->content;
-		tmp->value = get_rid_of_quotes(tmp->value, program_data);
-		tmp_lst = tmp_lst->next;
-	}
-	if (VERBOSE == 1)
-		ft_printf("token sequence is valid\n");
-	expander(tokenified_input, program_data);
-	if (VERBOSE == 1)
-	{
-		ft_printf("after expanding:\n");
-		print_tokens(tokenified_input);
-	}
 	// --- validator
 	// valid = validator(tokenified_input);
 	// if (valid != 0)
@@ -55,9 +45,9 @@ int	execute_input(t_program_data *program_data, char *input)
 	// 	program_data->gc = create_garbage_collector();
 	// 	return (-1);
 	// }
-	if (VERBOSE == 1)
-		ft_printf("token sequence is valid\n");
-	// tokenified_input = switch_args_for_redir(tokenified_input);
+	// if (VERBOSE == 1)
+	// 	ft_printf("token sequence is valid\n");
+	tokenified_input = switch_redir_args(tokenified_input);
 	tree = tok_to_bin_tree(tokenified_input, program_data);
 	tree->parent = NULL;
 

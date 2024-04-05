@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:29:36 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/26 05:29:20 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/04 17:20:32 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ int	main(int argc, char **argv, char **envp)
 	g_sigint_received = 0;
 	setup_signals();
 	run_crash_interface(&program_data);
+	// test_expander(&program_data, &program_data.tokens);
 	i = -1;
 	while (program_data.envcp && program_data.envcp[++i])
 		free(program_data.envcp[i]);

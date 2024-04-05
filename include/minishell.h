@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/04 14:39:31 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/05 10:24:10 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,9 +99,10 @@ void				print_binary_tree(t_bin_tree_node *tree, int tabs);
 void				print_pipes(int in_fd, int out_fd);
 t_token				**list_to_token_array(t_list *list);
 // testing
+t_list				*test_redir_switch(t_list *tokens);
 void				test_validator(void);
 void				test_lexer(char *input, t_program_data *data);
-void				test_expander(t_program_data *data, t_token **tokens);
+void				test_expander(t_program_data *data, char *input);
 
 // --- input loop
 int					run_crash_interface(t_program_data *program_data);
@@ -120,12 +121,12 @@ void				*print_logo(void);
 
 // --- 0-lexing
 t_list				*lexer(char *input, t_program_data *data);
-char				**ms_split(char *input);
+char				**ms_split(char *input, t_program_data *data);
 int					count_tokens(const char *s);
 int					is_operator_symbol(char c, char d);
 int					is_redirect(char c);
 int					same_str(char *str1, char *str2);
-char				*get_rid_of_quotes(char *str, t_program_data *program_data);
+char				*get_rid_of_quotes(char *str);
 
 // --- 1-validation
 int					validator(t_list *tokens);
@@ -135,10 +136,11 @@ int					check_files(t_list *files, int flag);
 char				*get_envcp(char *var_name, t_program_data *program_data);
 t_list				*expander(t_list *tokens, t_program_data *program_data);
 char				*list_matching_files(const char *pattern);
+char *expand_values(char *str, t_program_data *program_data);
 // --- 3-parsing
 // util
-t_token				**switch_args_for_redir(t_token **arr);
 t_list				*sub_token_t_list(t_list *tokens, int start, int end, t_program_data *program_data);
+t_list				*switch_redir_args(t_list *tokens);
 int					toklen(t_list *tokens);
 t_token				**t_list_to_token_arr(t_list	*tokens, t_program_data	*program_data);
 t_token				*get_token_at_index(t_list *tokens, int index);
