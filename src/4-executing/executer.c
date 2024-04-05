@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/02 13:24:59 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/05 10:20:17 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static int	execute_command(t_bin_tree_node *node, t_program_data *program_data)
 	t_cmd_path	*cmd_path;
 
 	cmd_path = create_cmd_struct(program_data->envcp, node->val);
-	if (cmd_path)
+	if (cmd_path != NULL)
 		execve(cmd_path->path, cmd_path->args, program_data->envcp);
 	if (cmd_path && cmd_path->path)
 		free(cmd_path->path);
@@ -78,7 +78,7 @@ static int	execute_command(t_bin_tree_node *node, t_program_data *program_data)
 		free(cmd_path->args);
 	if (cmd_path)
 		free(cmd_path);
-	return (exec_error(-3), -1);
+	return (log_error("No such file or directory", node->val[0]->value, 0), -1);
 }
 
 

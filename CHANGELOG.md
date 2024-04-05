@@ -1,5 +1,11 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+### v0.28.1 - 04.04.24 - Freddy 
+- better error logging function, used in executer
+- small wrong check fix in execute_command_utils F_OK -> X_OK
+- fixed error message not printing (No such file or directory) for random inputs, e.g. adfosdfnsdfl.
+	- this was surprisingly hard and my brain is in pain
+
 ## v0.28.0 - 03.04.24 - Freddy - 1670 / 2823
 - fixed export not working like bash bug for var-value pairs where var is only 1 char long
 - some fixes, and norminettification of envcp utils

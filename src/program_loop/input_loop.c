@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/02 12:28:25 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/04 13:31:02 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ int	run_crash_interface(t_program_data *program_data)
 		}
 		else
 			if (isatty(fileno(stdin)))
-				input = readline("testerinput $> ");
+				input = readline("bash-3.2$ ");
 		if (g_sigint_received == SIGINT)
 		{
 			g_sigint_received = 0;

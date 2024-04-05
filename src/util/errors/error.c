@@ -1,24 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execution_error.c                                  :+:      :+:    :+:   */
+/*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/02 10:02:28 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/04 14:33:47 by fschuber         ###   ########.fr       */
+/*   Created: 2024/04/04 14:34:49 by fschuber          #+#    #+#             */
+/*   Updated: 2024/04/04 14:39:22 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/minishell.h"
 
-void	exec_error(int error)
+// the paths only log if they arent null. error better not be null.
+void	log_error(char *error, char *path1, char *path2)
 {
 	ft_putstr_fd("crash: ", STDERR_FILENO);
-	if (error == -1)
-		ft_putstr_fd("dynamic allocation error\n", STDERR_FILENO);
-	else if (error == -2)
-		ft_putstr_fd("error getting command path\n", STDERR_FILENO);
-	else if (error == -3)
-		ft_putstr_fd("execve error\n", STDERR_FILENO);
+	if (path1)
+	{
+		ft_putstr_fd(path1, STDERR_FILENO);
+		ft_putstr_fd(": ", STDERR_FILENO);
+	}
+	if (path2)
+	{
+		ft_putstr_fd(path2, STDERR_FILENO);
+		ft_putstr_fd(": ", STDERR_FILENO);
+	}
+	ft_putstr_fd(error, STDERR_FILENO);
+	ft_putstr_fd("\n", STDERR_FILENO);
 }

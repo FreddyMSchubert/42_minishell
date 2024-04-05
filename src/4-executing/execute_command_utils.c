@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 06:36:17 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/02 13:24:07 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/05 10:20:29 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static char	*get_command_path(char **envp, char *command)
 		path_temp = ft_strjoin(split_paths[counter], "/");
 		path = ft_strjoin(path_temp, command);
 		free (path_temp);
-		if (!path || access(path, F_OK) == 0)
+		if (!path || access(path, X_OK) == 0)
 			return (ft_free_rec((void **)split_paths), path);
 		free (path);
 		counter++;

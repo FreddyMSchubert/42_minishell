@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/02 14:22:29 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/04 14:39:31 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,5 +181,6 @@ char				*strjoin_null_compatible(char const *s1, char const *s2);
 void				broadcast_validator_error(int error, char *arg);
 void				builtin_err(char *builtin, int error, char *arg);
 void				exec_error(int error);
+void				log_error(char *error, char *path1, char *path2);
 // general
 char				*ft_strjoinfree(char *s1, char *s2);
