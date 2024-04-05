@@ -2,6 +2,7 @@ NAME = ./minishell
 
 LIBFT_DIR   := ./submodules/42_libft
 FTPRINTF_DIR:= ./submodules/42_ft_printf
+GNL_DIR     := ./submodules/42_get_next_line
 
 SRC = $(shell find ./src -name "*.c")
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
@@ -13,9 +14,10 @@ CFLAGS		:=	-Wall -Werror -Wextra -g #-fsanitize=address
 HEADER		:=	-I./include/
 LIBS		:=	-L$(LIBFT_DIR) -lft \
 				-L$(FTPRINTF_DIR) -lftprintf \
+				-L$(GNL_DIR) -lftgnl \
 				-lreadline
 
-$(NAME): pre_compile $(LIBFT_DIR)/libft.a $(FTPRINTF_DIR)/ftprintf.a $(OBJ) pre_link
+$(NAME): pre_compile $(LIBFT_DIR)/libft.a $(FTPRINTF_DIR)/ftprintf.a $(GNL_DIR)/libftgnl.a $(OBJ) pre_link
 	@echo "$(CYAN)Linking $(NAME)...$(NC)"
 	@cc $(CFLAGS) $(OBJ) $(LIBS) -o $(NAME)
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
@@ -29,6 +31,9 @@ $(LIBFT_DIR)/libft.a:
 $(FTPRINTF_DIR)/ftprintf.a:
 	@echo "$(YELLOW)Making ft_printf...$(NC)"
 	@make -C $(FTPRINTF_DIR) > /dev/null
+$(GNL_DIR)/libftgnl.a:
+	@echo "$(YELLOW)Making get_next_line...$(NC)"
+	@make -C $(GNL_DIR) > /dev/null
 
 
 RED=$(shell tput setaf 1)
@@ -51,10 +56,12 @@ clean:
 	@rm -f $(OBJ) $(BOBJ) > /dev/null
 	@make -C $(LIBFT_DIR) clean > /dev/null
 	@make -C $(FTPRINTF_DIR) clean > /dev/null
+	@make -C $(GNL_DIR) clean > /dev/null
 fclean: clean
 	@echo "$(RED)Removing binaries...$(NC)"
 	@make -C $(LIBFT_DIR) fclean > /dev/null
 	@make -C $(FTPRINTF_DIR) fclean > /dev/null
+	@make -C $(GNL_DIR) fclean > /dev/null
 	@rm -f $(NAME) $(BNAME)
 re: fclean all
 

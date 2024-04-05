@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/05 10:24:10 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/05 12:49:36 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@
 
 #include "../submodules/42_ft_printf/ft_printf.h"
 #include "../submodules/42_libft/libft.h"
+#include "../submodules/42_get_next_line/get_next_line.h"
 
 // ----- TOKEN TYPES
 

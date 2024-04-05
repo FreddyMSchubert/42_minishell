@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:48:20 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/02 13:22:21 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/05 14:59:00 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,22 @@
 int	execute_echo(t_token **inputs, int out_fd)
 {
 	int		i;
+	int		j;
 	int		n_flag;
 
 	i = 1;
 	n_flag = 0;
 	if (!inputs[1])
 		return (ft_putstr_fd("\n", out_fd), 0);
-	if (ft_strncmp(inputs[1]->value, "-n", 3) == 0)
+	while (inputs[i] && inputs[i]->value[0] == '-')
 	{
+		j = 1;
+		while (inputs[i]->value[j] == 'n')
+			j++;
+		if (inputs[i]->value[j] != '\0')
+			break;
 		n_flag = 1;
-		i = 2;
+		i++;
 	}
 	while (inputs[i] && inputs[i]->type == TOK_WORD)
 	{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input_loop.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/05 10:24:29 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/05 13:41:33 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,19 @@ int	run_crash_interface(t_program_data *program_data)
 			ft_printf("%s", ANSI_COLOR_RESET);
 		}
 		else
+		{
 			if (isatty(fileno(stdin)))
-				input = readline("bash-3.2$ ");
+				input = readline("minishell$ ");
+			else
+			{
+				char *line;
+				line = get_next_line(fileno(stdin));
+				if (line == NULL)
+					return (0);
+				input = ft_strtrim(line, "\n");
+				free(line);
+			}
+		}
 		if (g_sigint_received == SIGINT)
 		{
 			g_sigint_received = 0;

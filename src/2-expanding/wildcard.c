@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:44:01 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/04 17:06:12 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/05 13:43:29 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,6 @@ char	*list_matching_files(const char *pattern)
 	closedir(dir);
 	if (result && ft_strlen(result) > 0)
 		result[ft_strlen(result) - 1] = '\0';
-	printf("result: %s\n", result);
+	// printf("result: %s\n", result);
 	return (result);
 }
