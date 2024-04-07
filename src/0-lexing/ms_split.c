@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 10:42:01 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/04 17:22:37 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/07 13:23:56 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int	count_tokens(const char *s)
 /// @brief gets start point of string to be split,
 /// determines end point by the next delim in s
 /// @return splitted string
-static char	*make_split_str(const char *s, char delim, int *i, t_program_data *data)
+static char	*make_split_str(const char *s, int *i, t_program_data *data)
 {
 	size_t	size;
 	int		quote;
@@ -84,7 +84,7 @@ static char	*make_split_str(const char *s, char delim, int *i, t_program_data *d
 			else if (quote == s[*i])
 				quote = 0;
 		}
-		if (s[*i] == delim && !quote)
+		if (ft_isspace(s[*i]) && !quote)
 			break ;
 		*i += 1;
 	}
@@ -139,7 +139,7 @@ char	**ms_split(char *input, t_program_data *data)
 		// printf("input[i]: %s\n", &input[i]);
 		if (is_operator_symbol(input[i], input[i + 1]) || !ft_isspace(input[i]))
 		{
-			result[j++] = get_rid_of_quotes(make_split_str(input, ' ', &i, data));
+			result[j++] = get_rid_of_quotes(make_split_str(input, &i, data));
 			if (!result[j - 1])
 				return (free_split(result), NULL);
 		}

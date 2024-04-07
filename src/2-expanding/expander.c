@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 09:20:32 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/07 11:35:29 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/07 13:31:41 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,35 +55,6 @@ char	*isolate_var(char *var)
 	}
 	return (var);
 }
-
-// static char	*get_expanded_str(char *input, char *envcp_value,
-// 		t_program_data *program_data, char *env_var)
-// {
-// 	char	*expanded_str;
-// 	int		i;
-// 	int		j;
-
-// 	i = -1;
-// 	j = 0;
-// 	expanded_str = ft_calloc(ft_strlen(input) + ft_strlen(envcp_value)
-// 			- ft_strlen(env_var) + 1, sizeof(char));
-// 	if (!expanded_str)
-// 		exit_error("malloc failed", 1, program_data->gc);
-// 	gc_append_element(program_data->gc, expanded_str);
-// 	while (input[++i])
-// 	{
-// 		if (ft_strncmp(&input[i], "$", 1) == 0)
-// 		{
-// 			ft_strlcpy(&expanded_str[j], envcp_value, ft_strlen(envcp_value)
-// 				+ 1);
-// 			j += ft_strlen(envcp_value);
-// 			i += ft_strlen(env_var);
-// 		}
-// 		else
-// 			expanded_str[j++] = input[i];
-// 	}
-// 	return (expanded_str);
-// }
 
 static bool	is_in_quote(char *str, char *quote, char *current_char)
 {
@@ -175,7 +146,7 @@ char *expand_values(char *str, t_program_data *program_data)
 	new_str = ft_calloc(ft_strlen(str) + 1, sizeof(char));
 	while (str[++i])
 	{
-		if (str[i] == '~')
+		if (str[i] == '~' && ft_isspace(str[i + 1]))
 			new_str = ft_strjoinfree(new_str, get_envcp("HOME", program_data));
 		else if (ft_strnstr(&str[i], "$?", 2) != NULL
 			&& !is_in_quote(str, "\'", &str[i]))
@@ -189,7 +160,7 @@ char *expand_values(char *str, t_program_data *program_data)
 		//when $ is found and afterwards theres a quote, dont search for env var, but just replace the $ with nothing
 		else if (str[i] == '$' && !is_in_quote(str, "\"", &str[i]) && !is_in_quote(str, "\'", &str[i]) && (str[i + 1] == '\"' || str[i + 1] == '\''))
 			new_str = ft_strjoinfree(new_str, ft_substr(&str[i], 1, find_closing_quote(&str[i + 1], &i)));
-		else if(ft_strnstr(&str[i], "$ ", 2))
+		else if(ft_strnstr(&str[i], "$ ", 2) || ft_strnstr(&str[i], "$\t", 2) || (str[i] == '$' && !str[i + 1]))
 		{
 			new_str = ft_strjoinfree(new_str, ft_strdup("$ "));
 			i++;
