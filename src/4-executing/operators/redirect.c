@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 16:07:34 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/07 11:39:11 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/07 13:03:01 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,8 +110,11 @@ int	redirect(t_bin_tree_node *node, t_program_data *program_data)
 	fd = open(filename, flags, 0644);
 	if (fd < 0)
 	{
-		ft_printf("minishell: %s: %s\n", node->r->val[0]->value, strerror(errno));
-		return (-1);
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		ft_putstr_fd(filename, STDERR_FILENO);
+		ft_putstr_fd(": ", STDERR_FILENO);
+		ft_putstr_fd(strerror(errno), STDERR_FILENO);
+		return (-2);
 	}
 	if (node->r->val[0]->type == TOK_REDIR && ft_strncmp(node->val[0]->value, node->r->val[0]->value, 1) == 0) // if its not the last redirect and the same as the current one
 		return (close(fd), redirect(node->r, program_data)); //printf("another redirection in front, node: %s\n", node->val[0]->value), 
