@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 16:07:34 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/04 17:26:42 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/07 11:39:11 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ int	redirect(t_bin_tree_node *node, t_program_data *program_data)
 		return (-1);
 	}
 	if (node->r->val[0]->type == TOK_REDIR && ft_strncmp(node->val[0]->value, node->r->val[0]->value, 1) == 0) // if its not the last redirect and the same as the current one
-		return (printf("another redirection in front, node: %s\n", node->val[0]->value), close(fd), redirect(node->r, program_data));
+		return (close(fd), redirect(node->r, program_data)); //printf("another redirection in front, node: %s\n", node->val[0]->value), 
 	if (node->val[0]->value[0] == '>')
 		redir_out = true;
 	else

@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 09:20:32 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/04 17:25:26 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/07 11:35:29 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,6 +149,18 @@ char	*get_pattern(char *str, int index)
 	return (ft_substr(&str[index], 0, i - index));
 }
 
+int	find_closing_quote(char *str, int *i)
+{
+	int		j;
+	char	quote;
+
+	j = 1;
+	quote = str[0];
+	while (str[j] && str[j] != quote)
+		j++;
+	*i += j;
+	return (j);
+}
 
 //expands all $ and wildcards in a string
 char *expand_values(char *str, t_program_data *program_data)
@@ -172,6 +184,14 @@ char *expand_values(char *str, t_program_data *program_data)
 			if (!envcp_value)
 				exit_error("malloc failed", 1, program_data->gc);
 			new_str = ft_strjoinfree(new_str, envcp_value);
+			i++;
+		}
+		//when $ is found and afterwards theres a quote, dont search for env var, but just replace the $ with nothing
+		else if (str[i] == '$' && !is_in_quote(str, "\"", &str[i]) && !is_in_quote(str, "\'", &str[i]) && (str[i + 1] == '\"' || str[i + 1] == '\''))
+			new_str = ft_strjoinfree(new_str, ft_substr(&str[i], 1, find_closing_quote(&str[i + 1], &i)));
+		else if(ft_strnstr(&str[i], "$ ", 2))
+		{
+			new_str = ft_strjoinfree(new_str, ft_strdup("$ "));
 			i++;
 		}
 		else if (ft_strchr(&str[i], '$') == &str[i]
