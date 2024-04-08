@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 09:20:32 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/07 13:31:41 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/07 15:19:38 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ char	*isolate_var(char *var)
 	return (var);
 }
 
-static bool	is_in_quote(char *str, char *quote, char *current_char)
+bool	is_in_quote(char *str, char *quote, char *current_char)
 {
 	int		i;
 	bool	d_quote;
@@ -65,6 +65,8 @@ static bool	is_in_quote(char *str, char *quote, char *current_char)
 	i = -1;
 	d_quote = false;
 	s_quote = false;
+	if (!quote || !str || !current_char)
+		return (false);
 	while (&str[i] != current_char && str[++i])
 	{
 		if (str[i] == '\"' && !s_quote)

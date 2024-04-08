@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 10:42:01 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/07 13:23:56 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/08 16:36:12 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,13 +133,14 @@ char	**ms_split(char *input, t_program_data *data)
 	result = malloc((word_count + 1) * sizeof(char *));
 	if (!result)
 		return (NULL);
+	gc_append_element(data->gc, result);
 	result[word_count] = NULL;
 	while (input[++i] && j < word_count)
 	{
 		// printf("input[i]: %s\n", &input[i]);
 		if (is_operator_symbol(input[i], input[i + 1]) || !ft_isspace(input[i]))
 		{
-			result[j++] = get_rid_of_quotes(make_split_str(input, &i, data));
+			result[j++] = make_split_str(input, &i, data);
 			if (!result[j - 1])
 				return (free_split(result), NULL);
 		}

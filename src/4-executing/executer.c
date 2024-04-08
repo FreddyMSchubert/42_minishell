@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/07 13:19:37 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/08 16:44:40 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ static int	execute_command(t_bin_tree_node *node, t_program_data *program_data)
 		free(cmd_path->args);
 	if (cmd_path)
 		free(cmd_path);
-	return (log_error("No such file or directory", node->val[0]->value, 0), -1);
+	return (log_error("command not found", node->val[0]->value, 0), -1);
 }
 
 

@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/07 13:25:32 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/08 16:36:40 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,15 @@
 // ----- TOKEN TYPES
 
 #define TOK_WORD 0			// Commands or Arguments
-#define TOK_BUILTIN 1		// Builtin (echo, cd, pwd, export, unset, env, exit)
-#define TOK_REDIR 2			// Redirections (<, >, >>, <<)
-#define TOK_PIPE 3			// Pipe (|)
-#define TOK_LOG_OR 4		// Logical OR ||
-#define TOK_LOG_AND 5		// Logical AND &&
-#define TOK_OPEN_BRACE 6	// Open Brace -> (
-#define TOK_CLOSE_BRACE 7	// Close Brace -> )
+#define TOK_S_QUOTE 1		// Single Quote
+#define TOK_D_QUOTE 2		// Double Quote
+#define TOK_BUILTIN 3		// Builtin (echo, cd, pwd, export, unset, env, exit)
+#define TOK_REDIR 4			// Redirections (<, >, >>, <<)
+#define TOK_PIPE 5			// Pipe (|)
+#define TOK_LOG_OR 6		// Logical OR ||
+#define TOK_LOG_AND 7		// Logical AND &&
+#define TOK_OPEN_BRACE 8	// Open Brace -> (
+#define TOK_CLOSE_BRACE 9	// Close Brace -> )
 
 // ----- STRUCTS
 
@@ -128,6 +130,7 @@ int					is_operator_symbol(char c, char d);
 int					is_redirect(char c);
 int					same_str(char *str1, char *str2);
 char				*get_rid_of_quotes(char *str);
+t_list				*split_token_if_operator_in_quotes(t_token **token, t_program_data *data);
 
 // --- 1-validation
 int					validator(t_list *tokens);
@@ -180,6 +183,7 @@ int					delete_envcp_var(char *var, char **envcp);
 // --- util
 
 char				*strjoin_null_compatible(char const *s1, char const *s2);
+bool				is_in_quote(char *str, char *quote, char *current_char);
 // errors
 void				broadcast_validator_error(int error, char *arg);
 void				builtin_err(char *builtin, int error, char *arg);

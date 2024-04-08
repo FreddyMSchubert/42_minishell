@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   printing.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 07:42:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/25 09:53:23 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/08 14:45:54 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,18 @@ void	print_binary_tree(t_bin_tree_node *tree, int tabs)
 
 void	print_token(t_token *token)
 {
+	if (!token)
+	{
+		printf("Token is NULL\n");
+		return ;
+	}
 	printf("  Type: ");
 	if (token->type == TOK_WORD)
 		printf("Command or Argument");
+	else if (token->type == TOK_S_QUOTE)
+		printf("Single Quote");
+	else if (token->type == TOK_D_QUOTE)
+		printf("Double Quote");
 	else if (token->type == TOK_REDIR)
 		printf("Redirection");
 	else if (token->type == TOK_PIPE)
