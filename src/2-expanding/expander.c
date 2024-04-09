@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 09:20:32 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/07 15:19:38 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/09 12:59:15 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ int	find_closing_quote(char *str, int *i)
 }
 
 //expands all $ and wildcards in a string
-char *expand_values(char *str, t_program_data *program_data)
+char *expand_values(char *str, t_program_data *program_data, bool heredoc)
 {
 	int	i;
 	char	*envcp_value;
@@ -178,11 +178,15 @@ char *expand_values(char *str, t_program_data *program_data)
 			envcp_value = get_envcp(env_var, program_data);
 			if (!envcp_value)
 				exit_error("malloc failed", 1, program_data->gc);
+			if (!heredoc)
+				new_str = ft_strjoinfree(new_str, ft_strdup("\""));
 			new_str = ft_strjoinfree(new_str, envcp_value);
+			if (!heredoc)
+				new_str = ft_strjoinfree(new_str, ft_strdup("\""));
 		}
 		//wildcard
 		else if (str[i] == '*' && !is_in_quote(str, "'", &str[i])
-			&& !is_in_quote(str, "\"", &str[i])) // wildcard, need to take* with the rest in front or behind delimitted by spaces
+			&& !is_in_quote(str, "\"", &str[i]) && !heredoc) // wildcard, need to take* with the rest in front or behind delimitted by spaces
 		{
 			// printf("str[i]: .%c.\n", str[i]);
 			tmp = list_matching_files(get_pattern(str, i));

@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/05 13:41:33 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/09 12:55:00 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	execute_input(t_program_data *program_data, char *input)
 
 	if (VERBOSE == 1)
 		ft_printf("Received input: %s\n", input);
-	input = expand_values(input, program_data);
+	input = expand_values(input, program_data, false);
 	if (VERBOSE == 1)
 	{
 		ft_printf("after expanding:\n");
@@ -57,8 +57,11 @@ int	execute_input(t_program_data *program_data, char *input)
 		ft_printf("\n\n\n");
 	// --- executer
 	last_pid = execute(tree, program_data);
+	// printf("last_pid: %d\n", last_pid);
 	if (last_pid != -1)
 		waitpid(last_pid, &program_data->exit_status, 0);
+	program_data->exit_status = WEXITSTATUS(program_data->exit_status);
+	// printf("exit_status: %d\n", program_data->exit_status);
 	return (0);
 }
 

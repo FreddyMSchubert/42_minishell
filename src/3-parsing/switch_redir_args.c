@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 16:53:28 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/04 12:29:09 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/09 10:57:46 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,22 +62,6 @@ void move_node(t_list **head_ref, t_list *node1, t_list *node2)
 	insert_node(head_ref, prev_node1, node2);
 }
 
-// bool	should_switch(t_list *node)
-// {
-// 	t_token	*current;
-// 	t_token	*next;
-
-// 	if (!node || !node->next || !node->next->next)
-// 		return (false);
-// 	current = node->content;
-// 	next = node->next->next->content;
-// 	if (!current || !next)
-// 		return (false);
-// 	if (current->type == TOK_REDIR && next->type == TOK_WORD)
-// 		return (true);
-// 	return (false);
-// }
-
 bool should_switch(t_list *node)
 {
 	// printf("%s\n", ((t_token *)node->content)->value);
@@ -96,7 +80,7 @@ bool should_switch(t_list *node)
 		return (false);
 	}
 	// printf("Current: %s\nNext_next: %s\n", current->value, next_next->value);
-	if (current->type == TOK_REDIR && next_next->type == TOK_WORD)
+	if (current->type == TOK_REDIR && next_next->type <= TOK_D_QUOTE)
 		return (true);
 	return (false);
 }

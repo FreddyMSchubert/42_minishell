@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/08 16:36:40 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/09 15:32:52 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ int					check_files(t_list *files, int flag);
 char				*get_envcp(char *var_name, t_program_data *program_data);
 t_list				*expander(t_list *tokens, t_program_data *program_data);
 char				*list_matching_files(const char *pattern);
-char *expand_values(char *str, t_program_data *program_data);
+char *expand_values(char *str, t_program_data *program_data, bool heredoc);
 // --- 3-parsing
 // util
 t_list				*sub_token_t_list(t_list *tokens, int start, int end, t_program_data *program_data);

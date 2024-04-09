@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:48:20 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/05 14:59:00 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/09 10:58:50 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,11 @@ int	execute_echo(t_token **inputs, int out_fd)
 		n_flag = 1;
 		i++;
 	}
-	while (inputs[i] && inputs[i]->type == TOK_WORD)
+	while (inputs[i] && inputs[i]->type <= TOK_D_QUOTE)
 	{
 		ft_putstr_fd(inputs[i]->value, out_fd);
 		i++;
-		if (inputs[i] && inputs[i]->type == TOK_WORD)
+		if (inputs[i] && inputs[i]->type <= TOK_D_QUOTE)
 			ft_putstr_fd(" ", out_fd);
 	}
 	if (n_flag == 0)

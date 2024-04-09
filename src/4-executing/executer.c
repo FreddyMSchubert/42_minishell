@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/08 16:44:40 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/09 10:42:26 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@ pid_t	execute(t_bin_tree_node *tree, t_program_data *program_data)
 		else if (tree->val[0]->type == TOK_PIPE)
 			setup_pipe(tree, program_data);
 		else if (tree->val[0]->type == TOK_REDIR)
-			if (redirect(tree, program_data) == -2)
+			if (redirect(tree, program_data) == -2 || !tree->l)
 				return (last_pid);
-		if (tree->l->val[0]->type < tree->r->val[0]->type && \
+		if (tree->l && tree->l->val[0]->type < tree->r->val[0]->type && \
 			tree->r->val[0]->type == TOK_REDIR)
 			if (redirect(tree->r, program_data) == -2)
 				return (last_pid);
@@ -78,7 +78,8 @@ static int	execute_command(t_bin_tree_node *node, t_program_data *program_data)
 		free(cmd_path->args);
 	if (cmd_path)
 		free(cmd_path);
-	return (log_error("command not found", node->val[0]->value, 0), -1);
+	program_data->exit_status = 127;
+	return (log_error("command not found", node->val[0]->value, 0), 127);
 }
 
 
@@ -124,8 +125,8 @@ int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 			}
 			close(node->output_fd);
 		}
-		program_data->exit_status = execute_command(node, program_data);
-		child_process_exit(program_data, program_data->exit_status);
+		execute_command(node, program_data);
+		child_process_exit(program_data, 127);
 	}
 	else if (pid > 0) // parent
 	{
