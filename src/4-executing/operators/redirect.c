@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 16:07:34 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/09 12:57:37 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/10 12:49:34 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,29 +23,6 @@ char	*get_filename(t_bin_tree_node *node)
 		temp = temp->l;
 	return (temp->val[0]->value);
 }
-
-// static char	*expand_heredoc_line(char	*line, t_program_data *program_data)
-// {
-// 	t_list	*list;
-// 	t_token	*token;
-// 	char	*expanded_line;
-
-// 	list = malloc (sizeof(t_list));
-// 	if (!list)
-// 		return (NULL);
-// 	token = malloc (sizeof(t_token));
-// 	if (!token)
-// 		return (NULL);
-// 	token->value = line;
-// 	token->type = TOK_WORD;
-// 	list->content = token;
-// 	list->next = NULL;
-// 	expander(list, program_data);
-// 	expanded_line = ft_strdup(((t_token *)list->content)->value);
-// 	free (token);
-// 	free (list);
-// 	return (expanded_line);
-// }
 
 static int	heredoc(t_bin_tree_node *node, t_program_data	*program_data)
 {
@@ -82,8 +59,8 @@ static int	heredoc(t_bin_tree_node *node, t_program_data	*program_data)
 			return (ft_putstr_fd("crash: redir: error expanding heredoc", STDERR_FILENO), -1);
 		write(pipe_fd[1], converted_line, ft_strlen(converted_line));
 		write(pipe_fd[1], "\n", 1);
-		free(line);
-		free(converted_line);
+		// free(line);
+		// free(converted_line);
 	}
 	if (g_sigint_received == SIGINT)
 	{

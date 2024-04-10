@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 09:20:32 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/09 12:59:15 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/10 12:46:28 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,7 @@ char *expand_values(char *str, t_program_data *program_data, bool heredoc)
 	new_str = ft_calloc(ft_strlen(str) + 1, sizeof(char));
 	while (str[++i])
 	{
-		if (str[i] == '~' && ft_isspace(str[i + 1]))
+		if (str[i] == '~' && (ft_isspace(str[i + 1]) || !str[i + 1]))
 			new_str = ft_strjoinfree(new_str, get_envcp("HOME", program_data));
 		else if (ft_strnstr(&str[i], "$?", 2) != NULL
 			&& !is_in_quote(str, "\'", &str[i]))
@@ -159,6 +159,11 @@ char *expand_values(char *str, t_program_data *program_data, bool heredoc)
 			new_str = ft_strjoinfree(new_str, envcp_value);
 			i++;
 		}
+		else if (ft_strnstr(&str[i], "\"$\"", 3))
+		{
+			new_str = ft_strjoinfree(new_str, ft_strdup("\"$\""));
+			i += 2;
+		}
 		//when $ is found and afterwards theres a quote, dont search for env var, but just replace the $ with nothing
 		else if (str[i] == '$' && !is_in_quote(str, "\"", &str[i]) && !is_in_quote(str, "\'", &str[i]) && (str[i + 1] == '\"' || str[i + 1] == '\''))
 			new_str = ft_strjoinfree(new_str, ft_substr(&str[i], 1, find_closing_quote(&str[i + 1], &i)));
@@ -167,7 +172,7 @@ char *expand_values(char *str, t_program_data *program_data, bool heredoc)
 			new_str = ft_strjoinfree(new_str, ft_strdup("$ "));
 			i++;
 		}
-		else if (ft_strchr(&str[i], '$') == &str[i]
+		else if (str[i] == '$'
 			&& !is_in_quote(str, "\'", &str[i]))
 		{
 			env_var = isolate_var(ft_strdup(ft_strchr(&str[i], '$') + 1));

@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/09 10:42:26 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/10 12:52:21 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,31 +38,37 @@ pid_t	execute(t_bin_tree_node *tree, t_program_data *program_data)
 			if (redirect(tree->r, program_data) == -2)
 				return (last_pid);
 		if (tree->val[0]->type == TOK_REDIR || tree->val[0]->type == TOK_PIPE)
-		{
 			last_pid = execute(tree->l, program_data);
+		if (tree->val[0]->type == TOK_PIPE)
 			last_pid = execute(tree->r, program_data);
-		}
 	}
 	return (last_pid);
 }
 
 static int	execute_builtin(t_bin_tree_node *node, t_program_data *program_data)
 {
+	int	exit_code;
+
+	exit_code = -1;
 	if (ft_strncmp(node->val[0]->value, "echo", 4) == 0)
-		return (execute_echo(node->val, node->output_fd));
+		exit_code = execute_echo(node->val, node->output_fd);
 	if (ft_strncmp(node->val[0]->value, "cd", 2) == 0)
-		return (execute_cd(node->val, program_data));
+		exit_code = execute_cd(node->val, program_data);
 	if (ft_strncmp(node->val[0]->value, "pwd", 3) == 0)
-		return (execute_pwd(node->output_fd));
+		exit_code = execute_pwd(node->output_fd);
 	if (ft_strncmp(node->val[0]->value, "export", 6) == 0)
-		return (execute_export(node->val, program_data));
+		exit_code = execute_export(node->val, program_data);
 	if (ft_strncmp(node->val[0]->value, "unset", 5) == 0)
-		return (execute_unset(node->val, program_data));
+		exit_code = execute_unset(node->val, program_data);
 	if (ft_strncmp(node->val[0]->value, "env", 3) == 0)
-		return (execute_env(program_data, node->output_fd));
+		exit_code = execute_env(program_data, node->output_fd);
 	if (ft_strncmp(node->val[0]->value, "exit", 4) == 0)
-		return (execute_exit(node->val, program_data, node->output_fd));
-	return (-1);
+		exit_code = execute_exit(node->val, program_data, node->output_fd);
+	if (node->output_fd != STDOUT_FILENO)
+		close(node->output_fd);
+	if (node->input_fd != STDIN_FILENO)
+		close(node->input_fd);
+	return (exit_code);
 }
 
 static int	execute_command(t_bin_tree_node *node, t_program_data *program_data)
@@ -88,7 +94,7 @@ int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 	pid_t	pid;
 
 	if (node->val[0]->type == TOK_BUILTIN)
-		return (execute_builtin(node, program_data));
+		return(execute_builtin(node, program_data));
 	pid = fork();
 	if (pid == -1)
 	{
