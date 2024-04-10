@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 09:20:32 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/10 12:46:28 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/10 15:43:53 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ char	*isolate_var(char *var)
 	while (var[++i])
 	{
 		if (var[i] == ' ' || var[i] == '\'' || var[i] == '\"' || var[i] == '$'
-			|| is_operator_symbol(var[i], var[i + 1]))
+			|| is_operator_symbol(var[i], var[i + 1]) || var[i] == '/')
 		{
 			var[i] = '\0';
 			break ;
@@ -135,6 +135,34 @@ int	find_closing_quote(char *str, int *i)
 	return (j);
 }
 
+char	*quote_operators(char *envcp_value)
+{
+	int		i;
+	int		j;
+	char	*new_str;
+	int		is_op;
+
+	i = -1;
+	j = 0;
+	new_str = ft_calloc(ft_strlen(envcp_value) * 2 + 1, sizeof(char));
+	if (!new_str)
+		return (NULL);
+	while (envcp_value[++i])
+	{
+		is_op = is_operator_symbol(envcp_value[i], envcp_value[i + 1]);
+		if (is_op)
+		{
+			new_str[j++] = '"';
+			new_str[j++] = envcp_value[i];
+			new_str[j++] = '"';
+			i += is_op + 1;
+		}
+		else
+			new_str[j++] = envcp_value[i];
+	}
+	return (new_str);
+}
+
 //expands all $ and wildcards in a string
 char *expand_values(char *str, t_program_data *program_data, bool heredoc)
 {
@@ -183,11 +211,10 @@ char *expand_values(char *str, t_program_data *program_data, bool heredoc)
 			envcp_value = get_envcp(env_var, program_data);
 			if (!envcp_value)
 				exit_error("malloc failed", 1, program_data->gc);
-			if (!heredoc)
-				new_str = ft_strjoinfree(new_str, ft_strdup("\""));
+			envcp_value = quote_operators(envcp_value);
 			new_str = ft_strjoinfree(new_str, envcp_value);
-			if (!heredoc)
-				new_str = ft_strjoinfree(new_str, ft_strdup("\""));
+			// if (!heredoc && !is_in_quote(str, "\"", &str[i]))
+			// 	new_str = ft_strjoinfree(new_str, ft_strdup("'"));
 		}
 		//wildcard
 		else if (str[i] == '*' && !is_in_quote(str, "'", &str[i])

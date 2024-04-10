@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 06:19:23 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/02 13:18:42 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/10 15:24:51 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ int	execute_cd(t_token **tokens, t_program_data *program_data)
 			path = ft_strdup(temp);
 		if (!temp || !path)
 			return (free(temp), free(path), builtin_err("cd", -3, "OLDPWD"), 1);
+		ft_printf("%s\n", path);
 	}
 	else
 		path = ft_strdup(tokens[1]->value);
