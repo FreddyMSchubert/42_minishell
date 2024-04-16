@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/10 12:52:21 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/16 14:24:40 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ static int	execute_builtin(t_bin_tree_node *node, t_program_data *program_data)
 {
 	int	exit_code;
 
-	exit_code = -1;
 	if (ft_strncmp(node->val[0]->value, "echo", 4) == 0)
 		exit_code = execute_echo(node->val, node->output_fd);
 	if (ft_strncmp(node->val[0]->value, "cd", 2) == 0)
@@ -68,7 +67,7 @@ static int	execute_builtin(t_bin_tree_node *node, t_program_data *program_data)
 		close(node->output_fd);
 	if (node->input_fd != STDIN_FILENO)
 		close(node->input_fd);
-	return (exit_code);
+	return (-1);
 }
 
 static int	execute_command(t_bin_tree_node *node, t_program_data *program_data)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input_loop.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/10 11:30:54 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/16 14:26:30 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,10 @@ int	execute_input(t_program_data *program_data, char *input)
 	last_pid = execute(tree, program_data);
 	// printf("last_pid: %d\n", last_pid);
 	if (last_pid != -1)
+	{
 		waitpid(last_pid, &program_data->exit_status, 0);
-	program_data->exit_status = WEXITSTATUS(program_data->exit_status);
+		program_data->exit_status = WEXITSTATUS(program_data->exit_status);
+	}
 	// printf("exit_status: %d\n", program_data->exit_status);
 	return (0);
 }

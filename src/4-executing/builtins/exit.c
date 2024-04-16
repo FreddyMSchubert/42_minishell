@@ -36,7 +36,6 @@ int	execute_exit(t_token **tokens, t_program_data *program_data, int out_fd)
 	gc_cleanup(program_data->gc);
 	program_data->gc = create_garbage_collector();
 	(void)out_fd;
-	// ft_putstr_fd("exit\n", out_fd);
-	// exit(program_data->exit_status);
+	ft_putstr_fd("exit\n", out_fd);
 	return(program_data->exit_status);
 }

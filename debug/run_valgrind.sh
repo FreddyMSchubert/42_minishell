@@ -10,7 +10,7 @@ make re && make clean && \
 			--suppressions=./debug/readline.supp \
 			--log-file=./debug/log.txt \
 			--error-limit=no \
-			-s ./crash
+			-s ./minishell
 
 # --time-stamp=yes \
 # --verbose \

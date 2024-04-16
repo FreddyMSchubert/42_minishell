@@ -22,7 +22,7 @@ int	execute_echo(t_token **inputs, int out_fd)
 	n_flag = 0;
 	if (!inputs[1])
 		return (ft_putstr_fd("\n", out_fd), 0);
-	while (inputs[i] && inputs[i]->value[0] == '-')
+	while (inputs[i] && inputs[i]->value[0] == '-' && inputs[i]->value[1] == 'n')
 	{
 		j = 1;
 		while (inputs[i]->value[j] == 'n')
