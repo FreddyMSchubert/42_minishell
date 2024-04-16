@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 13:54:08 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/05 15:04:53 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/08 16:43:12 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,5 +37,6 @@ int	execute_exit(t_token **tokens, t_program_data *program_data, int out_fd)
 	program_data->gc = create_garbage_collector();
 	(void)out_fd;
 	// ft_putstr_fd("exit\n", out_fd);
+	// exit(program_data->exit_status);
 	return(program_data->exit_status);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   validator.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 15:25:11 by nburchha          #+#    #+#             */
-/*   Updated: 2024/03/15 07:31:51 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/10 14:12:14 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,18 +26,18 @@ error codes:
 5 for allocation error
 */
 
-static int	add_file_to_list(t_list **files, char *value, int *error_code)
-{
-	t_list	*tmp;
+// static int	add_file_to_list(t_list **files, char *value, int *error_code)
+// {
+// 	t_list	*tmp;
 
-	// printf("error_code: %s\n", value);
-	tmp = ft_lstnew(value);
-	if (!tmp)
-		*error_code = 5;
-	if (*error_code == 0)
-		ft_lstadd_back(files, tmp);
-	return (*error_code);
-}
+// 	// printf("error_code: %s\n", value);
+// 	tmp = ft_lstnew(value);
+// 	if (!tmp)
+// 		*error_code = 5;
+// 	if (*error_code == 0)
+// 		ft_lstadd_back(files, tmp);
+// 	return (*error_code);
+// }
 
 int	validator(t_list *tokens)
 {
@@ -71,24 +71,30 @@ int	validator(t_list *tokens)
 
 		// check for valid word after < > >> <<
 		if (token->type == TOK_REDIR)
-			if (!tok->next || ((t_token *)tok->next->content)->type > TOK_BUILTIN)
-				return (3);
+		{
+			if (!tok->next)
+				return (ft_putstr_fd("minishell: syntax error near unexpected token `newline'", STDERR_FILENO), \
+				ft_putstr_fd("\n", STDERR_FILENO), 1);
+			else if (((t_token *)tok->next->content)->type > TOK_BUILTIN)
+				return (ft_putstr_fd("minishell: syntax error near unexpected token `", STDERR_FILENO), \
+						ft_putstr_fd(token->value, STDERR_FILENO), ft_putstr_fd("'\n", STDERR_FILENO), 2);
+		}
 		// put in files into linked lists
-		if (token->type == TOK_REDIR && ft_strncmp(token->value, "<", 2) == 0 && tok->next)
-			if (add_file_to_list(&files[0], ((t_token *)tok->next->content)->value, &error_code) != 0)
-				return (error_code);
+		// if (token->type == TOK_REDIR && ft_strncmp(token->value, "<", 2) == 0 && tok->next)
+		// 	if (add_file_to_list(&files[0], ((t_token *)tok->next->content)->value, &error_code) != 0)
+		// 		return (error_code);
 		// put append files into linked lists
-		if (token->type == TOK_REDIR && ft_strncmp(token->value, ">>", 2) == 0 && tok->next)
-			if (add_file_to_list(&files[2], ((t_token *)tok->next->content)->value, &error_code) != 0)
-				return (error_code);
+		// if (token->type == TOK_REDIR && ft_strncmp(token->value, ">>", 2) == 0 && tok->next)
+		// 	if (add_file_to_list(&files[2], ((t_token *)tok->next->content)->value, &error_code) != 0)
+		// 		return (error_code);
 		// put output files into linked lists
-		if (token->type == TOK_REDIR && ft_strncmp(token->value, ">", 2) == 0 && tok->next)
-			if (add_file_to_list(&files[1], ((t_token *)tok->next->content)->value, &error_code) != 0)
-				return (error_code);
+		// if (token->type == TOK_REDIR && ft_strncmp(token->value, ">", 2) == 0 && tok->next)
+		// 	if (add_file_to_list(&files[1], ((t_token *)tok->next->content)->value, &error_code) != 0)
+		// 		return (error_code);
 		tok = tok->next;
 	}
 	// check for | in beginning or end
-	if (((t_token *)tokens->content)->type == TOK_PIPE || ((t_token *)tokens->content)->type == TOK_PIPE)
+	if (((t_token *)tokens->content)->type == TOK_PIPE || token->type == TOK_PIPE)
 		return (1);
 	if (brace_opened != 0)
 		return (2);

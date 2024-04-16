@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:29:36 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/04 17:20:32 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/09 10:13:33 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,5 @@ int	main(int argc, char **argv, char **envp)
 		free(program_data.envcp);
 	(void)argc;
 	(void)argv;
-	return (0);
+	return (program_data.exit_status);
 }

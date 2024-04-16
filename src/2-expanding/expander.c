@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 09:20:32 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/07 11:35:29 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/10 15:43:53 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ char	*isolate_var(char *var)
 	while (var[++i])
 	{
 		if (var[i] == ' ' || var[i] == '\'' || var[i] == '\"' || var[i] == '$'
-			|| is_operator_symbol(var[i], var[i + 1]))
+			|| is_operator_symbol(var[i], var[i + 1]) || var[i] == '/')
 		{
 			var[i] = '\0';
 			break ;
@@ -56,36 +56,7 @@ char	*isolate_var(char *var)
 	return (var);
 }
 
-// static char	*get_expanded_str(char *input, char *envcp_value,
-// 		t_program_data *program_data, char *env_var)
-// {
-// 	char	*expanded_str;
-// 	int		i;
-// 	int		j;
-
-// 	i = -1;
-// 	j = 0;
-// 	expanded_str = ft_calloc(ft_strlen(input) + ft_strlen(envcp_value)
-// 			- ft_strlen(env_var) + 1, sizeof(char));
-// 	if (!expanded_str)
-// 		exit_error("malloc failed", 1, program_data->gc);
-// 	gc_append_element(program_data->gc, expanded_str);
-// 	while (input[++i])
-// 	{
-// 		if (ft_strncmp(&input[i], "$", 1) == 0)
-// 		{
-// 			ft_strlcpy(&expanded_str[j], envcp_value, ft_strlen(envcp_value)
-// 				+ 1);
-// 			j += ft_strlen(envcp_value);
-// 			i += ft_strlen(env_var);
-// 		}
-// 		else
-// 			expanded_str[j++] = input[i];
-// 	}
-// 	return (expanded_str);
-// }
-
-static bool	is_in_quote(char *str, char *quote, char *current_char)
+bool	is_in_quote(char *str, char *quote, char *current_char)
 {
 	int		i;
 	bool	d_quote;
@@ -94,6 +65,8 @@ static bool	is_in_quote(char *str, char *quote, char *current_char)
 	i = -1;
 	d_quote = false;
 	s_quote = false;
+	if (!quote || !str || !current_char)
+		return (false);
 	while (&str[i] != current_char && str[++i])
 	{
 		if (str[i] == '\"' && !s_quote)
@@ -162,8 +135,36 @@ int	find_closing_quote(char *str, int *i)
 	return (j);
 }
 
+char	*quote_operators(char *envcp_value)
+{
+	int		i;
+	int		j;
+	char	*new_str;
+	int		is_op;
+
+	i = -1;
+	j = 0;
+	new_str = ft_calloc(ft_strlen(envcp_value) * 2 + 1, sizeof(char));
+	if (!new_str)
+		return (NULL);
+	while (envcp_value[++i])
+	{
+		is_op = is_operator_symbol(envcp_value[i], envcp_value[i + 1]);
+		if (is_op)
+		{
+			new_str[j++] = '"';
+			new_str[j++] = envcp_value[i];
+			new_str[j++] = '"';
+			i += is_op + 1;
+		}
+		else
+			new_str[j++] = envcp_value[i];
+	}
+	return (new_str);
+}
+
 //expands all $ and wildcards in a string
-char *expand_values(char *str, t_program_data *program_data)
+char *expand_values(char *str, t_program_data *program_data, bool heredoc)
 {
 	int	i;
 	char	*envcp_value;
@@ -175,7 +176,7 @@ char *expand_values(char *str, t_program_data *program_data)
 	new_str = ft_calloc(ft_strlen(str) + 1, sizeof(char));
 	while (str[++i])
 	{
-		if (str[i] == '~')
+		if (str[i] == '~' && (ft_isspace(str[i + 1]) || !str[i + 1]))
 			new_str = ft_strjoinfree(new_str, get_envcp("HOME", program_data));
 		else if (ft_strnstr(&str[i], "$?", 2) != NULL
 			&& !is_in_quote(str, "\'", &str[i]))
@@ -186,15 +187,20 @@ char *expand_values(char *str, t_program_data *program_data)
 			new_str = ft_strjoinfree(new_str, envcp_value);
 			i++;
 		}
+		else if (ft_strnstr(&str[i], "\"$\"", 3))
+		{
+			new_str = ft_strjoinfree(new_str, ft_strdup("\"$\""));
+			i += 2;
+		}
 		//when $ is found and afterwards theres a quote, dont search for env var, but just replace the $ with nothing
 		else if (str[i] == '$' && !is_in_quote(str, "\"", &str[i]) && !is_in_quote(str, "\'", &str[i]) && (str[i + 1] == '\"' || str[i + 1] == '\''))
 			new_str = ft_strjoinfree(new_str, ft_substr(&str[i], 1, find_closing_quote(&str[i + 1], &i)));
-		else if(ft_strnstr(&str[i], "$ ", 2))
+		else if(ft_strnstr(&str[i], "$ ", 2) || ft_strnstr(&str[i], "$\t", 2) || (str[i] == '$' && !str[i + 1]))
 		{
 			new_str = ft_strjoinfree(new_str, ft_strdup("$ "));
 			i++;
 		}
-		else if (ft_strchr(&str[i], '$') == &str[i]
+		else if (str[i] == '$'
 			&& !is_in_quote(str, "\'", &str[i]))
 		{
 			env_var = isolate_var(ft_strdup(ft_strchr(&str[i], '$') + 1));
@@ -205,11 +211,14 @@ char *expand_values(char *str, t_program_data *program_data)
 			envcp_value = get_envcp(env_var, program_data);
 			if (!envcp_value)
 				exit_error("malloc failed", 1, program_data->gc);
+			envcp_value = quote_operators(envcp_value);
 			new_str = ft_strjoinfree(new_str, envcp_value);
+			// if (!heredoc && !is_in_quote(str, "\"", &str[i]))
+			// 	new_str = ft_strjoinfree(new_str, ft_strdup("'"));
 		}
 		//wildcard
 		else if (str[i] == '*' && !is_in_quote(str, "'", &str[i])
-			&& !is_in_quote(str, "\"", &str[i])) // wildcard, need to take* with the rest in front or behind delimitted by spaces
+			&& !is_in_quote(str, "\"", &str[i]) && !heredoc) // wildcard, need to take* with the rest in front or behind delimitted by spaces
 		{
 			// printf("str[i]: .%c.\n", str[i]);
 			tmp = list_matching_files(get_pattern(str, i));

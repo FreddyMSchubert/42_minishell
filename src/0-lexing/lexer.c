@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 06:54:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/04 17:21:21 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/11 14:22:11 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,35 +34,63 @@ static t_list	*detect_token_type(char *input, int is_first_or_after_operator, t_
 	t_token		*token;
 	t_list		*list;
 
+	if (!input)
+		return (NULL);
 	list = malloc(sizeof(t_list));
 	token = malloc(sizeof(t_token));
 	if (!token || !list)
 		return (free(token), free(list), NULL);
 	gc_append_element(program_data->gc, token);
 	gc_append_element(program_data->gc, list);
-	if (same_str(input, "<") == 0 || same_str(input, "<<") == 0 || \
-			same_str(input, ">") == 0 || same_str(input, ">>") == 0)
+	token->value = input;
+	if (is_in_quote(token->value, "\'", input))
+		token->type = TOK_S_QUOTE;
+	else if (is_in_quote(token->value, "\"", input))
+		token->type = TOK_D_QUOTE;
+	else if (ft_strnstr(token->value, "<", 1) || ft_strnstr(token->value, "<<", 2) || \
+			ft_strnstr(token->value, ">", 1) || ft_strnstr(token->value, ">>", 2))
 		token->type = TOK_REDIR;
-	else if (same_str(input, "|") == 0)
-		token->type = TOK_PIPE;
-	else if (same_str(input, "&&") == 0)
-		token->type = TOK_LOG_AND;
-	else if (same_str(input, "||") == 0)
+	else if (ft_strnstr(token->value, "||", 2))
 		token->type = TOK_LOG_OR;
-	else if (is_builtin_string(input, is_first_or_after_operator) == 0)
+	else if (ft_strnstr(token->value, "&&", 2))
+		token->type = TOK_LOG_AND;
+	else if (ft_strnstr(token->value, "|", 1))
+		token->type = TOK_PIPE;
+	else if (is_builtin_string(token->value, is_first_or_after_operator) == 0)
 		token->type = TOK_BUILTIN;
-	else if (same_str(input, "(") == 0)
+	else if (ft_strnstr(token->value, "(", 1))
 		token->type = TOK_OPEN_BRACE;
-	else if (same_str(input, ")") == 0)
+	else if (ft_strnstr(token->value, ")", 1))
 		token->type = TOK_CLOSE_BRACE;
 	else
 		token->type = TOK_WORD;
-	token->value = ft_strdup(input);
-	// ft_printf("appending token: %s\n", token->value);
-	gc_append_element(program_data->gc, token->value);
+	// if (token->type == TOK_S_QUOTE || token->type == TOK_D_QUOTE)
+	// 	token->type = TOK_WORD;
+	list->next = split_token_if_operator_in_quotes(&token, program_data);
 	list->content = token;
-	list->next = NULL;
+	token->value = get_rid_of_quotes(token->value);
+	gc_append_element(program_data->gc, token->value);
 	return (list);
+}
+
+//returns new list node if an operator in quotes is found and changes the current tokens value to the operator
+t_list	*split_token_if_operator_in_quotes(t_token **token, t_program_data *data)
+{
+	char	*tmp;
+	t_list	*node;
+	int		op_len;
+
+
+	node = NULL;
+	op_len = is_operator_symbol((*token)->value[0], (*token)->value[1]);
+	if ((*token)->type > TOK_BUILTIN && (int)ft_strlen((*token)->value) > op_len)
+	{
+		tmp = ft_substr((*token)->value, 0, op_len);
+		gc_append_element(data->gc, tmp);
+		node = detect_token_type((*token)->value + op_len, 0, data);
+		(*token)->value = tmp;
+	}
+	return (node);
 }
 
 // calculates additional spaces needed
@@ -183,8 +211,5 @@ t_list	*lexer(char *input, t_program_data *data)
 			return (NULL);
 		counter++;
 	}
-	counter = -1;
-	while (split_input[++counter])
-		free(split_input[counter]);
-	return (free(split_input), tokens);
+	return (tokens);
 }

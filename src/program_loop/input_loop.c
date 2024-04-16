@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/05 13:41:33 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/10 11:30:54 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,12 @@ int	execute_input(t_program_data *program_data, char *input)
 {
 	t_list				*tokenified_input;
 	t_bin_tree_node		*tree;
-	// t_token				*tmp;
+	int					valid;
 	pid_t				last_pid;
 
 	if (VERBOSE == 1)
 		ft_printf("Received input: %s\n", input);
-	input = expand_values(input, program_data);
+	input = expand_values(input, program_data, false);
 	if (VERBOSE == 1)
 	{
 		ft_printf("after expanding:\n");
@@ -36,17 +36,17 @@ int	execute_input(t_program_data *program_data, char *input)
 	if (VERBOSE == 1)
 		print_tokens(tokenified_input);
 	// --- validator
-	// valid = validator(tokenified_input);
-	// if (valid != 0)
-	// {
-	// 	if (VERBOSE == 1)
-	// 		ft_printf("token sequence is invalid: %d\n", valid);
-	// 	gc_cleanup(program_data->gc);
-	// 	program_data->gc = create_garbage_collector();
-	// 	return (-1);
-	// }
-	// if (VERBOSE == 1)
-	// 	ft_printf("token sequence is valid\n");
+	valid = validator(tokenified_input);
+	if (valid != 0)
+	{
+		if (VERBOSE == 1)
+			ft_printf("token sequence is invalid: %d\n", valid);
+		gc_cleanup(program_data->gc);
+		program_data->gc = create_garbage_collector();
+		return (-1);
+	}
+	if (VERBOSE == 1)
+		ft_printf("token sequence is valid\n");
 	tokenified_input = switch_redir_args(tokenified_input);
 	tree = tok_to_bin_tree(tokenified_input, program_data);
 	tree->parent = NULL;
@@ -57,8 +57,11 @@ int	execute_input(t_program_data *program_data, char *input)
 		ft_printf("\n\n\n");
 	// --- executer
 	last_pid = execute(tree, program_data);
+	// printf("last_pid: %d\n", last_pid);
 	if (last_pid != -1)
 		waitpid(last_pid, &program_data->exit_status, 0);
+	program_data->exit_status = WEXITSTATUS(program_data->exit_status);
+	// printf("exit_status: %d\n", program_data->exit_status);
 	return (0);
 }
 

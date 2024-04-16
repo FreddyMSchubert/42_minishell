@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   envcp_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 07:17:01 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/03 09:50:06 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/10 14:04:54 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	create_envcp_var(char *var, char *value, t_program_data *data)
 	i = 0;
 	while (data->envcp[i])
 		i++;
-	temp = (char **)realloc(data->envcp, sizeof(char *) * (i + 2));
+	temp = (char **)realloc(data->envcp, sizeof(char *) * (i + 2)); // forbidden function
 	if (!temp)
 		return (free(newenvcp), -2);
 	data->envcp = temp;
@@ -73,7 +73,7 @@ int	set_envcp_var(char *var, char *val, char createnew, t_program_data *data)
 	while (data->envcp[++i])
 	{
 		k = -1;
-		while (data->envcp[i][k++] && var[k] && data->envcp[i][k] == var[k])
+		while (data->envcp[i][++k] && var[k] && data->envcp[i][k] == var[k])
 			;
 		if (var[k] == '\0' && data->envcp[i][k] == '=')
 		{
@@ -101,8 +101,8 @@ int	delete_envcp_var(char *var, char **envcp)
 	{
 		j = 0;
 		k = 0;
-		while (envcp[i][j] && var[k] && envcp[i][j++] == var[k++])
-			;
+		while (envcp[i][j] && var[k] && envcp[i][j++] == var[k])
+			k++;
 		if (var[k] == '\0' && envcp[i][j] == '=')
 		{
 			free(envcp[i]);
