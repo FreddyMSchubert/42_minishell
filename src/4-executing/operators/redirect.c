@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 16:07:34 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/10 12:49:34 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/16 14:37:38 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,15 @@ static int	heredoc(t_bin_tree_node *node, t_program_data	*program_data)
 		return (-1);
 	while (g_sigint_received != SIGINT)
 	{
-		line = readline("crash_doc 📄 ");
+		if (isatty(fileno(stdin)))
+			line = readline("crash_doc 📄 ");
+		else
+		{
+			line = get_next_line(fileno(stdin));
+			if (line == NULL)
+				return (0);
+			line[ft_strlen(line) - 1] = '\0';
+		}
 		if (!line || ft_strncmp(line, delimiter, ft_strlen(delimiter)) == 0 || \
 			g_sigint_received == SIGINT)
 		{

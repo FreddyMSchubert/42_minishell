@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 06:54:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/11 14:22:11 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/16 16:24:26 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,6 +193,7 @@ t_list	*lexer(char *input, t_program_data *data)
 	int		is_first_or_after_operator;
 
 	split_input = ms_split(put_space_between_tokens(input, data), data);
+	// printf("segfault not after mssplit\n");
 	if (!split_input)
 		return (NULL);
 	token_amount = 0;
@@ -203,13 +204,16 @@ t_list	*lexer(char *input, t_program_data *data)
 	while (counter < token_amount)
 	{
 		is_first_or_after_operator = 0;
-		if (counter == 0 || (is_operator_symbol(*split_input[counter - 1], \
-				*split_input[counter]) != 0 && is_redirect(*split_input[counter - 1]) == 0))
+		// printf("segfault before dereferncing split input while\n");
+		if (counter == 0 || (is_operator_symbol(split_input[counter - 1][0], \
+				split_input[counter - 1][1]) != 0 && !is_redirect(*split_input[counter - 1]) == 0))
 			is_first_or_after_operator = 1;
+		// printf("segfault not after dereferncing split input while\n");
 		ft_lstadd_back(&tokens, detect_token_type(split_input[counter], is_first_or_after_operator, data));
 		if (ft_lstlast(tokens)->content == NULL)
 			return (NULL);
 		counter++;
 	}
+	// printf("segfault not after lexer\n");
 	return (tokens);
 }

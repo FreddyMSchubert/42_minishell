@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/10 13:20:59 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/16 16:24:15 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ t_list				*lexer(char *input, t_program_data *data);
 char				**ms_split(char *input, t_program_data *data);
 int					count_tokens(const char *s);
 int					is_operator_symbol(char c, char d);
-int					is_redirect(char c);
+bool				is_redirect(char c);
 int					same_str(char *str1, char *str2);
 char				*get_rid_of_quotes(char *str);
 t_list				*split_token_if_operator_in_quotes(t_token **token, t_program_data *data);

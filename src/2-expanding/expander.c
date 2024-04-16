@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 09:20:32 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/10 15:43:53 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/16 14:24:12 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,6 +163,42 @@ char	*quote_operators(char *envcp_value)
 	return (new_str);
 }
 
+//checks if a $ or wildcard should be expanded and if the token before is a redirection operator
+bool should_expand(char *str, int i, char expansion_type)
+{
+	int		j;
+
+	//search for redirection token before, to return false if there is one
+	j = i;
+	while (j > 0 && !is_operator_symbol(str[j], ' ') && !ft_isspace(str[j]))
+		j--;
+	while (j > 0 && ft_isspace(str[j]))
+		j--;
+	if (j > 0 && ft_strnstr(&str[j - 1], "<<", 2) && !is_in_quote(str, "\"", &str[j - 1]) && !is_in_quote(str, "\'", &str[j - 1]))
+		return (false);
+	if (expansion_type == 'h' && str[i] == '~' && (ft_isspace(str[i + 1]) || \
+		!str[i + 1]))
+		return (true);
+	else if (expansion_type == '?' && ft_strnstr(&str[i], "$?", 2) != NULL && \
+			!is_in_quote(str, "\'", &str[i]))
+		return (true);
+	else if (expansion_type == '"' && str[i] == '$' && \
+			!is_in_quote(str, "\"", &str[i]) && !is_in_quote(str, "\'", \
+			&str[i]) && (str[i + 1] == '\"' || str[i + 1] == '\''))
+		return (true);
+	else if (expansion_type == '$' && str[i] == '$' && \
+			!is_in_quote(str, "\'", &str[i]))
+		return (true);
+	else if ((expansion_type == 's' && str[i] == '$' && ft_isspace(str[i + 1])) \
+			|| (str[i] == '$' && !str[i + 1]))
+		return (true);
+	else if (expansion_type == '*' && str[i] == '*' && !is_in_quote(str, "'", \
+			&str[i]) && !is_in_quote(str, "\"", &str[i]))
+		return (true);
+		
+	return (false);
+}
+
 //expands all $ and wildcards in a string
 char *expand_values(char *str, t_program_data *program_data, bool heredoc)
 {
@@ -170,16 +206,15 @@ char *expand_values(char *str, t_program_data *program_data, bool heredoc)
 	char	*envcp_value;
 	char	*env_var;
 	char	*new_str;
-	char	*tmp;
 
 	i = -1;
 	new_str = ft_calloc(ft_strlen(str) + 1, sizeof(char));
 	while (str[++i])
 	{
-		if (str[i] == '~' && (ft_isspace(str[i + 1]) || !str[i + 1]))
+		
+		if (should_expand(str, i, 'h'))
 			new_str = ft_strjoinfree(new_str, get_envcp("HOME", program_data));
-		else if (ft_strnstr(&str[i], "$?", 2) != NULL
-			&& !is_in_quote(str, "\'", &str[i]))
+		else if (should_expand(str, i, '?'))
 		{
 			envcp_value = ft_itoa(program_data->exit_status);
 			if (!envcp_value)
@@ -193,15 +228,14 @@ char *expand_values(char *str, t_program_data *program_data, bool heredoc)
 			i += 2;
 		}
 		//when $ is found and afterwards theres a quote, dont search for env var, but just replace the $ with nothing
-		else if (str[i] == '$' && !is_in_quote(str, "\"", &str[i]) && !is_in_quote(str, "\'", &str[i]) && (str[i + 1] == '\"' || str[i + 1] == '\''))
+		else if (should_expand(str, i, '"'))
 			new_str = ft_strjoinfree(new_str, ft_substr(&str[i], 1, find_closing_quote(&str[i + 1], &i)));
-		else if(ft_strnstr(&str[i], "$ ", 2) || ft_strnstr(&str[i], "$\t", 2) || (str[i] == '$' && !str[i + 1]))
+		else if(should_expand(str, i, 's'))
 		{
 			new_str = ft_strjoinfree(new_str, ft_strdup("$ "));
 			i++;
 		}
-		else if (str[i] == '$'
-			&& !is_in_quote(str, "\'", &str[i]))
+		else if (should_expand(str, i, '$'))
 		{
 			env_var = isolate_var(ft_strdup(ft_strchr(&str[i], '$') + 1));
 			if (!env_var)
@@ -213,23 +247,20 @@ char *expand_values(char *str, t_program_data *program_data, bool heredoc)
 				exit_error("malloc failed", 1, program_data->gc);
 			envcp_value = quote_operators(envcp_value);
 			new_str = ft_strjoinfree(new_str, envcp_value);
-			// if (!heredoc && !is_in_quote(str, "\"", &str[i]))
-			// 	new_str = ft_strjoinfree(new_str, ft_strdup("'"));
 		}
 		//wildcard
-		else if (str[i] == '*' && !is_in_quote(str, "'", &str[i])
-			&& !is_in_quote(str, "\"", &str[i]) && !heredoc) // wildcard, need to take* with the rest in front or behind delimitted by spaces
+		else if (should_expand(str, i, '*') && !heredoc) // wildcard, need to take* with the rest in front or behind delimitted by spaces
 		{
 			// printf("str[i]: .%c.\n", str[i]);
-			tmp = list_matching_files(get_pattern(str, i));
+			env_var = list_matching_files(get_pattern(str, i));
 			// printf("tmp: %s\n", tmp);
-			if (tmp)
+			if (env_var)
 			{
 				char *tmp2 = ft_strrchr(new_str, ' ');
 				// printf("tmp2: %s\n", tmp2);
 				if (tmp2)
 					*(tmp2 + 1) = '\0';
-				new_str = ft_strjoinfree(new_str, tmp);
+				new_str = ft_strjoinfree(new_str, env_var);
 				while (str[i] && str[i] != ' ' && !is_operator_symbol(str[i], ' '))
 					i++;
 				if (str[i] && (str[i] == ' ' || is_operator_symbol(str[i], ' ')))
