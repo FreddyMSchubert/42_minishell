@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 06:54:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/09 10:56:49 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/11 14:22:11 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,12 @@ static t_list	*detect_token_type(char *input, int is_first_or_after_operator, t_
 	else if (ft_strnstr(token->value, "<", 1) || ft_strnstr(token->value, "<<", 2) || \
 			ft_strnstr(token->value, ">", 1) || ft_strnstr(token->value, ">>", 2))
 		token->type = TOK_REDIR;
-	else if (ft_strnstr(token->value, "|", 1))
-		token->type = TOK_PIPE;
-	else if (ft_strnstr(token->value, "&&", 2))
-		token->type = TOK_LOG_AND;
 	else if (ft_strnstr(token->value, "||", 2))
 		token->type = TOK_LOG_OR;
+	else if (ft_strnstr(token->value, "&&", 2))
+		token->type = TOK_LOG_AND;
+	else if (ft_strnstr(token->value, "|", 1))
+		token->type = TOK_PIPE;
 	else if (is_builtin_string(token->value, is_first_or_after_operator) == 0)
 		token->type = TOK_BUILTIN;
 	else if (ft_strnstr(token->value, "(", 1))
