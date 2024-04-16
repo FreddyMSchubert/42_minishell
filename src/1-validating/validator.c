@@ -42,7 +42,6 @@ error codes:
 int	validator(t_list *tokens)
 {
 	int		brace_opened;
-	int		error_code;
 	t_list	*files[3]; // 0 for input, 1 for output, 2 for append_out
 	t_list	*tok;
 	t_token	*token;
@@ -51,7 +50,6 @@ int	validator(t_list *tokens)
 	files[1] = NULL;
 	files[2] = NULL;
 	brace_opened = 0;
-	error_code = 0;
 	tok = tokens;
 	while (tok != NULL)
 	{

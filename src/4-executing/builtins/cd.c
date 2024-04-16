@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 06:19:23 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/10 15:24:51 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/16 14:22:35 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,10 @@ int	execute_cd(t_token **tokens, t_program_data *program_data)
 		path = ft_strdup(tokens[1]->value);
 	ret_val = chdir(path);
 	if (ret_val != 0)
-		return (builtin_err("cd", -4, NULL), errno);
+	{
+		program_data->exit_status = 1;
+		return (log_error("No such file or directory", "cd", path), 1);
+	}
 	buffer = getcwd(NULL, 0);
 	if (!buffer)
 		return (builtin_err("cd", -5, "getcwd failed"), -1);

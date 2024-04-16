@@ -1,5 +1,11 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+### v0.28.2 - 16.04.24 - Fredd - 2301 / 2823
+- Removed error code from validator
+- Made exit not heap use after free
+- made echo -n work better (previously echo - wouldnt print -)
+- fixed even stuff that gets executed in parent thread having their PID waited for, resulting in their return val being overwritten to 0.
+
 ### v0.28.1 - 04.04.24 - Freddy 
 - better error logging function, used in executer
 - small wrong check fix in execute_command_utils F_OK -> X_OK
