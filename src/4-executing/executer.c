@@ -3,47 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/17 08:45:51 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/17 10:54:31 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-pid_t	execute(t_bin_tree_node *tree, t_program_data *program_data)
-{
-	int	last_pid;
-
-	last_pid = -1;
-	if (program_data->exit_flag == 1 || !tree)
-		return (program_data->exit_status);
-	if (tree->l == NULL && tree->r == NULL)
-		last_pid = execute_node(tree, program_data);
-	else
-	{
-	// branches
-		if (tree->val[0]->type == TOK_LOG_AND)
-			return (logical_and(tree, program_data));
-		else if (tree->val[0]->type == TOK_LOG_OR)
-			return (logical_or(tree, program_data));
-		else if (tree->val[0]->type == TOK_PIPE)
-			setup_pipe(tree, program_data);
-		else if (tree->val[0]->type == TOK_REDIR)
-			if (redirect(tree, program_data) == -2 || !tree->l)
-				return (last_pid);
-		if (tree->l && tree->l->val[0]->type < tree->r->val[0]->type && \
-			tree->r->val[0]->type == TOK_REDIR)
-			if (redirect(tree->r, program_data) == -2)
-				return (last_pid);
-		if (tree->val[0]->type == TOK_REDIR || tree->val[0]->type == TOK_PIPE)
-			last_pid = execute(tree->l, program_data);
-		if (tree->val[0]->type == TOK_PIPE)
-			last_pid = execute(tree->r, program_data);
-	}
-	return (last_pid);
-}
 
 static int	execute_builtin(t_bin_tree_node *node, t_program_data *program_data)
 {
@@ -93,8 +60,8 @@ int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 {
 	pid_t	pid;
 
-	if (node->val[0]->type == TOK_BUILTIN)
-		return(execute_builtin(node, program_data));
+	// if (node->val[0]->type == TOK_BUILTIN)
+	// 	return(execute_builtin(node, program_data));
 	pid = fork();
 	if (pid == -1)
 	{
@@ -145,4 +112,40 @@ int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 		return (pid);
 	}
 	return (42);	// this will never occur, just to silence warning
+}
+
+pid_t	execute(t_bin_tree_node *tree, t_program_data *program_data)
+{
+	int	last_pid;
+
+	last_pid = -1;
+	if (program_data->exit_flag == 1 || !tree)
+		return (program_data->exit_status);
+	if (tree->l == NULL && tree->r == NULL)
+		if (tree->val[0]->type != TOK_BUILTIN)
+			last_pid = execute_node(tree, program_data);
+		else
+			program_data->exit_status = execute_builtin(tree, program_data);
+	else
+	{
+	// branches
+		if (tree->val[0]->type == TOK_LOG_AND)
+			return (logical_and(tree, program_data));
+		else if (tree->val[0]->type == TOK_LOG_OR)
+			return (logical_or(tree, program_data));
+		else if (tree->val[0]->type == TOK_PIPE)
+			setup_pipe(tree, program_data);
+		else if (tree->val[0]->type == TOK_REDIR)
+			if (redirect(tree, program_data) == 1 || !tree->l)
+				return (last_pid);
+		if (tree->l && tree->l->val[0]->type < tree->r->val[0]->type && \
+			tree->r->val[0]->type == TOK_REDIR)
+			if (redirect(tree->r, program_data) == 1)
+				return (last_pid);
+		if (tree->val[0]->type == TOK_REDIR || tree->val[0]->type == TOK_PIPE)
+			last_pid = execute(tree->l, program_data);
+		if (tree->val[0]->type == TOK_PIPE)
+			last_pid = execute(tree->r, program_data);
+	}
+	return (last_pid);
 }

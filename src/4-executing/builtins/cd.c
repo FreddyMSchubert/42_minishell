@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 06:19:23 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/17 08:44:44 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/17 10:35:59 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	execute_cd(t_token **tokens, t_program_data *program_data)
 	char	*temp;
 	int		ret_val;
 
-	if (tokens[1] == NULL)
+	if (tokens[1] == NULL || ft_strncmp(tokens[1]->value, "--", 2) == 0)
 	{
 		temp = get_envcp_var("HOME", program_data->envcp);
 		if (temp)
@@ -37,7 +37,7 @@ int	execute_cd(t_token **tokens, t_program_data *program_data)
 			path = ft_strdup(temp);
 		if (!temp || !path)
 			return (free(temp), free(path), builtin_err("cd", -3, "OLDPWD"), 1);
-		ft_printf("%s\n", path);
+		printf("%s\n", path);
 	}
 	else
 		path = ft_strdup(tokens[1]->value);

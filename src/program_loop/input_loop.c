@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/17 09:34:34 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/17 10:58:24 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ int	execute_input(t_program_data *program_data, char *input)
 	t_list				*tokenified_input;
 	t_bin_tree_node		*tree;
 	int					valid;
+	int					status;
 	pid_t				last_pid;
 
 	if (VERBOSE == 1)
@@ -59,8 +60,11 @@ int	execute_input(t_program_data *program_data, char *input)
 	last_pid = execute(tree, program_data);
 	// printf("last_pid: %d\n", last_pid);
 	if (last_pid != -1)
-		waitpid(last_pid, &program_data->exit_status, 0);
-	program_data->exit_status = WEXITSTATUS(program_data->exit_status);
+	{
+		waitpid(last_pid, &status, 0);
+		if (program_data->exit_status == 0)
+			program_data->exit_status = WEXITSTATUS(status);
+	}
 	// printf("exit_status: %d\n", program_data->exit_status);
 	return (0);
 }
