@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:48:20 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/10 18:40:34 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/17 08:45:04 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	execute_echo(t_token **inputs, int out_fd)
 	n_flag = 0;
 	if (!inputs[1])
 		return (ft_putstr_fd("\n", out_fd), 0);
-	while (inputs[i] && inputs[i]->value[0] == '-' && inputs[i]->value[1] == 'n')
+	while (inputs[i] && inputs[i]->value[0] == '-')
 	{
 		j = 1;
 		while (inputs[i]->value[j] == 'n')
