@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 09:48:54 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/02 13:19:58 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/17 12:09:26 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,7 @@ int	execute_unset(t_token **node, t_program_data *program_data)
 	i = 1;
 	while (node[i] != NULL)
 	{
-		if (delete_envcp_var(node[i]->value, program_data->envcp) != 0)
-			return (builtin_err("unset", -5, "fail unsetting var"), 1);
+		delete_envcp_var(node[i]->value, program_data->envcp);
 		i++;
 	}
 	return (0);
