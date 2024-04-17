@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 10:42:01 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/08 16:36:12 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/17 09:41:15 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ char	**ms_split(char *input, t_program_data *data)
 	if (!result)
 		return (NULL);
 	gc_append_element(data->gc, result);
-	result[word_count] = NULL;
+	// result[word_count] = NULL;
 	while (input[++i] && j < word_count)
 	{
 		// printf("input[i]: %s\n", &input[i]);
@@ -145,5 +145,6 @@ char	**ms_split(char *input, t_program_data *data)
 				return (free_split(result), NULL);
 		}
 	}
+	result[j] = NULL;
 	return (result);
 }
