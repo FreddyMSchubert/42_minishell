@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 16:07:34 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/17 10:49:31 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/17 11:43:29 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,9 +89,9 @@ int	redirect(t_bin_tree_node *node, t_program_data *program_data)
 	char	*filename;
 	bool	redir_out;
 
-	if (node->input_fd != 0)
+	if (node->input_fd != 0 && node->l)
 		node->l->input_fd = node->input_fd;
-	if (node->output_fd != 1)
+	if (node->output_fd != 1 && node->l)
 		node->l->output_fd = node->output_fd;
 	if (ft_strncmp(node->val[0]->value, "<<", 2) == 0)
 		return (heredoc(node, program_data));
@@ -129,9 +129,9 @@ int	redirect(t_bin_tree_node *node, t_program_data *program_data)
 		node = node->parent;
 		if (!node->parent || (node->parent->val && node->parent->val[0]->type != TOK_REDIR))
 		{
-			if (!redir_out)
+			if (!redir_out && node->l)
 				node->l->input_fd = fd;
-			else
+			else if (node->l)
 				node->l->output_fd = fd;
 			return (0);
 		}
