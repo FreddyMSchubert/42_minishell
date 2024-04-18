@@ -6,11 +6,21 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 15:25:11 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/18 18:25:24 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/18 18:53:13 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+static void	throw_syntax_error(char *token)
+{
+	int	err;
+
+	err = STDERR_FILENO;
+	ft_putstr_fd("minishell: syntax error near unexpected token `", err);
+	ft_putstr_fd(token, err);
+	ft_putstr_fd("'\n", err);
+}
 
 // files: 0 for input, 1 for output, 2 for append_out
 int	validator(t_list *tokens)
@@ -28,13 +38,7 @@ int	validator(t_list *tokens)
 	// check for inital token not being pipe or logical operator
 	if (((t_token *)tok->content)->type == TOK_PIPE || ((t_token *)tok->content)->type == TOK_LOG_OR || \
 		((t_token *)tok->content)->type == TOK_LOG_AND)
-	{
-		ft_putstr_fd("minishell: syntax error near unexpected token `", STDERR_FILENO);
-		ft_putstr_fd(((t_token *)tok->content)->value, STDERR_FILENO);
-		ft_putstr_fd("'\n", STDERR_FILENO);
-		return (258);
-	}
-
+		return (throw_syntax_error(((t_token *)tok->content)->value), 258);
 	while (tok != NULL)
 	{
 		token = tok->content;
@@ -48,34 +52,33 @@ int	validator(t_list *tokens)
 			brace_opened++;
 		else if (token->type == TOK_CLOSE_BRACE)
 			brace_opened--;
+		if (brace_opened < 0)
+			return (throw_syntax_error(")"), 2);
+		if (token->type == TOK_OPEN_BRACE && tok->next && ((t_token *)tok->next->content)->type == TOK_CLOSE_BRACE)
+			return (throw_syntax_error(")"), 258);
+		if (token->type == TOK_CLOSE_BRACE && tok->next && ((t_token *)tok->next->content)->type == TOK_OPEN_BRACE)
+			return (throw_syntax_error("("), 258);
+		if (token->type == TOK_CLOSE_BRACE && tok->next && ((t_token *)tok->next->content)->type <= TOK_BUILTIN)
+			return (throw_syntax_error(((t_token *)tok->next->content)->value), 258);
 		// check for valid word after < > >> <<
 		if (token->type == TOK_REDIR)
 		{
 			if (!tok->next)
-				return (ft_putstr_fd("minishell: syntax error near unexpected token `newline'", STDERR_FILENO), \
-				ft_putstr_fd("\n", STDERR_FILENO), 1);
+				return (throw_syntax_error("newline"), 1);
 			else if (((t_token *)tok->next->content)->type > TOK_BUILTIN)
-				return (ft_putstr_fd("minishell: syntax error near unexpected token `", STDERR_FILENO), \
-						ft_putstr_fd(token->value, STDERR_FILENO), ft_putstr_fd("'\n", STDERR_FILENO), 2);
+				return (throw_syntax_error(token->value), 2);
 		}
 		tok = tok->next;
 	}
 	// check for | in beginning or end
 	if (token->type == TOK_PIPE || token->type == TOK_LOG_OR || token->type == TOK_LOG_AND || token->type == TOK_REDIR)
-	{
-		ft_putstr_fd("minishell: syntax error near unexpected token `", STDERR_FILENO);
-		ft_putstr_fd(token->value, STDERR_FILENO);
-		ft_putstr_fd("'\n", STDERR_FILENO);
-		return (258);
-	}
+		return (throw_syntax_error(token->value),258);
 	if (brace_opened != 0)
 	{
-		ft_putstr_fd("minishell: syntax error near unexpected token `", STDERR_FILENO);
 		if (brace_opened > 0)
-			ft_putstr_fd("(", STDERR_FILENO);
+			throw_syntax_error("(");
 		else
-			ft_putstr_fd(")", STDERR_FILENO);
-		ft_putstr_fd("'\n", STDERR_FILENO);
+			throw_syntax_error(")");
 		return (2);
 	}
 	// check for file errors
