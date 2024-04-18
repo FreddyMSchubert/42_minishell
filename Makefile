@@ -63,6 +63,7 @@ fclean: clean
 	@make -C $(FTPRINTF_DIR) fclean > /dev/null
 	@make -C $(GNL_DIR) fclean > /dev/null
 	@rm -f $(NAME) $(BNAME)
+	@rm -rf $(OBJ_DIR)
 re: fclean all
 
 comp:
