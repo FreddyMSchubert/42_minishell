@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/18 10:50:52 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/18 22:25:59 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,13 +165,13 @@ void				setup_pipe(t_bin_tree_node *node, t_program_data *data);
 // "normal" commands
 t_cmd_path			*create_cmd_struct(char	**envp, t_token	**cmd);
 // builtins
-int					execute_echo(t_token **inputs, int out_fd);
+int					execute_echo(t_token **inputs, int out_fd, t_program_data *program_data);
 int					execute_env(t_program_data *program_data, int out_fd);
 int					execute_exit(t_token **tokens, t_program_data *data, \
 								int out_fd);
 int					execute_cd(t_token **tokens, t_program_data *program_data);
-int					execute_pwd(int out_fd);
-int					execute_export(t_token **node, t_program_data *data);
+int					execute_pwd(int out_fd, t_program_data *program_data);
+int					execute_export(t_token **node, int out_fd, t_program_data *data);
 int					execute_unset(t_token **node, t_program_data *data);
 // env utils
 char				*get_envcp_var(char *var, char **envcp);

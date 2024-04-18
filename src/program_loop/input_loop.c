@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/17 10:58:24 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/18 22:21:33 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,7 @@ int	execute_input(t_program_data *program_data, char *input)
 	if (last_pid != -1)
 	{
 		waitpid(last_pid, &status, 0);
-		if (program_data->exit_status == 0)
-			program_data->exit_status = WEXITSTATUS(status);
+		program_data->exit_status = WEXITSTATUS(status);
 	}
 	// printf("exit_status: %d\n", program_data->exit_status);
 	return (0);
