@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 13:54:08 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/18 10:03:06 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/18 10:08:36 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,5 +30,7 @@ int	execute_exit(t_token **tokens, t_program_data *program_data, int out_fd)
 	else
 		program_data->exit_status = 0;
 	program_data->exit_flag = 1;
+	if (isatty(fileno(stdin)))
+		ft_putstr_fd("exit\n", out_fd);
 	return(0);
 }
