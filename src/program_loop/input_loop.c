@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input_loop.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/17 10:58:24 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/18 18:04:32 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ int	execute_input(t_program_data *program_data, char *input)
 	valid = validator(tokenified_input);
 	if (valid != 0)
 	{
+		program_data->exit_status = valid;
 		if (VERBOSE == 1)
 			ft_printf("token sequence is invalid: %d\n", valid);
 		gc_cleanup(program_data->gc);
