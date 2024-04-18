@@ -68,7 +68,7 @@ int	match(const char *pattern, const char *filename)
 	return (*p == '\0'); // Successful match if end of pattern
 }
 
-char	*list_matching_files(const char *pattern)
+char	*list_matching_files(char *pattern)
 {
 	DIR				*dir;
 	struct dirent	*entry;
@@ -76,7 +76,7 @@ char	*list_matching_files(const char *pattern)
 
 	dir = opendir(".");
 	if (!dir)
-		return (perror("opendir() error"), NULL);
+		return (perror("opendir() error"), free(pattern), NULL);
 	entry = readdir(dir);
 	result = NULL;
 	while (entry != NULL)
@@ -87,12 +87,13 @@ char	*list_matching_files(const char *pattern)
 		{
 			result = concatenate_matches_free_s1(result, entry->d_name);
 			if (!result)
-				return (closedir(dir), NULL);
+				return (closedir(dir), free(pattern), NULL);
 		}
 		entry = readdir(dir);
 	}
 	closedir(dir);
 	if (result && ft_strlen(result) > 0)
 		result[ft_strlen(result) - 1] = '\0';
+	free (pattern);
 	return (result);
 }

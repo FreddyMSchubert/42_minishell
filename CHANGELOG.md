@@ -1,5 +1,8 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+### v0.28.3 - 18.4.24 - Freddy
+- added some better free protection in expander & wildcard
+
 ### v0.28.2 - 18.4.24 - Freddy
 - replaces malloc call in ms_split with calloc to avoid a potential jump on uninitialized value
 

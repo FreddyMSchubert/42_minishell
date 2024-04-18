@@ -13,10 +13,10 @@
 #include "../../include/minishell.h"
 
 /*
-search for $ in string if not single quoted
-loop thru envcp array
-if envcp name matches var name
-return envcp value
+	search for $ in string if not single quoted
+	loop thru envcp array
+	if envcp name matches var name
+	return envcp value
 */
 
 char	*get_envcp(char *env_var, t_program_data *program_data)
@@ -146,7 +146,7 @@ char	*quote_operators(char *envcp_value)
 	j = 0;
 	new_str = ft_calloc(ft_strlen(envcp_value) * 2 + 1, sizeof(char));
 	if (!new_str)
-		return (NULL);
+		return (free(envcp_value), NULL);
 	while (envcp_value[++i])
 	{
 		is_op = is_operator_symbol(envcp_value[i], envcp_value[i + 1]);
@@ -160,6 +160,7 @@ char	*quote_operators(char *envcp_value)
 		else
 			new_str[j++] = envcp_value[i];
 	}
+	free (envcp_value);
 	return (new_str);
 }
 
