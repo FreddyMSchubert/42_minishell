@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 06:19:23 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/17 14:31:51 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/18 10:28:28 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	execute_cd(t_token **tokens, t_program_data *program_data)
 		if (temp)
 			path = ft_strdup(temp);
 		if (!temp || !path)
-			return (free(path), builtin_err("cd", -3, "OLDPWD"), 1);
+			return (builtin_err("cd", -3, "OLDPWD"), 1);
 		printf("%s\n", path);
 	}
 	else
@@ -48,7 +48,7 @@ int	execute_cd(t_token **tokens, t_program_data *program_data)
 	if (!buffer)
 		return (builtin_err("cd", -5, "getcwd failed"), -1);
 	free(path);
-	if (set_envcp_var("OLDPWD", get_envcp_var("PWD", program_data->envcp), 0, program_data) == -1)
+	if (set_envcp_var("OLDPWD", get_envcp_var("PWD", program_data->envcp), 1, program_data) == -1)
 		return (free(buffer), builtin_err("cd", -2, "OLDPWD"), -2);
 	if (set_envcp_var("PWD", buffer, 0, program_data) == -1)
 		return (free(buffer), builtin_err("cd", -2, "PWD"), -2);
