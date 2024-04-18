@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 13:54:08 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/17 08:45:20 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/18 10:03:06 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,6 @@ int	execute_exit(t_token **tokens, t_program_data *program_data, int out_fd)
 	{
 		ft_putstr_fd("exit: too many arguments\n", STDERR_FILENO);
 		program_data->exit_status = 1;
-		program_data->exit_flag = 1;
-		gc_cleanup(program_data->gc);
-		program_data->gc = create_garbage_collector();
 		return (1);
 	}
 	if (tokens[1])
@@ -33,10 +30,5 @@ int	execute_exit(t_token **tokens, t_program_data *program_data, int out_fd)
 	else
 		program_data->exit_status = 0;
 	program_data->exit_flag = 1;
-	gc_cleanup(program_data->gc);
-	program_data->gc = create_garbage_collector();
-	(void)out_fd;
-	// ft_putstr_fd("exit\n", out_fd);
-	// exit(program_data->exit_status);
-	return(program_data->exit_status);
+	return(0);
 }

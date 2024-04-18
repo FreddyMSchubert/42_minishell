@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 10:42:01 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/17 09:41:15 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/18 10:02:15 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ char	**ms_split(char *input, t_program_data *data)
 	// printf("word_count: %d\n", word_count);
 	if (word_count == -1)
 		return (NULL);
-	result = calloc((word_count + 1), sizeof(char *));
+	result = ft_calloc((word_count + 1), sizeof(char *));
 	if (!result)
 		return (NULL);
 	gc_append_element(data->gc, result);
