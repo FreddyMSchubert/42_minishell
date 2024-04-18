@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 15:25:11 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/18 18:02:41 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/18 18:25:24 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,16 @@ int	validator(t_list *tokens)
 	files[2] = NULL;
 	brace_opened = 0;
 	tok = tokens;
+	// check for inital token not being pipe or logical operator
+	if (((t_token *)tok->content)->type == TOK_PIPE || ((t_token *)tok->content)->type == TOK_LOG_OR || \
+		((t_token *)tok->content)->type == TOK_LOG_AND)
+	{
+		ft_putstr_fd("minishell: syntax error near unexpected token `", STDERR_FILENO);
+		ft_putstr_fd(((t_token *)tok->content)->value, STDERR_FILENO);
+		ft_putstr_fd("'\n", STDERR_FILENO);
+		return (258);
+	}
+
 	while (tok != NULL)
 	{
 		token = tok->content;
@@ -51,8 +61,13 @@ int	validator(t_list *tokens)
 		tok = tok->next;
 	}
 	// check for | in beginning or end
-	if (((t_token *)tokens->content)->type == TOK_PIPE || token->type == TOK_PIPE)
-		return (1);
+	if (token->type == TOK_PIPE || token->type == TOK_LOG_OR || token->type == TOK_LOG_AND || token->type == TOK_REDIR)
+	{
+		ft_putstr_fd("minishell: syntax error near unexpected token `", STDERR_FILENO);
+		ft_putstr_fd(token->value, STDERR_FILENO);
+		ft_putstr_fd("'\n", STDERR_FILENO);
+		return (258);
+	}
 	if (brace_opened != 0)
 	{
 		ft_putstr_fd("minishell: syntax error near unexpected token `", STDERR_FILENO);
