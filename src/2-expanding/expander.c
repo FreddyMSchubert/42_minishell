@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 09:20:32 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/16 14:24:12 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/18 10:43:34 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,9 +153,11 @@ char	*quote_operators(char *envcp_value)
 		if (is_op)
 		{
 			new_str[j++] = '"';
-			new_str[j++] = envcp_value[i];
+			new_str[j++] = envcp_value[i++];
+			if (is_op == 2)
+				new_str[j++] = envcp_value[i++];
+			// i += is_op + 1;
 			new_str[j++] = '"';
-			i += is_op + 1;
 		}
 		else
 			new_str[j++] = envcp_value[i];
