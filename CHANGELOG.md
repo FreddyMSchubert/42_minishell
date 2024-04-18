@@ -1,5 +1,8 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+### v0.28.2 - 18.4.24 - Freddy
+- replaces malloc call in ms_split with calloc to avoid a potential jump on uninitialized value
+
 ### v0.28.1 - 04.04.24 - Freddy 
 - better error logging function, used in executer
 - small wrong check fix in execute_command_utils F_OK -> X_OK

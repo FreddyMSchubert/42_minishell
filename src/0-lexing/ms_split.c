@@ -26,25 +26,20 @@ int	count_tokens(const char *s)
 	in_quote = 0;
 	while ((int)ft_strlen(s) > i && s[++i])
 	{
-		// printf("%zu\n", ft_strlen(s));
 		if ((s[i] == '"' && in_quote != 2) || (s[i] == '\'' && in_quote != 1))
 		{
-			// printf("quote: %c\n", s[i]);
 			if (in_quote == 0)
 			{
 				if (s[i] != '\"')
 					in_quote = 2;
 				else
 					in_quote = 1;
-				// count++;
-				// in_word = 0;
 			}
 			else
 				in_quote = 0;
 		}
 		if (is_operator_symbol(s[i], s[i + 1]))
 		{
-			// printf("operator: %c\n", s[i]);
 			if (is_operator_symbol(s[i], s[i + 1]) == 2)
 				i++;
 			count++;
@@ -54,13 +49,10 @@ int	count_tokens(const char *s)
 		{
 			count++;
 			in_word = 1;
-			// printf("wortanfang: %c\n", s[i]);
 		}
 		else if (ft_isspace(s[i]) && !in_quote)
 			in_word = 0;
 	}
-	// if (in_quote)
-	// 	return (-1);
 	return (count);
 }
 
@@ -130,7 +122,7 @@ char	**ms_split(char *input, t_program_data *data)
 	// printf("word_count: %d\n", word_count);
 	if (word_count == -1)
 		return (NULL);
-	result = malloc((word_count + 1) * sizeof(char *));
+	result = calloc((word_count + 1), sizeof(char *));
 	if (!result)
 		return (NULL);
 	gc_append_element(data->gc, result);

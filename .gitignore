@@ -7,3 +7,4 @@ crash
 .devcontainer
 debug/log.txt
 obj
+output_logs
