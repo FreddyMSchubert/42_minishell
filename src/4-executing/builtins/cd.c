@@ -36,7 +36,7 @@ int	execute_cd(t_token **tokens, t_program_data *program_data)
 		if (temp)
 			path = ft_strdup(temp);
 		if (!temp || !path)
-			return (free(temp), free(path), builtin_err("cd", -3, "OLDPWD"), 1);
+			return (free(path), builtin_err("cd", -3, "OLDPWD"), 1);
 		printf("%s\n", path);
 	}
 	else

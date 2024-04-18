@@ -133,7 +133,7 @@ pid_t	execute(t_bin_tree_node *tree, t_program_data *program_data)
 			return (logical_and(tree, program_data));
 		else if (tree->val[0]->type == TOK_LOG_OR)
 			return (logical_or(tree, program_data));
-		else if (tree->val[0]->type == TOK_PIPE)
+		else if (tree->val[0]->type == TOK_PIPE && !(tree->l->val[0]->type == TOK_REDIR && tree->l->val[0]->value[0] == '>'))
 			setup_pipe(tree, program_data);
 		else if (tree->val[0]->type == TOK_REDIR)
 			if (redirect(tree, program_data) == 1 || !tree->l)
