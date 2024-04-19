@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 06:54:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/17 09:42:07 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/19 21:50:53 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,8 +157,10 @@ static char	*put_space_between_tokens(char *input, t_program_data *data)
 	in_quote = 0;
 	while (input[i] && j < (int)ft_strlen(input) + calc_add_spaces(input))
 	{
-		if ((input[i] == '\'' && in_quote != 2) || (input[i] == '\"' && in_quote != 1)) //"=2 '=1
-			in_quote = input[i] % 4 - 1;
+		if ((input[i] == '\'' && in_quote != '\'') || (input[i] == '\"' && in_quote != '"'))
+			in_quote = input[i];
+		else if (in_quote == input[i])
+			in_quote = 0;
 		else if (!in_quote && is_operator_symbol(input[i], input[i + 1]) > 0)
 		{
 			if (cur_symbol != 0)
@@ -173,10 +175,13 @@ static char	*put_space_between_tokens(char *input, t_program_data *data)
 				new_input[j++] = ' ';
 			cur_symbol = 1;
 		}
+		else if (input[i] != ' ')
+			cur_symbol = 1;
 		if (input[i] && is_operator_symbol(input[i], input[i + 1]) == 2)
 			new_input[j++] = input[i++];
 		new_input[j++] = input[i++];
 	}
+	// printf("new_input: %s\n", new_input);
 	return (new_input);
 }
 

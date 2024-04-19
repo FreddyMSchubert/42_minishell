@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 16:07:34 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/17 11:43:29 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/19 22:38:03 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,14 @@ static int	heredoc(t_bin_tree_node *node, t_program_data	*program_data)
 	char	*delimiter;
 	bool	expand;
 
+	if (node->r->val[0]->type == TOK_REDIR)
+		redirect(node->r, program_data);
 	expand = true;
-	delimiter = node->r->val[0]->value;
-	if (delimiter[0] == '"' || delimiter[0] == '\'')
-	{
-		delimiter++;
-		delimiter[ft_strlen(delimiter) - 1] = '\0';
+	delimiter = get_filename(node);
+	if (VERBOSE)
+		printf("delimiter: %s\n", delimiter);
+	if (node->r->val[0]->type == TOK_D_QUOTE || node->r->val[0]->type == TOK_S_QUOTE)
 		expand = false;
-	}
 	if (pipe(pipe_fd) < 0)
 		return (-1);
 	while (g_sigint_received != SIGINT)
@@ -67,8 +67,6 @@ static int	heredoc(t_bin_tree_node *node, t_program_data	*program_data)
 			return (ft_putstr_fd("crash: redir: error expanding heredoc", STDERR_FILENO), -1);
 		write(pipe_fd[1], converted_line, ft_strlen(converted_line));
 		write(pipe_fd[1], "\n", 1);
-		// free(line);
-		// free(converted_line);
 	}
 	if (g_sigint_received == SIGINT)
 	{

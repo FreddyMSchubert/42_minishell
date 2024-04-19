@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/18 22:26:40 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/19 22:10:28 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,8 @@ pid_t	execute(t_bin_tree_node *tree, t_program_data *program_data)
 	int	last_pid;
 
 	last_pid = -1;
+	if (VERBOSE == 1)
+		ft_printf("executing %s, out_fd: %d\n", tree->val[0]->value, tree->output_fd);
 	if (program_data->exit_flag == 1 || !tree)
 		return (program_data->exit_status);
 	if (tree->l == NULL && tree->r == NULL)
@@ -138,12 +140,11 @@ pid_t	execute(t_bin_tree_node *tree, t_program_data *program_data)
 		else if (tree->val[0]->type == TOK_REDIR)
 			if (redirect(tree, program_data) == 1 || !tree->l)
 				return (last_pid);
-		if (tree->l && tree->l->val[0]->type < tree->r->val[0]->type && \
-			tree->r->val[0]->type == TOK_REDIR)
-			if (redirect(tree->r, program_data) == 1)
-				return (last_pid);
-		if (tree->val[0]->type == TOK_REDIR || tree->val[0]->type == TOK_PIPE)
-			last_pid = execute(tree->l, program_data);
+		// if (tree->l && tree->l->val[0]->type < tree->r->val[0]->type && \
+		// 	tree->r->val[0]->type == TOK_REDIR)
+		// 	if (redirect(tree->r, program_data) == 1)
+		// 		return (last_pid);
+		last_pid = execute(tree->l, program_data);
 		if (tree->val[0]->type == TOK_PIPE)
 			last_pid = execute(tree->r, program_data);
 	}
