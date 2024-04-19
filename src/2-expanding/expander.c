@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 09:20:32 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/18 21:56:44 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/19 11:06:56 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,7 +173,7 @@ bool	is_valid_variable(char *var)
 	if (!ft_isalpha((unsigned char)var[0]) && var[0] != '_')
 		return (false);
 	i = 0;
-	while (var[++i] && var[i] != '$' && !ft_isspace(var[i]) && !is_operator_symbol(var[i], ' ') && var[i] != '\'' && var[i] != '\"')
+	while (var[++i] && var[i] != '$' && (ft_isalnum(var[i]) || var[i] == '_') && !is_operator_symbol(var[i], ' ')) // && var[i] != '\'' && var[i] != '\"'
 	{
 		if (!ft_isalnum(var[i]) && var[i] != '_')
 			return (false);
