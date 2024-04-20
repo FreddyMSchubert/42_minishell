@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/19 22:10:28 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/20 19:58:24 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ static int	execute_builtin(t_bin_tree_node *node, t_program_data *program_data)
 static int	execute_command(t_bin_tree_node *node, t_program_data *program_data)
 {
 	t_cmd_path	*cmd_path;
+	char		*error_msg;
 
 	cmd_path = create_cmd_struct(program_data->envcp, node->val);
 	if (cmd_path != NULL)
@@ -51,8 +52,22 @@ static int	execute_command(t_bin_tree_node *node, t_program_data *program_data)
 		free(cmd_path->args);
 	if (cmd_path)
 		free(cmd_path);
-	program_data->exit_status = 127;
-	return (log_error("command not found", node->val[0]->value, 0), 127);
+	if (errno == EACCES)
+	{
+		program_data->exit_status = 126;
+		error_msg = "permission denied";
+	}
+	else if (errno == EISDIR)
+	{
+		program_data->exit_status = 126;
+		error_msg = "is a directory";
+	}
+	else
+	{
+		program_data->exit_status = 127;
+		error_msg = "command not found";
+	}
+	return (log_error(error_msg, node->val[0]->value, 0), -1);
 }
 
 
