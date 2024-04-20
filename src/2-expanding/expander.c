@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 09:20:32 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/19 11:06:56 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/20 19:34:25 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ char	*isolate_var(char *var)
 	while (var[++i])
 	{
 		if (var[i] == ' ' || var[i] == '\'' || var[i] == '\"' || var[i] == '$'
-			|| is_operator_symbol(var[i], var[i + 1]) || var[i] == '/')
+			|| is_operator_symbol(var[i], var[i + 1]) || var[i] == '/' || var[i] == '?')
 		{
 			var[i] = '\0';
 			break ;
@@ -56,7 +56,7 @@ char	*isolate_var(char *var)
 	return (var);
 }
 
-bool	is_in_quote(char *str, char *quote, char *current_char)
+bool	is_in_quote(char *str, char quote, char *current_char)
 {
 	int		i;
 	bool	d_quote;
@@ -74,7 +74,7 @@ bool	is_in_quote(char *str, char *quote, char *current_char)
 		else if (str[i] == '\'' && !d_quote)
 			s_quote = !s_quote;
 	}
-	if (quote[0] == '\"')
+	if (quote == '\"')
 		return (d_quote);
 	else
 		return (s_quote);
@@ -109,17 +109,21 @@ char	*get_rid_of_quotes(char *str)
 }
 
 /// @brief retrieves the pattern of a wildcard
-char	*get_pattern(char *str, int index)
+char	*get_pattern(char *str, int index, t_program_data *program_data)
 {
 	int	i;
+	char	*ret;
 
 	i = index;
-	while (str[i] && str[i] != ' ' && !is_operator_symbol(str[i], ' '))
+	while (str[i] && (str[i] != ' ' || is_in_quote(str, '"', &str[i]) || is_in_quote(str, '\'', &str[i])) && !is_operator_symbol(str[i], ' '))
 		i++;
-	while (index > 0 && str[index] != ' ' && !is_operator_symbol(str[index], ' '))
+	while (index > 0 && (str[index] != ' ' || is_in_quote(str, '"', &str[index]) || is_in_quote(str, '\'', &str[index])) && !is_operator_symbol(str[index], ' '))
 		index--;
-	index++;
-	return (ft_substr(&str[index], 0, i - index));
+	ret = ft_substr(&str[index + 1], 0, i - index + 1);
+	gc_append_element(program_data->gc, ret);
+	// ret = expand_values(ret, program_data, true);
+	// printf("pattern: .%s.\n", ret);
+	return (get_rid_of_quotes(ret));
 }
 
 int	find_closing_quote(char *str, int *i)
@@ -192,29 +196,28 @@ bool should_expand(char *str, int i, char expansion_type)
 		j--;
 	while (j > 0 && ft_isspace(str[j]))
 		j--;
-	if (j > 0 && ft_strnstr(&str[j - 1], "<<", 2) && !is_in_quote(str, "\"", &str[j - 1]) && !is_in_quote(str, "\'", &str[j - 1]))
+	if (j > 0 && ft_strnstr(&str[j - 1], "<<", 2) && !is_in_quote(str, '\"', &str[j - 1]) && !is_in_quote(str, '\'', &str[j - 1]))
 		return (false);
-	if (expansion_type == 'h' && (ft_isspace(str[i + 1]) || !str[i + 1]) && (i == 0 || ft_isspace(str[i - 1]) || is_operator_symbol(str[i - 1], ' ')))
+	if (expansion_type == '~' && (ft_isspace(str[i + 1]) || !str[i + 1] || str[i + 1] == '/') && (i == 0 || ft_isspace(str[i - 1]) || is_operator_symbol(str[i - 1], ' ')))
 		return (true);
 	else if (expansion_type == '?' && ft_strnstr(&str[i], "$?", 2) != NULL && \
-			!is_in_quote(str, "\'", &str[i]))
+			!is_in_quote(str, '\'', &str[i]))
 		return (true);
 	else if (expansion_type == '"' && str[i] == '$' && \
-			!is_in_quote(str, "\"", &str[i]) && !is_in_quote(str, "\'", \
+			!is_in_quote(str, '\"', &str[i]) && !is_in_quote(str, '\'', \
 			&str[i]) && (str[i + 1] == '\"' || str[i + 1] == '\''))
 		return (true);
 	else if (expansion_type == '$' && is_valid_variable(&str[i + 1]) &&\
-			!is_in_quote(str, "\'", &str[i]))
+			!is_in_quote(str, '\'', &str[i]))
 		return (true);
 	// else if ((expansion_type == 's' && str[i] == '$' && ft_isspace(str[i + 1])) \
 	// 		|| (str[i] == '$' && !str[i + 1]))
 	else if (expansion_type == 's' && !is_valid_variable(&str[i + 1]) && \
-			!is_in_quote(str, "'", &str[i]) && !is_in_quote(str, "\"", &str[i]))
+			!is_in_quote(str, '\'', &str[i]) && !is_in_quote(str, '\"', &str[i]))
 		return (true);
-	else if (expansion_type == '*' && !is_in_quote(str, "'", \
-			&str[i]) && !is_in_quote(str, "\"", &str[i]))
+	else if (expansion_type == '*' && !is_in_quote(str, '\'', \
+			&str[i]) && !is_in_quote(str, '\"', &str[i]))
 		return (true);
-		
 	return (false);
 }
 
@@ -230,7 +233,7 @@ char *expand_values(char *str, t_program_data *program_data, bool heredoc)
 	new_str = ft_calloc(ft_strlen(str) + 1, sizeof(char));
 	while (str[++i])
 	{
-		if (str[i] == '~' && should_expand(str, i, 'h'))
+		if (str[i] == '~' && should_expand(str, i, '~'))
 			new_str = ft_strjoinfree(new_str, get_envcp("HOME", program_data));
 		else if (str[i] == '$' && should_expand(str, i, '?'))
 		{
@@ -269,19 +272,23 @@ char *expand_values(char *str, t_program_data *program_data, bool heredoc)
 		else if (str[i] == '*' && should_expand(str, i, '*') && !heredoc) // wildcard, need to take* with the rest in front or behind delimitted by spaces
 		{
 			// printf("str[i]: .%c.\n", str[i]);
-			env_var = list_matching_files(get_pattern(str, i));
-			// printf("tmp: %s\n", tmp);
+			env_var = list_matching_files(get_pattern(str, i, program_data));
+			// printf("wildcard: %s\n", env_var);
 			if (env_var)
 			{
-				char *tmp2 = ft_strrchr(new_str, ' ');
-				// printf("tmp2: %s\n", tmp2);
-				if (tmp2)
-					*(tmp2 + 1) = '\0';
+				// printf("env_var: %s\n", env_var);
+				int index = ft_strlen(new_str) - 1;
+				while (index > 0 && (str[index] != ' ' || is_in_quote(str, '"', &str[index]) || is_in_quote(str, '\'', &str[index])) && !is_operator_symbol(str[index], ' '))
+					index--;
+				new_str[index + 1] = '\0';
+				new_str = ft_strjoinfree(new_str, ft_strdup("\""));
 				new_str = ft_strjoinfree(new_str, env_var);
-				while (str[i] && str[i] != ' ' && !is_operator_symbol(str[i], ' '))
+				new_str = ft_strjoinfree(new_str, ft_strdup("\""));
+				while (str[i] && (str[i] != ' ' || is_in_quote(str, '"', &str[i]) || is_in_quote(str, '\'', &str[i])) && !is_operator_symbol(str[i], ' '))
 					i++;
 				if (str[i] && (str[i] == ' ' || is_operator_symbol(str[i], ' ')))
 					new_str = ft_strjoinfree(new_str, ft_substr(&str[i], 0, 1));
+				// printf("new_str: %s\n", new_str);
 			}
 			else
 				new_str = ft_strjoinfree(new_str, ft_substr(&str[i], 0, 1));

@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/19 22:38:46 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/20 17:24:55 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,7 +183,7 @@ int					delete_envcp_var(char *var, char **envcp);
 // --- util
 
 char				*strjoin_null_compatible(char const *s1, char const *s2);
-bool				is_in_quote(char *str, char *quote, char *current_char);
+bool				is_in_quote(char *str, char quote, char *current_char);
 // errors
 void				broadcast_validator_error(int error, char *arg);
 void				builtin_err(char *builtin, int error, char *arg);

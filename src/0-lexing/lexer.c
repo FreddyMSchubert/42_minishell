@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 06:54:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/19 21:50:53 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/20 16:21:53 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,9 @@ static t_list	*detect_token_type(char *input, int is_first_or_after_operator, t_
 	gc_append_element(program_data->gc, token);
 	gc_append_element(program_data->gc, list);
 	token->value = input;
-	if (is_in_quote(token->value, "\'", input))
+	if (is_in_quote(token->value, '\'', input))
 		token->type = TOK_S_QUOTE;
-	else if (is_in_quote(token->value, "\"", input))
+	else if (is_in_quote(token->value, '\"', input))
 		token->type = TOK_D_QUOTE;
 	else if (ft_strnstr(token->value, "<", 1) || ft_strnstr(token->value, "<<", 2) || \
 			ft_strnstr(token->value, ">", 1) || ft_strnstr(token->value, ">>", 2))

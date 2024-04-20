@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_command_utils.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 06:36:17 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/05 10:20:29 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/20 14:42:55 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static char	*get_command_path(char **envp, char *command)
 	char	*path_temp;
 	int		counter;
 
-	if (access(command, X_OK) == 0)
+	if (access(command, X_OK) == 0 || ft_strncmp(command, "./", 2) == 0 || ft_strncmp(command, "/", 1) == 0)
 		return (ft_strdup(command));
 	while (ft_strncmp(envp[0], "PATH", 4) != 0)
 		envp++;
