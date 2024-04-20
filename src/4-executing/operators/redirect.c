@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 16:07:34 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/19 22:38:03 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/20 14:29:38 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static int	heredoc(t_bin_tree_node *node, t_program_data	*program_data)
 				return (0);
 			line[ft_strlen(line) - 1] = '\0';
 		}
-		if (!line || ft_strncmp(line, delimiter, ft_strlen(delimiter)) == 0 || \
+		if (!line || ft_strncmp(line, delimiter, ft_strlen(line)) == 0 || \
 			g_sigint_received == SIGINT)
 		{
 			free(line);
