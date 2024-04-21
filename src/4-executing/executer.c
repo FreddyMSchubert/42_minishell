@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/20 19:58:24 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/21 18:05:31 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static int	execute_builtin(t_bin_tree_node *node, t_program_data *program_data)
 		close(node->output_fd);
 	if (node->input_fd != STDIN_FILENO)
 		close(node->input_fd);
-	return (exit_code);
+	return (-1);
 }
 
 static int	execute_command(t_bin_tree_node *node, t_program_data *program_data)
@@ -53,11 +53,6 @@ static int	execute_command(t_bin_tree_node *node, t_program_data *program_data)
 	if (cmd_path)
 		free(cmd_path);
 	if (errno == EACCES)
-	{
-		program_data->exit_status = 126;
-		error_msg = "permission denied";
-	}
-	else if (errno == EISDIR)
 	{
 		program_data->exit_status = 126;
 		error_msg = "is a directory";
@@ -114,7 +109,7 @@ int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 			close(node->output_fd);
 		}
 		execute_command(node, program_data);
-		child_process_exit(program_data, 127);
+		child_process_exit(program_data, program_data->exit_status);
 	}
 	else if (pid > 0) // parent
 	{

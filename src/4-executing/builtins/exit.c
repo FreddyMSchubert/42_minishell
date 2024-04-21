@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 13:54:08 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/21 16:41:50 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/21 18:05:40 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,19 +30,20 @@ bool	is_digit(char *str)
 
 int	execute_exit(t_token **tokens, t_program_data *program_data, int out_fd)
 {
-	if (tokens[1] && tokens[2])
-	{
-		ft_putstr_fd("exit: too many arguments\n", STDERR_FILENO);
-		program_data->exit_status = 1;
-		return (1);
-	}
-	else if (tokens[1] && !is_digit(tokens[1]->value))
+	if (tokens[1] && (!is_digit(tokens[1]->value) || ft_strncmp(tokens[1]->value, "", 1) == 0))
 	{
 		ft_putstr_fd("exit: ", STDERR_FILENO);
 		ft_putstr_fd(tokens[1]->value, STDERR_FILENO);
 		ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
 		program_data->exit_status = 255;
-		return (255);
+		program_data->exit_flag = 1;
+		// return (255);
+	}
+	else if (tokens[1] && tokens[2])
+	{
+		ft_putstr_fd("exit: too many arguments\n", STDERR_FILENO);
+		program_data->exit_status = 1;
+		// return (1);
 	}
 	else if (tokens[1])
 	{

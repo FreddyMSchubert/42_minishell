@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 09:20:32 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/20 19:34:25 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/21 18:52:14 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,7 +198,7 @@ bool should_expand(char *str, int i, char expansion_type)
 		j--;
 	if (j > 0 && ft_strnstr(&str[j - 1], "<<", 2) && !is_in_quote(str, '\"', &str[j - 1]) && !is_in_quote(str, '\'', &str[j - 1]))
 		return (false);
-	if (expansion_type == '~' && (ft_isspace(str[i + 1]) || !str[i + 1] || str[i + 1] == '/') && (i == 0 || ft_isspace(str[i - 1]) || is_operator_symbol(str[i - 1], ' ')))
+	if (expansion_type == '~' && (ft_isspace(str[i + 1]) || !str[i + 1] || str[i + 1] == '/') && (i == 0 || ft_isspace(str[i - 1]) || is_operator_symbol(str[i - 1], ' ')) && !is_in_quote(str, '\'', &str[i]) && !is_in_quote(str, '\"', &str[i]) && !is_in_quote(str, '`', &str[i]) && !is_in_quote(str, '$', &str[i]) && !is_in_quote(str, '\'', &str[i]) && !is_in_quote(str, '"', &str[i]))
 		return (true);
 	else if (expansion_type == '?' && ft_strnstr(&str[i], "$?", 2) != NULL && \
 			!is_in_quote(str, '\'', &str[i]))
