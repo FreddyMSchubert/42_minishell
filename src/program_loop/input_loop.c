@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/20 14:19:28 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/21 15:45:54 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ int	execute_input(t_program_data *program_data, char *input)
 		if (VERBOSE == 1)
 			ft_printf("token sequence is invalid: %d\n", valid);
 		program_data->exit_status = valid;
+		if (!isatty(fileno(stdin)))
+			program_data->exit_flag = 1;
 		gc_cleanup(program_data->gc);
 		program_data->gc = create_garbage_collector();
 		return (-1);

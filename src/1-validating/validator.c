@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 15:25:11 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/20 20:07:57 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/21 15:52:48 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int	validator(t_list *tokens)
 			brace_opened--;
 
 		// check for valid word after < > >> <<
-		if (token->type >= TOK_REDIR)
+		if (token->type == TOK_REDIR)
 		{
 			if (!tok->next)
 				return (ft_putstr_fd("minishell: syntax error near unexpected token `newline'", STDERR_FILENO), \
