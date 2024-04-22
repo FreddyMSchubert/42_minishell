@@ -1,5 +1,10 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+### v0.28.4 - 22.04.24 - Freddy
+- Changed all errors to use log_err function. this had no effect on checks, just clarity and simplicity.
+- Removed some unnecessary files (debug folder)
+- renamed log_error to log_err
+
 ### v0.28.3 - 18.4.24 - Freddy
 - added some better free protection in expander & wildcard
 

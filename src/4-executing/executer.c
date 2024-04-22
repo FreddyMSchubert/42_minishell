@@ -52,7 +52,7 @@ static int	execute_command(t_bin_tree_node *node, t_program_data *program_data)
 	if (cmd_path)
 		free(cmd_path);
 	program_data->exit_status = 127;
-	return (log_error("command not found", node->val[0]->value, 0), 127);
+	return (log_err("command not found", node->val[0]->value, 0), 127);
 }
 
 

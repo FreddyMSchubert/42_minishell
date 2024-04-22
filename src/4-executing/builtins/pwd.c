@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 08:44:06 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/02 13:10:07 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/22 07:22:25 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	execute_pwd(int out_fd)
 	pwd = getcwd(NULL, 0);
 	if (!pwd)
 	{
-		builtin_err("pwd", -4, NULL);
+        log_err("error changing directory", "pwd", NULL);
 		return (errno);
 	}
 	ft_putendl_fd(pwd, out_fd);

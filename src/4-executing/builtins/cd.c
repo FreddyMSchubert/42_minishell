@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 06:19:23 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/18 10:28:28 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/22 07:21:44 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	execute_cd(t_token **tokens, t_program_data *program_data)
 		if (temp)
 			path = ft_strdup(temp);
 		else
-			return (builtin_err("cd", -3, "HOME"), 1);
+			return (log_err("HOME not set", "cd", NULL), 1);
 	}
 	else if (tokens[1]->value[0] == '-')
 	{
@@ -36,21 +36,21 @@ int	execute_cd(t_token **tokens, t_program_data *program_data)
 		if (temp)
 			path = ft_strdup(temp);
 		if (!temp || !path)
-			return (builtin_err("cd", -3, "OLDPWD"), 1);
+			return (log_err("OLDPWD not set", "cd", NULL), 1);
 		printf("%s\n", path);
 	}
 	else
 		path = ft_strdup(tokens[1]->value);
 	ret_val = chdir(path);
 	if (ret_val != 0)
-		return (builtin_err("cd", -4, NULL), errno);
+		return (log_err("cd", NULL, NULL), errno);
 	buffer = getcwd(NULL, 0);
 	if (!buffer)
-		return (builtin_err("cd", -5, "getcwd failed"), -1);
+		return (log_err("getcwd failed", "cd", NULL), -1);
 	free(path);
 	if (set_envcp_var("OLDPWD", get_envcp_var("PWD", program_data->envcp), 1, program_data) == -1)
-		return (free(buffer), builtin_err("cd", -2, "OLDPWD"), -2);
+		return (free(buffer), log_err("dynamic allocation error", "cd", "OLDPWD"), -2);
 	if (set_envcp_var("PWD", buffer, 0, program_data) == -1)
-		return (free(buffer), builtin_err("cd", -2, "PWD"), -2);
+		return (free(buffer), log_err("dynamic allocation error", "cd", "PWD"), -2);
 	return (free(buffer), 0);
 }

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "minishell.h"
 
 // tabs are used to visualize tree, call function with 0
 void	print_binary_tree(t_bin_tree_node *tree, int tabs)

@@ -57,13 +57,13 @@ clean:
 	@make -C $(LIBFT_DIR) clean > /dev/null
 	@make -C $(FTPRINTF_DIR) clean > /dev/null
 	@make -C $(GNL_DIR) clean > /dev/null
+	@rm -rf $(OBJ_DIR)
 fclean: clean
 	@echo "$(RED)Removing binaries...$(NC)"
 	@make -C $(LIBFT_DIR) fclean > /dev/null
 	@make -C $(FTPRINTF_DIR) fclean > /dev/null
 	@make -C $(GNL_DIR) fclean > /dev/null
 	@rm -f $(NAME) $(BNAME)
-	@rm -rf $(OBJ_DIR)
 re: fclean all
 
 comp:
