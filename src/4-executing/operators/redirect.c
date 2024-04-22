@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 16:07:34 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/17 11:43:29 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/22 10:14:56 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,6 @@ static int	heredoc(t_bin_tree_node *node, t_program_data	*program_data)
 			return (ft_putstr_fd("crash: redir: error expanding heredoc", STDERR_FILENO), -1);
 		write(pipe_fd[1], converted_line, ft_strlen(converted_line));
 		write(pipe_fd[1], "\n", 1);
-		// free(line);
-		// free(converted_line);
 	}
 	if (g_sigint_received == SIGINT)
 	{
@@ -95,7 +93,6 @@ int	redirect(t_bin_tree_node *node, t_program_data *program_data)
 		node->l->output_fd = node->output_fd;
 	if (ft_strncmp(node->val[0]->value, "<<", 2) == 0)
 		return (heredoc(node, program_data));
-	// printf("node->val[0]->value: %s\n", node->val[1]->value);
 	if (ft_strncmp(node->val[0]->value, "<", 1) == 0)
 		flags = O_RDONLY;
 	else if (ft_strncmp(node->val[0]->value, ">>", 2) == 0)
@@ -105,21 +102,9 @@ int	redirect(t_bin_tree_node *node, t_program_data *program_data)
 	filename = get_filename(node);
 	fd = open(filename, flags, 0644);
 	if (fd < 0)
-	{
-		ft_putstr_fd("minishell: ", STDERR_FILENO);
-		ft_putstr_fd(filename, STDERR_FILENO);
-		ft_putstr_fd(": ", STDERR_FILENO);
-		ft_putstr_fd(strerror(errno), STDERR_FILENO);
-		ft_putstr_fd("\n", STDERR_FILENO);
-		if (node->input_fd != 0)
-			close(node->input_fd);
-		if (node->output_fd != 1)
-			close(node->output_fd);
-		program_data->exit_status = 1;
-		return (1);
-	}
+		return (log_err(filename, filename, NULL), close_fds(node), program_data->exit_status = 1, 1);
 	if (node->r->val[0]->type == TOK_REDIR && ft_strncmp(node->val[0]->value, node->r->val[0]->value, 1) == 0) // if its not the last redirect and the same as the current one
-		return (close(fd), redirect(node->r, program_data)); //printf("another redirection in front, node: %s\n", node->val[0]->value), 
+		return (close(fd), redirect(node->r, program_data));
 	if (node->val[0]->value[0] == '>')
 		redir_out = true;
 	else
@@ -142,4 +127,23 @@ int	redirect(t_bin_tree_node *node, t_program_data *program_data)
 		node->l->output_fd = fd;
 	(void)program_data;
 	return (0);
+}
+
+// recursive check upwards until reaching head node.
+// if any parent node has a redirected output, return that instead.
+// topmost redirected output should be returned in the end
+int	check_whether_parent_redirected(t_bin_tree_node *node)
+{
+	int	topmost_parent_output_fd;
+	int	own_output_fd;
+
+	if (node->parent)
+		topmost_parent_output_fd = check_whether_parent_redirected(node->parent);
+	else // head node
+		return (node->output_fd);
+	own_output_fd = node->output_fd;
+
+	if (topmost_parent_output_fd != STDOUT_FILENO)
+		return (topmost_parent_output_fd);
+	return (own_output_fd);
 }

@@ -1,5 +1,11 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+### v0.28.6 - 22.04.24 - Freddy
+- fixed exit return code being overwritten in execute_builtin
+- some very solid line savings by putting the non-stdout or stdin closing logic into own util function
+- fixed pipes not properly redirecting output when on the left theres not just a single node
+	- added a recursive check_whether_parent_redirected function which returns the output fd of the topmost parent with a weird output fd or just stdout
+
 ### v0.28.5 - 22.04.24 - Freddy
 - fixed exit code not being retrieved correctly from left parts of and or operators
 - fixed lexer not correctly categorizing builtins after an operator as a builtin

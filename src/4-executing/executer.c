@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/22 09:25:29 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/22 10:14:34 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static void	execute_builtin(t_bin_tree_node *node, t_program_data *program_data)
 	else if (ft_strncmp(node->val[0]->value, "env", 3) == 0)
 		program_data->exit_status = execute_env(program_data, node->output_fd);
 	else if (ft_strncmp(node->val[0]->value, "exit", 4) == 0)
-		program_data->exit_status = execute_exit(node->val, program_data, node->output_fd);
+		execute_exit(node->val, program_data, node->output_fd);
 	if (node->output_fd != STDOUT_FILENO)
 		close(node->output_fd);
 	if (node->input_fd != STDIN_FILENO)
@@ -62,14 +62,7 @@ static int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 
 	pid = fork();
 	if (pid == -1)
-	{
-		perror("fork failed");
-		if (node->output_fd != STDOUT_FILENO)
-			close(node->output_fd);
-		if (node->input_fd != STDIN_FILENO)
-			close(node->input_fd);
-		return (-1);
-	}
+		return (perror("fork failed"), close_fds(node), -1);
 	else if (pid == 0) // child
 	{
 		if (node->input_fd != STDIN_FILENO)
@@ -100,30 +93,27 @@ static int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 		child_process_exit(program_data, 127);
 	}
 	else if (pid > 0) // parent
-	{
-		if (VERBOSE == 1)
-			ft_printf("child process %d: %s\n", pid, node->val[0]->value);
-		if (node->output_fd != STDOUT_FILENO)
-			close(node->output_fd);
-		if (node->input_fd != STDIN_FILENO)
-			close(node->input_fd);
-		return (pid);
-	}
+		return (close_fds(node), pid);
 	return (42);	// this will never occur, just to silence warning
 }
 
 pid_t	execute(t_bin_tree_node *tree, t_program_data *program_data)
 {
 	int	last_pid;
+	int	redir_out;
 
 	last_pid = -1;
 	if (program_data->exit_flag == 1 || !tree)
 		return (program_data->exit_status);
 	if (tree->l == NULL && tree->r == NULL)
+	{
+		redir_out = check_whether_parent_redirected(tree);
+		tree->output_fd = redir_out;
 		if (tree->val[0]->type != TOK_BUILTIN)
 			last_pid = execute_node(tree, program_data);
 		else
 			execute_builtin(tree, program_data);
+	}
 	else
 	{
 	// branches
