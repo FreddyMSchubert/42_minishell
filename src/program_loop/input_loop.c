@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/18 18:04:32 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/22 09:25:56 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,14 +59,16 @@ int	execute_input(t_program_data *program_data, char *input)
 		ft_printf("\n\n\n");
 	// --- executer
 	last_pid = execute(tree, program_data);
-	// printf("last_pid: %d\n", last_pid);
 	if (last_pid != -1)
 	{
+		if (VERBOSE == 1)
+			ft_printf("waiting for pid %d\n", last_pid);
 		waitpid(last_pid, &status, 0);
+		if (program_data->exit_status == 0 && VERBOSE == 1)
+			ft_printf("exit status was: %d, will be: %d\n", program_data->exit_status, WEXITSTATUS(status));
 		if (program_data->exit_status == 0)
-			program_data->exit_status = WEXITSTATUS(status);
+			program_data->exit_status = WEXITSTATUS(status);;
 	}
-	// printf("exit_status: %d\n", program_data->exit_status);
 	return (0);
 }
 

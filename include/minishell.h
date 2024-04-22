@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/22 07:16:23 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/22 09:18:34 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,13 @@
 #include "../submodules/42_ft_printf/ft_printf.h"
 #include "../submodules/42_libft/libft.h"
 #include "../submodules/42_get_next_line/get_next_line.h"
+
+// ----- SETTINGS
+
+// will output detailed logging if set to 1, and normal logging if 0
+#define VERBOSE 0
+// will make everything work with tester provided
+#define DEBUG 1
 
 // ----- TOKEN TYPES
 
@@ -84,13 +91,6 @@ typedef struct s_cmd_path
 	char			*path;
 	char			**args;
 }				t_cmd_path;
-
-// ----- SETTINGS
-
-// will output detailed logging if set to 1, and normal logging if 0
-#define VERBOSE 0
-// will make everything work with tester provided executable is called minishell
-#define DEBUG 1
 
 // ----- FUNCTIONS
 
@@ -154,7 +154,6 @@ t_bin_tree_node		*tok_to_bin_tree(t_list *tokens, t_program_data *program_data);
 // --- 4-executing
 // general
 int					execute(t_bin_tree_node *tree, t_program_data *data);
-int					execute_node(t_bin_tree_node *node, t_program_data *data);
 int					execute_input(t_program_data *program_data, char *input);
 void				child_process_exit(t_program_data	*data, int	exitcode);
 // operators
@@ -165,7 +164,7 @@ void				setup_pipe(t_bin_tree_node *node, t_program_data *data);
 // "normal" commands
 t_cmd_path			*create_cmd_struct(char	**envp, t_token	**cmd);
 // builtins
-int					execute_echo(t_token **inputs, int out_fd);
+int					execute_echo(t_token **inputs, int out_fd, t_program_data *program_data);
 int					execute_env(t_program_data *program_data, int out_fd);
 int					execute_exit(t_token **tokens, t_program_data *data, \
 								int out_fd);

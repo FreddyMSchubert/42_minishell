@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 06:54:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/17 09:42:07 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/22 09:17:13 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,6 @@ static t_list	*detect_token_type(char *input, int is_first_or_after_operator, t_
 		token->type = TOK_CLOSE_BRACE;
 	else
 		token->type = TOK_WORD;
-	// if (token->type == TOK_S_QUOTE || token->type == TOK_D_QUOTE)
-	// 	token->type = TOK_WORD;
 	list->next = split_token_if_operator_in_quotes(&token, program_data);
 	list->content = token;
 	token->value = get_rid_of_quotes(token->value);
@@ -146,7 +144,6 @@ static char	*put_space_between_tokens(char *input, t_program_data *data)
 
 	if (count_tokens(input) == -1)
 		exit_error("Syntax error", 258, data->gc);
-	// printf("calc_add_spaces: %d\n", calc_add_spaces(input));
 	new_input = ft_calloc((ft_strlen(input) + calc_add_spaces(input) + 1), 1);
 	if (!new_input)
 		return (NULL);
@@ -203,7 +200,7 @@ t_list	*lexer(char *input, t_program_data *data)
 	{
 		is_first_or_after_operator = 0;
 		if (counter == 0 || (is_operator_symbol(split_input[counter - 1][0], \
-				split_input[counter - 1][1]) != 0 && !is_redirect(*split_input[counter - 1]) == 0))
+				split_input[counter - 1][1]) != 0 && !is_redirect(*split_input[counter - 1]) == true))
 			is_first_or_after_operator = 1;
 		ft_lstadd_back(&tokens, detect_token_type(split_input[counter], is_first_or_after_operator, data));
 		if (ft_lstlast(tokens)->content == NULL)

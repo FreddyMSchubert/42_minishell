@@ -1,5 +1,9 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+### v0.28.5 - 22.04.24 - Freddy
+- fixed exit code not being retrieved correctly from left parts of and or operators
+- fixed lexer not correctly categorizing builtins after an operator as a builtin
+
 ### v0.28.4 - 22.04.24 - Freddy
 - Changed all errors to use log_err function. this had no effect on checks, just clarity and simplicity.
 - Removed some unnecessary files (debug folder)

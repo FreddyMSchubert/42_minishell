@@ -3,39 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/17 11:44:15 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/22 09:25:29 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static int	execute_builtin(t_bin_tree_node *node, t_program_data *program_data)
+static void	execute_builtin(t_bin_tree_node *node, t_program_data *program_data)
 {
-	int	exit_code;
-
-	exit_code = -1;
+	if (VERBOSE == 1)
+		ft_printf("execute_builtin called! exit code was %d\n", program_data->exit_status);
 	if (ft_strncmp(node->val[0]->value, "echo", 4) == 0)
-		exit_code = execute_echo(node->val, node->output_fd);
-	if (ft_strncmp(node->val[0]->value, "cd", 2) == 0)
-		exit_code = execute_cd(node->val, program_data);
-	if (ft_strncmp(node->val[0]->value, "pwd", 3) == 0)
-		exit_code = execute_pwd(node->output_fd);
-	if (ft_strncmp(node->val[0]->value, "export", 6) == 0)
-		exit_code = execute_export(node->val, program_data);
-	if (ft_strncmp(node->val[0]->value, "unset", 5) == 0)
-		exit_code = execute_unset(node->val, program_data);
-	if (ft_strncmp(node->val[0]->value, "env", 3) == 0)
-		exit_code = execute_env(program_data, node->output_fd);
-	if (ft_strncmp(node->val[0]->value, "exit", 4) == 0)
-		exit_code = execute_exit(node->val, program_data, node->output_fd);
+		program_data->exit_status = execute_echo(node->val, node->output_fd, program_data);
+	else if (ft_strncmp(node->val[0]->value, "cd", 2) == 0)
+		program_data->exit_status = execute_cd(node->val, program_data);
+	else if (ft_strncmp(node->val[0]->value, "pwd", 3) == 0)
+		program_data->exit_status = execute_pwd(node->output_fd);
+	else if (ft_strncmp(node->val[0]->value, "export", 6) == 0)
+		program_data->exit_status = execute_export(node->val, program_data);
+	else if (ft_strncmp(node->val[0]->value, "unset", 5) == 0)
+		program_data->exit_status = execute_unset(node->val, program_data);
+	else if (ft_strncmp(node->val[0]->value, "env", 3) == 0)
+		program_data->exit_status = execute_env(program_data, node->output_fd);
+	else if (ft_strncmp(node->val[0]->value, "exit", 4) == 0)
+		program_data->exit_status = execute_exit(node->val, program_data, node->output_fd);
 	if (node->output_fd != STDOUT_FILENO)
 		close(node->output_fd);
 	if (node->input_fd != STDIN_FILENO)
 		close(node->input_fd);
-	return (exit_code);
+	if (VERBOSE == 1)
+		ft_printf("execute_builtin finished! exit code was %d\n", program_data->exit_status);
 }
 
 static int	execute_command(t_bin_tree_node *node, t_program_data *program_data)
@@ -56,12 +56,10 @@ static int	execute_command(t_bin_tree_node *node, t_program_data *program_data)
 }
 
 
-int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
+static int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 {
 	pid_t	pid;
 
-	// if (node->val[0]->type == TOK_BUILTIN)
-	// 	return(execute_builtin(node, program_data));
 	pid = fork();
 	if (pid == -1)
 	{
@@ -125,7 +123,7 @@ pid_t	execute(t_bin_tree_node *tree, t_program_data *program_data)
 		if (tree->val[0]->type != TOK_BUILTIN)
 			last_pid = execute_node(tree, program_data);
 		else
-			program_data->exit_status = execute_builtin(tree, program_data);
+			execute_builtin(tree, program_data);
 	else
 	{
 	// branches

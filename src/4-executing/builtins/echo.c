@@ -6,13 +6,13 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:48:20 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/17 08:45:04 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/22 08:13:39 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/minishell.h"
 
-int	execute_echo(t_token **inputs, int out_fd)
+int	execute_echo(t_token **inputs, int out_fd, t_program_data *program_data)
 {
 	int		i;
 	int		j;
@@ -41,5 +41,6 @@ int	execute_echo(t_token **inputs, int out_fd)
 	}
 	if (n_flag == 0)
 		ft_putstr_fd("\n", out_fd);
+	program_data->exit_status = 0;
 	return (0);
 }
