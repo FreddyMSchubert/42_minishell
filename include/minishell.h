@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/22 10:12:56 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/23 08:38:23 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,12 +78,21 @@ typedef struct s_bin_tree_node
 	int				output_fd;
 }	t_bin_tree_node;
 
+// needed to store file descriptors for cleanup
+typedef struct s_fdlist	t_fdlist;
+typedef struct s_fdlist
+{
+	int			fd;
+	t_fdlist	*next;
+}				t_fdlist;
+
 typedef struct s_program_data
 {
 	char			exit_flag;		// 0 by default, 1 to exit & cleanup
 	int				exit_status;	// exit status to be returned
 	char			**envcp;		// internal copy of envp
 	t_list			*gc;			// garbage collector
+	t_fdlist		*fd_gc;			// file descriptor collector
 }	t_program_data;
 
 typedef struct s_cmd_path
@@ -115,8 +124,13 @@ int					gc_append_element(t_list *gc, void *content);
 void				gc_append_element_array(t_list *gc, void *content);
 void				gc_append_t_list(t_list *gc, t_list *linkedlist);
 void				gc_cleanup(t_list *gc);
+// - fd collector
+t_fdlist			*create_fd_collector(void);
+int					fd_collector_append(t_program_data *data, int fd1, int fd2);
+void				fd_collector_cleanup(t_fdlist *fd_gc);
 // - util
-void				exit_error(char *message, int exit_code, t_list *gc);
+void				exit_error(char *msg, int exit_code, t_program_data *data);
+void				cleanup_gc_and_fd(t_program_data *program_data);
 // - signals
 int					setup_signals(void);
 // - visuals
@@ -162,7 +176,7 @@ int					logical_and(t_bin_tree_node *node, t_program_data *data);
 int					logical_or(t_bin_tree_node *node, t_program_data *data);
 int					redirect(t_bin_tree_node *node, t_program_data *data);
 void				setup_pipe(t_bin_tree_node *node, t_program_data *data);
-int					check_whether_parent_redirected(t_bin_tree_node *node);
+int					get_parent_output_fd(t_bin_tree_node *node);
 // "normal" commands
 t_cmd_path			*create_cmd_struct(char	**envp, t_token	**cmd);
 // builtins

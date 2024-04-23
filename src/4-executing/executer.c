@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/22 10:14:34 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/23 08:36:57 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,8 @@
 
 static void	execute_builtin(t_bin_tree_node *node, t_program_data *program_data)
 {
-	if (VERBOSE == 1)
-		ft_printf("execute_builtin called! exit code was %d\n", program_data->exit_status);
 	if (ft_strncmp(node->val[0]->value, "echo", 4) == 0)
-		program_data->exit_status = execute_echo(node->val, node->output_fd, program_data);
+		execute_echo(node->val, node->output_fd, program_data);
 	else if (ft_strncmp(node->val[0]->value, "cd", 2) == 0)
 		program_data->exit_status = execute_cd(node->val, program_data);
 	else if (ft_strncmp(node->val[0]->value, "pwd", 3) == 0)
@@ -30,12 +28,6 @@ static void	execute_builtin(t_bin_tree_node *node, t_program_data *program_data)
 		program_data->exit_status = execute_env(program_data, node->output_fd);
 	else if (ft_strncmp(node->val[0]->value, "exit", 4) == 0)
 		execute_exit(node->val, program_data, node->output_fd);
-	if (node->output_fd != STDOUT_FILENO)
-		close(node->output_fd);
-	if (node->input_fd != STDIN_FILENO)
-		close(node->input_fd);
-	if (VERBOSE == 1)
-		ft_printf("execute_builtin finished! exit code was %d\n", program_data->exit_status);
 }
 
 static int	execute_command(t_bin_tree_node *node, t_program_data *program_data)
@@ -55,15 +47,12 @@ static int	execute_command(t_bin_tree_node *node, t_program_data *program_data)
 	return (log_err("command not found", node->val[0]->value, 0), 127);
 }
 
-
 static int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 {
 	pid_t	pid;
 
 	pid = fork();
-	if (pid == -1)
-		return (perror("fork failed"), close_fds(node), -1);
-	else if (pid == 0) // child
+	if (pid == 0)
 	{
 		if (node->input_fd != STDIN_FILENO)
 		{
@@ -92,23 +81,23 @@ static int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 		execute_command(node, program_data);
 		child_process_exit(program_data, 127);
 	}
-	else if (pid > 0) // parent
-		return (close_fds(node), pid);
-	return (42);	// this will never occur, just to silence warning
+	else if (pid > 0)
+		return (pid);
+	else
+		return (perror("fork failed"), -1);
+	return ("this will never be reached but you know, shut up compiler"[0]);
 }
 
 pid_t	execute(t_bin_tree_node *tree, t_program_data *program_data)
 {
 	int	last_pid;
-	int	redir_out;
 
 	last_pid = -1;
 	if (program_data->exit_flag == 1 || !tree)
 		return (program_data->exit_status);
 	if (tree->l == NULL && tree->r == NULL)
 	{
-		redir_out = check_whether_parent_redirected(tree);
-		tree->output_fd = redir_out;
+		tree->output_fd = get_parent_output_fd(tree);
 		if (tree->val[0]->type != TOK_BUILTIN)
 			last_pid = execute_node(tree, program_data);
 		else
@@ -116,7 +105,6 @@ pid_t	execute(t_bin_tree_node *tree, t_program_data *program_data)
 	}
 	else
 	{
-	// branches
 		if (tree->val[0]->type == TOK_LOG_AND)
 			return (logical_and(tree, program_data));
 		else if (tree->val[0]->type == TOK_LOG_OR)

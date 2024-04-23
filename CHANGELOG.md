@@ -1,5 +1,13 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+### v0.29.0 - 22.04.24 - Freddy
+- created a method for leaf nodes to check for whether any of their parents up the tree has redirected their output, so they can write there as well
+	- this created a couple fd issues i was unable to fix, and i decided it was cleaner to just make an fd collector
+		- implemented that in all of the places
+- General Refactorings
+- also, another readline heredoc suppression
+- some very minor changes that were necessary because the slightly different compiler in docker linux was complaining
+
 ### v0.28.6 - 22.04.24 - Freddy
 - fixed exit return code being overwritten in execute_builtin
 - some very solid line savings by putting the non-stdout or stdin closing logic into own util function

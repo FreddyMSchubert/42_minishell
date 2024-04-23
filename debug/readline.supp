@@ -16186,3 +16186,18 @@
    obj:/usr/bin/ls
    fun:(below main)
 }
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   fun:xmalloc
+   fun:readline_internal_teardown
+   fun:readline
+   fun:heredoc
+   fun:redirect
+   fun:execute
+   fun:execute_input
+   fun:run_crash_interface
+   fun:main
+}

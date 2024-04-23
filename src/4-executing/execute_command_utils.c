@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 06:36:17 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/22 09:52:15 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/23 07:42:46 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,12 +88,4 @@ t_cmd_path	*create_cmd_struct(char	**envp, t_token	**cmd)
 	}
 	path->args = split_cmd;
 	return (path);
-}
-
-void	close_fds(t_bin_tree_node *node)
-{
-	if (node->input_fd != STDIN_FILENO)
-		close(node->input_fd);
-	if (node->output_fd != STDOUT_FILENO)
-		close(node->output_fd);
 }

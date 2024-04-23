@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 09:20:32 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/18 13:24:24 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/23 07:56:36 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char	*get_envcp(char *env_var, t_program_data *program_data)
 	i = -1;
 	tmp = ft_strjoin(env_var, "=");
 	if (!tmp)
-		exit_error("malloc failed", 1, program_data->gc);
+		exit_error("malloc failed", 1, program_data);
 	gc_append_element(program_data->gc, tmp);
 	while (program_data->envcp[++i])
 	{
@@ -206,7 +206,7 @@ bool should_expand(char *str, int i, char expansion_type)
 	else if (expansion_type == '$' && is_valid_variable(&str[i + 1]) &&\
 			!is_in_quote(str, "\'", &str[i]))
 		return (true);
-	// else if ((expansion_type == 's' && str[i] == '$' && ft_isspace(str[i + 1])) \
+	// else if ((expansion_type == 's' && str[i] == '$' && ft_isspace(str[i + 1]))
 	// 		|| (str[i] == '$' && !str[i + 1]))
 	else if (expansion_type == 's' && !is_valid_variable(&str[i + 1]) && \
 			!is_in_quote(str, "'", &str[i]) && !is_in_quote(str, "\"", &str[i]))
@@ -236,7 +236,7 @@ char *expand_values(char *str, t_program_data *program_data, bool heredoc)
 		{
 			envcp_value = ft_itoa(program_data->exit_status);
 			if (!envcp_value)
-				exit_error("malloc failed", 1, program_data->gc);
+				exit_error("malloc failed", 1, program_data);
 			new_str = ft_strjoinfree(new_str, envcp_value);
 			i++;
 		}
@@ -256,12 +256,12 @@ char *expand_values(char *str, t_program_data *program_data, bool heredoc)
 		{
 			env_var = isolate_var(ft_strdup(ft_strchr(&str[i], '$') + 1));
 			if (!env_var)
-				exit_error("malloc failed", 1, program_data->gc);
+				exit_error("malloc failed", 1, program_data);
 			gc_append_element(program_data->gc, env_var);
 			i += ft_strlen(env_var);
 			envcp_value = get_envcp(env_var, program_data);
 			if (!envcp_value)
-				exit_error("malloc failed", 1, program_data->gc);
+				exit_error("malloc failed", 1, program_data);
 			envcp_value = quote_operators(envcp_value);
 			new_str = ft_strjoinfree(new_str, envcp_value);
 		}

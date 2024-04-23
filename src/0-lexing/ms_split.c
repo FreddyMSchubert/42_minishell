@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 10:42:01 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/18 10:02:15 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/23 07:51:52 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ static char	*make_split_str(const char *s, int *i, t_program_data *data)
 	*i -= 1;
 	ret = ft_substr(s, size, *i - size + 1);
 	if (!ret)
-		exit_error("Memory allocation failed", 1, data->gc);
+		exit_error("Memory allocation failed", 1, data);
 	gc_append_element(data->gc, ret);
 	return (ret);
 }

@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 06:54:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/22 09:17:13 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/23 07:51:31 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,7 @@ static char	*put_space_between_tokens(char *input, t_program_data *data)
 	int		in_quote;
 
 	if (count_tokens(input) == -1)
-		exit_error("Syntax error", 258, data->gc);
+		exit_error("Syntax error", 258, data);
 	new_input = ft_calloc((ft_strlen(input) + calc_add_spaces(input) + 1), 1);
 	if (!new_input)
 		return (NULL);

@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/22 09:25:56 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/23 07:36:52 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,7 @@ int	execute_input(t_program_data *program_data, char *input)
 		program_data->exit_status = valid;
 		if (VERBOSE == 1)
 			ft_printf("token sequence is invalid: %d\n", valid);
-		gc_cleanup(program_data->gc);
-		program_data->gc = create_garbage_collector();
+		cleanup_gc_and_fd(program_data);
 		return (-1);
 	}
 	if (VERBOSE == 1)
@@ -120,8 +119,7 @@ int	run_crash_interface(t_program_data *program_data)
 		{
 			if (input != NULL)
 				gc_append_element(program_data->gc, input);
-			gc_cleanup(program_data->gc);
-			program_data->gc = create_garbage_collector();
+			cleanup_gc_and_fd(program_data);
 			program_data->exit_status = 0;
 			if (input == NULL)
 				break ;
@@ -133,10 +131,10 @@ int	run_crash_interface(t_program_data *program_data)
 			add_history(input);
 		}
 		execute_input(program_data, input);
-		gc_cleanup(program_data->gc);
-		program_data->gc = create_garbage_collector();
+		cleanup_gc_and_fd(program_data);
 	}
 	gc_cleanup(program_data->gc);
+	fd_collector_cleanup(program_data->fd_gc);
 	rl_clear_history();
 	return (0);
 }
