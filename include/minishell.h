@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/21 18:51:24 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/23 11:51:40 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,13 @@
 #include "../submodules/42_ft_printf/ft_printf.h"
 #include "../submodules/42_libft/libft.h"
 #include "../submodules/42_get_next_line/get_next_line.h"
+
+// ----- SETTINGS
+
+// will output detailed logging if set to 1, and normal logging if 0
+#define VERBOSE 0
+// will make everything work with tester provided executable is called minishell
+#define DEBUG 1
 
 // ----- TOKEN TYPES
 
@@ -84,13 +91,6 @@ typedef struct s_cmd_path
 	char			*path;
 	char			**args;
 }				t_cmd_path;
-
-// ----- SETTINGS
-
-// will output detailed logging if set to 1, and normal logging if 0
-#define VERBOSE 0
-// will make everything work with tester provided executable is called minishell
-#define DEBUG 1
 
 // ----- FUNCTIONS
 
