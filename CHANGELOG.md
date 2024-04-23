@@ -1,5 +1,8 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+### v0.29.1 - 23.4.24 - Freddy
+- fixed and & or operator not actually retrieving return values correctly
+
 ### v0.29.0 - 23.4.24 - Freddy
 - new version number due to changed motivation - now doing bonus checks instead of leaks
 - made makefile clean target remove object directory
