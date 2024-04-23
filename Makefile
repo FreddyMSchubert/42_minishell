@@ -57,6 +57,9 @@ clean:
 	@make -C $(LIBFT_DIR) clean > /dev/null
 	@make -C $(FTPRINTF_DIR) clean > /dev/null
 	@make -C $(GNL_DIR) clean > /dev/null
+	@echo "$(RED)"
+	rm -rf $(OBJ_DIR)
+	@echo "$(NC)"
 fclean: clean
 	@echo "$(RED)Removing binaries...$(NC)"
 	@make -C $(LIBFT_DIR) fclean > /dev/null

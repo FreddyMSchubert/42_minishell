@@ -1,5 +1,12 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+### v0.29.0 - 23.4.24 - Freddy
+- new version number due to changed motivation - now doing bonus checks instead of leaks
+- made makefile clean target remove object directory
+- added more valgrind suppressions
+- fixed lexer not recognizing builtins that arent at the very start of the line
+- improved validator checks in various ways. to learn how, refer to the changes made to validator.c file in the "graveyard" branch, everything is listed in its chanelog
+
 ### v0.28.3 - 18.4.24 - Freddy
 - added some better free protection in expander & wildcard
 
