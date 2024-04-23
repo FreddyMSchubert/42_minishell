@@ -1,6 +1,11 @@
 # CHANGELOG minishell by nburchha & fschuber
 
-### v0.29.0 - 22.04.24 - Freddy
+### v0.29.1 - 23.04.24 - Freddy
+- General refactorings
+	- unnecessary comments removal
+- fixed fd priority logic in get_parent_output_fd
+
+### v0.29.0 - 23.04.24 - Freddy
 - created a method for leaf nodes to check for whether any of their parents up the tree has redirected their output, so they can write there as well
 	- this created a couple fd issues i was unable to fix, and i decided it was cleaner to just make an fd collector
 		- implemented that in all of the places

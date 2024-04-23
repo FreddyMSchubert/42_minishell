@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/23 08:36:57 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/23 10:43:03 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,11 @@ static void	execute_builtin(t_bin_tree_node *node, t_program_data *program_data)
 		program_data->exit_status = execute_env(program_data, node->output_fd);
 	else if (ft_strncmp(node->val[0]->value, "exit", 4) == 0)
 		execute_exit(node->val, program_data, node->output_fd);
+
+	if (VERBOSE == 1)
+		ft_printf("executing node: %s - [builtin] (in: %d, out: %d)\n", node->val[0]->value, node->input_fd, node->output_fd);
+	if (node->output_fd != STDOUT_FILENO && get_parent_output_fd(node, 1) != node->output_fd)
+		close(node->output_fd);
 }
 
 static int	execute_command(t_bin_tree_node *node, t_program_data *program_data)
@@ -76,13 +81,25 @@ static int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 					close(node->input_fd);
 				exit(-1);
 			}
+			printf("closing output fd %d\n", node->output_fd);
 			close(node->output_fd);
 		}
 		execute_command(node, program_data);
 		child_process_exit(program_data, 127);
 	}
 	else if (pid > 0)
+	{
+		if (VERBOSE == 1)
+			ft_printf("executing node: %s - %d (in: %d, out: %d)\n", node->val[0]->value, pid, node->input_fd, node->output_fd);
+		if (node->output_fd != STDOUT_FILENO && get_parent_output_fd(node, 1) != node->output_fd)
+			close(node->output_fd);
+		if (node->input_fd != STDIN_FILENO)
+		{
+			close(node->input_fd);
+			printf("closed input fd %d\n", node->input_fd);
+		}
 		return (pid);
+	}
 	else
 		return (perror("fork failed"), -1);
 	return ("this will never be reached but you know, shut up compiler"[0]);
@@ -97,7 +114,7 @@ pid_t	execute(t_bin_tree_node *tree, t_program_data *program_data)
 		return (program_data->exit_status);
 	if (tree->l == NULL && tree->r == NULL)
 	{
-		tree->output_fd = get_parent_output_fd(tree);
+		tree->output_fd = get_parent_output_fd(tree, 0);
 		if (tree->val[0]->type != TOK_BUILTIN)
 			last_pid = execute_node(tree, program_data);
 		else

@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/23 08:38:23 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/23 10:37:31 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@
 // ----- SETTINGS
 
 // will output detailed logging if set to 1, and normal logging if 0
-#define VERBOSE 0
+#define VERBOSE 1
 // will make everything work with tester provided
 #define DEBUG 1
 
@@ -176,7 +176,7 @@ int					logical_and(t_bin_tree_node *node, t_program_data *data);
 int					logical_or(t_bin_tree_node *node, t_program_data *data);
 int					redirect(t_bin_tree_node *node, t_program_data *data);
 void				setup_pipe(t_bin_tree_node *node, t_program_data *data);
-int					get_parent_output_fd(t_bin_tree_node *node);
+int					get_parent_output_fd(t_bin_tree_node *node, char mode);
 // "normal" commands
 t_cmd_path			*create_cmd_struct(char	**envp, t_token	**cmd);
 // builtins

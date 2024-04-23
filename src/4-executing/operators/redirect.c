@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 16:07:34 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/23 08:20:33 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/23 10:43:20 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,18 +128,27 @@ int	redirect(t_bin_tree_node *node, t_program_data *program_data)
 // recursive check upwards until reaching head node.
 // if any parent node has a redirected output, return that instead.
 // topmost redirected output should be returned in the end
-int	get_parent_output_fd(t_bin_tree_node *node)
+// if mode is 0, it returns the lowest different output fd, if mode is 1, it returns the highest
+int	get_parent_output_fd(t_bin_tree_node *node, char mode)
 {
 	int	topmost_parent_output_fd;
 	int	own_output_fd;
 
 	if (node->parent)
-		topmost_parent_output_fd = get_parent_output_fd(node->parent);
+		topmost_parent_output_fd = get_parent_output_fd(node->parent, mode);
 	else
 		return (node->output_fd);
 	own_output_fd = node->output_fd;
-
-	if (topmost_parent_output_fd != STDOUT_FILENO)
+	if (mode == 0)
+	{
+		if (own_output_fd != STDOUT_FILENO)
+			return (own_output_fd);
 		return (topmost_parent_output_fd);
-	return (own_output_fd);
+	}
+	else
+	{
+		if (topmost_parent_output_fd != STDOUT_FILENO)
+			return (topmost_parent_output_fd);
+		return (own_output_fd);
+	}
 }
