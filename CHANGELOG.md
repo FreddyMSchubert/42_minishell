@@ -1,9 +1,16 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+## v0.30.0 - 23.4.24 - Freddy
+- new branch who dis - hopefully fixing the pipe bracket combo problem here (issue 19)
+- in setup_pipe, made it find the correct node to place the writing fd pipe end
+	- this works to pipe the output correctly, but it destroys the first & second go wild checks, making them wait infinitely
+		- niklas suggested the write fd pipe input could be set to a redirect if one was encountered while recursively going down (it seems to only fail for redirects)
+		- that fixed the first two wildcards actually, big success in that sense. hwoever, wildcards 4-6 still have wrong outputs and 3-7 still have wrong return codes, all seemingly closely related to the same issue.
+
 ### v0.29.1 - 23.4.24 - Freddy
 - fixed and & or operator not actually retrieving return values correctly
 
-### v0.29.0 - 23.4.24 - Freddy
+## v0.29.0 - 23.4.24 - Freddy
 - new version number due to changed motivation - now doing bonus checks instead of leaks
 - made makefile clean target remove object directory
 - added more valgrind suppressions

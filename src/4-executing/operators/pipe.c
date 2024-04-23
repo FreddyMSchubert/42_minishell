@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 13:20:09 by nburchha          #+#    #+#             */
-/*   Updated: 2024/03/07 12:00:29 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/23 19:09:47 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,23 @@
 
 void	setup_pipe(t_bin_tree_node *node, t_program_data *program_data)
 {
-	int		pipe_fd[2];
-	// pid_t	pid;
+	int					pipe_fd[2];
+	t_bin_tree_node		*current;
 
-	// printf("setting up pipe\n");
 	node->l->input_fd = node->input_fd;
 	if (pipe(pipe_fd) == -1)
 	{
 		ft_putstr_fd("pipe error\n", 2);
 		return ;
 	}
-	node->l->output_fd = pipe_fd[1];
+	current = node->l;
+	while (current->r != NULL)
+	{
+		if (current->val[0]->type == TOK_REDIR)
+			break ;
+		current = current->r;
+	}
+	current->output_fd = pipe_fd[1];
 	node->r->input_fd = pipe_fd[0];
 	(void)program_data;
 }
