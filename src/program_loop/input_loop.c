@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input_loop.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: niklasburchhardt <niklasburchhardt@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/21 15:45:54 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/24 17:11:01 by niklasburch      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,6 @@ int	run_crash_interface(t_program_data *program_data)
 		program_data->gc = create_garbage_collector();
 	}
 	gc_cleanup(program_data->gc);
-	rl_clear_history();
+	clear_history();
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   validator.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: niklasburchhardt <niklasburchhardt@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 15:25:11 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/23 11:55:05 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/24 17:21:44 by niklasburch      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	validator(t_list *tokens)
 		if (token->type >= TOK_PIPE && token->type <= TOK_LOG_AND && tok->next && \
 				((t_token *)tok->next->content)->type >= TOK_PIPE \
 				&& ((t_token *)tok->next->content)->type <= TOK_LOG_AND)
-			return (1);
+			return (throw_syntax_error(token->value), 2);
 		// check for unclosed braces
 		if (token->type == TOK_OPEN_BRACE)
 			brace_opened++;
@@ -64,15 +64,15 @@ int	validator(t_list *tokens)
 		if (token->type == TOK_REDIR)
 		{
 			if (!tok->next)
-				return (throw_syntax_error("newline"), 1);
+				return (throw_syntax_error("newline"), 2);
 			else if (((t_token *)tok->next->content)->type > TOK_BUILTIN)
 				return (throw_syntax_error(token->value), 2);
 		}
 		tok = tok->next;
 	}
 	// check for | in beginning or end
-	if (token->type == TOK_PIPE || token->type == TOK_LOG_OR || token->type == TOK_LOG_AND || token->type == TOK_REDIR)
-		return (throw_syntax_error(token->value),258);
+	if (token->type == TOK_PIPE || token->type == TOK_LOG_OR || token->type == TOK_LOG_AND)// || token->type == TOK_REDIR)
+		return (throw_syntax_error(token->value), 2);
 	if (brace_opened != 0)
 	{
 		if (brace_opened > 0)
