@@ -6,7 +6,7 @@
 /*   By: niklasburchhardt <niklasburchhardt@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/24 20:57:33 by niklasburch      ###   ########.fr       */
+/*   Updated: 2024/04/24 22:18:23 by niklasburch      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,9 @@ static int execute_command(t_bin_tree_node *node, t_program_data *program_data)
 	t_cmd_path *cmd_path;
 	char *error_msg;
 
+	// printf("executing %s\n", node->val[0]->value);
 	cmd_path = create_cmd_struct(program_data->envcp, node->val);
-	if (cmd_path != NULL)
+	if (cmd_path)
 		execve(cmd_path->path, cmd_path->args, program_data->envcp);
 	if (cmd_path && cmd_path->path)
 		free(cmd_path->path);
@@ -110,8 +111,8 @@ int execute_node(t_bin_tree_node *node, t_program_data *program_data)
 	}
 	else if (pid > 0) // parent
 	{
-		// if (VERBOSE == 1)
-		// 	printf("child process %d: %s\n", pid, node->val[0]->value);
+		if (VERBOSE == 1)
+			printf("child process %d: %s\n", pid, node->val[0]->value);
 		if (node->output_fd != STDOUT_FILENO)
 			close(node->output_fd);
 		if (node->input_fd != STDIN_FILENO)

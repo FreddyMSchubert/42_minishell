@@ -6,7 +6,7 @@
 /*   By: niklasburchhardt <niklasburchhardt@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 06:36:17 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/24 20:28:13 by niklasburch      ###   ########.fr       */
+/*   Updated: 2024/04/24 22:18:30 by niklasburch      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,10 @@ static char	*get_command_path(char **envp, char *command)
 
 	if (access(command, X_OK) == 0 || ft_strncmp(command, "./", 2) == 0 || ft_strncmp(command, "/", 1) == 0)
 		return (ft_strdup(command));
-	while (ft_strncmp(envp[0], "PATH", 4) != 0)
+	while (envp && envp[0] && ft_strncmp(envp[0], "PATH", 4) != 0)
 		envp++;
+	if (!envp || !envp[0])
+		return (NULL);
 	split_paths = ft_split(envp[0], ':');
 	if (split_paths == NULL)
 		return (exec_error(-1), NULL);
@@ -69,8 +71,9 @@ t_cmd_path	*create_cmd_struct(char	**envp, t_token	**cmd)
 
 	path = malloc(sizeof(t_cmd_path));
 	if (!path)
-		return (exec_error(-1), NULL);
+		return (printf("malloc eror\n"), exec_error(-1), NULL);
 	path->path = get_command_path(envp, cmd[0]->value);
+	// printf("path->path: %s\n", path->path);
 	if (!path->path)
 		return (free(path), NULL);
 	token_amount = get_token_arr_len(cmd);
