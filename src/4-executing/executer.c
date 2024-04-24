@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/23 19:33:36 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/24 17:43:01 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,28 +14,28 @@
 
 static int	execute_builtin(t_bin_tree_node *node, t_program_data *program_data)
 {
-	int	exit_code;
-
-	exit_code = -1;
+	if (VERBOSE == 1)
+		ft_printf("executing builtin %s, in: %d, out: %d\n", node->val[0]->value, node->input_fd, node->output_fd);
 	if (ft_strncmp(node->val[0]->value, "echo", 4) == 0)
-		exit_code = execute_echo(node->val, node->output_fd, program_data);
+		execute_echo(node->val, node->output_fd, program_data);
 	if (ft_strncmp(node->val[0]->value, "cd", 2) == 0)
-		exit_code = execute_cd(node->val, program_data);
+		execute_cd(node->val, program_data);
 	if (ft_strncmp(node->val[0]->value, "pwd", 3) == 0)
-		exit_code = execute_pwd(node->output_fd, program_data);
+		execute_pwd(node->output_fd, program_data);
 	if (ft_strncmp(node->val[0]->value, "export", 6) == 0)
-		exit_code = execute_export(node->val, node->output_fd, program_data);
+		execute_export(node->val, node->output_fd, program_data);
 	if (ft_strncmp(node->val[0]->value, "unset", 5) == 0)
-		exit_code = execute_unset(node->val, program_data);
+		execute_unset(node->val, program_data);
 	if (ft_strncmp(node->val[0]->value, "env", 3) == 0)
-		exit_code = execute_env(program_data, node->output_fd);
+		execute_env(program_data, node->output_fd);
 	if (ft_strncmp(node->val[0]->value, "exit", 4) == 0)
-		exit_code = execute_exit(node->val, program_data, node->output_fd);
+		execute_exit(node->val, program_data, node->output_fd);
 	if (node->output_fd != STDOUT_FILENO)
 		close(node->output_fd);
 	if (node->input_fd != STDIN_FILENO)
 		close(node->input_fd);
-	ft_printf("closing fds: %d, %d\n", node->input_fd, node->output_fd);
+	if (VERBOSE == 1)
+		ft_printf("closing fds: %d, %d\n", node->input_fd, node->output_fd);
 	return (-1);
 }
 
@@ -66,13 +66,12 @@ static int	execute_command(t_bin_tree_node *node, t_program_data *program_data)
 	return (log_error(error_msg, node->val[0]->value, 0), -1);
 }
 
-
 int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 {
 	pid_t	pid;
 
-	// if (node->val[0]->type == TOK_BUILTIN)
-	// 	return(execute_builtin(node, program_data));
+	if (VERBOSE == 1)
+		ft_printf("executing %s, in: %d, out: %d\n", node->val[0]->value, node->input_fd, node->output_fd);
 	pid = fork();
 	if (pid == -1)
 	{
@@ -96,7 +95,6 @@ int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 				exit(-1);
 			}
 			close(node->input_fd);
-			ft_printf("closed input fd %d\n", node->input_fd);
 		}
 		if (node->output_fd != STDOUT_FILENO)
 		{
@@ -109,7 +107,6 @@ int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 				exit(-1);
 			}
 			close(node->output_fd);
-			ft_printf("closed output fd %d\n", node->output_fd);
 		}
 		execute_command(node, program_data);
 		child_process_exit(program_data, program_data->exit_status);
@@ -119,12 +116,20 @@ int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 		if (VERBOSE == 1)
 			ft_printf("child process %d: %s\n", pid, node->val[0]->value);
 		if (node->output_fd != STDOUT_FILENO)
+		{
 			close(node->output_fd);
+			if (VERBOSE == 1)
+				ft_printf("%s: closed output fd %d\n", node->val[0]->value, node->output_fd);
+		}
 		if (node->input_fd != STDIN_FILENO)
+		{
 			close(node->input_fd);
+			if (VERBOSE == 1)
+				ft_printf("%s: closed input fd %d\n", node->val[0]->value, node->input_fd);
+		}
 		return (pid);
 	}
-	return (42);	// this will never occur, just to silence warning
+	return ("this will never occur, just to silence warning!"[0]);
 }
 
 pid_t	execute(t_bin_tree_node *tree, t_program_data *program_data)
@@ -132,7 +137,6 @@ pid_t	execute(t_bin_tree_node *tree, t_program_data *program_data)
 	int	last_pid;
 
 	last_pid = -1;
-	ft_printf("executing %s, in: %d, out: %d\n", tree->val[0]->value, tree->input_fd, tree->output_fd);
 	if (VERBOSE == 1)
 		ft_printf("executing %s, out_fd: %d\n", tree->val[0]->value, tree->output_fd);
 	if (program_data->exit_flag == 1 || !tree)
@@ -149,7 +153,7 @@ pid_t	execute(t_bin_tree_node *tree, t_program_data *program_data)
 			return (logical_and(tree, program_data));
 		else if (tree->val[0]->type == TOK_LOG_OR)
 			return (logical_or(tree, program_data));
-		else if (tree->val[0]->type == TOK_PIPE && !(tree->l->val[0]->type == TOK_REDIR && tree->l->val[0]->value[0] == '>'))
+		else if (tree->val[0]->type == TOK_PIPE)
 			setup_pipe(tree, program_data);
 		else if (tree->val[0]->type == TOK_REDIR)
 			if (redirect(tree, program_data) == 1 || !tree->l)

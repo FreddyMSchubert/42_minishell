@@ -1,5 +1,9 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+### v0.30.2 - 23.4.24 - Freddy
+- removed one pescy line and now it seems to be correct - theres still a couple of bonus test cases that we dont pass - namely 4, 5 & 6, but thats fine, we are doing pipes differently
+- still some output issues but those were fixed in graveyard branch so ill just go through that tomorrow and that should fix it probaably
+
 ### v0.30.1 - 23.4.24 - Freddy
 - just realized the same would probably be smart not only for the input but also the output node. added that - same logic but mirrored.
 - this creates multiple problems in different parts of the program, all infinite loops because off commands that expect inputs that dont get their input fd closed for some reason
