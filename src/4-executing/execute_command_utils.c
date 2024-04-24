@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_command_utils.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: niklasburchhardt <niklasburchhardt@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 06:36:17 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/20 14:42:55 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/24 20:28:13 by niklasburch      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,4 +88,17 @@ t_cmd_path	*create_cmd_struct(char	**envp, t_token	**cmd)
 	}
 	path->args = split_cmd;
 	return (path);
+}
+
+void	close_fds_loop(void)
+{
+	int	fd;
+
+	fd = 3;
+	while (fd < FD_SETSIZE)
+	{
+		if (fd != STDIN_FILENO && fd != STDOUT_FILENO)
+			close(fd);
+		fd++;
+	}
 }

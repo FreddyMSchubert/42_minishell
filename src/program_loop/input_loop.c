@@ -6,7 +6,7 @@
 /*   By: niklasburchhardt <niklasburchhardt@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/24 17:11:01 by niklasburch      ###   ########.fr       */
+/*   Updated: 2024/04/24 20:03:30 by niklasburch      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,7 @@ int	execute_input(t_program_data *program_data, char *input)
 	t_list				*tokenified_input;
 	t_bin_tree_node		*tree;
 	int					valid;
-	int					status;
-	pid_t				last_pid;
+	t_pid_list			*pid_list;
 
 	if (VERBOSE == 1)
 		ft_printf("Received input: %s\n", input);
@@ -60,13 +59,9 @@ int	execute_input(t_program_data *program_data, char *input)
 	if (VERBOSE == 1)
 		ft_printf("\n\n\n");
 	// --- executer
-	last_pid = execute(tree, program_data);
-	// printf("last_pid: %d\n", last_pid);
-	if (last_pid != -1)
-	{
-		waitpid(last_pid, &status, 0);
-		program_data->exit_status = WEXITSTATUS(status);
-	}
+	pid_list = NULL;
+	execute(tree, program_data, &pid_list);
+	wait_and_free(program_data, &pid_list);
 	// printf("exit_status: %d\n", program_data->exit_status);
 	return (0);
 }
@@ -74,9 +69,12 @@ int	execute_input(t_program_data *program_data, char *input)
 int	run_crash_interface(t_program_data *program_data)
 {
 	char	*input;
+	// struct	termios original_termios;
 
 	if (DEBUG == 0)
 		print_logo();
+	// if (tcgetattr(STDIN_FILENO, &original_termios) < 0)
+	// 	exit_error("tcgetattr failed", 1, program_data->gc);
 	while (program_data->exit_flag == 0)
 	{
 		if (DEBUG == 0)
@@ -132,6 +130,7 @@ int	run_crash_interface(t_program_data *program_data)
 			add_history(input);
 		}
 		execute_input(program_data, input);
+		// tcgetattr(STDIN_FILENO, &original_termios);
 		gc_cleanup(program_data->gc);
 		program_data->gc = create_garbage_collector();
 	}
