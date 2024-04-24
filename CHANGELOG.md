@@ -1,5 +1,12 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+### v0.30.1 - 23.4.24 - Freddy
+- just realized the same would probably be smart not only for the input but also the output node. added that - same logic but mirrored.
+- this creates multiple problems in different parts of the program, all infinite loops because off commands that expect inputs that dont get their input fd closed for some reason
+- idk about this, added some print statements to understand the flow
+- that was kinda helpful, its now clear the last pipes write end doesnt get closed
+- can't finish it, pushing to continue on other device.
+
 ## v0.30.0 - 23.4.24 - Freddy
 - new branch who dis - hopefully fixing the pipe bracket combo problem here (issue 19)
 - in setup_pipe, made it find the correct node to place the writing fd pipe end

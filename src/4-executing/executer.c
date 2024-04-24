@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/23 13:07:10 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/23 19:33:36 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ static int	execute_builtin(t_bin_tree_node *node, t_program_data *program_data)
 		close(node->output_fd);
 	if (node->input_fd != STDIN_FILENO)
 		close(node->input_fd);
+	ft_printf("closing fds: %d, %d\n", node->input_fd, node->output_fd);
 	return (-1);
 }
 
@@ -95,6 +96,7 @@ int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 				exit(-1);
 			}
 			close(node->input_fd);
+			ft_printf("closed input fd %d\n", node->input_fd);
 		}
 		if (node->output_fd != STDOUT_FILENO)
 		{
@@ -107,6 +109,7 @@ int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 				exit(-1);
 			}
 			close(node->output_fd);
+			ft_printf("closed output fd %d\n", node->output_fd);
 		}
 		execute_command(node, program_data);
 		child_process_exit(program_data, program_data->exit_status);
@@ -129,6 +132,7 @@ pid_t	execute(t_bin_tree_node *tree, t_program_data *program_data)
 	int	last_pid;
 
 	last_pid = -1;
+	ft_printf("executing %s, in: %d, out: %d\n", tree->val[0]->value, tree->input_fd, tree->output_fd);
 	if (VERBOSE == 1)
 		ft_printf("executing %s, out_fd: %d\n", tree->val[0]->value, tree->output_fd);
 	if (program_data->exit_flag == 1 || !tree)
