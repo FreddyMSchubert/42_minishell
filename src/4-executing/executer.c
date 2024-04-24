@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: niklasburchhardt <niklasburchhardt@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/23 13:07:10 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/24 16:44:59 by niklasburch      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ static int	execute_builtin(t_bin_tree_node *node, t_program_data *program_data)
 		close(node->output_fd);
 	if (node->input_fd != STDIN_FILENO)
 		close(node->input_fd);
+	(void)exit_code;
 	return (-1);
 }
 
@@ -113,8 +114,8 @@ int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 	}
 	else if (pid > 0) // parent
 	{
-		if (VERBOSE == 1)
-			ft_printf("child process %d: %s\n", pid, node->val[0]->value);
+		// if (VERBOSE == 1)
+		// 	printf("child process %d: %s\n", pid, node->val[0]->value);
 		if (node->output_fd != STDOUT_FILENO)
 			close(node->output_fd);
 		if (node->input_fd != STDIN_FILENO)
@@ -130,7 +131,7 @@ pid_t	execute(t_bin_tree_node *tree, t_program_data *program_data)
 
 	last_pid = -1;
 	if (VERBOSE == 1)
-		ft_printf("executing %s, out_fd: %d\n", tree->val[0]->value, tree->output_fd);
+		printf("executing %s, out_fd: %d\n", tree->val[0]->value, tree->output_fd);
 	if (program_data->exit_flag == 1 || !tree)
 		return (program_data->exit_status);
 	if (tree->l == NULL && tree->r == NULL)
@@ -145,7 +146,7 @@ pid_t	execute(t_bin_tree_node *tree, t_program_data *program_data)
 			return (logical_and(tree, program_data));
 		else if (tree->val[0]->type == TOK_LOG_OR)
 			return (logical_or(tree, program_data));
-		else if (tree->val[0]->type == TOK_PIPE && !(tree->l->val[0]->type == TOK_REDIR && tree->l->val[0]->value[0] == '>'))
+		else if (tree->val[0]->type == TOK_PIPE)// && !(tree->l->val[0]->type == TOK_REDIR && tree->l->val[0]->value[0] == '>'))
 			setup_pipe(tree, program_data);
 		else if (tree->val[0]->type == TOK_REDIR)
 			if (redirect(tree, program_data) == 1 || !tree->l)

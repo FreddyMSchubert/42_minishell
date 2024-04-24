@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: niklasburchhardt <niklasburchhardt@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 06:54:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/23 11:50:26 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/24 16:44:19 by niklasburch      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,17 +146,19 @@ static char	*put_space_between_tokens(char *input, t_program_data *data)
 
 	if (count_tokens(input) == -1)
 		exit_error("Syntax error", 258, data->gc);
-	// printf("calc_add_spaces: %d\n", calc_add_spaces(input));
 	new_input = ft_calloc((ft_strlen(input) + calc_add_spaces(input) + 1), 1);
 	if (!new_input)
 		return (NULL);
+	// printf("calc_add_spaces: %d\n", calc_add_spaces(input));
 	gc_append_element(data->gc, new_input);
 	i = 0;
 	j = 0;
 	cur_symbol = SYM_SPC;
 	in_quote = 0;
+	// printf("input: %s\n", input);
 	while (input[i] && j < (int)ft_strlen(input) + calc_add_spaces(input))
 	{
+		// printf("input[%d]: %c\n", i, input[i]);
 		if ((input[i] == '\'' && in_quote != '\'') || (input[i] == '\"' && in_quote != '"'))
 			in_quote = input[i];
 		else if (in_quote == input[i])
@@ -179,7 +181,8 @@ static char	*put_space_between_tokens(char *input, t_program_data *data)
 			cur_symbol = 1;
 		if (input[i] && is_operator_symbol(input[i], input[i + 1]) == 2)
 			new_input[j++] = input[i++];
-		new_input[j++] = input[i++];
+		if (input[i])
+			new_input[j++] = input[i++];
 	}
 	// printf("new_input: %s\n", new_input);
 	return (new_input);

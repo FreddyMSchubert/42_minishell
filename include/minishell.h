@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: niklasburchhardt <niklasburchhardt@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/23 11:51:40 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/24 16:44:12 by niklasburch      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,8 +139,16 @@ int					check_files(t_list *files, int flag);
 // --- 2-expanding
 char				*get_envcp(char *var_name, t_program_data *program_data);
 t_list				*expander(t_list *tokens, t_program_data *program_data);
-char				*list_matching_files(char *pattern);
 char				*expand_values(char *str, t_program_data *program_data, bool heredoc);
+char				*get_envcp(char *env_var, t_program_data *program_data);
+char				*isolate_var(char *var);
+int					find_closing_quote(char *str, int *i);
+char				*quote_operators(char *envcp_value);
+bool				is_valid_variable(char *var);
+// wildcard
+char				*list_matching_files(char *pattern);
+char				*get_pattern(char *str, int index, t_program_data *program_data);
+char				*get_rid_of_quotes_wildcard(char *str);
 // --- 3-parsing
 // util
 t_list				*sub_token_t_list(t_list *tokens, int start, int end, t_program_data *program_data);
@@ -181,7 +189,7 @@ int					create_envcp_var(char *vr, char *vl, t_program_data *data);
 int					delete_envcp_var(char *var, char **envcp);
 
 // --- util
-
+void				*ft_realloc(void *ptr, size_t old_size, size_t new_size);
 char				*strjoin_null_compatible(char const *s1, char const *s2);
 bool				is_in_quote(char *str, char quote, char *current_char);
 // errors
