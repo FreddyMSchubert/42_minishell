@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 19:50:38 by niklasburch       #+#    #+#             */
-/*   Updated: 2024/04/25 19:43:39 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/25 21:14:24 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,12 @@ void	*wait_and_free(t_program_data *program_data, t_pid_list **pid_list)
 	int			status;
 	int			exit_status;
 
+	g_sigint_received = 1;
 	tmp = *pid_list;
 	exit_status = 0;
 	while (tmp)
 	{
-		if (!next && tmp->is_builtin)
+		if (!tmp->next && tmp->is_builtin)
 			return (free(tmp), NULL);
 		if (tmp->is_builtin)
 		{
@@ -45,6 +46,7 @@ void	*wait_and_free(t_program_data *program_data, t_pid_list **pid_list)
 	}
 	if (program_data->exit_status == 0)
 		program_data->exit_status = exit_status;
+	g_sigint_received = 0;
 	return (NULL);
 }
 

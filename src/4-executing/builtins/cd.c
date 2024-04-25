@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 06:19:23 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/25 12:01:40 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/25 21:06:24 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ int	execute_cd(t_token **tokens, t_program_data *program_data)
 	char	*buffer;
 
 	path = get_path(tokens, program_data);
+	gc_append_element(program_data->gc, path);
 	if (!path)
 		return (1);
 	if (change_directory(path, program_data) != 0)
@@ -104,7 +105,6 @@ int	execute_cd(t_token **tokens, t_program_data *program_data)
 	buffer = get_current_directory(program_data);
 	if (!buffer)
 		return (-1);
-	free(path);
 	if (update_env_vars(program_data, buffer) != 0)
 		return (-2);
 	free(buffer);

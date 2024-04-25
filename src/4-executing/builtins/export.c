@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 09:38:36 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/25 13:31:54 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/25 21:13:06 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ int	execute_export(t_token **tokens, int out_fd, t_program_data *program_data)
 		var = ft_substr(tokens[i]->value, 0, equ_pos_char - tokens[i]->value);
 		if (!var)
 			return (export_error_return(4, NULL, program_data));
+		gc_append_element(program_data->gc, var);
 		if (ft_isnbr(var))
 		{
 			export_error_return(2, tokens[i]->value, program_data);
@@ -80,6 +81,7 @@ int	execute_export(t_token **tokens, int out_fd, t_program_data *program_data)
 		value = ft_substr(tokens[i]->value, equ_pos_char - tokens[i]->value + 1, ft_strlen(tokens[i]->value) - (equ_pos_char - tokens[i]->value) - 1);
 		if (!value)
 			return (export_error_return(4, NULL, program_data));
+		gc_append_element(program_data->gc, value);
 		if (set_envcp_var(var, value, 1, program_data) != 0)
 			return (export_error_return(3, NULL, program_data));
 	}

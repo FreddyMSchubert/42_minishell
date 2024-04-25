@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/25 19:44:10 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/25 20:57:45 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ int	run_crash_interface(t_program_data *program_data)
 				char *line;
 				line = get_next_line(fileno(stdin));
 				if (line == NULL)
-					return (0);
+					return (gc_cleanup(program_data->gc), 0);
 				input = ft_strtrim(line, "\n");
 				free(line);
 			}

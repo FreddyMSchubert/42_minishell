@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   garbage_collector.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 12:18:59 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/25 10:46:38 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/25 22:08:53 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,19 +82,7 @@ void	gc_append_t_list(t_list *gc, t_list *linkedlist)
 // after this, the garbage collector is freed, so it should be reinitialized
 void	gc_cleanup(t_list *gc)
 {
-	t_list	*current;
-	t_list	*current2;
-
 	if (VERBOSE == 1)
 		printf("cleaning up garbage collector\n");
-	current = gc;
-	while (current != NULL)
-	{
-		current2 = current;
-		current = current->next;
-		free(current2->content);
-		current2->content = NULL;
-		free(current2);
-		current2 = NULL;
-	}
+	ft_lstclear(&gc, free);
 }
