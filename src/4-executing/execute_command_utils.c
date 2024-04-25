@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_command_utils.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 06:36:17 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/20 14:42:55 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/25 09:55:37 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,10 @@ static char	*get_command_path(char **envp, char *command)
 
 	if (access(command, X_OK) == 0 || ft_strncmp(command, "./", 2) == 0 || ft_strncmp(command, "/", 1) == 0)
 		return (ft_strdup(command));
-	while (ft_strncmp(envp[0], "PATH", 4) != 0)
+	while (envp && envp[0] && ft_strncmp(envp[0], "PATH", 4) != 0)
 		envp++;
+	if (!envp || !envp[0])
+		return (NULL);
 	split_paths = ft_split(envp[0], ':');
 	if (split_paths == NULL)
 		return (exec_error(-1), NULL);
@@ -69,8 +71,9 @@ t_cmd_path	*create_cmd_struct(char	**envp, t_token	**cmd)
 
 	path = malloc(sizeof(t_cmd_path));
 	if (!path)
-		return (exec_error(-1), NULL);
+		return (printf("malloc eror\n"), exec_error(-1), NULL);
 	path->path = get_command_path(envp, cmd[0]->value);
+	// printf("path->path: %s\n", path->path);
 	if (!path->path)
 		return (free(path), NULL);
 	token_amount = get_token_arr_len(cmd);
@@ -88,4 +91,17 @@ t_cmd_path	*create_cmd_struct(char	**envp, t_token	**cmd)
 	}
 	path->args = split_cmd;
 	return (path);
+}
+
+void	close_fds_loop(void)
+{
+	int	fd;
+
+	fd = 3;
+	while (fd < FD_SETSIZE)
+	{
+		if (fd != STDIN_FILENO && fd != STDOUT_FILENO)
+			close(fd);
+		fd++;
+	}
 }

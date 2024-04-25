@@ -6,13 +6,13 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 09:48:54 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/21 18:51:54 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/23 16:29:40 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/minishell.h"
 
-static bool	is_valid_variable(char *var)
+static bool	is_valid_unset_variable(char *var)
 {
 	int	i;
 
@@ -36,7 +36,7 @@ int	execute_unset(t_token **node, t_program_data *program_data)
 	{
 		// printf("node[i]->value: %s\n", node[i]->value);
 		if (ft_strchr(node[i]->value, '=') != NULL || 
-			!is_valid_variable(node[i]->value) ||
+			!is_valid_unset_variable(node[i]->value) ||
 			ft_strncmp(node[i]->value, "=", 1) == 0 || 
 			ft_strncmp(node[i]->value, "?", 1) == 0 || 
 			ft_strncmp(node[i]->value, "$", 1) == 0 || 

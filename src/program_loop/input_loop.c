@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/25 09:34:48 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/25 09:51:41 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,7 @@ int	execute_input(t_program_data *program_data, char *input)
 	t_list				*tokenified_input;
 	t_bin_tree_node		*tree;
 	int					valid;
-	int					status;
-	pid_t				last_pid;
+	t_pid_list			*pid_list;
 
 	if (VERBOSE == 1)
 		ft_printf("Received input: %s\n", input);
@@ -60,14 +59,9 @@ int	execute_input(t_program_data *program_data, char *input)
 	if (VERBOSE == 1)
 		ft_printf("\n\n\n");
 	// --- executer
-	last_pid = execute(tree, program_data);
-	// printf("last_pid: %d\n", last_pid);
-	if (last_pid != -1)
-	{
-		waitpid(last_pid, &status, 0);
-		program_data->exit_status = WEXITSTATUS(status);
-	}
-	// printf("exit_status: %d\n", program_data->exit_status);
+	pid_list = NULL;
+	execute(tree, program_data, &pid_list);
+	wait_and_free(program_data, &pid_list);
 	return (0);
 }
 
@@ -136,6 +130,6 @@ int	run_crash_interface(t_program_data *program_data)
 		program_data->gc = create_garbage_collector();
 	}
 	gc_cleanup(program_data->gc);
-	rl_clear_history();
+	clear_history();
 	return (0);
 }

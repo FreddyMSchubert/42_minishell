@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/23 11:51:40 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/25 10:17:25 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,14 @@ typedef struct s_cmd_path
 	char			**args;
 }				t_cmd_path;
 
+//if last element of list is a builtin we use the existing programdata exit code
+typedef struct s_pid_list
+{
+	pid_t				pid;
+	bool				is_builtin;
+	struct s_pid_list	*next;
+}	t_pid_list;
+
 // ----- FUNCTIONS
 
 // --- utils / debug
@@ -139,8 +147,16 @@ int					check_files(t_list *files, int flag);
 // --- 2-expanding
 char				*get_envcp(char *var_name, t_program_data *program_data);
 t_list				*expander(t_list *tokens, t_program_data *program_data);
-char				*list_matching_files(char *pattern);
 char				*expand_values(char *str, t_program_data *program_data, bool heredoc);
+char				*get_envcp(char *env_var, t_program_data *program_data);
+char				*isolate_var(char *var);
+int					find_closing_quote(char *str, int *i);
+char				*quote_operators(char *envcp_value);
+bool				is_valid_variable(char *var);
+// wildcard
+char				*list_matching_files(char *pattern);
+char				*get_pattern(char *str, int index, t_program_data *program_data);
+char				*get_rid_of_quotes_wildcard(char *str);
 // --- 3-parsing
 // util
 t_list				*sub_token_t_list(t_list *tokens, int start, int end, t_program_data *program_data);
@@ -153,13 +169,13 @@ t_bin_tree_node		*tok_to_bin_tree(t_list *tokens, t_program_data *program_data);
 
 // --- 4-executing
 // general
-int					execute(t_bin_tree_node *tree, t_program_data *data);
+pid_t				execute(t_bin_tree_node *tree, t_program_data *program_data, t_pid_list **pid_list);
 int					execute_node(t_bin_tree_node *node, t_program_data *data);
 int					execute_input(t_program_data *program_data, char *input);
 void				child_process_exit(t_program_data	*data, int	exitcode);
 // operators
-int					logical_and(t_bin_tree_node *node, t_program_data *data);
-int					logical_or(t_bin_tree_node *node, t_program_data *data);
+int					logical_and(t_bin_tree_node *node, t_program_data *program_data, t_pid_list **pid_list);
+int					logical_or(t_bin_tree_node *node, t_program_data *program_data, t_pid_list **pid_list);
 int					redirect(t_bin_tree_node *node, t_program_data *data);
 void				setup_pipe(t_bin_tree_node *node, t_program_data *data);
 // "normal" commands
@@ -179,9 +195,12 @@ int					set_envcp_var(char *var, char *value, char createnew, \
 									t_program_data *program_data);
 int					create_envcp_var(char *vr, char *vl, t_program_data *data);
 int					delete_envcp_var(char *var, char **envcp);
+// fds closing utils
+void				close_fds_loop(void);
+int					add_to_pid_list(pid_t pid, t_pid_list **pidlist, bool is_builtin);
+void				*wait_and_free(t_program_data *program_data, t_pid_list **pid_list);
 
 // --- util
-
 char				*strjoin_null_compatible(char const *s1, char const *s2);
 bool				is_in_quote(char *str, char quote, char *current_char);
 // errors

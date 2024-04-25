@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 16:07:34 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/25 09:26:51 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/25 09:50:26 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,10 +87,14 @@ int	redirect(t_bin_tree_node *node, t_program_data *program_data)
 	char	*filename;
 	bool	redir_out;
 
-	if (node->input_fd != 0 && node->l)
+	if (node->input_fd != 0 && node->val[0]->value[0] == '>' && node->l)
 		node->l->input_fd = node->input_fd;
-	if (node->output_fd != 1 && node->l)
+	else if (node->input_fd != 0)
+		close(node->input_fd);
+	if (node->output_fd != 1 && node->val[0]->value[0] == '<' && node->l)
 		node->l->output_fd = node->output_fd;
+	else if (node->output_fd != 1)
+		close(node->output_fd);
 	if (ft_strncmp(node->val[0]->value, "<<", 2) == 0)
 		return (heredoc(node, program_data));
 	// printf("node->val[0]->value: %s\n", node->val[1]->value);

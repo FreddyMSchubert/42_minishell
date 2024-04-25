@@ -6,13 +6,13 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/25 09:18:30 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/25 10:11:10 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static int	execute_builtin(t_bin_tree_node *node, t_program_data *program_data)
+static int execute_builtin(t_bin_tree_node *node, t_program_data *program_data)
 {
 	int	exit_status;
 
@@ -43,13 +43,14 @@ static int	execute_builtin(t_bin_tree_node *node, t_program_data *program_data)
 	return (-1);
 }
 
-static int	execute_command(t_bin_tree_node *node, t_program_data *program_data)
+static int execute_command(t_bin_tree_node *node, t_program_data *program_data)
 {
-	t_cmd_path	*cmd_path;
-	char		*error_msg;
+	t_cmd_path *cmd_path;
+	char *error_msg;
 
+	// printf("executing %s\n", node->val[0]->value);
 	cmd_path = create_cmd_struct(program_data->envcp, node->val);
-	if (cmd_path != NULL)
+	if (cmd_path)
 		execve(cmd_path->path, cmd_path->args, program_data->envcp);
 	if (cmd_path && cmd_path->path)
 		free(cmd_path->path);
@@ -70,9 +71,9 @@ static int	execute_command(t_bin_tree_node *node, t_program_data *program_data)
 	return (log_error(error_msg, node->val[0]->value, 0), -1);
 }
 
-int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
+int execute_node(t_bin_tree_node *node, t_program_data *program_data)
 {
-	pid_t	pid;
+	pid_t pid;
 
 	if (VERBOSE == 1)
 		ft_printf("executing %s, in: %d, out: %d\n", node->val[0]->value, node->input_fd, node->output_fd);
@@ -112,13 +113,14 @@ int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 			}
 			close(node->output_fd);
 		}
+		close_fds_loop();
 		execute_command(node, program_data);
 		child_process_exit(program_data, program_data->exit_status);
 	}
 	else if (pid > 0) // parent
 	{
 		if (VERBOSE == 1)
-			ft_printf("child process %d: %s\n", pid, node->val[0]->value);
+			printf("child process %d: %s\n", pid, node->val[0]->value);
 		if (node->output_fd != STDOUT_FILENO)
 		{
 			close(node->output_fd);
@@ -136,37 +138,40 @@ int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 	return ("this will never occur, just to silence warning!"[0]);
 }
 
-pid_t	execute(t_bin_tree_node *tree, t_program_data *program_data)
+pid_t	execute(t_bin_tree_node *tree, t_program_data *program_data, t_pid_list **pid_list)
 {
-	int	last_pid;
+	int last_pid;
 
 	last_pid = -1;
 	if (VERBOSE == 1)
-		ft_printf("executing %s, out_fd: %d\n", tree->val[0]->value, tree->output_fd);
+		printf("executing %s, out_fd: %d\n", tree->val[0]->value, tree->output_fd);
 	if (program_data->exit_flag == 1 || !tree)
 		return (program_data->exit_status);
 	if (tree->l == NULL && tree->r == NULL)
 	{
 		if (tree->val[0]->type != TOK_BUILTIN)
+		{
 			last_pid = execute_node(tree, program_data);
+			add_to_pid_list(last_pid, pid_list, false);
+		}
 		else
-			execute_builtin(tree, program_data);
+			add_to_pid_list(execute_builtin(tree, program_data), pid_list, true);
 	}
 	else
 	{
-	// branches
+		// branches
 		if (tree->val[0]->type == TOK_LOG_AND)
-			return (logical_and(tree, program_data));
+			return (logical_and(tree, program_data, pid_list));
 		else if (tree->val[0]->type == TOK_LOG_OR)
-			return (logical_or(tree, program_data));
+			return (logical_or(tree, program_data, pid_list));
 		else if (tree->val[0]->type == TOK_PIPE)
 			setup_pipe(tree, program_data);
 		else if (tree->val[0]->type == TOK_REDIR)
 			if (redirect(tree, program_data) == 1 || !tree->l)
 				return (last_pid);
-		last_pid = execute(tree->l, program_data);
+		last_pid = execute(tree->l, program_data, pid_list);
 		if (tree->val[0]->type == TOK_PIPE)
-			last_pid = execute(tree->r, program_data);
+			last_pid = execute(tree->r, program_data, pid_list);
 	}
 	return (last_pid);
 }
