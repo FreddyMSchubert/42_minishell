@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/25 13:32:18 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/25 17:23:33 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,11 @@ int	execute_input(t_program_data *program_data, char *input)
 		print_tokens(tokenified_input);
 	// --- validator
 	valid = validator(tokenified_input);
+	program_data->exit_status = valid;
 	if (valid != 0)
 	{
 		if (VERBOSE == 1)
 			printf("token sequence is invalid: %d\n", valid);
-		program_data->exit_status = valid;
 		if (!isatty(fileno(stdin)))
 			program_data->exit_flag = 1;
 		gc_cleanup(program_data->gc);
@@ -73,6 +73,7 @@ int	run_crash_interface(t_program_data *program_data)
 		print_logo();
 	while (program_data->exit_flag == 0)
 	{
+		// printf("exit status: %d\n", program_data->exit_status);
 		if (DEBUG == 0)
 		{
 			if (program_data->exit_status == 0)
