@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gc_util.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 08:43:39 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/18 06:49:49 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/25 09:33:06 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,9 @@
 */
 void	exit_error(char *message, int exit_code, t_list *gc)
 {
-	ft_printf("%s\n", message);
+	ft_putstr_fd("minishell: ", STDERR_FILENO);
+	ft_putstr_fd(message, STDERR_FILENO);
+	ft_putstr_fd("\n", STDERR_FILENO);
 	gc_cleanup(gc);
 	exit(exit_code);
 }

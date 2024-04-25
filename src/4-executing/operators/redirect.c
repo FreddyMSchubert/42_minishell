@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: niklasburchhardt <niklasburchhardt@stud    +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 16:07:34 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/24 14:04:31 by niklasburch      ###   ########.fr       */
+/*   Updated: 2024/04/25 09:50:26 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,17 +139,9 @@ int	redirect(t_bin_tree_node *node, t_program_data *program_data)
 		}
 	}
 	if (node->val[0]->value[0] == '<' && node->l)
-	{
-		// if (node->l->input_fd != 0 && printf("closing input_fd: %d\n", node->l->input_fd))
-		// 	close(node->l->input_fd);
 		node->l->input_fd = fd;
-	}
 	else if (node->l)
-	{
-		// if (node->l->output_fd != 1 && printf("closing output_fd: %d\n", node->l->output_fd))
-		// 	close(node->l->output_fd);
 		node->l->output_fd = fd;
-	}
 	(void)program_data;
 	return (0);
 }

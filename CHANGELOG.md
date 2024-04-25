@@ -1,9 +1,37 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+### v0.30.4 - 25.4.24 - Freddy
+- fixed the && || return codes thorugh a simple fix - now the bonus is done, apart from the wildcards.
+
+### v0.30.3 - 25.4.24 - Freddy
+- made builtin return values be saved into programdata->exit_status, probably better
+- made the builtin checks if else statements, lol were only doing the most complicated of efficiency improvements, stuff like this we just leave. fixed.
+- random other improvements
+	- made exit_error properly log to stderr
+	- made log_error handle the case where error doesnt have a value
+
+### v0.30.2 - 24.4.24 - Freddy
+- removed one pescy line and now it seems to be correct - theres still a couple of bonus test cases that we dont pass - namely 4, 5 & 6, but thats fine, we are doing pipes differently
+- still some output issues but those were fixed in graveyard branch so ill just go through that tomorrow and that should fix it probaably
+
+### v0.30.1 - 23.4.24 - Freddy
+- just realized the same would probably be smart not only for the input but also the output node. added that - same logic but mirrored.
+- this creates multiple problems in different parts of the program, all infinite loops because off commands that expect inputs that dont get their input fd closed for some reason
+- idk about this, added some print statements to understand the flow
+- that was kinda helpful, its now clear the last pipes write end doesnt get closed
+- can't finish it, pushing to continue on other device.
+
+## v0.30.0 - 23.4.24 - Freddy
+- new branch who dis - hopefully fixing the pipe bracket combo problem here (issue 19)
+- in setup_pipe, made it find the correct node to place the writing fd pipe end
+	- this works to pipe the output correctly, but it destroys the first & second go wild checks, making them wait infinitely
+		- niklas suggested the write fd pipe input could be set to a redirect if one was encountered while recursively going down (it seems to only fail for redirects)
+		- that fixed the first two wildcards actually, big success in that sense. hwoever, wildcards 4-6 still have wrong outputs and 3-7 still have wrong return codes, all seemingly closely related to the same issue.
+
 ### v0.29.1 - 23.4.24 - Freddy
 - fixed and & or operator not actually retrieving return values correctly
 
-### v0.29.0 - 23.4.24 - Freddy
+## v0.29.0 - 23.4.24 - Freddy
 - new version number due to changed motivation - now doing bonus checks instead of leaks
 - made makefile clean target remove object directory
 - added more valgrind suppressions

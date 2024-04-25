@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: niklasburchhardt <niklasburchhardt@stud    +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/24 16:44:12 by niklasburch      ###   ########.fr       */
+/*   Updated: 2024/04/25 10:17:25 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,14 @@ typedef struct s_cmd_path
 	char			**args;
 }				t_cmd_path;
 
+//if last element of list is a builtin we use the existing programdata exit code
+typedef struct s_pid_list
+{
+	pid_t				pid;
+	bool				is_builtin;
+	struct s_pid_list	*next;
+}	t_pid_list;
+
 // ----- FUNCTIONS
 
 // --- utils / debug
@@ -161,13 +169,13 @@ t_bin_tree_node		*tok_to_bin_tree(t_list *tokens, t_program_data *program_data);
 
 // --- 4-executing
 // general
-int					execute(t_bin_tree_node *tree, t_program_data *data);
+pid_t				execute(t_bin_tree_node *tree, t_program_data *program_data, t_pid_list **pid_list);
 int					execute_node(t_bin_tree_node *node, t_program_data *data);
 int					execute_input(t_program_data *program_data, char *input);
 void				child_process_exit(t_program_data	*data, int	exitcode);
 // operators
-int					logical_and(t_bin_tree_node *node, t_program_data *data);
-int					logical_or(t_bin_tree_node *node, t_program_data *data);
+int					logical_and(t_bin_tree_node *node, t_program_data *program_data, t_pid_list **pid_list);
+int					logical_or(t_bin_tree_node *node, t_program_data *program_data, t_pid_list **pid_list);
 int					redirect(t_bin_tree_node *node, t_program_data *data);
 void				setup_pipe(t_bin_tree_node *node, t_program_data *data);
 // "normal" commands
@@ -187,9 +195,12 @@ int					set_envcp_var(char *var, char *value, char createnew, \
 									t_program_data *program_data);
 int					create_envcp_var(char *vr, char *vl, t_program_data *data);
 int					delete_envcp_var(char *var, char **envcp);
+// fds closing utils
+void				close_fds_loop(void);
+int					add_to_pid_list(pid_t pid, t_pid_list **pidlist, bool is_builtin);
+void				*wait_and_free(t_program_data *program_data, t_pid_list **pid_list);
 
 // --- util
-void				*ft_realloc(void *ptr, size_t old_size, size_t new_size);
 char				*strjoin_null_compatible(char const *s1, char const *s2);
 bool				is_in_quote(char *str, char quote, char *current_char);
 // errors

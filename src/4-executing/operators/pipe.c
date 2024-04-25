@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 13:20:09 by nburchha          #+#    #+#             */
-/*   Updated: 2024/03/07 12:00:29 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/24 17:41:44 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,32 @@
 
 void	setup_pipe(t_bin_tree_node *node, t_program_data *program_data)
 {
-	int		pipe_fd[2];
-	// pid_t	pid;
+	int					pipe_fd[2];
+	t_bin_tree_node		*input;
+	t_bin_tree_node		*output;
 
-	// printf("setting up pipe\n");
-	node->l->input_fd = node->input_fd;
 	if (pipe(pipe_fd) == -1)
 	{
 		ft_putstr_fd("pipe error\n", 2);
 		return ;
 	}
-	node->l->output_fd = pipe_fd[1];
-	node->r->input_fd = pipe_fd[0];
+	input = node->l;
+	while (input->r != NULL)
+	{
+		if (input->val[0]->type == TOK_REDIR)
+			break ;
+		input = input->r;
+	}
+	output = node->r;
+	while (output->l != NULL)
+	{
+		if (output->val[0]->type == TOK_REDIR)
+			break ;
+		output = output->l;
+	}
+	input->output_fd = pipe_fd[1];
+	output->input_fd = pipe_fd[0];
+	if (VERBOSE == 1)
+		ft_printf("creating pipe:\twrite: %s [%d],\tread: %s [%d]\n", input->val[0]->value, input->output_fd, output->val[0]->value, output->input_fd);
 	(void)program_data;
 }
