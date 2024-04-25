@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 16:07:34 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/25 09:50:26 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/25 12:16:17 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ int	redirect(t_bin_tree_node *node, t_program_data *program_data)
 	char	*filename;
 	bool	redir_out;
 
+	node->redirected = true;
 	if (node->input_fd != 0 && node->val[0]->value[0] == '>' && node->l)
 		node->l->input_fd = node->input_fd;
 	else if (node->input_fd != 0)

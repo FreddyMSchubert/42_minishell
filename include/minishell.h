@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/25 10:38:26 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/25 11:59:34 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ typedef struct s_bin_tree_node
 	t_bin_tree_node	*l;
 	t_bin_tree_node	*r;
 	t_bin_tree_node	*parent;
+	bool			redirected; // true if node is a redirection and was already executed
 	int				input_fd;
 	int				output_fd;
 }	t_bin_tree_node;

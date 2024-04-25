@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/25 10:28:40 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/25 12:15:12 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,9 +169,14 @@ pid_t	execute(t_bin_tree_node *tree, t_program_data *program_data, t_pid_list **
 		else if (tree->val[0]->type == TOK_REDIR)
 			if (redirect(tree, program_data) == 1 || !tree->l)
 				return (last_pid);
+		if (tree->val[0]->type == TOK_REDIR && tree->r->val[0]->type == TOK_REDIR && ((tree->l && tree->l->val[0]->type < tree->r->val[0]->type) || (tree->parent && tree->parent->val[0]->type == TOK_REDIR)))
+			if (redirect(tree->r, program_data) == 1)
+				return (last_pid);
 		last_pid = execute(tree->l, program_data, pid_list);
-		if (tree->val[0]->type == TOK_PIPE)
+		if (tree->val[0]->type == TOK_PIPE && tree->r->redirected == false)
 			last_pid = execute(tree->r, program_data, pid_list);
 	}
 	return (last_pid);
 }
+
+//ls | cat << stop <- executen cat nicht
