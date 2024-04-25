@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 06:19:23 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/25 10:34:13 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/25 12:01:40 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 	If no arguments are given, cd changes to the user's temp directory.
 	Otherwise, chdir changes directory and getcwd gets the new path.
 */
-char *get_path(t_token **tokens, t_program_data *program_data)
+char	*get_path(t_token **tokens, t_program_data *program_data)
 {
 	char	*temp;
 
@@ -35,16 +35,10 @@ char *get_path(t_token **tokens, t_program_data *program_data)
 	{
 		temp = get_envcp_var("OLDPWD", program_data->envcp);
 		if (temp)
-		{
-			printf("%s\n", temp);
-			return (ft_strdup(temp));
-		}
+			return (printf("%s\n", temp), ft_strdup(temp));
 		else
-		{
-			log_err("OLDPWD not set", "cd", NULL);
-			program_data->exit_status = 1;
-			return (NULL);
-		}
+			return (program_data->exit_status = 1, \
+						log_err("OLDPWD not set", "cd", NULL), NULL);
 	}
 	else
 		return (ft_strdup(tokens[1]->value));

@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/25 10:46:08 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/25 12:07:32 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,11 @@ static int execute_builtin(t_bin_tree_node *node, t_program_data *program_data)
 	return (-1);
 }
 
-static int execute_command(t_bin_tree_node *node, t_program_data *program_data)
+static int	execute_command(t_bin_tree_node *node, t_program_data *program_data)
 {
-	t_cmd_path *cmd_path;
-	char *error_msg;
+	t_cmd_path	*cmd_path;
+	char		*error_msg;
 
-	// printf("executing %s\n", node->val[0]->value);
 	cmd_path = create_cmd_struct(program_data->envcp, node->val);
 	if (cmd_path)
 		execve(cmd_path->path, cmd_path->args, program_data->envcp);
@@ -71,12 +70,13 @@ static int execute_command(t_bin_tree_node *node, t_program_data *program_data)
 	return (log_err(error_msg, node->val[0]->value, 0), -1);
 }
 
-int execute_node(t_bin_tree_node *node, t_program_data *program_data)
+int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 {
-	pid_t pid;
+	pid_t	pid;
 
 	if (VERBOSE == 1)
-		printf("executing %s, in: %d, out: %d\n", node->val[0]->value, node->input_fd, node->output_fd);
+		printf("executing %s, in: %d, out: %d\n", \
+						node->val[0]->value, node->input_fd, node->output_fd);
 	pid = fork();
 	if (pid == -1)
 	{
@@ -87,7 +87,7 @@ int execute_node(t_bin_tree_node *node, t_program_data *program_data)
 			close(node->input_fd);
 		return (-1);
 	}
-	else if (pid == 0) // child
+	else if (pid == 0)
 	{
 		if (node->input_fd != STDIN_FILENO)
 		{
@@ -117,7 +117,7 @@ int execute_node(t_bin_tree_node *node, t_program_data *program_data)
 		execute_command(node, program_data);
 		child_process_exit(program_data, program_data->exit_status);
 	}
-	else if (pid > 0) // parent
+	else if (pid > 0)
 	{
 		if (VERBOSE == 1)
 			printf("child process %d: %s\n", pid, node->val[0]->value);

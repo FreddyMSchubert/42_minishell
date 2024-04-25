@@ -1,5 +1,9 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+### v0.30.8 - 25.4.24 - Freddy
+- cd.c now fully norminette conformant
+- general norminettification in many places
+
 ### v0.30.7 - 25.4.24 - Freddy
 - stopped Makefile from relinking, added *.o to gitignore
 
