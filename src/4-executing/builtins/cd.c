@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 06:19:23 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/21 19:02:22 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/25 10:34:13 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,18 @@
 */
 char *get_path(t_token **tokens, t_program_data *program_data)
 {
-	char *temp;
+	char	*temp;
+
 	if (tokens[1] == NULL || ft_strncmp(tokens[1]->value, "--", 2) == 0)
 	{
 		temp = get_envcp_var("HOME", program_data->envcp);
 		if (temp)
-			return ft_strdup(temp);
+			return (ft_strdup(temp));
 		else
 		{
-			builtin_err("cd", -3, "HOME");
+			log_err("HOME not set", "cd", NULL);
 			program_data->exit_status = 1;
-			return NULL;
+			return (NULL);
 		}
 	}
 	else if (tokens[1]->value[0] == '-')
@@ -36,74 +37,82 @@ char *get_path(t_token **tokens, t_program_data *program_data)
 		if (temp)
 		{
 			printf("%s\n", temp);
-			return ft_strdup(temp);
+			return (ft_strdup(temp));
 		}
 		else
 		{
-			builtin_err("cd", -3, "OLDPWD");
+			log_err("OLDPWD not set", "cd", NULL);
 			program_data->exit_status = 1;
-			return NULL;
+			return (NULL);
 		}
 	}
 	else
-		return ft_strdup(tokens[1]->value);
+		return (ft_strdup(tokens[1]->value));
 }
 
-int change_directory(char *path, t_program_data *program_data)
+int	change_directory(char *path, t_program_data *program_data)
 {
-	int ret_val = chdir(path);
+	int	ret_val;
+
+	ret_val = chdir(path);
 	if (ret_val != 0)
 	{
-		builtin_err("cd", -4, NULL);
+		log_err("error changing directory", "cd", NULL);
 		program_data->exit_status = 1;
-		return errno;
+		return (errno);
 	}
-	return 0;
+	return (0);
 }
 
-char *get_current_directory(t_program_data *program_data)
+char	*get_current_directory(t_program_data *program_data)
 {
-	char *buffer = getcwd(NULL, 0);
+	char	*buffer;
+
+	buffer = getcwd(NULL, 0);
 	if (!buffer)
 	{
-		builtin_err("cd", -5, "getcwd failed");
+		log_err("getcwd failed", "cd", NULL);
 		program_data->exit_status = 1;
 	}
-	return buffer;
+	return (buffer);
 }
 
-int update_env_vars(t_program_data *program_data, char *buffer)
+int	update_env_vars(t_program_data *program_data, char *buffer)
 {
-	if (set_envcp_var("OLDPWD", get_envcp_var("PWD", program_data->envcp), 1, program_data) == -1)
+	if (set_envcp_var("OLDPWD", get_envcp_var("PWD", program_data->envcp), \
+												1, program_data) == -1)
 	{
 		free(buffer);
-		builtin_err("cd", -2, "OLDPWD");
+		log_err("dynamic allocation error", "cd", NULL);
 		program_data->exit_status = 1;
-		return -2;
+		return (-2);
 	}
 	if (set_envcp_var("PWD", buffer, 0, program_data) == -1)
 	{
 		free(buffer);
-		builtin_err("cd", -2, "PWD");
+		log_err("dynamic allocation error", "cd", NULL);
 		program_data->exit_status = 1;
-		return -2;
+		return (-2);
 	}
-	return 0;
+	return (0);
 }
 
 int	execute_cd(t_token **tokens, t_program_data *program_data)
 {
-	char *path = get_path(tokens, program_data);
+	char	*path;
+	char	*buffer;
+
+	path = get_path(tokens, program_data);
 	if (!path)
-		return 1;
+		return (1);
 	if (change_directory(path, program_data) != 0)
-		return 1;
-	char *buffer = get_current_directory(program_data);
+		return (1);
+	buffer = get_current_directory(program_data);
 	if (!buffer)
-		return -1;
+		return (-1);
 	free(path);
 	if (update_env_vars(program_data, buffer) != 0)
-		return -2;
+		return (-2);
 	free(buffer);
-	return 0;
+	return (0);
 }

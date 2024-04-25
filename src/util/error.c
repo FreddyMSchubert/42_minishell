@@ -6,14 +6,14 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 14:34:49 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/25 09:36:16 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/25 10:38:10 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../include/minishell.h"
+#include "../../include/minishell.h"
 
 // the paths only log if they arent null. error better not be null.
-void	log_error(char *error, char *path1, char *path2)
+void	log_err(char *error, char *path1, char *path2)
 {
 	ft_putstr_fd("minishell: ", STDERR_FILENO);
 	if (path1)

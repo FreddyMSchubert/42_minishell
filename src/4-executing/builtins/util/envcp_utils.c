@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   envcp_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 07:17:01 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/17 12:01:11 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/25 10:35:33 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,5 +114,5 @@ int	delete_envcp_var(char *var, char **envcp)
 			return (0);
 		}
 	}
-	return (-1);//builtin_err("cd", -3, var), -1);
+	return (-1);
 }

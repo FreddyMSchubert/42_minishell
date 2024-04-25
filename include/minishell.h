@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/25 10:17:25 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/25 10:38:26 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,10 +203,5 @@ void				*wait_and_free(t_program_data *program_data, t_pid_list **pid_list);
 // --- util
 char				*strjoin_null_compatible(char const *s1, char const *s2);
 bool				is_in_quote(char *str, char quote, char *current_char);
-// errors
-void				broadcast_validator_error(int error, char *arg);
-void				builtin_err(char *builtin, int error, char *arg);
-void				exec_error(int error);
-void				log_error(char *error, char *path1, char *path2);
-// general
+void				log_err(char *error, char *path1, char *path2);
 char				*ft_strjoinfree(char *s1, char *s2);

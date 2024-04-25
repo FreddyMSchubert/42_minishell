@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/25 10:11:10 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/25 10:28:40 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ static int execute_command(t_bin_tree_node *node, t_program_data *program_data)
 		program_data->exit_status = 127;
 		error_msg = "command not found";
 	}
-	return (log_error(error_msg, node->val[0]->value, 0), -1);
+	return (log_err(error_msg, node->val[0]->value, 0), -1);
 }
 
 int execute_node(t_bin_tree_node *node, t_program_data *program_data)

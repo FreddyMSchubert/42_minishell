@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 06:36:17 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/25 09:55:37 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/25 10:37:50 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static char	*get_command_path(char **envp, char *command)
 		return (NULL);
 	split_paths = ft_split(envp[0], ':');
 	if (split_paths == NULL)
-		return (exec_error(-1), NULL);
+		return (log_err("dynamic allocation error", NULL, NULL), NULL);
 	counter = 0;
 	while (split_paths[counter])
 	{
@@ -71,15 +71,14 @@ t_cmd_path	*create_cmd_struct(char	**envp, t_token	**cmd)
 
 	path = malloc(sizeof(t_cmd_path));
 	if (!path)
-		return (printf("malloc eror\n"), exec_error(-1), NULL);
+		return (printf("malloc eror\n"), log_err("dynamic allocation error", NULL, NULL), NULL);
 	path->path = get_command_path(envp, cmd[0]->value);
-	// printf("path->path: %s\n", path->path);
 	if (!path->path)
 		return (free(path), NULL);
 	token_amount = get_token_arr_len(cmd);
 	split_cmd = malloc(sizeof(char *) * (token_amount + 1));
 	if (!split_cmd)
-		return (free(path), exec_error(-1), NULL);
+		return (free(path), log_err("dynamic allocation error", NULL, NULL), NULL);
 	split_cmd[token_amount] = NULL;
 	cmd_i_counter = 0;
 	split_cmd_i_counter = 0;

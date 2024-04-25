@@ -1,5 +1,10 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+### v0.30.5 - 25.4.24 - Freddy
+- fixed the error logging - unified everything to use log_error instead of weird different functions, which was quite unnecessary
+	- everything still works the same, its just nicer in code now
+- some cd norminettifications
+
 ### v0.30.4 - 25.4.24 - Freddy
 - fixed the && || return codes thorugh a simple fix - now the bonus is done, apart from the wildcards.
 
