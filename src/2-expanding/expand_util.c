@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 16:07:07 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/23 21:59:21 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/25 20:27:53 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,4 +105,56 @@ bool	is_valid_variable(char *var)
 			return (false);
 	}
 	return (true);
+}
+
+bool	is_in_quote(char *str, char quote, char *current_char)
+{
+	int		i;
+	bool	d_quote;
+	bool	s_quote;
+
+	i = -1;
+	d_quote = false;
+	s_quote = false;
+	if (!quote || !str || !current_char)
+		return (false);
+	while (&str[i] != current_char && str[++i])
+	{
+		if (str[i] == '\"' && !s_quote)
+			d_quote = !d_quote;
+		else if (str[i] == '\'' && !d_quote)
+			s_quote = !s_quote;
+	}
+	if (quote == '\"')
+		return (d_quote);
+	else
+		return (s_quote);
+}
+
+char	*get_rid_of_quotes(char *str)
+{
+	int		i;
+	int		j;
+	char	*new_str;
+	bool	s_quote;
+	bool	d_quote;
+
+	s_quote = false;
+	d_quote = false;
+	i = -1;
+	j = 0;
+	new_str = ft_calloc(ft_strlen(str) + 1, sizeof(char));
+	if (!new_str)
+		return (NULL);
+	while (str[++i])
+	{
+		if (str[i] == '\'' && !d_quote)
+			s_quote = !s_quote;
+		else if (str[i] == '\"' && !s_quote)
+			d_quote = !d_quote;
+		else
+			new_str[j++] = str[i];
+	}
+	new_str[j] = '\0';
+	return (new_str);
 }

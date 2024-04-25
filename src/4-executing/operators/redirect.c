@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 16:07:34 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/25 19:40:05 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/25 21:49:11 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,25 +44,27 @@ static int	heredoc(t_bin_tree_node *node, t_program_data	*program_data)
 		return (-1);
 	while (g_sigint_received != SIGINT)
 	{
-		if (isatty(fileno(stdin)))
-			line = readline("crash_doc 📄 ");
-		else
-		{
-			line = get_next_line(fileno(stdin));
-			if (line == NULL)
-				return (0);
-			line[ft_strlen(line) - 1] = '\0';
-		}
+		// if (isatty(fileno(stdin)))
+		// 	line = readline("crash_doc 📄 ");
+		// else
+		// {
+		write(0, "> ", 2);
+		line = get_next_line(fileno(stdin));
+		if (line == NULL)
+			return (0);
+		gc_append_element(program_data->gc, line);
+		line[ft_strlen(line) - 1] = '\0';
+		// }
 		if (!line || ft_strncmp(line, delimiter, ft_strlen(line)) == 0 || \
 			g_sigint_received == SIGINT)
-		{
-			free(line);
 			break ;
-		}
 		if (expand)
 			converted_line = expand_values(line, program_data, true);
 		else
+		{
 			converted_line = ft_strdup(line);
+			gc_append_element(program_data->gc, converted_line);
+		}
 		if (!converted_line)
 			return (ft_putstr_fd("crash: redir: error expanding heredoc", STDERR_FILENO), -1);
 		write(pipe_fd[1], converted_line, ft_strlen(converted_line));
