@@ -1,5 +1,8 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+### v0.30.7 - 25.4.24 - Freddy
+- stopped Makefile from relinking, added *.o to gitignore
+
 ### v0.30.6 - 25.4.24 - Freddy
 - removal of ft_printf - now everything uses printf - less issues with things printing inside of each other
 

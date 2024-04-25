@@ -4,10 +4,9 @@ LIBFT_DIR   := ./submodules/42_libft
 GNL_DIR     := ./submodules/42_get_next_line
 
 SRC = $(shell find ./src -name "*.c")
-OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+OBJ = $(SRC:.c=.o)
 
 SRC_DIR = ./src
-OBJ_DIR = ./obj
 
 CFLAGS		:=	-Wall -Werror -Wextra -g #-fsanitize=address
 HEADER		:=	-I./include/
@@ -15,10 +14,18 @@ LIBS		:=	-L$(LIBFT_DIR) -lft \
 				-L$(GNL_DIR) -lftgnl \
 				-lreadline
 
-$(NAME): pre_compile $(LIBFT_DIR)/libft.a $(GNL_DIR)/libftgnl.a $(OBJ) pre_link
+RED=$(shell tput setaf 1)
+GREEN=$(shell tput setaf 2)
+YELLOW=$(shell tput setaf 3)
+BLUE=$(shell tput setaf 4)
+PURPLE=$(shell tput setaf 5)
+CYAN=$(shell tput setaf 6)
+NC=$(shell tput sgr0) # Reset
+
+$(NAME): $(LIBFT_DIR)/libft.a $(GNL_DIR)/libftgnl.a $(OBJ)
 	@echo "$(CYAN)Linking $(NAME)...$(NC)"
 	@cc $(CFLAGS) $(OBJ) $(LIBS) -o $(NAME)
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+%.o: %.c
 	@mkdir -p $(@D)
 	@printf "$(PURPLE)$(notdir $<) $(NC)"
 	@cc -c $< $(CFLAGS) $(HEADER) -o $@
@@ -29,20 +36,6 @@ $(LIBFT_DIR)/libft.a:
 $(GNL_DIR)/libftgnl.a:
 	@echo "$(YELLOW)Making get_next_line...$(NC)"
 	@make -C $(GNL_DIR) > /dev/null
-
-
-RED=$(shell tput setaf 1)
-GREEN=$(shell tput setaf 2)
-YELLOW=$(shell tput setaf 3)
-BLUE=$(shell tput setaf 4)
-PURPLE=$(shell tput setaf 5)
-CYAN=$(shell tput setaf 6)
-NC=$(shell tput sgr0) # Reset
-
-pre_compile:
-	@echo "$(PURPLE)\nStarting compilation...$(NC)"
-pre_link:
-	@echo "$(CYAN)\n\nStarting linking...$(NC)"
 
 all: $(NAME)
 	@echo "$(GREEN)$(NAME) is done!$(NC)"
