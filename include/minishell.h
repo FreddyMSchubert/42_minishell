@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/25 18:19:33 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/25 20:01:36 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ void				gc_cleanup(t_list *gc);
 // - util
 void				exit_error(char *message, int exit_code, t_list *gc);
 // - signals
-int					setup_signals(void);
+void				setup_signals(void);
 // - visuals
 void				*print_logo(void);
 
