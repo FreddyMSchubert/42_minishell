@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/25 10:28:40 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/25 10:46:08 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static int execute_builtin(t_bin_tree_node *node, t_program_data *program_data)
 
 	exit_status = 0;
 	if (VERBOSE == 1)
-		ft_printf("executing builtin %s, in: %d, out: %d\n", node->val[0]->value, node->input_fd, node->output_fd);
+		printf("executing builtin %s, in: %d, out: %d\n", node->val[0]->value, node->input_fd, node->output_fd);
 	if (ft_strncmp(node->val[0]->value, "echo", 4) == 0)
 		exit_status = execute_echo(node->val, node->output_fd, program_data);
 	else if (ft_strncmp(node->val[0]->value, "cd", 2) == 0)
@@ -39,7 +39,7 @@ static int execute_builtin(t_bin_tree_node *node, t_program_data *program_data)
 		close(node->input_fd);
 	program_data->exit_status = exit_status;
 	if (VERBOSE == 1)
-		ft_printf("closing fds: %d, %d\n", node->input_fd, node->output_fd);
+		printf("closing fds: %d, %d\n", node->input_fd, node->output_fd);
 	return (-1);
 }
 
@@ -76,7 +76,7 @@ int execute_node(t_bin_tree_node *node, t_program_data *program_data)
 	pid_t pid;
 
 	if (VERBOSE == 1)
-		ft_printf("executing %s, in: %d, out: %d\n", node->val[0]->value, node->input_fd, node->output_fd);
+		printf("executing %s, in: %d, out: %d\n", node->val[0]->value, node->input_fd, node->output_fd);
 	pid = fork();
 	if (pid == -1)
 	{
@@ -125,13 +125,13 @@ int execute_node(t_bin_tree_node *node, t_program_data *program_data)
 		{
 			close(node->output_fd);
 			if (VERBOSE == 1)
-				ft_printf("%s: closed output fd %d\n", node->val[0]->value, node->output_fd);
+				printf("%s: closed output fd %d\n", node->val[0]->value, node->output_fd);
 		}
 		if (node->input_fd != STDIN_FILENO)
 		{
 			close(node->input_fd);
 			if (VERBOSE == 1)
-				ft_printf("%s: closed input fd %d\n", node->val[0]->value, node->input_fd);
+				printf("%s: closed input fd %d\n", node->val[0]->value, node->input_fd);
 		}
 		return (pid);
 	}

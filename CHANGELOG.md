@@ -1,5 +1,8 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+### v0.30.6 - 25.4.24 - Freddy
+- removal of ft_printf - now everything uses printf - less issues with things printing inside of each other
+
 ### v0.30.5 - 25.4.24 - Freddy
 - fixed the error logging - unified everything to use log_error instead of weird different functions, which was quite unnecessary
 	- everything still works the same, its just nicer in code now

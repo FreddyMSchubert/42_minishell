@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 13:20:09 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/24 17:41:44 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/25 10:46:14 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,6 @@ void	setup_pipe(t_bin_tree_node *node, t_program_data *program_data)
 	input->output_fd = pipe_fd[1];
 	output->input_fd = pipe_fd[0];
 	if (VERBOSE == 1)
-		ft_printf("creating pipe:\twrite: %s [%d],\tread: %s [%d]\n", input->val[0]->value, input->output_fd, output->val[0]->value, output->input_fd);
+		printf("creating pipe:\twrite: %s [%d],\tread: %s [%d]\n", input->val[0]->value, input->output_fd, output->val[0]->value, output->input_fd);
 	(void)program_data;
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   garbage_collector.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 12:18:59 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/20 10:01:36 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/25 10:46:38 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ void	gc_cleanup(t_list *gc)
 	t_list	*current2;
 
 	if (VERBOSE == 1)
-		ft_printf("cleaning up garbage collector\n");
+		printf("cleaning up garbage collector\n");
 	current = gc;
 	while (current != NULL)
 	{

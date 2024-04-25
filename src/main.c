@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:29:36 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/20 21:16:06 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/25 10:45:45 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	main(int argc, char **argv, char **envp)
 	program_data.exit_status = 0;
 	program_data.envcp = ft_strarrdup(envp);
 	if (!program_data.envcp)
-		return (ft_printf("Error: failed to copy environment\n"), 1);
+		return (printf("Error: failed to copy environment\n"), 1);
 	program_data.gc = create_garbage_collector();
 	g_sigint_received = 0;
 	setup_signals();
