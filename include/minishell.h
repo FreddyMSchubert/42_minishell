@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/25 11:59:34 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/25 18:19:33 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,12 +78,21 @@ typedef struct s_bin_tree_node
 	int				output_fd;
 }	t_bin_tree_node;
 
+//if last element of list is a builtin we use the existing programdata exit code
+typedef struct s_pid_list
+{
+	pid_t				pid;
+	bool				is_builtin;
+	struct s_pid_list	*next;
+}	t_pid_list;
+
 typedef struct s_program_data
 {
 	char			exit_flag;		// 0 by default, 1 to exit & cleanup
 	int				exit_status;	// exit status to be returned
 	char			**envcp;		// internal copy of envp
 	t_list			*gc;			// garbage collector
+	t_pid_list		*pid_list;		// list of pids to wait for
 }	t_program_data;
 
 typedef struct s_cmd_path
@@ -92,13 +101,6 @@ typedef struct s_cmd_path
 	char			**args;
 }				t_cmd_path;
 
-//if last element of list is a builtin we use the existing programdata exit code
-typedef struct s_pid_list
-{
-	pid_t				pid;
-	bool				is_builtin;
-	struct s_pid_list	*next;
-}	t_pid_list;
 
 // ----- FUNCTIONS
 
@@ -170,12 +172,12 @@ t_bin_tree_node		*tok_to_bin_tree(t_list *tokens, t_program_data *program_data);
 // --- 4-executing
 // general
 pid_t				execute(t_bin_tree_node *tree, t_program_data *program_data, t_pid_list **pid_list);
-int					execute_node(t_bin_tree_node *node, t_program_data *data);
+int					execute_node(t_bin_tree_node *node, t_program_data *data, t_pid_list **pid_list);
 int					execute_input(t_program_data *program_data, char *input);
 void				child_process_exit(t_program_data	*data, int	exitcode);
 // operators
-int					logical_and(t_bin_tree_node *node, t_program_data *program_data, t_pid_list **pid_list);
-int					logical_or(t_bin_tree_node *node, t_program_data *program_data, t_pid_list **pid_list);
+int					logical_and(t_bin_tree_node *node, t_program_data *program_data);
+int					logical_or(t_bin_tree_node *node, t_program_data *program_data);
 int					redirect(t_bin_tree_node *node, t_program_data *data);
 void				setup_pipe(t_bin_tree_node *node, t_program_data *data);
 // "normal" commands

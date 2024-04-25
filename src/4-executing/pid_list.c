@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 19:50:38 by niklasburch       #+#    #+#             */
-/*   Updated: 2024/04/25 17:02:06 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/25 19:43:39 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,9 @@ void	*wait_and_free(t_program_data *program_data, t_pid_list **pid_list)
 			continue ;
 		}
 		waitpid(tmp->pid, &status, 0);
-		// printf("pid: %d\n", tmp->pid);
 		if (WIFEXITED(status))
 			exit_status = WEXITSTATUS(status);
-		else if (WIFSIGNALED(status))// && printf("exited because of signal\n"))
+		else if (WIFSIGNALED(status))
 			exit_status = 128 + WTERMSIG(status);
 		next = tmp->next;
 		free(tmp);
@@ -46,7 +45,6 @@ void	*wait_and_free(t_program_data *program_data, t_pid_list **pid_list)
 	}
 	if (program_data->exit_status == 0)
 		program_data->exit_status = exit_status;
-	*pid_list = NULL;
 	return (NULL);
 }
 

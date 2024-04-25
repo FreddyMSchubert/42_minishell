@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/25 17:23:33 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/25 19:44:10 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ int	execute_input(t_program_data *program_data, char *input)
 	t_list				*tokenified_input;
 	t_bin_tree_node		*tree;
 	int					valid;
-	t_pid_list			*pid_list;
 
 	if (VERBOSE == 1)
 		printf("Received input: %s\n", input);
@@ -32,7 +31,7 @@ int	execute_input(t_program_data *program_data, char *input)
 	// --- lexer
 	tokenified_input = lexer(input, program_data);
 	if (tokenified_input == NULL)
-		return (ft_putstr_fd("crash: error lexing input", STDERR_FILENO), -1);
+		return (-1);
 	if (VERBOSE == 1)
 		print_tokens(tokenified_input);
 	// --- validator
@@ -59,9 +58,9 @@ int	execute_input(t_program_data *program_data, char *input)
 	if (VERBOSE == 1)
 		printf("\n\n\n");
 	// --- executer
-	pid_list = NULL;
-	execute(tree, program_data, &pid_list);
-	wait_and_free(program_data, &pid_list);
+	program_data->pid_list = NULL;
+	execute(tree, program_data, &program_data->pid_list);
+	wait_and_free(program_data, &program_data->pid_list);
 	return (0);
 }
 

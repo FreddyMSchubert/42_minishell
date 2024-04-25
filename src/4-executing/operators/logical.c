@@ -6,51 +6,34 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 08:32:19 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/25 17:26:42 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/25 18:40:18 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/minishell.h"
 
-int	logical_and(t_bin_tree_node *node, t_program_data *program_data, t_pid_list **pid_list)
+int	logical_and(t_bin_tree_node *node, t_program_data *program_data)
 {
-	int	pid;
-	int	status;
+	t_pid_list	*pid_list;
 
-	pid = -1;
+	pid_list = NULL;
 	if (node->l != NULL)
-		pid = execute(node->l, program_data, pid_list);
-	if (pid != -1)
-	{
-		waitpid(pid, &status, 0);
-		if (WIFEXITED(status))
-			program_data->exit_status = WEXITSTATUS(status);
-		pid = -1;
-	}
+		program_data->exit_status = execute(node->l, program_data, &pid_list);
+	wait_and_free(program_data, &pid_list);
 	if (program_data->exit_status == 0 && node->r != NULL)
-		pid = execute(node->r, program_data, pid_list);
-	return (pid);
+		program_data->exit_status = execute(node->r, program_data, &program_data->pid_list);
+	return (program_data->exit_status);
 }
 
-int	logical_or(t_bin_tree_node *node, t_program_data *program_data, t_pid_list **pid_list)
+int	logical_or(t_bin_tree_node *node, t_program_data *program_data)
 {
-	int	pid;
-	int	status;
-	int	exit_status;
+	t_pid_list	*pid_list;
 
-	pid = -1;
-	exit_status = 0;
+	pid_list = NULL;
 	if (node->l != NULL)
-		pid = execute(node->l, program_data, pid_list);
-	if (pid != -1)
-	{
-		waitpid(pid, &status, 0);
-		add_to_pid_list(pid, pid_list, false);
-		pid = -1;
-		if (WIFEXITED(status))
-			exit_status = WEXITSTATUS(status);
-	}
-	if (exit_status != 0 && node->r != NULL)
-		pid = execute(node->r, program_data, pid_list);
-	return (pid);
+		program_data->exit_status = execute(node->l, program_data, &pid_list);
+	wait_and_free(program_data, &pid_list);
+	if (program_data->exit_status != 0 && node->r != NULL)
+		program_data->exit_status = execute(node->r, program_data, &program_data->pid_list);
+	return (program_data->exit_status);
 }
