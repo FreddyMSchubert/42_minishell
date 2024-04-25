@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/11 12:15:06 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/25 19:57:48 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/25 20:03:38 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ extern int	g_sigint_received;
 static void	sigint_handler(int signo)
 {
 	(void)signo;
-	printf("\n");
+	write(1, "\n", 1);
 	if (g_sigint_received == 0)
 	{
 		rl_on_new_line();
