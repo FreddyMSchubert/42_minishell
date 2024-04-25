@@ -34,7 +34,6 @@
 
 // ----- SUBMODULES
 
-#include "../submodules/42_ft_printf/ft_printf.h"
 #include "../submodules/42_libft/libft.h"
 #include "../submodules/42_get_next_line/get_next_line.h"
 

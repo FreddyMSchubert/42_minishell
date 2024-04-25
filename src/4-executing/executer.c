@@ -18,7 +18,7 @@ static int execute_builtin(t_bin_tree_node *node, t_program_data *program_data)
 
 	exit_status = 0;
 	if (VERBOSE == 1)
-		ft_printf("executing builtin %s, in: %d, out: %d\n", node->val[0]->value, node->input_fd, node->output_fd);
+		printf("executing builtin %s, in: %d, out: %d\n", node->val[0]->value, node->input_fd, node->output_fd);
 	if (ft_strncmp(node->val[0]->value, "echo", 4) == 0)
 		exit_status = execute_echo(node->val, node->output_fd, program_data);
 	else if (ft_strncmp(node->val[0]->value, "cd", 2) == 0)
@@ -39,16 +39,15 @@ static int execute_builtin(t_bin_tree_node *node, t_program_data *program_data)
 		close(node->input_fd);
 	program_data->exit_status = exit_status;
 	if (VERBOSE == 1)
-		ft_printf("closing fds: %d, %d\n", node->input_fd, node->output_fd);
+		printf("closing fds: %d, %d\n", node->input_fd, node->output_fd);
 	return (-1);
 }
 
-static int execute_command(t_bin_tree_node *node, t_program_data *program_data)
+static int	execute_command(t_bin_tree_node *node, t_program_data *program_data)
 {
-	t_cmd_path *cmd_path;
-	char *error_msg;
+	t_cmd_path	*cmd_path;
+	char		*error_msg;
 
-	// printf("executing %s\n", node->val[0]->value);
 	cmd_path = create_cmd_struct(program_data->envcp, node->val);
 	if (cmd_path)
 		execve(cmd_path->path, cmd_path->args, program_data->envcp);
@@ -71,12 +70,13 @@ static int execute_command(t_bin_tree_node *node, t_program_data *program_data)
 	return (log_err(error_msg, node->val[0]->value, 0), -1);
 }
 
-int execute_node(t_bin_tree_node *node, t_program_data *program_data)
+int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 {
-	pid_t pid;
+	pid_t	pid;
 
 	if (VERBOSE == 1)
-		ft_printf("executing %s, in: %d, out: %d\n", node->val[0]->value, node->input_fd, node->output_fd);
+		printf("executing %s, in: %d, out: %d\n", \
+						node->val[0]->value, node->input_fd, node->output_fd);
 	pid = fork();
 	if (pid == -1)
 	{
@@ -87,7 +87,7 @@ int execute_node(t_bin_tree_node *node, t_program_data *program_data)
 			close(node->input_fd);
 		return (-1);
 	}
-	else if (pid == 0) // child
+	else if (pid == 0)
 	{
 		if (node->input_fd != STDIN_FILENO)
 		{
@@ -117,7 +117,7 @@ int execute_node(t_bin_tree_node *node, t_program_data *program_data)
 		execute_command(node, program_data);
 		child_process_exit(program_data, program_data->exit_status);
 	}
-	else if (pid > 0) // parent
+	else if (pid > 0)
 	{
 		if (VERBOSE == 1)
 			printf("child process %d: %s\n", pid, node->val[0]->value);
@@ -125,13 +125,13 @@ int execute_node(t_bin_tree_node *node, t_program_data *program_data)
 		{
 			close(node->output_fd);
 			if (VERBOSE == 1)
-				ft_printf("%s: closed output fd %d\n", node->val[0]->value, node->output_fd);
+				printf("%s: closed output fd %d\n", node->val[0]->value, node->output_fd);
 		}
 		if (node->input_fd != STDIN_FILENO)
 		{
 			close(node->input_fd);
 			if (VERBOSE == 1)
-				ft_printf("%s: closed input fd %d\n", node->val[0]->value, node->input_fd);
+				printf("%s: closed input fd %d\n", node->val[0]->value, node->input_fd);
 		}
 		return (pid);
 	}

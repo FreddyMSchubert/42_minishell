@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/25 09:51:41 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/25 10:46:34 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,11 @@ int	execute_input(t_program_data *program_data, char *input)
 	t_pid_list			*pid_list;
 
 	if (VERBOSE == 1)
-		ft_printf("Received input: %s\n", input);
+		printf("Received input: %s\n", input);
 	input = expand_values(input, program_data, false);
 	if (VERBOSE == 1)
 	{
-		ft_printf("after expanding:\n");
+		printf("after expanding:\n");
 		printf("input: %s\n", input);
 	}
 	// --- lexer
@@ -40,7 +40,7 @@ int	execute_input(t_program_data *program_data, char *input)
 	if (valid != 0)
 	{
 		if (VERBOSE == 1)
-			ft_printf("token sequence is invalid: %d\n", valid);
+			printf("token sequence is invalid: %d\n", valid);
 		program_data->exit_status = valid;
 		if (!isatty(fileno(stdin)))
 			program_data->exit_flag = 1;
@@ -49,7 +49,7 @@ int	execute_input(t_program_data *program_data, char *input)
 		return (-1);
 	}
 	if (VERBOSE == 1)
-		ft_printf("token sequence is valid\n");
+		printf("token sequence is valid\n");
 	tokenified_input = switch_redir_args(tokenified_input);
 	tree = tok_to_bin_tree(tokenified_input, program_data);
 	tree->parent = NULL;
@@ -57,7 +57,7 @@ int	execute_input(t_program_data *program_data, char *input)
 	if (VERBOSE == 1)
 		print_binary_tree(tree, 0);
 	if (VERBOSE == 1)
-		ft_printf("\n\n\n");
+		printf("\n\n\n");
 	// --- executer
 	pid_list = NULL;
 	execute(tree, program_data, &pid_list);
@@ -77,15 +77,15 @@ int	run_crash_interface(t_program_data *program_data)
 		{
 			if (program_data->exit_status == 0)
 			{
-				ft_printf("%s", ANSI_COLOR_CYAN);
+				printf("%s", ANSI_COLOR_CYAN);
 				input = readline("crash 💣 ");
 			}
 			else
 			{
-				ft_printf("%s", ANSI_COLOR_RED);
+				printf("%s", ANSI_COLOR_RED);
 				input = readline("crash 💥 ");
 			}
-			ft_printf("%s", ANSI_COLOR_RESET);
+			printf("%s", ANSI_COLOR_RESET);
 		}
 		else
 		{
