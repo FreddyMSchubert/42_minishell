@@ -1,5 +1,8 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+### v0.30.4 - 25.4.24 - Freddy
+- fixed the && || return codes thorugh a simple fix - now the bonus is done, apart from the wildcards.
+
 ### v0.30.3 - 25.4.24 - Freddy
 - made builtin return values be saved into programdata->exit_status, probably better
 - made the builtin checks if else statements, lol were only doing the most complicated of efficiency improvements, stuff like this we just leave. fixed.
