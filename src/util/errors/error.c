@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 14:34:49 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/07 12:40:51 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/25 09:36:16 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,9 @@ void	log_error(char *error, char *path1, char *path2)
 		ft_putstr_fd(path2, STDERR_FILENO);
 		ft_putstr_fd(": ", STDERR_FILENO);
 	}
-	ft_putstr_fd(error, STDERR_FILENO);
+	if (error != NULL)
+		ft_putstr_fd(error, STDERR_FILENO);
+	else
+		ft_putstr_fd("error", STDERR_FILENO);
 	ft_putstr_fd("\n", STDERR_FILENO);
 }

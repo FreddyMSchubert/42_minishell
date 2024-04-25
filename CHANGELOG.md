@@ -1,6 +1,13 @@
 # CHANGELOG minishell by nburchha & fschuber
 
-### v0.30.2 - 23.4.24 - Freddy
+### v0.30.3 - 25.4.24 - Freddy
+- made builtin return values be saved into programdata->exit_status, probably better
+- made the builtin checks if else statements, lol were only doing the most complicated of efficiency improvements, stuff like this we just leave. fixed.
+- random other improvements
+	- made exit_error properly log to stderr
+	- made log_error handle the case where error doesnt have a value
+
+### v0.30.2 - 24.4.24 - Freddy
 - removed one pescy line and now it seems to be correct - theres still a couple of bonus test cases that we dont pass - namely 4, 5 & 6, but thats fine, we are doing pipes differently
 - still some output issues but those were fixed in graveyard branch so ill just go through that tomorrow and that should fix it probaably
 

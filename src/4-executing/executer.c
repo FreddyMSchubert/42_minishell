@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/24 17:43:01 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/25 09:18:30 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,30 @@
 
 static int	execute_builtin(t_bin_tree_node *node, t_program_data *program_data)
 {
+	int	exit_status;
+
+	exit_status = 0;
 	if (VERBOSE == 1)
 		ft_printf("executing builtin %s, in: %d, out: %d\n", node->val[0]->value, node->input_fd, node->output_fd);
 	if (ft_strncmp(node->val[0]->value, "echo", 4) == 0)
-		execute_echo(node->val, node->output_fd, program_data);
-	if (ft_strncmp(node->val[0]->value, "cd", 2) == 0)
-		execute_cd(node->val, program_data);
-	if (ft_strncmp(node->val[0]->value, "pwd", 3) == 0)
-		execute_pwd(node->output_fd, program_data);
-	if (ft_strncmp(node->val[0]->value, "export", 6) == 0)
-		execute_export(node->val, node->output_fd, program_data);
-	if (ft_strncmp(node->val[0]->value, "unset", 5) == 0)
-		execute_unset(node->val, program_data);
-	if (ft_strncmp(node->val[0]->value, "env", 3) == 0)
-		execute_env(program_data, node->output_fd);
-	if (ft_strncmp(node->val[0]->value, "exit", 4) == 0)
-		execute_exit(node->val, program_data, node->output_fd);
+		exit_status = execute_echo(node->val, node->output_fd, program_data);
+	else if (ft_strncmp(node->val[0]->value, "cd", 2) == 0)
+		exit_status = execute_cd(node->val, program_data);
+	else if (ft_strncmp(node->val[0]->value, "pwd", 3) == 0)
+		exit_status = execute_pwd(node->output_fd, program_data);
+	else if (ft_strncmp(node->val[0]->value, "export", 6) == 0)
+		exit_status = execute_export(node->val, node->output_fd, program_data);
+	else if (ft_strncmp(node->val[0]->value, "unset", 5) == 0)
+		exit_status = execute_unset(node->val, program_data);
+	else if (ft_strncmp(node->val[0]->value, "env", 3) == 0)
+		exit_status = execute_env(program_data, node->output_fd);
+	else if (ft_strncmp(node->val[0]->value, "exit", 4) == 0)
+		exit_status = execute_exit(node->val, program_data, node->output_fd);
 	if (node->output_fd != STDOUT_FILENO)
 		close(node->output_fd);
 	if (node->input_fd != STDIN_FILENO)
 		close(node->input_fd);
+	program_data->exit_status = exit_status;
 	if (VERBOSE == 1)
 		ft_printf("closing fds: %d, %d\n", node->input_fd, node->output_fd);
 	return (-1);
@@ -142,10 +146,12 @@ pid_t	execute(t_bin_tree_node *tree, t_program_data *program_data)
 	if (program_data->exit_flag == 1 || !tree)
 		return (program_data->exit_status);
 	if (tree->l == NULL && tree->r == NULL)
+	{
 		if (tree->val[0]->type != TOK_BUILTIN)
 			last_pid = execute_node(tree, program_data);
 		else
 			execute_builtin(tree, program_data);
+	}
 	else
 	{
 	// branches
