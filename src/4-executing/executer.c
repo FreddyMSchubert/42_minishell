@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/25 12:15:12 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/25 13:05:43 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ static int execute_builtin(t_bin_tree_node *node, t_program_data *program_data)
 		close(node->output_fd);
 	if (node->input_fd != STDIN_FILENO)
 		close(node->input_fd);
+	// printf("exit status in builtin: %d\n", exit_status);
 	program_data->exit_status = exit_status;
 	if (VERBOSE == 1)
 		printf("closing fds: %d, %d\n", node->input_fd, node->output_fd);

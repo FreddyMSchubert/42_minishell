@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 09:38:36 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/18 22:19:08 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/25 13:31:54 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,5 +83,5 @@ int	execute_export(t_token **tokens, int out_fd, t_program_data *program_data)
 		if (set_envcp_var(var, value, 1, program_data) != 0)
 			return (export_error_return(3, NULL, program_data));
 	}
-	return (0);
+	return (program_data->exit_status);
 }

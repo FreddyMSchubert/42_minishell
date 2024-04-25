@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:48:20 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/18 22:25:00 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/25 13:30:19 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	execute_echo(t_token **inputs, int out_fd, t_program_data *program_data)
 		j = 1;
 		while (inputs[i]->value[j] == 'n')
 			j++;
-		if (inputs[i]->value[j] != '\0')
+		if (inputs[i]->value[j] != '\0' || j == 1)
 			break;
 		n_flag = 1;
 		i++;
