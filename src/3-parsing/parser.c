@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 12:13:31 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/26 05:34:23 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/25 11:59:50 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,7 @@ t_bin_tree_node	*tok_to_bin_tree(t_list *tokens, t_program_data *program_data)
 	gc_append_element(program_data->gc, node);
 	node->input_fd = STDIN_FILENO;
 	node->output_fd = STDOUT_FILENO;
+	node->redirected = false;
 	dom_op_i = get_dominant_operator(&tokens);
 	if (dom_op_i == -1)
 	{
