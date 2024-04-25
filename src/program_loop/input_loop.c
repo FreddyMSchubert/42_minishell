@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input_loop.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/25 10:46:34 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/25 19:44:10 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ int	execute_input(t_program_data *program_data, char *input)
 	t_list				*tokenified_input;
 	t_bin_tree_node		*tree;
 	int					valid;
-	t_pid_list			*pid_list;
 
 	if (VERBOSE == 1)
 		printf("Received input: %s\n", input);
@@ -32,16 +31,16 @@ int	execute_input(t_program_data *program_data, char *input)
 	// --- lexer
 	tokenified_input = lexer(input, program_data);
 	if (tokenified_input == NULL)
-		return (ft_putstr_fd("crash: error lexing input", STDERR_FILENO), -1);
+		return (-1);
 	if (VERBOSE == 1)
 		print_tokens(tokenified_input);
 	// --- validator
 	valid = validator(tokenified_input);
+	program_data->exit_status = valid;
 	if (valid != 0)
 	{
 		if (VERBOSE == 1)
 			printf("token sequence is invalid: %d\n", valid);
-		program_data->exit_status = valid;
 		if (!isatty(fileno(stdin)))
 			program_data->exit_flag = 1;
 		gc_cleanup(program_data->gc);
@@ -59,9 +58,9 @@ int	execute_input(t_program_data *program_data, char *input)
 	if (VERBOSE == 1)
 		printf("\n\n\n");
 	// --- executer
-	pid_list = NULL;
-	execute(tree, program_data, &pid_list);
-	wait_and_free(program_data, &pid_list);
+	program_data->pid_list = NULL;
+	execute(tree, program_data, &program_data->pid_list);
+	wait_and_free(program_data, &program_data->pid_list);
 	return (0);
 }
 
@@ -73,6 +72,7 @@ int	run_crash_interface(t_program_data *program_data)
 		print_logo();
 	while (program_data->exit_flag == 0)
 	{
+		// printf("exit status: %d\n", program_data->exit_status);
 		if (DEBUG == 0)
 		{
 			if (program_data->exit_status == 0)

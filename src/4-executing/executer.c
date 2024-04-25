@@ -6,41 +6,43 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/25 12:15:12 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/25 19:41:35 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static int execute_builtin(t_bin_tree_node *node, t_program_data *program_data)
+static int execute_builtin(t_bin_tree_node *node, t_program_data *program_data, t_pid_list **pid_list)
 {
-	int	exit_status;
+	// int	exit_status;
 
-	exit_status = 0;
+	// exit_status = 0;
 	if (VERBOSE == 1)
 		printf("executing builtin %s, in: %d, out: %d\n", node->val[0]->value, node->input_fd, node->output_fd);
 	if (ft_strncmp(node->val[0]->value, "echo", 4) == 0)
-		exit_status = execute_echo(node->val, node->output_fd, program_data);
+		program_data->exit_status = execute_echo(node->val, node->output_fd, program_data);
 	else if (ft_strncmp(node->val[0]->value, "cd", 2) == 0)
-		exit_status = execute_cd(node->val, program_data);
+		program_data->exit_status = execute_cd(node->val, program_data);
 	else if (ft_strncmp(node->val[0]->value, "pwd", 3) == 0)
-		exit_status = execute_pwd(node->output_fd, program_data);
+		program_data->exit_status = execute_pwd(node->output_fd, program_data);
 	else if (ft_strncmp(node->val[0]->value, "export", 6) == 0)
-		exit_status = execute_export(node->val, node->output_fd, program_data);
+		program_data->exit_status = execute_export(node->val, node->output_fd, program_data);
 	else if (ft_strncmp(node->val[0]->value, "unset", 5) == 0)
-		exit_status = execute_unset(node->val, program_data);
+		program_data->exit_status = execute_unset(node->val, program_data);
 	else if (ft_strncmp(node->val[0]->value, "env", 3) == 0)
-		exit_status = execute_env(program_data, node->output_fd);
+		program_data->exit_status = execute_env(program_data, node->output_fd);
 	else if (ft_strncmp(node->val[0]->value, "exit", 4) == 0)
-		exit_status = execute_exit(node->val, program_data, node->output_fd);
+		program_data->exit_status = execute_exit(node->val, program_data, node->output_fd);
 	if (node->output_fd != STDOUT_FILENO)
 		close(node->output_fd);
 	if (node->input_fd != STDIN_FILENO)
 		close(node->input_fd);
-	program_data->exit_status = exit_status;
+	// printf("exit status in builtin: %d\n", exit_status);
+	// program_data->exit_status = exit_status;
+	add_to_pid_list(-1, pid_list, true);
 	if (VERBOSE == 1)
 		printf("closing fds: %d, %d\n", node->input_fd, node->output_fd);
-	return (-1);
+	return (program_data->exit_status);
 }
 
 static int	execute_command(t_bin_tree_node *node, t_program_data *program_data)
@@ -70,7 +72,7 @@ static int	execute_command(t_bin_tree_node *node, t_program_data *program_data)
 	return (log_err(error_msg, node->val[0]->value, 0), -1);
 }
 
-int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
+int	execute_node(t_bin_tree_node *node, t_program_data *program_data, t_pid_list **pid_list)
 {
 	pid_t	pid;
 
@@ -85,7 +87,7 @@ int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 			close(node->output_fd);
 		if (node->input_fd != STDIN_FILENO)
 			close(node->input_fd);
-		return (-1);
+		return (1);
 	}
 	else if (pid == 0)
 	{
@@ -119,6 +121,7 @@ int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 	}
 	else if (pid > 0)
 	{
+		add_to_pid_list(pid, pid_list, false);
 		if (VERBOSE == 1)
 			printf("child process %d: %s\n", pid, node->val[0]->value);
 		if (node->output_fd != STDOUT_FILENO)
@@ -133,16 +136,13 @@ int	execute_node(t_bin_tree_node *node, t_program_data *program_data)
 			if (VERBOSE == 1)
 				printf("%s: closed input fd %d\n", node->val[0]->value, node->input_fd);
 		}
-		return (pid);
+		return (program_data->exit_status);
 	}
 	return ("this will never occur, just to silence warning!"[0]);
 }
 
 pid_t	execute(t_bin_tree_node *tree, t_program_data *program_data, t_pid_list **pid_list)
 {
-	int last_pid;
-
-	last_pid = -1;
 	if (VERBOSE == 1)
 		printf("executing %s, out_fd: %d\n", tree->val[0]->value, tree->output_fd);
 	if (program_data->exit_flag == 1 || !tree)
@@ -150,33 +150,28 @@ pid_t	execute(t_bin_tree_node *tree, t_program_data *program_data, t_pid_list **
 	if (tree->l == NULL && tree->r == NULL)
 	{
 		if (tree->val[0]->type != TOK_BUILTIN)
-		{
-			last_pid = execute_node(tree, program_data);
-			add_to_pid_list(last_pid, pid_list, false);
-		}
+			program_data->exit_status = execute_node(tree, program_data, pid_list);
 		else
-			add_to_pid_list(execute_builtin(tree, program_data), pid_list, true);
+			program_data->exit_status = execute_builtin(tree, program_data, pid_list);
 	}
 	else
 	{
 		// branches
 		if (tree->val[0]->type == TOK_LOG_AND)
-			return (logical_and(tree, program_data, pid_list));
+			return (logical_and(tree, program_data));
 		else if (tree->val[0]->type == TOK_LOG_OR)
-			return (logical_or(tree, program_data, pid_list));
+			return (logical_or(tree, program_data));
 		else if (tree->val[0]->type == TOK_PIPE)
 			setup_pipe(tree, program_data);
 		else if (tree->val[0]->type == TOK_REDIR)
 			if (redirect(tree, program_data) == 1 || !tree->l)
-				return (last_pid);
+				return (program_data->exit_status);
 		if (tree->val[0]->type == TOK_REDIR && tree->r->val[0]->type == TOK_REDIR && ((tree->l && tree->l->val[0]->type < tree->r->val[0]->type) || (tree->parent && tree->parent->val[0]->type == TOK_REDIR)))
 			if (redirect(tree->r, program_data) == 1)
-				return (last_pid);
-		last_pid = execute(tree->l, program_data, pid_list);
+				return (program_data->exit_status);
+		program_data->exit_status = execute(tree->l, program_data, pid_list);
 		if (tree->val[0]->type == TOK_PIPE && tree->r->redirected == false)
-			last_pid = execute(tree->r, program_data, pid_list);
+			program_data->exit_status = execute(tree->r, program_data, pid_list);
 	}
-	return (last_pid);
+	return (program_data->exit_status);
 }
-
-//ls | cat << stop <- executen cat nicht

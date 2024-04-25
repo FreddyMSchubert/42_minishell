@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 16:07:34 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/25 12:16:17 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/25 19:40:05 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,6 @@ int	redirect(t_bin_tree_node *node, t_program_data *program_data)
 		close(node->output_fd);
 	if (ft_strncmp(node->val[0]->value, "<<", 2) == 0)
 		return (heredoc(node, program_data));
-	// printf("node->val[0]->value: %s\n", node->val[1]->value);
 	if (ft_strncmp(node->val[0]->value, "<", 1) == 0)
 		flags = O_RDONLY;
 	else if (ft_strncmp(node->val[0]->value, ">>", 2) == 0)
