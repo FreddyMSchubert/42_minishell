@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 17:46:25 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/26 17:51:15 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,6 @@ typedef struct s_data
 	int				exit_status;
 	char			**envcp;
 	t_list			*gc;
-	t_pid_list		*pid_list;
 }	t_data;
 
 typedef struct s_cmd_path
@@ -210,8 +209,8 @@ int					execute_node(t_node *node, t_data *data, \
 										t_pid_list **pid_list);
 void				child_process_exit(t_data *data, int exitcode);
 // operators
-int					logical_and(t_node *node, t_data *sh);
-int					logical_or(t_node *node, t_data *sh);
+int					logical_and(t_node *node, t_data *sh, t_pid_list **pidlist);
+int					logical_or(t_node *node, t_data *sh, t_pid_list **pidlist);
 int					redirect(t_node *node, t_data *data);
 int					heredoc(t_node *node, t_data	*sh);
 void				setup_pipe(t_node *node);
