@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 12:18:59 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 17:03:07 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/26 17:07:36 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	gc_append_element(t_list *gc, void *content)
 	while (selected_node->next != NULL)
 	{
 		if (selected_node->content == content)
-			return (free(new_node), -2);	// duplicated pointer
+			return (free(new_node), -2);
 		selected_node = selected_node->next;
 	}
 	selected_node->next = new_node;
