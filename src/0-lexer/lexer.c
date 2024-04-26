@@ -43,9 +43,9 @@ static t_list	*detect_token_type(char *input, int is_first_or_after_operator, t_
 	gc_append_element(program_data->gc, token);
 	gc_append_element(program_data->gc, list);
 	token->val = input;
-	if (is_in_quote(token->val, '\'', input))
+	if (in_quote(token->val, '\'', input))
 		token->type = TOK_S_QUOTE;
-	else if (is_in_quote(token->val, '\"', input))
+	else if (in_quote(token->val, '\"', input))
 		token->type = TOK_D_QUOTE;
 	else if (ft_strnstr(token->val, "<", 1) || ft_strnstr(token->val, "<<", 2) || \
 			ft_strnstr(token->val, ">", 1) || ft_strnstr(token->val, ">>", 2))

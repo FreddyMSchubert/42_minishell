@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: niklasburchhardt <niklasburchhardt@stud    +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:44:01 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/24 13:00:35 by niklasburch      ###   ########.fr       */
+/*   Updated: 2024/04/26 12:28:37 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-
 
 char	*concatenate_matches_free_s1(char *s1, const char *s2)
 {
@@ -27,7 +25,7 @@ char	*concatenate_matches_free_s1(char *s1, const char *s2)
 	else
 		s1_len = ft_strlen(s1);
 	s2_len = ft_strlen(s2);
-	new_str = malloc(s1_len + s2_len + 4); // +4 for two single quotes, space and '\0'
+	new_str = malloc(s1_len + s2_len + 4);
 	if (!new_str)
 		return (NULL);
 	if (s1)
@@ -35,50 +33,31 @@ char	*concatenate_matches_free_s1(char *s1, const char *s2)
 		ft_strlcpy(new_str, s1, ft_strlen(s1) + 1);
 		free(s1);
 	}
-	new_str[s1_len] = '\''; // Add opening single quote
+	new_str[s1_len] = '\'';
 	ft_strlcpy(new_str + s1_len + 1, s2, ft_strlen(s2) + 1);
-	new_str[s1_len + s2_len + 1] = '\''; // Add closing single quote
-	new_str[s1_len + s2_len + 2] = ' '; // Add space
+	new_str[s1_len + s2_len + 1] = '\'';
+	new_str[s1_len + s2_len + 2] = ' ';
 	new_str[s1_len + s2_len + 3] = '\0';
 	return (new_str);
 }
 
-// int	match(const char *pattern, const char *filename)
-// {
-// 	const char	*p = pattern;
-// 	const char	*f = filename;
-// 	const char	*star = NULL;
-// 	const char	*sf = NULL;
-
-// 	printf("pattern: %s, filename: %s\n", pattern, filename);
-// 	while (*f)
-// 	{
-// 		printf("p: %c, f: %c\n", *p, *f);
-// 		if (*p == *f && p++ && f++)
-// 			;
-// 		else if (*p == '\\' && *(p + 1) == '*' && *f == '*') // Handle literal * in filename
-// 		{
-// 			printf("escaped: p: %c, f: %c\n", *p, *f);
-// 			p += 2;
-// 			f++;
-// 		}
-// 		else if (*p == '*' && *(p - 1) != '\\')
-// 		{
-// 			star = p++;
-// 			sf = f;
-// 		}
-// 		else if (star)
-// 		{
-// 			p = star + 1;
-// 			f = ++sf;
-// 		}
-// 		else
-// 			return (0);
-// 	}
-// 	while (*p == '*' && *(p - 1) != '\\')
-// 		p++;
-// 	return (*p == '\0'); // Successful match if end of pattern
-// }
+int	process_star(const char **p, const char **f, const char **star, \
+				const char **sf)
+{
+	if (*(*p) == '*' && (*p == *star || *(*p - 1) != '\\'))
+	{
+		*star = (*p)++;
+		*sf = *f;
+	}
+	else if (*star)
+	{
+		*p = *star + 1;
+		*f = ++(*sf);
+	}
+	else
+		return (0);
+	return (1);
+}
 
 int	match(const char *pattern, const char *filename)
 {
@@ -87,36 +66,20 @@ int	match(const char *pattern, const char *filename)
 	const char	*star = NULL;
 	const char	*sf = NULL;
 
-	// printf("pattern: %s, filename: %s\n", pattern, filename);
 	while (*f)
 	{
-		// printf("p: %c, f: %c\n", *p, *f);
-		if (star && !(*star + 1)) // If pattern ends with *, match rest of filename
-				return (1);
+		if (star && !(*star + 1))
+			return (1);
 		if (*p == *f && *p != '*' && p++ && f++)
 			;
-		else if (*p == '\\' && *(p + 1) == '*' && *f == '*') // Handle literal * in filename
-		{
-			// printf("escaped: p: %c, f: %c\n", *p, *f);
+		else if (*p == '\\' && *(p + 1) == '*' && *f == '*' && *f++)
 			p += 2;
-			f++;
-		}
-		else if (*p == '*' && (p == pattern || *(p - 1) != '\\'))
-		{
-			star = p++;
-			sf = f;
-		}
-		else if (star)
-		{
-			p = star + 1;
-			f = ++sf;
-		}
-		else
+		else if (!process_star(&p, &f, &star, &sf))
 			return (0);
 	}
 	while (*p == '*' && (p == pattern || *(p - 1) != '\\'))
 		p++;
-	return (*p == '\0'); // Successful match if end of pattern
+	return (*p == '\0');
 }
 
 char	*list_matching_files(char *pattern)
@@ -136,7 +99,6 @@ char	*list_matching_files(char *pattern)
 			;
 		else if (match(pattern, entry->d_name))
 		{
-			// printf("match: %s\n", entry->d_name);
 			result = concatenate_matches_free_s1(result, entry->d_name);
 			if (!result)
 				return (closedir(dir), free(pattern), NULL);
@@ -146,6 +108,32 @@ char	*list_matching_files(char *pattern)
 	closedir(dir);
 	if (result && ft_strlen(result) > 0)
 		result[ft_strlen(result) - 1] = '\0';
-	free(pattern);
 	return (result);
+}
+
+void	handle_wildcard_expansion(t_exp *exp, t_data *data)
+{
+	char	*env_var;
+	int		index;
+
+	index = exp->i - 1;
+	env_var = list_matching_files(get_pattern((char *)exp->str, exp->i, data));
+	if (env_var)
+	{
+		while (exp->buf_pos > 0 && ((exp->str[exp->buf_pos - 1] != ' ' && \
+		!is_operator_symbol(exp->str[exp->buf_pos - 1], ' ')) || in_quote(exp->\
+		str, '"', &exp->str[exp->buf_pos - 1]) || in_quote(exp->str, '\'', \
+		&exp->str[exp->buf_pos - 1])))
+			exp->buf_pos--;
+		exp->buffer[exp->buf_pos] = '\0';
+		append_to_buffer(exp, env_var);
+		exp->buffer[index + ft_strlen(env_var) + 1] = '\0';
+		free(env_var);
+		while (exp->str[exp->i] && (exp->str[exp->i] != ' ' || \
+		in_quote(exp->str, '"', &exp->str[exp->i]) || in_quote(exp->str, '\'', \
+		&exp->str[exp->i])) && !is_operator_symbol(exp->str[exp->i], ' '))
+			exp->i++;
+	}
+	else
+		append_to_buffer(exp, "*");
 }
