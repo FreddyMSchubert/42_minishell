@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_util.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 12:13:26 by fschuber          #+#    #+#             */
-/*   Updated: 2024/03/25 09:32:06 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/26 09:41:04 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,23 +18,22 @@
 	Does not free or change the original token t_list.
 	e.g. get_sub_token_arr({a, e, b, w, t, c, d}, 1, 3) -> {e, b, w}
 */
-t_list	*sub_token_t_list(t_list *tokens, int start, int end, t_data *program_data)
+t_list	*sub_list(t_list *tokens, int start, int end, \
+							t_data *program_data)
 {
 	int		index;
-	t_list	*current_token;
 	t_list	*sub_token_list;
 	t_list	*temp;
 
 	if (start > end)
 		return (NULL);
-	index = 0;
-	current_token = tokens;
+	index = -1;
 	sub_token_list = NULL;
-	while (current_token != NULL && index <= end)
+	while (tokens != NULL && ++index <= end)
 	{
 		if (index >= start)
 		{
-			temp = ft_lstnew(current_token->content);
+			temp = ft_lstnew(tokens->content);
 			if (!temp)
 				return (NULL);
 			gc_append_element(program_data->gc, temp);
@@ -43,8 +42,7 @@ t_list	*sub_token_t_list(t_list *tokens, int start, int end, t_data *program_dat
 			else
 				ft_lstadd_back(&sub_token_list, temp);
 		}
-		current_token = current_token->next;
-		index++;
+		tokens = tokens->next;
 	}
 	return (sub_token_list);
 }

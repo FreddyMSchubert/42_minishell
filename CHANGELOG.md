@@ -1,5 +1,12 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+### v0.31.3 - 26.4.24 - Freddy
+- norminettification
+	- switch_redir_args, easy one
+	- parser_util
+	- parser
+		- created external files parser_defaults and substring_util to house new smaller functions
+
 ### v0.31.2 - 26.4.24 - Freddy
 - norminettification
 	- logical.c

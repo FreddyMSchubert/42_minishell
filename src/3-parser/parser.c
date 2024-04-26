@@ -3,57 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 12:13:31 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/25 11:59:50 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/26 10:24:45 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-/*
-	Checks whether the inputted token array is a substring
-	If so, it returns the first token after the substring start and next nulls 
-	the last token before the substring end
-	returns NULL if no substring is found
-*/
-static t_list	*check_substring(t_list *tokens)
-{
-	int		depth;
-	t_list	*current;
-	t_list	*prev;
-	t_list	*before_last_close_brace;
-
-	depth = 0;
-	current = tokens;
-	before_last_close_brace = NULL;
-	while (current != NULL)
-	{
-		if (((t_tok *)current->content)->type == TOK_OPEN_BRACE)
-			depth++;
-		else if (((t_tok *)current->content)->type == TOK_CLOSE_BRACE)
-		{
-			depth--;
-			if (prev)
-				before_last_close_brace = prev;
-		}
-		if (depth == 0 && current->next != NULL)
-		{
-			depth = -1;
-			break ;
-		}
-		prev = current;
-		current = current->next;
-	}
-	if (depth == 0)
-	{
-		if (before_last_close_brace)
-			before_last_close_brace->next = NULL;
-		return (tokens->next);
-	}
-	return (NULL);
-}
 
 /*
 	Sister-function to get_dominant_operator,
@@ -67,6 +24,31 @@ static int	adjust_operator_priority(int current_priority)
 		return (0);
 }
 
+static t_list	*find_valid_substring(t_list *tokens)
+{
+	t_list	*current;
+
+	current = check_substring(tokens);
+	while (current != NULL)
+	{
+		if (current != tokens)
+			tokens = current;
+		else
+			break ;
+		current = check_substring(tokens);
+	}
+	return (tokens);
+}
+
+static int	adjust_depth(t_list	*c)
+{
+	if (((t_tok *)c->content)->type == TOK_OPEN_BRACE)
+		return (1);
+	else if (((t_tok *)c->content)->type == TOK_CLOSE_BRACE)
+		return (-1);
+	return (0);
+}
+
 /*
 	Finds the most dominant operator in a token array, returning its index.
 	Returns -1 if there is no dominant operator in the token array.
@@ -78,34 +60,22 @@ static int	get_dominant_operator(t_list **tokens)
 	int		i;
 	int		target_tok;
 	int		depth;
-	t_list	*current;
+	t_list	*c;
 
 	target_tok = TOK_LOG_AND;
-	(current = check_substring(*tokens));
-	while (current != NULL)
-	{
-		if (current != *tokens)
-			*tokens = current;
-		else
-			break ;
-		(current = check_substring(*tokens));
-	}
+	c = find_valid_substring(*tokens);
 	while (target_tok > 0)
 	{
-		current = *tokens;
-		i = 0;
+		c = *tokens;
+		i = -1;
 		depth = 0;
-		while (current != NULL)
+		while (c != NULL && ++i >= -1)
 		{
-			if (((t_tok *)current->content)->type == TOK_OPEN_BRACE)
-				depth++;
-			else if (((t_tok *)current->content)->type == TOK_CLOSE_BRACE)
-				depth--;
-			if (((t_tok *)current->content)->type == target_tok && \
+			depth += adjust_depth(c);
+			if (((t_tok *)c->content)->type == target_tok && \
 							depth == 0 && i >= 0 && i < toklen(*tokens))
 				return (i);
-			i++;
-			current = current->next;
+			c = c->next;
 		}
 		target_tok = adjust_operator_priority(target_tok);
 	}
@@ -116,35 +86,27 @@ static int	get_dominant_operator(t_list **tokens)
 	Gets a token array as input. Returns a functional binary tree structure.
 	dom_op_i = dominant operator index
 */
-t_node	*parse(t_list *tokens, t_data *program_data)
+t_node	*parse(t_list *tokens, t_data *sh)
 {
 	t_node		*node;
-	int					dom_op_i;
-	t_tok				**arr;
+	int			dom_op_i;
+	t_tok		**arr;
 
-	node = malloc(sizeof(t_node));
+	node = create_default_node(sh);
 	if (!node || !tokens)
 		return (free(node), NULL);
-	gc_append_element(program_data->gc, node);
-	node->in_fd = STDIN_FILENO;
-	node->out_fd = STDOUT_FILENO;
-	node->redirected = false;
 	dom_op_i = get_dominant_operator(&tokens);
 	if (dom_op_i == -1)
-	{
-		arr = t_list_to_token_arr(tokens, program_data);
-		return (node->val = arr, node->l = NULL, node->r = NULL, node);
-	}
-	node->val = malloc(sizeof(t_tok) * 2);
+		return (arr = t_list_to_token_arr(tokens, sh), node->val = arr, \
+					node->l = NULL, node->r = NULL, node);
+	node->val = create_default_token_arr(sh);
 	if (!node->val)
 		return (free(node->val), free(node), NULL);
-	gc_append_element(program_data->gc, node->val);
 	node->val[0] = get_token_at_index(tokens, dom_op_i);
-	node->val[1] = NULL;
-	node->l = parse(sub_token_t_list(tokens, 0, dom_op_i - 1, program_data), program_data);
+	node->l = parse(sub_list(tokens, 0, dom_op_i - 1, sh), sh);
 	if (node->l)
 		node->l->parent = node;
-	node->r = parse(sub_token_t_list(tokens, dom_op_i + 1, toklen(tokens) - 1, program_data), program_data);
+	node->r = parse(sub_list(tokens, dom_op_i + 1, toklen(tokens) - 1, sh), sh);
 	if (node->r)
 		node->r->parent = node;
 	return (node);
