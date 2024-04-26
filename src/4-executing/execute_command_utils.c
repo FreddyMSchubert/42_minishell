@@ -73,7 +73,7 @@ t_cmd_path	*create_cmd_struct(char	**envp, t_tok	**cmd)
 	path = malloc(sizeof(t_cmd_path));
 	if (!path)
 		return (log_err("dynamic allocation error", NULL, NULL), NULL);
-	path->path = get_command_path(envp, cmd[0]->value);
+	path->path = get_command_path(envp, cmd[0]->val);
 	if (!path->path)
 		return (free(path), NULL);
 	token_amount = get_token_arr_len(cmd);
@@ -85,7 +85,7 @@ t_cmd_path	*create_cmd_struct(char	**envp, t_tok	**cmd)
 	split_cmd_i_counter = 0;
 	while (cmd[cmd_i_counter])
 	{
-		split_cmd[split_cmd_i_counter] = cmd[cmd_i_counter]->value;
+		split_cmd[split_cmd_i_counter] = cmd[cmd_i_counter]->val;
 		split_cmd_i_counter++;
 		cmd_i_counter++;
 	}

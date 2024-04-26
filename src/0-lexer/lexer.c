@@ -42,25 +42,25 @@ static t_list	*detect_token_type(char *input, int is_first_or_after_operator, t_
 		return (free(token), free(list), NULL);
 	gc_append_element(program_data->gc, token);
 	gc_append_element(program_data->gc, list);
-	token->value = input;
-	if (is_in_quote(token->value, '\'', input))
+	token->val = input;
+	if (is_in_quote(token->val, '\'', input))
 		token->type = TOK_S_QUOTE;
-	else if (is_in_quote(token->value, '\"', input))
+	else if (is_in_quote(token->val, '\"', input))
 		token->type = TOK_D_QUOTE;
-	else if (ft_strnstr(token->value, "<", 1) || ft_strnstr(token->value, "<<", 2) || \
-			ft_strnstr(token->value, ">", 1) || ft_strnstr(token->value, ">>", 2))
+	else if (ft_strnstr(token->val, "<", 1) || ft_strnstr(token->val, "<<", 2) || \
+			ft_strnstr(token->val, ">", 1) || ft_strnstr(token->val, ">>", 2))
 		token->type = TOK_REDIR;
-	else if (ft_strnstr(token->value, "||", 2))
+	else if (ft_strnstr(token->val, "||", 2))
 		token->type = TOK_LOG_OR;
-	else if (ft_strnstr(token->value, "&&", 2))
+	else if (ft_strnstr(token->val, "&&", 2))
 		token->type = TOK_LOG_AND;
-	else if (ft_strnstr(token->value, "|", 1))
+	else if (ft_strnstr(token->val, "|", 1))
 		token->type = TOK_PIPE;
-	else if (is_builtin_string(token->value, is_first_or_after_operator) == 0)
+	else if (is_builtin_string(token->val, is_first_or_after_operator) == 0)
 		token->type = TOK_BUILTIN;
-	else if (ft_strnstr(token->value, "(", 1))
+	else if (ft_strnstr(token->val, "(", 1))
 		token->type = TOK_OPEN_BRACE;
-	else if (ft_strnstr(token->value, ")", 1))
+	else if (ft_strnstr(token->val, ")", 1))
 		token->type = TOK_CLOSE_BRACE;
 	else
 		token->type = TOK_WORD;
@@ -68,12 +68,12 @@ static t_list	*detect_token_type(char *input, int is_first_or_after_operator, t_
 	// 	token->type = TOK_WORD;
 	list->next = split_token_if_operator_in_quotes(&token, program_data);
 	list->content = token;
-	token->value = get_rid_of_quotes(token->value);
-	gc_append_element(program_data->gc, token->value);
+	token->val = get_rid_of_quotes(token->val);
+	gc_append_element(program_data->gc, token->val);
 	return (list);
 }
 
-//returns new list node if an operator in quotes is found and changes the current tokens value to the operator
+//returns new list node if an operator in quotes is found and changes the current tokens val to the operator
 t_list	*split_token_if_operator_in_quotes(t_tok **token, t_data *data)
 {
 	char	*tmp;
@@ -82,13 +82,13 @@ t_list	*split_token_if_operator_in_quotes(t_tok **token, t_data *data)
 
 
 	node = NULL;
-	op_len = is_operator_symbol((*token)->value[0], (*token)->value[1]);
-	if ((*token)->type > TOK_BUILTIN && (int)ft_strlen((*token)->value) > op_len)
+	op_len = is_operator_symbol((*token)->val[0], (*token)->val[1]);
+	if ((*token)->type > TOK_BUILTIN && (int)ft_strlen((*token)->val) > op_len)
 	{
-		tmp = ft_substr((*token)->value, 0, op_len);
+		tmp = ft_substr((*token)->val, 0, op_len);
 		gc_append_element(data->gc, tmp);
-		node = detect_token_type((*token)->value + op_len, 0, data);
-		(*token)->value = tmp;
+		node = detect_token_type((*token)->val + op_len, 0, data);
+		(*token)->val = tmp;
 	}
 	return (node);
 }

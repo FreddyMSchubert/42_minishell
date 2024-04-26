@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 09:48:54 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/23 16:29:40 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/26 07:23:08 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,34 +27,30 @@ static bool	is_valid_unset_variable(char *var)
 	return (true);
 }
 
-int	execute_unset(t_tok **node, t_data *program_data)
+int	execute_unset(t_tok **node, t_data *data)
 {
 	int	i;
 
 	i = 1;
 	while (node[i] != NULL)
 	{
-		// printf("node[i]->value: %s\n", node[i]->value);
-		if (ft_strchr(node[i]->value, '=') != NULL || 
-			!is_valid_unset_variable(node[i]->value) ||
-			ft_strncmp(node[i]->value, "=", 1) == 0 || 
-			ft_strncmp(node[i]->value, "?", 1) == 0 || 
-			ft_strncmp(node[i]->value, "$", 1) == 0 || 
-			ft_strncmp(node[i]->value, "", 1) == 0)
+		if (ft_strchr(node[i]->val, '=') != NULL || \
+			!is_valid_unset_variable(node[i]->val) || \
+			ft_strncmp(node[i]->val, "=", 1) == 0 || \
+			ft_strncmp(node[i]->val, "?", 1) == 0 || \
+			ft_strncmp(node[i]->val, "$", 1) == 0 || \
+			ft_strncmp(node[i]->val, "", 1) == 0)
 		{
-			ft_putstr_fd("unset: not a valid identifier\n", STDERR_FILENO);
-			program_data->exit_status = 1;
+			log_err("not a valid identifier", "unset", node[i]->val);
+			data->exit_status = 1;
 			return (1);
 		}
-		else if (ft_strncmp(node[i]->value, "_", 2) == 0)
-		{
-			ft_putstr_fd("unset: cannot unset _\n", STDERR_FILENO);
-			program_data->exit_status = 1;
-			return (1);
-		}
-		delete_envcp_var(node[i]->value, program_data->envcp);
+		else if (ft_strncmp(node[i]->val, "_", 2) == 0)
+			return (data->exit_status = 1, \
+						log_err("cannot unset _", "unset", node[i]->val), 1);
+		delete_envcp_var(node[i]->val, data->envcp);
 		i++;
 	}
-	program_data->exit_status = 0;
+	data->exit_status = 0;
 	return (0);
 }

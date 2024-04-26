@@ -21,7 +21,7 @@ char	*get_filename(t_node *node)
 	temp = node->r;
 	while (temp->val[0]->type > TOK_D_QUOTE)
 		temp = temp->l;
-	return (temp->val[0]->value);
+	return (temp->val[0]->val);
 }
 
 static int	heredoc(t_node *node, t_data	*program_data)
@@ -73,7 +73,7 @@ static int	heredoc(t_node *node, t_data	*program_data)
 		return (-2);
 	}
 	close(pipe_fd[1]);
-	node->l->input_fd = pipe_fd[0];
+	node->l->in_fd = pipe_fd[0];
 	return (0);
 }
 
@@ -85,19 +85,19 @@ int	redirect(t_node *node, t_data *program_data)
 	bool	redir_out;
 
 	node->redirected = true;
-	if (node->input_fd != 0 && node->val[0]->value[0] == '>' && node->l)
-		node->l->input_fd = node->input_fd;
-	else if (node->input_fd != 0)
-		close(node->input_fd);
-	if (node->output_fd != 1 && node->val[0]->value[0] == '<' && node->l)
-		node->l->output_fd = node->output_fd;
-	else if (node->output_fd != 1)
-		close(node->output_fd);
-	if (ft_strncmp(node->val[0]->value, "<<", 2) == 0)
+	if (node->in_fd != 0 && node->val[0]->val[0] == '>' && node->l)
+		node->l->in_fd = node->in_fd;
+	else if (node->in_fd != 0)
+		close(node->in_fd);
+	if (node->out_fd != 1 && node->val[0]->val[0] == '<' && node->l)
+		node->l->out_fd = node->out_fd;
+	else if (node->out_fd != 1)
+		close(node->out_fd);
+	if (ft_strncmp(node->val[0]->val, "<<", 2) == 0)
 		return (heredoc(node, program_data));
-	if (ft_strncmp(node->val[0]->value, "<", 1) == 0)
+	if (ft_strncmp(node->val[0]->val, "<", 1) == 0)
 		flags = O_RDONLY;
-	else if (ft_strncmp(node->val[0]->value, ">>", 2) == 0)
+	else if (ft_strncmp(node->val[0]->val, ">>", 2) == 0)
 		flags = O_APPEND | O_WRONLY | O_CREAT;
 	else
 		flags = O_TRUNC | O_WRONLY | O_CREAT;
@@ -110,16 +110,16 @@ int	redirect(t_node *node, t_data *program_data)
 		ft_putstr_fd(": ", STDERR_FILENO);
 		ft_putstr_fd(strerror(errno), STDERR_FILENO);
 		ft_putstr_fd("\n", STDERR_FILENO);
-		if (node->input_fd != 0)
-			close(node->input_fd);
-		if (node->output_fd != 1)
-			close(node->output_fd);
+		if (node->in_fd != 0)
+			close(node->in_fd);
+		if (node->out_fd != 1)
+			close(node->out_fd);
 		program_data->exit_status = 1;
 		return (1);
 	}
-	if (node->r->val[0]->type == TOK_REDIR && ft_strncmp(node->val[0]->value, node->r->val[0]->value, 1) == 0) // if its not the last redirect and the same as the current one
-		return (close(fd), redirect(node->r, program_data)); //printf("another redirection in front, node: %s\n", node->val[0]->value), 
-	if (node->val[0]->value[0] == '>')
+	if (node->r->val[0]->type == TOK_REDIR && ft_strncmp(node->val[0]->val, node->r->val[0]->val, 1) == 0) // if its not the last redirect and the same as the current one
+		return (close(fd), redirect(node->r, program_data)); //printf("another redirection in front, node: %s\n", node->val[0]->val),
+	if (node->val[0]->val[0] == '>')
 		redir_out = true;
 	else
 		redir_out = false;
@@ -129,16 +129,16 @@ int	redirect(t_node *node, t_data *program_data)
 		if (!node->parent || (node->parent->val && node->parent->val[0]->type != TOK_REDIR))
 		{
 			if (!redir_out && node->l)
-				node->l->input_fd = fd;
+				node->l->in_fd = fd;
 			else if (node->l)
-				node->l->output_fd = fd;
+				node->l->out_fd = fd;
 			return (0);
 		}
 	}
-	if (node->val[0]->value[0] == '<' && node->l)
-		node->l->input_fd = fd;
+	if (node->val[0]->val[0] == '<' && node->l)
+		node->l->in_fd = fd;
 	else if (node->l)
-		node->l->output_fd = fd;
+		node->l->out_fd = fd;
 	(void)program_data;
 	return (0);
 }

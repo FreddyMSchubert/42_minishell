@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 09:38:36 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/25 21:13:06 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/26 07:47:54 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/minishell.h"
 
-static int	export_error_return(int error_code, char *arg, t_data *data)
+static int	export_err(int error_code, char *arg, t_data *data)
 {
 	ft_putstr_fd("minishell: export: `", STDERR_FILENO);
 	if (arg)
@@ -27,7 +27,8 @@ static int	export_error_return(int error_code, char *arg, t_data *data)
 	return (1);
 }
 
-bool	is_valid_env_var(char *var)
+// checks if the variable is a valid env var
+static bool	valid_var(char *var)
 {
 	int	i;
 
@@ -42,48 +43,62 @@ bool	is_valid_env_var(char *var)
 	return (true);
 }
 
-int	execute_export(t_tok **tokens, int out_fd, t_data *program_data)
+static int	display_all_env_vars(t_data *program_data, int out_fd)
 {
-	int		i;
-	char	*equ_pos_char;
-	char	*var;
-	char	*value;
+	int	i;
 
 	i = 0;
-	if (!tokens[1])
+	while (program_data->envcp[i])
 	{
-		while (program_data->envcp[i])
-		{
-			ft_putstr_fd("declare -x ", out_fd);
-			ft_putendl_fd(program_data->envcp[i], out_fd);
-			i++;
-		}
+		ft_putstr_fd("declare -x ", out_fd);
+		ft_putendl_fd(program_data->envcp[i], out_fd);
+		i++;
+	}
+	return (0);
+}
+
+static int	parse_and_set_env_var(t_tok *token, t_data *program_data)
+{
+	char	*equ_sign;
+	char	*var;
+	char	*val;
+
+	equ_sign = ft_strchr(token->val, '=');
+	if (!equ_sign || equ_sign == token->val || !valid_var(token->val))
+	{
+		if (equ_sign == token->val || !valid_var(token->val))
+			return (export_err(2, token->val, program_data));
 		return (0);
 	}
-	while (tokens[++i])
+	var = ft_substr(token->val, 0, equ_sign - token->val);
+	if (!var)
+		return (export_err(4, NULL, program_data));
+	if (ft_isnbr(var))
+		return (free(var), export_err(2, token->val, program_data));
+	val = ft_substr(token->val, equ_sign - token->val + 1, \
+						ft_strlen(token->val) - (equ_sign - token->val) - 1);
+	if (!val)
+		return (free(var), export_err(4, NULL, program_data));
+	if (set_envcp_var(var, val, 1, program_data) != 0)
+		return (free(var), free(val), export_err(3, NULL, program_data));
+	free(var);
+	free(val);
+	return (0);
+}
+
+int	execute_export(t_tok **toks, int out_fd, t_data *program_data)
+{
+	int		i;
+	int		result;
+
+	if (!toks[1])
+		return (display_all_env_vars(program_data, out_fd), 0);
+	i = 0;
+	while (toks[++i])
 	{
-		equ_pos_char = ft_strchr(tokens[i]->value, '=');
-		if (!equ_pos_char || equ_pos_char == tokens[i]->value || !is_valid_env_var(tokens[i]->value))
-		{
-			if (equ_pos_char == tokens[i]->value || !is_valid_env_var(tokens[i]->value))
-				export_error_return(2, tokens[i]->value, program_data);
-			continue;
-		}
-		var = ft_substr(tokens[i]->value, 0, equ_pos_char - tokens[i]->value);
-		if (!var)
-			return (export_error_return(4, NULL, program_data));
-		gc_append_element(program_data->gc, var);
-		if (ft_isnbr(var))
-		{
-			export_error_return(2, tokens[i]->value, program_data);
-			continue;
-		}
-		value = ft_substr(tokens[i]->value, equ_pos_char - tokens[i]->value + 1, ft_strlen(tokens[i]->value) - (equ_pos_char - tokens[i]->value) - 1);
-		if (!value)
-			return (export_error_return(4, NULL, program_data));
-		gc_append_element(program_data->gc, value);
-		if (set_envcp_var(var, value, 1, program_data) != 0)
-			return (export_error_return(3, NULL, program_data));
+		result = parse_and_set_env_var(toks[i], program_data);
+		if (result != 0)
+			return (result);
 	}
 	return (program_data->exit_status);
 }

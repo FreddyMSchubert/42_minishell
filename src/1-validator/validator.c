@@ -38,7 +38,7 @@ int	validate(t_list *tokens)
 	// check for inital token not being pipe or logical operator
 	if (((t_tok *)tok->content)->type == TOK_PIPE || ((t_tok *)tok->content)->type == TOK_LOG_OR || \
 		((t_tok *)tok->content)->type == TOK_LOG_AND)
-		return (throw_syntax_error(((t_tok *)tok->content)->value), 258);
+		return (throw_syntax_error(((t_tok *)tok->content)->val), 258);
 	while (tok != NULL)
 	{
 		token = tok->content;
@@ -46,7 +46,7 @@ int	validate(t_list *tokens)
 		if (token->type >= TOK_PIPE && token->type <= TOK_LOG_AND && tok->next && \
 				((t_tok *)tok->next->content)->type >= TOK_PIPE \
  && ((t_tok *)tok->next->content)->type <= TOK_LOG_AND)
-			return (throw_syntax_error(token->value), 2);
+			return (throw_syntax_error(token->val), 2);
 		// check for unclosed braces
 		if (token->type == TOK_OPEN_BRACE)
 			brace_opened++;
@@ -59,20 +59,20 @@ int	validate(t_list *tokens)
 		if (token->type == TOK_CLOSE_BRACE && tok->next && ((t_tok *)tok->next->content)->type == TOK_OPEN_BRACE)
 			return (throw_syntax_error("("), 258);
 		if (token->type == TOK_CLOSE_BRACE && tok->next && ((t_tok *)tok->next->content)->type <= TOK_BUILTIN)
-			return (throw_syntax_error(((t_tok *)tok->next->content)->value), 258);
+			return (throw_syntax_error(((t_tok *)tok->next->content)->val), 258);
 		// check for valid word after < > >> <<
 		if (token->type == TOK_REDIR)
 		{
 			if (!tok->next)
 				return (throw_syntax_error("newline"), 2);
 			else if (((t_tok *)tok->next->content)->type > TOK_BUILTIN)
-				return (throw_syntax_error(token->value), 2);
+				return (throw_syntax_error(token->val), 2);
 		}
 		tok = tok->next;
 	}
 	// check for | in beginning or end
 	if (token->type == TOK_PIPE || token->type == TOK_LOG_OR || token->type == TOK_LOG_AND)// || token->type == TOK_REDIR)
-		return (throw_syntax_error(token->value), 2);
+		return (throw_syntax_error(token->val), 2);
 	if (brace_opened != 0)
 	{
 		if (brace_opened > 0)

@@ -70,7 +70,7 @@ void	print_token(t_tok *token)
 		printf("Open Brace");
 	else if (token->type == TOK_CLOSE_BRACE)
 		printf("Close Brace");
-	printf(", \tValue: \"%s\"\n", token->value);
+	printf(", \tValue: \"%s\"\n", token->val);
 }
 
 void	print_tokens(t_list *tokens)

@@ -18,30 +18,30 @@ static int execute_builtin(t_node *node, t_data *program_data, t_pid_list **pid_
 
 	// exit_status = 0;
 	if (VERBOSE == 1)
-		printf("executing builtin %s, in: %d, out: %d\n", node->val[0]->value, node->input_fd, node->output_fd);
-	if (ft_strncmp(node->val[0]->value, "echo", 4) == 0)
-		program_data->exit_status = execute_echo(node->val, node->output_fd, program_data);
-	else if (ft_strncmp(node->val[0]->value, "cd", 2) == 0)
+		printf("executing builtin %s, in: %d, out: %d\n", node->val[0]->val, node->in_fd, node->out_fd);
+	if (ft_strncmp(node->val[0]->val, "echo", 4) == 0)
+		program_data->exit_status = execute_echo(node->val, node->out_fd, program_data);
+	else if (ft_strncmp(node->val[0]->val, "cd", 2) == 0)
 		program_data->exit_status = execute_cd(node->val, program_data);
-	else if (ft_strncmp(node->val[0]->value, "pwd", 3) == 0)
-		program_data->exit_status = execute_pwd(node->output_fd, program_data);
-	else if (ft_strncmp(node->val[0]->value, "export", 6) == 0)
-		program_data->exit_status = execute_export(node->val, node->output_fd, program_data);
-	else if (ft_strncmp(node->val[0]->value, "unset", 5) == 0)
+	else if (ft_strncmp(node->val[0]->val, "pwd", 3) == 0)
+		program_data->exit_status = execute_pwd(node->out_fd, program_data);
+	else if (ft_strncmp(node->val[0]->val, "export", 6) == 0)
+		program_data->exit_status = execute_export(node->val, node->out_fd, program_data);
+	else if (ft_strncmp(node->val[0]->val, "unset", 5) == 0)
 		program_data->exit_status = execute_unset(node->val, program_data);
-	else if (ft_strncmp(node->val[0]->value, "env", 3) == 0)
-		program_data->exit_status = execute_env(program_data, node->output_fd);
-	else if (ft_strncmp(node->val[0]->value, "exit", 4) == 0)
-		program_data->exit_status = execute_exit(node->val, program_data, node->output_fd);
-	if (node->output_fd != STDOUT_FILENO)
-		close(node->output_fd);
-	if (node->input_fd != STDIN_FILENO)
-		close(node->input_fd);
+	else if (ft_strncmp(node->val[0]->val, "env", 3) == 0)
+		program_data->exit_status = execute_env(program_data, node->out_fd);
+	else if (ft_strncmp(node->val[0]->val, "exit", 4) == 0)
+		program_data->exit_status = execute_exit(node->val, program_data, node->out_fd);
+	if (node->out_fd != STDOUT_FILENO)
+		close(node->out_fd);
+	if (node->in_fd != STDIN_FILENO)
+		close(node->in_fd);
 	// printf("exit status in builtin: %d\n", exit_status);
 	// program_data->exit_status = exit_status;
 	add_to_pid_list(-1, pid_list, true);
 	if (VERBOSE == 1)
-		printf("closing fds: %d, %d\n", node->input_fd, node->output_fd);
+		printf("closing fds: %d, %d\n", node->in_fd, node->out_fd);
 	return (program_data->exit_status);
 }
 
@@ -69,7 +69,7 @@ static int	execute_command(t_node *node, t_data *program_data)
 		program_data->exit_status = 127;
 		error_msg = "command not found";
 	}
-	return (log_err(error_msg, node->val[0]->value, 0), -1);
+	return (log_err(error_msg, node->val[0]->val, 0), -1);
 }
 
 int	execute_node(t_node *node, t_data *program_data, t_pid_list **pid_list)
@@ -78,42 +78,42 @@ int	execute_node(t_node *node, t_data *program_data, t_pid_list **pid_list)
 
 	if (VERBOSE == 1)
 		printf("executing %s, in: %d, out: %d\n", \
-						node->val[0]->value, node->input_fd, node->output_fd);
+						node->val[0]->val, node->in_fd, node->out_fd);
 	pid = fork();
 	if (pid == -1)
 	{
 		perror("fork failed");
-		if (node->output_fd != STDOUT_FILENO)
-			close(node->output_fd);
-		if (node->input_fd != STDIN_FILENO)
-			close(node->input_fd);
+		if (node->out_fd != STDOUT_FILENO)
+			close(node->out_fd);
+		if (node->in_fd != STDIN_FILENO)
+			close(node->in_fd);
 		return (1);
 	}
 	else if (pid == 0)
 	{
-		if (node->input_fd != STDIN_FILENO)
+		if (node->in_fd != STDIN_FILENO)
 		{
-			if (dup2(node->input_fd, STDIN_FILENO) == -1)
+			if (dup2(node->in_fd, STDIN_FILENO) == -1)
 			{
 				perror("dup2 input redirect failed");
-				if (node->output_fd != STDOUT_FILENO)
-					close(node->output_fd);
-				close(node->input_fd);
+				if (node->out_fd != STDOUT_FILENO)
+					close(node->out_fd);
+				close(node->in_fd);
 				exit(-1);
 			}
-			close(node->input_fd);
+			close(node->in_fd);
 		}
-		if (node->output_fd != STDOUT_FILENO)
+		if (node->out_fd != STDOUT_FILENO)
 		{
-			if (dup2(node->output_fd, STDOUT_FILENO) == -1)
+			if (dup2(node->out_fd, STDOUT_FILENO) == -1)
 			{
 				perror("dup2 output redirect failed");
-				close(node->output_fd);
-				if (node->input_fd != STDIN_FILENO)
-					close(node->input_fd);
+				close(node->out_fd);
+				if (node->in_fd != STDIN_FILENO)
+					close(node->in_fd);
 				exit(-1);
 			}
-			close(node->output_fd);
+			close(node->out_fd);
 		}
 		close_fds_loop();
 		execute_command(node, program_data);
@@ -123,18 +123,18 @@ int	execute_node(t_node *node, t_data *program_data, t_pid_list **pid_list)
 	{
 		add_to_pid_list(pid, pid_list, false);
 		if (VERBOSE == 1)
-			printf("child process %d: %s\n", pid, node->val[0]->value);
-		if (node->output_fd != STDOUT_FILENO)
+			printf("child process %d: %s\n", pid, node->val[0]->val);
+		if (node->out_fd != STDOUT_FILENO)
 		{
-			close(node->output_fd);
+			close(node->out_fd);
 			if (VERBOSE == 1)
-				printf("%s: closed output fd %d\n", node->val[0]->value, node->output_fd);
+				printf("%s: closed output fd %d\n", node->val[0]->val, node->out_fd);
 		}
-		if (node->input_fd != STDIN_FILENO)
+		if (node->in_fd != STDIN_FILENO)
 		{
-			close(node->input_fd);
+			close(node->in_fd);
 			if (VERBOSE == 1)
-				printf("%s: closed input fd %d\n", node->val[0]->value, node->input_fd);
+				printf("%s: closed input fd %d\n", node->val[0]->val, node->in_fd);
 		}
 		return (program_data->exit_status);
 	}
@@ -144,7 +144,7 @@ int	execute_node(t_node *node, t_data *program_data, t_pid_list **pid_list)
 pid_t	execute(t_node *tree, t_data *program_data, t_pid_list **pid_list)
 {
 	if (VERBOSE == 1)
-		printf("executing %s, out_fd: %d\n", tree->val[0]->value, tree->output_fd);
+		printf("executing %s, out_fd: %d\n", tree->val[0]->val, tree->out_fd);
 	if (program_data->exit_flag == 1 || !tree)
 		return (program_data->exit_status);
 	if (tree->l == NULL && tree->r == NULL)

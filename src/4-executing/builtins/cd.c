@@ -19,7 +19,7 @@ char	*get_path(t_tok **tokens, t_data *program_data)
 {
 	char	*temp;
 
-	if (tokens[1] == NULL || ft_strncmp(tokens[1]->value, "--", 2) == 0)
+	if (tokens[1] == NULL || ft_strncmp(tokens[1]->val, "--", 2) == 0)
 	{
 		temp = get_envcp_var("HOME", program_data->envcp);
 		if (temp)
@@ -31,7 +31,7 @@ char	*get_path(t_tok **tokens, t_data *program_data)
 			return (NULL);
 		}
 	}
-	else if (tokens[1]->value[0] == '-')
+	else if (tokens[1]->val[0] == '-')
 	{
 		temp = get_envcp_var("OLDPWD", program_data->envcp);
 		if (temp)
@@ -41,7 +41,7 @@ char	*get_path(t_tok **tokens, t_data *program_data)
 						log_err("OLDPWD not set", "cd", NULL), NULL);
 	}
 	else
-		return (ft_strdup(tokens[1]->value));
+		return (ft_strdup(tokens[1]->val));
 }
 
 int	change_directory(char *path, t_data *program_data)

@@ -6,15 +6,15 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 07:17:01 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/25 10:35:33 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/26 07:03:54 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../../include/minishell.h"
 
-// function to get the value of an environment variable
+// function to get the val of an environment variable
 // gets a reference to the actual environment variable, 
-// so strdup it if you want to keep it
+// so please strdup it if you want to keep it
 char	*get_envcp_var(char *var, char **envcp)
 {
 	int	i;
@@ -38,12 +38,13 @@ char	*get_envcp_var(char *var, char **envcp)
 	return (NULL);
 }
 
-// creates a new environment variable with the given value
+// creates a new environment variable with the given val
 int	create_envcp_var(char *var, char *value, t_data *data)
 {
 	char	*newenvcp;
-	char	**temp;
+	char	**new_envcp_array;
 	int		i;
+	int		j;
 
 	newenvcp = ft_strjoinfree(ft_strjoin(var, "="), ft_strdup(value));
 	if (!newenvcp)
@@ -51,16 +52,20 @@ int	create_envcp_var(char *var, char *value, t_data *data)
 	i = 0;
 	while (data->envcp[i])
 		i++;
-	temp = (char **)realloc(data->envcp, sizeof(char *) * (i + 2)); // forbidden function
-	if (!temp)
+	new_envcp_array = (char **)malloc(sizeof(char *) * (i + 2));
+	if (!new_envcp_array)
 		return (free(newenvcp), -2);
-	data->envcp = temp;
-	data->envcp[i] = newenvcp;
-	data->envcp[i + 1] = NULL;
+	j = -1;
+	while (++j < i)
+		new_envcp_array[j] = data->envcp[j];
+	new_envcp_array[i] = newenvcp;
+	new_envcp_array[i + 1] = NULL;
+	free(data->envcp);
+	data->envcp = new_envcp_array;
 	return (0);
 }
 
-// function to set the value of an envcpironment variable
+// function to set the val of an envcpironment variable
 // if it fails to find the variable and createnew is 1, it creates a new one
 int	set_envcp_var(char *var, char *val, char createnew, t_data *data)
 {

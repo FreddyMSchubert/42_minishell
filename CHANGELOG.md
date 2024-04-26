@@ -1,5 +1,18 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+### v0.31.1 - 26.4.24 - Freddy
+- removed realloc (not allowed function) from create_envcp_var in envcp_utils
+- norminettification
+	- echo
+	- exit
+	- unset
+	- export
+	- some input_loop fixes
+- renamed some values in structs for clarity and brevity
+
+## v0.31.0 - 26.4.24 - Freddy
+- Time to make this scale fully norminette conformant. i started by changing file names and function names to more easy to use ones using clion.
+
 ### v0.30.8 - 25.4.24 - Freddy
 - cd.c now fully norminette conformant
 - general norminettification in many places
@@ -23,7 +36,7 @@
 - made the builtin checks if else statements, lol were only doing the most complicated of efficiency improvements, stuff like this we just leave. fixed.
 - random other improvements
 	- made exit_error properly log to stderr
-	- made log_error handle the case where error doesnt have a value
+	- made log_error handle the case where error doesnt have a val
 
 ### v0.30.2 - 24.4.24 - Freddy
 - removed one pescy line and now it seems to be correct - theres still a couple of bonus test cases that we dont pass - namely 4, 5 & 6, but thats fine, we are doing pipes differently
@@ -57,7 +70,7 @@
 - added some better free protection in expander & wildcard
 
 ### v0.28.2 - 18.4.24 - Freddy
-- replaces malloc call in ms_split with calloc to avoid a potential jump on uninitialized value
+- replaces malloc call in ms_split with calloc to avoid a potential jump on uninitialized val
 
 ### v0.28.1 - 04.04.24 - Freddy 
 - better error logging function, used in executer
@@ -66,7 +79,7 @@
 	- this was surprisingly hard and my brain is in pain
 
 ## v0.28.0 - 03.04.24 - Freddy - 1670 / 2823
-- fixed export not working like bash bug for var-value pairs where var is only 1 char long
+- fixed export not working like bash bug for var-val pairs where var is only 1 char long
 - some fixes, and norminettification of envcp utils
 
 ## v0.27.0 - 02.04.24 - Freddy - 1670 / 2823
@@ -207,7 +220,7 @@
 - implemented here_doc
 - parents now return childs exit status
 - fixed some bugs in the executer
-- fixed new line not resetting program return value
+- fixed new line not resetting program return val
 
 ## v0.17.0 - 04.03.24 - Freddy
 - Added ft_isspace to libft submodule, removed from ms_split
@@ -267,7 +280,7 @@
 - changelog dates fix
 
 ### v0.11.2 - 26.02.24 - Freddy
-- Fixed export trying to set an already set variable without a value
+- Fixed export trying to set an already set variable without a val
 
 ### v0.11.1 - 26.02.24 - Freddy
 - Fixed cd not returning to home directory when run with no args
@@ -348,7 +361,7 @@
 ## v0.2.0 - 08.02.24 - Freddy
 - added `parser.c` & `parser_util.c` which create basic bin tree from token array
 	- untested because theres not a printing function yet
-- changed t_node to save a token array as value instead of a single token
+- changed t_node to save a token array as val instead of a single token
 
 ## v0.1.0 - 07.02.24 - Freddy
 - added `printing.c` for printing debug functions (with print_tokens())

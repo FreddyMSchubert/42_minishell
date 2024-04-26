@@ -37,9 +37,9 @@ void	setup_pipe(t_node *node, t_data *program_data)
 			break ;
 		output = output->l;
 	}
-	input->output_fd = pipe_fd[1];
-	output->input_fd = pipe_fd[0];
+	input->out_fd = pipe_fd[1];
+	output->in_fd = pipe_fd[0];
 	if (VERBOSE == 1)
-		printf("creating pipe:\twrite: %s [%d],\tread: %s [%d]\n", input->val[0]->value, input->output_fd, output->val[0]->value, output->input_fd);
+		printf("creating pipe:\twrite: %s [%d],\tread: %s [%d]\n", input->val[0]->val, input->out_fd, output->val[0]->val, output->in_fd);
 	(void)program_data;
 }

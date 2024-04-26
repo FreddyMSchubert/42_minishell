@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 06:29:18 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/26 07:28:55 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@
 typedef struct s_tok
 {
 	char			type;
-	char			*value;
+	char			*val;
 }	t_tok;
 // char used for type to save space, as there are only 8 types
 
@@ -74,8 +74,8 @@ typedef struct s_node
 	t_node          *r;
 	t_node          *parent;
 	bool			redirected;
-	int				input_fd;
-	int				output_fd;
+	int				in_fd;
+	int				out_fd;
 }	t_node;
 // redirected is true if node is a redirection and was already executed
 

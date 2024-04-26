@@ -126,8 +126,8 @@ t_node	*parse(t_list *tokens, t_data *program_data)
 	if (!node || !tokens)
 		return (free(node), NULL);
 	gc_append_element(program_data->gc, node);
-	node->input_fd = STDIN_FILENO;
-	node->output_fd = STDOUT_FILENO;
+	node->in_fd = STDIN_FILENO;
+	node->out_fd = STDOUT_FILENO;
 	node->redirected = false;
 	dom_op_i = get_dominant_operator(&tokens);
 	if (dom_op_i == -1)

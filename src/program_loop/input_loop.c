@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 06:27:50 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/26 07:18:15 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,13 +64,13 @@ static int	execute_input(t_data *program_data, char *input)
 int	run_input_loop(t_data *program_data)
 {
 	char	*input;
+	char	*line;
 
 	if (DEBUG == 0)
 		print_logo();
 	while (program_data->exit_flag == 0)
 	{
-		// printf("exit status: %d\n", program_data->exit_status);
-		if (DEBUG == 0)
+		if (isatty(fileno(stdin)))
 		{
 			if (program_data->exit_status == 0)
 			{
@@ -86,17 +86,11 @@ int	run_input_loop(t_data *program_data)
 		}
 		else
 		{
-			if (isatty(fileno(stdin)))
-				input = readline("minishell$ ");
-			else
-			{
-				char *line;
-				line = get_next_line(fileno(stdin));
-				if (line == NULL)
-					return (gc_cleanup(program_data->gc), 0);
-				input = ft_strtrim(line, "\n");
-				free(line);
-			}
+			line = get_next_line(fileno(stdin));
+			if (line == NULL)
+				return (gc_cleanup(program_data->gc), 0);
+			input = ft_strtrim(line, "\n");
+			free(line);
 		}
 		if (g_sigint_received == SIGINT)
 		{
