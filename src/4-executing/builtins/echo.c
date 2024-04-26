@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:48:20 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 07:15:01 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/26 17:33:51 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static int	parse_echo_options(t_tok **inputs, int *i)
 	return (n_flag);
 }
 
-int	execute_echo(t_tok **inputs, int out_fd, t_data *program_data)
+int	execute_echo(t_tok **inputs, int out_fd, t_data *sh)
 {
 	int		i;
 	int		n_flag;
@@ -49,6 +49,6 @@ int	execute_echo(t_tok **inputs, int out_fd, t_data *program_data)
 	}
 	if (n_flag == 0)
 		ft_putstr_fd("\n", out_fd);
-	program_data->exit_status = 0;
+	sh->exit_status = 0;
 	return (0);
 }

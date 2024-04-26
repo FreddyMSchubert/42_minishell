@@ -3,23 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 13:40:52 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/18 19:59:03 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/26 17:34:01 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/minishell.h"
 
-int	execute_env(t_data *program_data, int out_fd)
+int	execute_env(t_data *sh, int out_fd)
 {
 	int	i;
 
 	i = 0;
-	while (program_data->envcp[i])
+	while (sh->envcp[i])
 	{
-		ft_putstr_fd(program_data->envcp[i], out_fd);
+		ft_putstr_fd(sh->envcp[i], out_fd);
 		ft_putchar_fd('\n', out_fd);
 		i++;
 	}

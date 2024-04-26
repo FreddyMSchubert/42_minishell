@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_expand_util.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 12:12:06 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/26 12:14:58 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/26 17:33:18 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ char	*isolate_var(char *var)
 	return (var);
 }
 
-char	*get_envcp(const char *env_var, t_data *program_data)
+char	*get_envcp(const char *env_var, t_data *sh)
 {
 	int		i;
 	char	*tmp;
@@ -56,12 +56,12 @@ char	*get_envcp(const char *env_var, t_data *program_data)
 	i = -1;
 	tmp = ft_strjoin(env_var, "=");
 	if (!tmp)
-		exit_error("malloc failed", 1, program_data->gc);
-	gc_append_element(program_data->gc, tmp);
-	while (program_data->envcp[++i])
+		exit_error("malloc failed", 1, sh->gc);
+	gc_append_element(sh->gc, tmp);
+	while (sh->envcp[++i])
 	{
-		if (ft_strncmp(program_data->envcp[i], tmp, ft_strlen(tmp)) == 0)
-			return (ft_strdup(program_data->envcp[i] + ft_strlen(env_var) + 1));
+		if (ft_strncmp(sh->envcp[i], tmp, ft_strlen(tmp)) == 0)
+			return (ft_strdup(sh->envcp[i] + ft_strlen(env_var) + 1));
 	}
 	return (ft_strdup(""));
 }

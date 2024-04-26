@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 12:13:26 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 17:20:22 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/26 17:33:26 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,13 @@
 	@param	tokens	pointer to the token list
 	@param	start	index of the first token to include
 	@param	end		index of the last token to include
-	@param	program_data	pointer to the data struct
+	@param	sh		pointer to the data struct
 	@return	pointer to the new token list
 			NULL	if malloc failed
 	e.g. get_sub_token_arr({a, e, b, w, t, c, d}, 1, 3) -> {e, b, w}
 */
 t_list	*sub_list(t_list *tokens, int start, int end, \
-							t_data *program_data)
+							t_data *sh)
 {
 	int		index;
 	t_list	*sub_token_list;
@@ -40,7 +40,7 @@ t_list	*sub_list(t_list *tokens, int start, int end, \
 			temp = ft_lstnew(tokens->content);
 			if (!temp)
 				return (NULL);
-			gc_append_element(program_data->gc, temp);
+			gc_append_element(sh->gc, temp);
 			if (!sub_token_list)
 				sub_token_list = temp;
 			else
@@ -98,11 +98,11 @@ t_tok	*get_token_at_index(t_list *tokens, int index)
 /*
 	@brief	converts a token list to an array of tokens
 	@param	tokens	pointer to the token list
-	@param	program_data	pointer to the data struct
+	@param	sh	pointer to the data struct
 	@return	pointer to the token array
 			NULL	if malloc failed
 */
-t_tok	**t_list_to_token_arr(t_list	*tokens, t_data	*program_data)
+t_tok	**t_list_to_token_arr(t_list	*tokens, t_data	*sh)
 {
 	t_tok	**token_arr;
 	t_list	*temp;
@@ -118,7 +118,7 @@ t_tok	**t_list_to_token_arr(t_list	*tokens, t_data	*program_data)
 	token_arr = malloc(sizeof(t_tok *) * (counter + 1));
 	if (!token_arr)
 		return (NULL);
-	gc_append_element(program_data->gc, token_arr);
+	gc_append_element(sh->gc, token_arr);
 	token_arr[counter] = NULL;
 	counter = 0;
 	temp = tokens;
