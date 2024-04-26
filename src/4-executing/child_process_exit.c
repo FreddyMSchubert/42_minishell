@@ -12,7 +12,7 @@
 
 #include "../../include/minishell.h"
 
-void	child_process_exit(t_program_data *program_data, int exitcode)
+void	child_process_exit(t_data *program_data, int exitcode)
 {
 	int			i;
 

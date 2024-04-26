@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input_loop.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/25 20:57:45 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/26 06:27:50 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,28 +14,25 @@
 
 extern int	g_sigint_received;
 
-int	execute_input(t_program_data *program_data, char *input)
+static int	execute_input(t_data *program_data, char *input)
 {
 	t_list				*tokenified_input;
-	t_bin_tree_node		*tree;
+	t_node				*tree;
 	int					valid;
 
 	if (VERBOSE == 1)
 		printf("Received input: %s\n", input);
-	input = expand_values(input, program_data, false);
+	input = expand(input, program_data, false);
 	if (VERBOSE == 1)
-	{
-		printf("after expanding:\n");
-		printf("input: %s\n", input);
-	}
-	// --- lexer
-	tokenified_input = lexer(input, program_data);
+		printf("after expanding:\ninput:\n");
+	// --- lex
+	tokenified_input = lex(input, program_data);
 	if (tokenified_input == NULL)
 		return (-1);
 	if (VERBOSE == 1)
 		print_tokens(tokenified_input);
-	// --- validator
-	valid = validator(tokenified_input);
+	// --- validate
+	valid = validate(tokenified_input);
 	program_data->exit_status = valid;
 	if (valid != 0)
 	{
@@ -44,17 +41,17 @@ int	execute_input(t_program_data *program_data, char *input)
 		if (!isatty(fileno(stdin)))
 			program_data->exit_flag = 1;
 		gc_cleanup(program_data->gc);
-		program_data->gc = create_garbage_collector();
+		program_data->gc = gc_create();
 		return (-1);
 	}
 	if (VERBOSE == 1)
 		printf("token sequence is valid\n");
 	tokenified_input = switch_redir_args(tokenified_input);
-	tree = tok_to_bin_tree(tokenified_input, program_data);
+	tree = parse(tokenified_input, program_data);
 	tree->parent = NULL;
 
 	if (VERBOSE == 1)
-		print_binary_tree(tree, 0);
+        print_node_with_children(tree, 0);
 	if (VERBOSE == 1)
 		printf("\n\n\n");
 	// --- executer
@@ -64,7 +61,7 @@ int	execute_input(t_program_data *program_data, char *input)
 	return (0);
 }
 
-int	run_crash_interface(t_program_data *program_data)
+int	run_input_loop(t_data *program_data)
 {
 	char	*input;
 
@@ -114,7 +111,7 @@ int	run_crash_interface(t_program_data *program_data)
 			if (input != NULL)
 				gc_append_element(program_data->gc, input);
 			gc_cleanup(program_data->gc);
-			program_data->gc = create_garbage_collector();
+			program_data->gc = gc_create();
 			program_data->exit_status = 0;
 			if (input == NULL)
 				break ;
@@ -127,7 +124,7 @@ int	run_crash_interface(t_program_data *program_data)
 		}
 		execute_input(program_data, input);
 		gc_cleanup(program_data->gc);
-		program_data->gc = create_garbage_collector();
+		program_data->gc = gc_create();
 	}
 	gc_cleanup(program_data->gc);
 	clear_history();

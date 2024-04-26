@@ -50,8 +50,8 @@
 - new version number due to changed motivation - now doing bonus checks instead of leaks
 - made makefile clean target remove object directory
 - added more valgrind suppressions
-- fixed lexer not recognizing builtins that arent at the very start of the line
-- improved validator checks in various ways. to learn how, refer to the changes made to validator.c file in the "graveyard" branch, everything is listed in its chanelog
+- fixed lex not recognizing builtins that arent at the very start of the line
+- improved validate checks in various ways. to learn how, refer to the changes made to validate.c file in the "graveyard" branch, everything is listed in its chanelog
 
 ### v0.28.3 - 18.4.24 - Freddy
 - added some better free protection in expander & wildcard
@@ -101,7 +101,7 @@
 
 ### v0.24.3 - 25.03.24 - Freddy
 - redirect/get_filename NULL segfault fix
-- false lexer builtin token type fix
+- false lex builtin token type fix
 
 ### v0.24.2 - 20.03.24 - Freddy
 - memory leak fixes
@@ -137,7 +137,7 @@
 - garbage collector tweaks
 - more detailed run command which tracks children + file descriptors
 - Malloc fixes
-	- further lexer detect_toen_type fixes
+	- further lex detect_toen_type fixes
 	- parser new node allocation not being appended fix
 	- parser_util/sub_token_t_list not appending after calling ft_lstnew fixed
 - Fd fixes
@@ -184,14 +184,14 @@
 
 ### [ArrayToList] - v4 - 15.03.24 - Freddy
 - switched parser to lists. some other fixes
-- validator referencing wrong token numbering fixed. now uses macros instead of numbers.
-- some other validator logic fixes
+- validate referencing wrong token numbering fixed. now uses macros instead of numbers.
+- some other validate logic fixes
 ### [ArrayToList] - v3 - 14.03.24 - Freddy
 - switched expander to lists. some other fixes
 ### [ArrayToList] - v2 - 14.03.24 - Freddy
-- switched validator to lists. redirects and log ops seem to work fine now.
+- switched validate to lists. redirects and log ops seem to work fine now.
 ### [ArrayToList] - v1 - 14.03.24 - Freddy
-- switched lexer to lists. unable to test redirects and logical operators
+- switched lex to lists. unable to test redirects and logical operators
 
 ## v0.21.0 - 13.03.24 - Freddy
 - Added signals. ctrl-c & ctrl-d & ctrl-\
@@ -284,7 +284,7 @@
 - removed deprecated folder
 
 ## v0.10.0 - 21.02.24 - Niklas
-- Added expansion of * in the cwd and $ after the lexer
+- Added expansion of * in the cwd and $ after the lex
 - Deleted expansion and wildcard token types
 - Minor bug fixes
 
@@ -306,14 +306,14 @@
 - added exit status to program data
 
 ## v0.7.0 - 20.02.24 - Freddy
-- created a basic program execution loop with lexer, validator, parser, and executer, currently missing expander & executer is very basic
+- created a basic program execution loop with lex, validate, parser, and executer, currently missing expander & executer is very basic
 - created basic executer, does not consider operators and can only execute one builtin, echo.
 - Removed unnecessary compile flags
 
 ## v0.6.0 - 19.02.24 - Freddy
 - Added garbage collector, currently unimplemented
 - removed dysfunctional execution functions for merging with master
-- added input loop which takes input and currently just throws it into the lexer & tree building testing function
+- added input loop which takes input and currently just throws it into the lex & tree building testing function
 - Added .DS_Store to gitignore
 
 ### v0.5.1 - 15.02.24 - Freddy
@@ -324,7 +324,7 @@
 
 ## v0.4.0 - 09.02.24 - Freddy
 - Added correct bracket binary tree creation functionality in `parser`
-- Added opening & closing brace operators for use in parser, implemented in `lexer`
+- Added opening & closing brace operators for use in parser, implemented in `lex`
 	- Changed testing input to test for braces
 	- added to `printing.c`
 - made `parser` and `parser_util` norminette conforming
@@ -333,27 +333,27 @@
 - simplified names of some functions for norminette conformity
 
 ### v0.3.1 - 08.02.24 - Freddy
-- moved `lexer.c`
-- removed ; semicolon recognition as unique token from `lexer` and `minishell.h` and `printing.c`
+- moved `lex.c`
+- removed ; semicolon recognition as unique token from `lex` and `minishell.h` and `printing.c`
 
 ## v0.3.0 - 08.02.24 - Freddy
 - fixed `parser.c` array assingment & infinite loop problem
     - fixed get_dominant_operator not iterating
     - fixed get_sub_token_arr incorrect malloc size calculation
 - moved print_token as a seperate function out of print_tokens in `printing.c`
-- added print_binary_tree() to `printing.c`
+- added print_node_with_children() to `printing.c`
 - fixed broken import in `testing.c` & added print binary tree call
 - apparently Makefile spelling was not properly corrected, should be good now
 
 ## v0.2.0 - 08.02.24 - Freddy
 - added `parser.c` & `parser_util.c` which create basic bin tree from token array
 	- untested because theres not a printing function yet
-- changed t_bin_tree_node to save a token array as value instead of a single token
+- changed t_node to save a token array as value instead of a single token
 
 ## v0.1.0 - 07.02.24 - Freddy
 - added `printing.c` for printing debug functions (with print_tokens())
 - added `testing.c` for testing debug functions (with test_lexer())
-- added non-finished `lexer.c` that splits up input string into token array
+- added non-finished `lex.c` that splits up input string into token array
 - added deprecated folder with alternative token space seperator approach for unused but good code of potential future use
 
 ### v0.0.2 - 07.02.24 - Freddy

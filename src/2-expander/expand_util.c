@@ -12,7 +12,7 @@
 
 #include "../../include/minishell.h"
 
-char	*get_envcp(char *env_var, t_program_data *program_data)
+char	*get_envcp(char *env_var, t_data *program_data)
 {
 	int		i;
 	char	*tmp;

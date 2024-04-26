@@ -12,7 +12,7 @@
 
 #include "../../../include/minishell.h"
 
-int	execute_pwd(int out_fd, t_program_data *program_data)
+int	execute_pwd(int out_fd, t_data *program_data)
 {
 	char	*pwd;
 

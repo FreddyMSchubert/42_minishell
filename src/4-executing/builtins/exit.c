@@ -28,7 +28,7 @@ bool	is_digit(char *str)
 	return (true);
 }
 
-int	execute_exit(t_token **tokens, t_program_data *program_data, int out_fd)
+int	execute_exit(t_tok **tokens, t_data *program_data, int out_fd)
 {
 	if (tokens[1] && (!is_digit(tokens[1]->value) || ft_strncmp(tokens[1]->value, "", 1) == 0))
 	{

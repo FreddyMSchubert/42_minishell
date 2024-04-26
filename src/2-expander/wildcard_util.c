@@ -43,7 +43,7 @@ char	*get_rid_of_quotes_wildcard(char *str)
 	return (new_str);
 }
 
-char	*get_pattern(char *str, int index, t_program_data *program_data)
+char	*get_pattern(char *str, int index, t_data *program_data)
 {
 	int	i;
 	char	*ret;

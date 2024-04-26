@@ -16,7 +16,7 @@ int	g_sigint_received;
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_program_data	program_data;
+	t_data	program_data;
 	int				i;
 
 	program_data.exit_flag = 0;
@@ -24,10 +24,10 @@ int	main(int argc, char **argv, char **envp)
 	program_data.envcp = ft_strarrdup(envp);
 	if (!program_data.envcp)
 		return (printf("Error: failed to copy environment\n"), 1);
-	program_data.gc = create_garbage_collector();
+	program_data.gc = gc_create();
 	g_sigint_received = 0;
-	setup_signals();
-	run_crash_interface(&program_data);
+    setup_sigs();
+    run_input_loop(&program_data);
 	i = -1;
 	while (program_data.envcp && program_data.envcp[++i])
 		free(program_data.envcp[i]);

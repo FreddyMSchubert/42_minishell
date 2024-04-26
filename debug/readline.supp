@@ -336,7 +336,7 @@
    fun:rl_redisplay
    fun:readline_internal_setup
    fun:readline
-   fun:run_crash_interface
+   fun:run_input_loop
    fun:main
 }
 {

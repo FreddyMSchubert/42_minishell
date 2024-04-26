@@ -48,7 +48,7 @@ static char	*get_command_path(char **envp, char *command)
 	return (ft_free_rec((void **)split_paths), NULL);
 }
 
-static int	get_token_arr_len(t_token	**cmd)
+static int	get_token_arr_len(t_tok	**cmd)
 {
 	int	i;
 
@@ -62,7 +62,7 @@ static int	get_token_arr_len(t_token	**cmd)
 	@brief	Creates a path struct consisting of a path string
 	@brief	and the arguments as an array of strings
 */
-t_cmd_path	*create_cmd_struct(char	**envp, t_token	**cmd)
+t_cmd_path	*create_cmd_struct(char	**envp, t_tok	**cmd)
 {
 	t_cmd_path	*path;
 	char		**split_cmd;

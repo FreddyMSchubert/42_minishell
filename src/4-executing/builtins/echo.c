@@ -12,7 +12,7 @@
 
 #include "../../../include/minishell.h"
 
-int	execute_echo(t_token **inputs, int out_fd, t_program_data *program_data)
+int	execute_echo(t_tok **inputs, int out_fd, t_data *program_data)
 {
 	int		i;
 	int		j;

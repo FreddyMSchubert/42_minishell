@@ -59,7 +59,7 @@ int	count_tokens(const char *s)
 /// @brief gets start point of string to be split,
 /// determines end point by the next delim in s
 /// @return splitted string
-static char	*make_split_str(const char *s, int *i, t_program_data *data)
+static char	*make_split_str(const char *s, int *i, t_data *data)
 {
 	size_t	size;
 	int		quote;
@@ -109,7 +109,7 @@ void	free_split(char **split)
 /// @brief splits a string into an array of strings, using spaces,
 /// single quotes and double quotes as delimiters. inside single
 /// quotes: everything is a string
-char	**ms_split(char *input, t_program_data *data)
+char	**ms_split(char *input, t_data *data)
 {
 	int				word_count;
 	char			**result;

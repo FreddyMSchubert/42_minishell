@@ -14,7 +14,7 @@
 
 extern int	g_sigint_received;
 
-void	*wait_and_free(t_program_data *program_data, t_pid_list **pid_list)
+void	*wait_and_free(t_data *program_data, t_pid_list **pid_list)
 {
 	t_pid_list	*tmp;
 	t_pid_list	*next;

@@ -18,7 +18,7 @@
 	Does not free or change the original token t_list.
 	e.g. get_sub_token_arr({a, e, b, w, t, c, d}, 1, 3) -> {e, b, w}
 */
-t_list	*sub_token_t_list(t_list *tokens, int start, int end, t_program_data *program_data)
+t_list	*sub_token_t_list(t_list *tokens, int start, int end, t_data *program_data)
 {
 	int		index;
 	t_list	*current_token;
@@ -64,7 +64,7 @@ int	toklen(t_list *tokens)
 	return (counter);
 }
 
-t_token	*get_token_at_index(t_list *tokens, int index)
+t_tok	*get_token_at_index(t_list *tokens, int index)
 {
 	int		counter;
 	t_list	*tok;
@@ -81,9 +81,9 @@ t_token	*get_token_at_index(t_list *tokens, int index)
 	return (NULL);
 }
 
-t_token	**t_list_to_token_arr(t_list	*tokens, t_program_data	*program_data)
+t_tok	**t_list_to_token_arr(t_list	*tokens, t_data	*program_data)
 {
-	t_token	**token_arr;
+	t_tok	**token_arr;
 	t_list	*temp;
 	int		counter;
 
@@ -94,7 +94,7 @@ t_token	**t_list_to_token_arr(t_list	*tokens, t_program_data	*program_data)
 		counter++;
 		temp = temp->next;
 	}
-	token_arr = malloc(sizeof(t_token *) * (counter + 1));
+	token_arr = malloc(sizeof(t_tok *) * (counter + 1));
 	if (!token_arr)
 		return (NULL);
 	gc_append_element(program_data->gc, token_arr);

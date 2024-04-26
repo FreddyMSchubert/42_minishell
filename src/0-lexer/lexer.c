@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer.c                                            :+:      :+:    :+:   */
+/*   lex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: niklasburchhardt <niklasburchhardt@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -29,15 +29,15 @@ static int	is_builtin_string(char *input, int is_first_or_after_operator)
 /*
 	@brief	Receives one token as string, returns categorized token struct
 */
-static t_list	*detect_token_type(char *input, int is_first_or_after_operator, t_program_data *program_data)
+static t_list	*detect_token_type(char *input, int is_first_or_after_operator, t_data *program_data)
 {
-	t_token		*token;
+	t_tok		*token;
 	t_list		*list;
 
 	if (!input)
 		return (NULL);
 	list = malloc(sizeof(t_list));
-	token = malloc(sizeof(t_token));
+	token = malloc(sizeof(t_tok));
 	if (!token || !list)
 		return (free(token), free(list), NULL);
 	gc_append_element(program_data->gc, token);
@@ -74,7 +74,7 @@ static t_list	*detect_token_type(char *input, int is_first_or_after_operator, t_
 }
 
 //returns new list node if an operator in quotes is found and changes the current tokens value to the operator
-t_list	*split_token_if_operator_in_quotes(t_token **token, t_program_data *data)
+t_list	*split_token_if_operator_in_quotes(t_tok **token, t_data *data)
 {
 	char	*tmp;
 	t_list	*node;
@@ -136,7 +136,7 @@ static int	calc_add_spaces(char *input)
 
 	new_input is to be freed by ms_split
 */
-static char	*put_space_between_tokens(char *input, t_program_data *data)
+static char	*put_space_between_tokens(char *input, t_data *data)
 {
 	int		i;
 	int		j;
@@ -191,7 +191,7 @@ static char	*put_space_between_tokens(char *input, t_program_data *data)
 /*
 	@brief	Receives full input command, returns array of categorized tokens
 */
-t_list	*lexer(char *input, t_program_data *data)
+t_list	*lex(char *input, t_data *data)
 {
 	char	**split_input;
 	t_list	*tokens;

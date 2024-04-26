@@ -36,7 +36,7 @@ static void	sigint_handler(int signo)
 		ioctl(0, TIOCSTI, "\4");
 }
 
-void	setup_signals(void)
+void	setup_sigs(void)
 {
 	signal(SIGINT, sigint_handler);
 	signal(SIGQUIT, SIG_IGN);

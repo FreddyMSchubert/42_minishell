@@ -12,7 +12,7 @@
 
 #include "../../../include/minishell.h"
 
-static int	export_error_return(int error_code, char *arg, t_program_data *data)
+static int	export_error_return(int error_code, char *arg, t_data *data)
 {
 	ft_putstr_fd("minishell: export: `", STDERR_FILENO);
 	if (arg)
@@ -42,7 +42,7 @@ bool	is_valid_env_var(char *var)
 	return (true);
 }
 
-int	execute_export(t_token **tokens, int out_fd, t_program_data *program_data)
+int	execute_export(t_tok **tokens, int out_fd, t_data *program_data)
 {
 	int		i;
 	char	*equ_pos_char;

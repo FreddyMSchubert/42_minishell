@@ -27,7 +27,7 @@ static bool	is_valid_unset_variable(char *var)
 	return (true);
 }
 
-int	execute_unset(t_token **node, t_program_data *program_data)
+int	execute_unset(t_tok **node, t_data *program_data)
 {
 	int	i;
 

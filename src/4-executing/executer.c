@@ -12,7 +12,7 @@
 
 #include "../../include/minishell.h"
 
-static int execute_builtin(t_bin_tree_node *node, t_program_data *program_data, t_pid_list **pid_list)
+static int execute_builtin(t_node *node, t_data *program_data, t_pid_list **pid_list)
 {
 	// int	exit_status;
 
@@ -45,7 +45,7 @@ static int execute_builtin(t_bin_tree_node *node, t_program_data *program_data, 
 	return (program_data->exit_status);
 }
 
-static int	execute_command(t_bin_tree_node *node, t_program_data *program_data)
+static int	execute_command(t_node *node, t_data *program_data)
 {
 	t_cmd_path	*cmd_path;
 	char		*error_msg;
@@ -72,7 +72,7 @@ static int	execute_command(t_bin_tree_node *node, t_program_data *program_data)
 	return (log_err(error_msg, node->val[0]->value, 0), -1);
 }
 
-int	execute_node(t_bin_tree_node *node, t_program_data *program_data, t_pid_list **pid_list)
+int	execute_node(t_node *node, t_data *program_data, t_pid_list **pid_list)
 {
 	pid_t	pid;
 
@@ -141,7 +141,7 @@ int	execute_node(t_bin_tree_node *node, t_program_data *program_data, t_pid_list
 	return ("this will never occur, just to silence warning!"[0]);
 }
 
-pid_t	execute(t_bin_tree_node *tree, t_program_data *program_data, t_pid_list **pid_list)
+pid_t	execute(t_node *tree, t_data *program_data, t_pid_list **pid_list)
 {
 	if (VERBOSE == 1)
 		printf("executing %s, out_fd: %d\n", tree->val[0]->value, tree->output_fd);

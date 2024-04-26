@@ -10,10 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "minishell.h"
 
 // tabs are used to visualize tree, call function with 0
-void	print_binary_tree(t_bin_tree_node *tree, int tabs)
+void	print_node_with_children(t_node *tree, int tabs)
 {
 	int			i;
 	int			tabs_counter;
@@ -31,18 +31,18 @@ void	print_binary_tree(t_bin_tree_node *tree, int tabs)
 	if (tree->l != NULL)
 	{
 		printf("\x1b[31m");
-		print_binary_tree(tree->l, tabs + 1);
+        print_node_with_children(tree->l, tabs + 1);
 		printf("\x1b[0m");
 	}
 	if (tree->r != NULL)
 	{
 		printf("\x1b[34m");
-		print_binary_tree(tree->r, tabs + 1);
+        print_node_with_children(tree->r, tabs + 1);
 		printf("\x1b[0m");
 	}
 }
 
-void	print_token(t_token *token)
+void	print_token(t_tok *token)
 {
 	if (!token)
 	{

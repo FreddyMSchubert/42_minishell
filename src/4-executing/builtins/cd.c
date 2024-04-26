@@ -15,7 +15,7 @@
 	If no arguments are given, cd changes to the user's temp directory.
 	Otherwise, chdir changes directory and getcwd gets the new path.
 */
-char	*get_path(t_token **tokens, t_program_data *program_data)
+char	*get_path(t_tok **tokens, t_data *program_data)
 {
 	char	*temp;
 
@@ -44,7 +44,7 @@ char	*get_path(t_token **tokens, t_program_data *program_data)
 		return (ft_strdup(tokens[1]->value));
 }
 
-int	change_directory(char *path, t_program_data *program_data)
+int	change_directory(char *path, t_data *program_data)
 {
 	int	ret_val;
 
@@ -58,7 +58,7 @@ int	change_directory(char *path, t_program_data *program_data)
 	return (0);
 }
 
-char	*get_current_directory(t_program_data *program_data)
+char	*get_current_directory(t_data *program_data)
 {
 	char	*buffer;
 
@@ -71,7 +71,7 @@ char	*get_current_directory(t_program_data *program_data)
 	return (buffer);
 }
 
-int	update_env_vars(t_program_data *program_data, char *buffer)
+int	update_env_vars(t_data *program_data, char *buffer)
 {
 	if (set_envcp_var("OLDPWD", get_envcp_var("PWD", program_data->envcp), \
 												1, program_data) == -1)
@@ -91,7 +91,7 @@ int	update_env_vars(t_program_data *program_data, char *buffer)
 	return (0);
 }
 
-int	execute_cd(t_token **tokens, t_program_data *program_data)
+int	execute_cd(t_tok **tokens, t_data *program_data)
 {
 	char	*path;
 	char	*buffer;

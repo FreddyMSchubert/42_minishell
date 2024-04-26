@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 09:20:32 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/25 21:41:49 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/26 06:25:26 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void append_to_buffer(char **buffer, int *buffer_size, int *buffer_pos, char *to
 	*buffer_pos += to_append_len;
 }
 
-void handle_tilde_expansion(char **buffer, int *buffer_size, int *buffer_pos, int *i, t_program_data *program_data)
+void handle_tilde_expansion(char **buffer, int *buffer_size, int *buffer_pos, int *i, t_data *program_data)
 {
 	char	*home;
 
@@ -97,7 +97,7 @@ void handle_tilde_expansion(char **buffer, int *buffer_size, int *buffer_pos, in
 	free(home);
 }
 
-void handle_dollar_question_expansion(char **buffer, int *buffer_size, int *buffer_pos, int *i, t_program_data *program_data)
+void handle_dollar_question_expansion(char **buffer, int *buffer_size, int *buffer_pos, int *i, t_data *program_data)
 {
 	char	*exit_status;
 
@@ -119,7 +119,7 @@ void handle_dollar_quote_expansion(char **buffer, int *buffer_size, int *buffer_
 	free(to_append);
 }
 
-void handle_dollar_expansion(char **buffer, int *buffer_size, int *buffer_pos, char *str, int *i, t_program_data *program_data)
+void handle_dollar_expansion(char **buffer, int *buffer_size, int *buffer_pos, char *str, int *i, t_data *program_data)
 {
 	char	*env_var;
 	char	*envcp_value;
@@ -141,7 +141,7 @@ void handle_dollar_expansion(char **buffer, int *buffer_size, int *buffer_pos, c
 	gc_append_element(program_data->gc, envcp_value);
 }
 
-void handle_wildcard_expansion(char **buffer, int *buffer_size, int *buffer_pos, char *str, int *i, t_program_data *program_data)
+void handle_wildcard_expansion(char **buffer, int *buffer_size, int *buffer_pos, char *str, int *i, t_data *program_data)
 {
 	char	*env_var;
 	int index;
@@ -170,7 +170,7 @@ void handle_wildcard_expansion(char **buffer, int *buffer_size, int *buffer_pos,
 		append_to_buffer(buffer, buffer_size, buffer_pos, "*");
 }
 
-char *expand_values(char *str, t_program_data *program_data, bool heredoc)
+char *expand(char *str, t_data *program_data, bool heredoc)
 {
 	int i = 0;
 	int buffer_size = ft_strlen(str) * 2; // Allocate a buffer of size twice the length of str

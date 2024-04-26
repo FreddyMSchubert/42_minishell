@@ -12,7 +12,7 @@
 
 #include "../../../include/minishell.h"
 
-int	logical_and(t_bin_tree_node *node, t_program_data *program_data)
+int	logical_and(t_node *node, t_data *program_data)
 {
 	t_pid_list	*pid_list;
 
@@ -25,7 +25,7 @@ int	logical_and(t_bin_tree_node *node, t_program_data *program_data)
 	return (program_data->exit_status);
 }
 
-int	logical_or(t_bin_tree_node *node, t_program_data *program_data)
+int	logical_or(t_node *node, t_data *program_data)
 {
 	t_pid_list	*pid_list;
 

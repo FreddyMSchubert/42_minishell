@@ -39,7 +39,7 @@ char	*get_envcp_var(char *var, char **envcp)
 }
 
 // creates a new environment variable with the given value
-int	create_envcp_var(char *var, char *value, t_program_data *data)
+int	create_envcp_var(char *var, char *value, t_data *data)
 {
 	char	*newenvcp;
 	char	**temp;
@@ -62,7 +62,7 @@ int	create_envcp_var(char *var, char *value, t_program_data *data)
 
 // function to set the value of an envcpironment variable
 // if it fails to find the variable and createnew is 1, it creates a new one
-int	set_envcp_var(char *var, char *val, char createnew, t_program_data *data)
+int	set_envcp_var(char *var, char *val, char createnew, t_data *data)
 {
 	int			i;
 	int			k;

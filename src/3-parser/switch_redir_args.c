@@ -48,7 +48,7 @@ void insert_node(t_list **head_ref, t_list *prev_node, t_list *node)
 void move_node(t_list **head_ref, t_list *node1, t_list *node2)
 {
 	// printf("Switching nodes: %p and %p\n", node1, node2);
-	// printf("Nodes to switch: %s and %s\n", ((t_token *)node1->content)->value, ((t_token *)node2->content)->value);
+	// printf("Nodes to switch: %s and %s\n", ((t_tok *)node1->content)->value, ((t_tok *)node2->content)->value);
 	if (node1 == node2 || *head_ref == NULL || node1 == NULL || node2 == NULL)
 		return;
 
@@ -64,15 +64,15 @@ void move_node(t_list **head_ref, t_list *node1, t_list *node2)
 
 bool should_switch(t_list *node)
 {
-	// printf("%s\n", ((t_token *)node->content)->value);
+	// printf("%s\n", ((t_tok *)node->content)->value);
 	if (!node || !node->next || !node->next->next)
 	{
 		// printf("Node is null\n");
 		return (false);
 	}
 
-	t_token *current = node->content;
-	t_token *next_next = node->next->next->content;
+	t_tok *current = node->content;
+	t_tok *next_next = node->next->next->content;
 
 	if (current == NULL || next_next == NULL)
 	{
@@ -106,7 +106,7 @@ t_list	*switch_redir_args(t_list *tokens)
 // 	printf("Before switch:\n");
 // 	while (iterator)
 // 	{
-// 		printf("Token: %s\n", ((t_token *)iterator->content)->value);
+// 		printf("Token: %s\n", ((t_tok *)iterator->content)->value);
 // 		iterator = iterator->next;
 // 	}
 // 	tokens = switch_redir_args(tokens);
@@ -114,7 +114,7 @@ t_list	*switch_redir_args(t_list *tokens)
 // 	iterator = tokens;
 // 	while (iterator)
 // 	{
-// 		printf("Token: %s\n", ((t_token *)iterator->content)->value);
+// 		printf("Token: %s\n", ((t_tok *)iterator->content)->value);
 // 		iterator = iterator->next;
 // 	}
 // 	return (tokens);

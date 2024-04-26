@@ -12,7 +12,7 @@
 
 #include "../../../include/minishell.h"
 
-int	execute_env(t_program_data *program_data, int out_fd)
+int	execute_env(t_data *program_data, int out_fd)
 {
 	int	i;
 

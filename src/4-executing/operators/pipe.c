@@ -12,11 +12,11 @@
 
 #include "../../../include/minishell.h"
 
-void	setup_pipe(t_bin_tree_node *node, t_program_data *program_data)
+void	setup_pipe(t_node *node, t_data *program_data)
 {
 	int					pipe_fd[2];
-	t_bin_tree_node		*input;
-	t_bin_tree_node		*output;
+	t_node		*input;
+	t_node		*output;
 
 	if (pipe(pipe_fd) == -1)
 	{

@@ -30,9 +30,9 @@ static t_list	*check_substring(t_list *tokens)
 	before_last_close_brace = NULL;
 	while (current != NULL)
 	{
-		if (((t_token *)current->content)->type == TOK_OPEN_BRACE)
+		if (((t_tok *)current->content)->type == TOK_OPEN_BRACE)
 			depth++;
-		else if (((t_token *)current->content)->type == TOK_CLOSE_BRACE)
+		else if (((t_tok *)current->content)->type == TOK_CLOSE_BRACE)
 		{
 			depth--;
 			if (prev)
@@ -97,11 +97,11 @@ static int	get_dominant_operator(t_list **tokens)
 		depth = 0;
 		while (current != NULL)
 		{
-			if (((t_token *)current->content)->type == TOK_OPEN_BRACE)
+			if (((t_tok *)current->content)->type == TOK_OPEN_BRACE)
 				depth++;
-			else if (((t_token *)current->content)->type == TOK_CLOSE_BRACE)
+			else if (((t_tok *)current->content)->type == TOK_CLOSE_BRACE)
 				depth--;
-			if (((t_token *)current->content)->type == target_tok && \
+			if (((t_tok *)current->content)->type == target_tok && \
 							depth == 0 && i >= 0 && i < toklen(*tokens))
 				return (i);
 			i++;
@@ -116,13 +116,13 @@ static int	get_dominant_operator(t_list **tokens)
 	Gets a token array as input. Returns a functional binary tree structure.
 	dom_op_i = dominant operator index
 */
-t_bin_tree_node	*tok_to_bin_tree(t_list *tokens, t_program_data *program_data)
+t_node	*parse(t_list *tokens, t_data *program_data)
 {
-	t_bin_tree_node		*node;
+	t_node		*node;
 	int					dom_op_i;
-	t_token				**arr;
+	t_tok				**arr;
 
-	node = malloc(sizeof(t_bin_tree_node));
+	node = malloc(sizeof(t_node));
 	if (!node || !tokens)
 		return (free(node), NULL);
 	gc_append_element(program_data->gc, node);
@@ -135,16 +135,16 @@ t_bin_tree_node	*tok_to_bin_tree(t_list *tokens, t_program_data *program_data)
 		arr = t_list_to_token_arr(tokens, program_data);
 		return (node->val = arr, node->l = NULL, node->r = NULL, node);
 	}
-	node->val = malloc(sizeof(t_token) * 2);
+	node->val = malloc(sizeof(t_tok) * 2);
 	if (!node->val)
 		return (free(node->val), free(node), NULL);
 	gc_append_element(program_data->gc, node->val);
 	node->val[0] = get_token_at_index(tokens, dom_op_i);
 	node->val[1] = NULL;
-	node->l = tok_to_bin_tree(sub_token_t_list(tokens, 0, dom_op_i - 1, program_data), program_data);
+	node->l = parse(sub_token_t_list(tokens, 0, dom_op_i - 1, program_data), program_data);
 	if (node->l)
 		node->l->parent = node;
-	node->r = tok_to_bin_tree(sub_token_t_list(tokens, dom_op_i + 1, toklen(tokens) - 1, program_data), program_data);
+	node->r = parse(sub_token_t_list(tokens, dom_op_i + 1, toklen(tokens) - 1, program_data), program_data);
 	if (node->r)
 		node->r->parent = node;
 	return (node);

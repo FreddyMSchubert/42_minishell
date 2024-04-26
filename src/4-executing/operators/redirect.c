@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 16:07:34 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/25 21:49:11 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/26 06:30:42 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 extern int	g_sigint_received;
 
-char	*get_filename(t_bin_tree_node *node)
+char	*get_filename(t_node *node)
 {
-	t_bin_tree_node	*temp;
+	t_node	*temp;
 
 	temp = node->r;
 	while (temp->val[0]->type > TOK_D_QUOTE)
@@ -24,42 +24,37 @@ char	*get_filename(t_bin_tree_node *node)
 	return (temp->val[0]->value);
 }
 
-static int	heredoc(t_bin_tree_node *node, t_program_data	*program_data)
+static int	heredoc(t_node *node, t_data	*program_data)
 {
 	int		pipe_fd[2];
 	char	*line;
 	char	*converted_line;
 	char	*delimiter;
-	bool	expand;
+	bool	shouldexpand;
 
 	if (node->r->val[0]->type == TOK_REDIR)
 		redirect(node->r, program_data);
-	expand = true;
+	shouldexpand = true;
 	delimiter = get_filename(node);
 	if (VERBOSE)
 		printf("delimiter: %s\n", delimiter);
 	if (node->r->val[0]->type == TOK_D_QUOTE || node->r->val[0]->type == TOK_S_QUOTE)
-		expand = false;
+		shouldexpand = false;
 	if (pipe(pipe_fd) < 0)
 		return (-1);
 	while (g_sigint_received != SIGINT)
 	{
-		// if (isatty(fileno(stdin)))
-		// 	line = readline("crash_doc 📄 ");
-		// else
-		// {
-		write(0, "> ", 2);
+		ft_putstr_fd("crash_doc 📄 ", STDOUT_FILENO);
 		line = get_next_line(fileno(stdin));
 		if (line == NULL)
 			return (0);
 		gc_append_element(program_data->gc, line);
 		line[ft_strlen(line) - 1] = '\0';
-		// }
 		if (!line || ft_strncmp(line, delimiter, ft_strlen(line)) == 0 || \
 			g_sigint_received == SIGINT)
 			break ;
-		if (expand)
-			converted_line = expand_values(line, program_data, true);
+		if (shouldexpand)
+			converted_line = expand(line, program_data, true);
 		else
 		{
 			converted_line = ft_strdup(line);
@@ -82,7 +77,7 @@ static int	heredoc(t_bin_tree_node *node, t_program_data	*program_data)
 	return (0);
 }
 
-int	redirect(t_bin_tree_node *node, t_program_data *program_data)
+int	redirect(t_node *node, t_data *program_data)
 {
 	int		fd;
 	int		flags;
