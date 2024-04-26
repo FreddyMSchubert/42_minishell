@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 09:55:23 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/26 12:25:26 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,7 +196,7 @@ void				close_fds(t_node *node);
 // fds closing utils
 void				close_fds_loop(void);
 int					add_to_pid_list(pid_t pid, t_pid_list **pidlist, bool is_builtin);
-void				*wait_and_free(t_data *program_data, t_pid_list **pid_list);
+void				*resolve_pid_list(t_data *program_data, t_pid_list **pid_list);
 
 // --- util
 bool				is_in_quote(char *str, char quote, char *current_char);

@@ -1,5 +1,17 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+### v0.31.4 - 26.4.24 - Freddy
+- norminettification
+	- execute_command_utils.c
+	- pid_list
+	- executer.c
+		- moved execute_node function into its own file
+- already norminettified
+	- child_process_exit.c
+	- util.c
+- removed extern int g_sigint_received in every file it still was in, its enough to just have it in the header
+- this commit creates some issues but i gotta push these changes
+
 ### v0.31.3 - 26.4.24 - Freddy
 - norminettification
 	- switch_redir_args, easy one

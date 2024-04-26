@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 06:36:17 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/25 12:11:18 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/26 10:59:26 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,15 @@
 	@brief		It's on the caller to free the path.
 	@brief		Expects cleaned up command, so no flags, params, etc
 */
-static char	*get_command_path(char **envp, char *command)
+static char	*get_command_path(char **envp, char *cmd)
 {
 	char	**split_paths;
 	char	*path;
-	char	*path_temp;
 	int		counter;
 
-	if (access(command, X_OK) == 0 || ft_strncmp(command, "./", 2) == 0 \
-									|| ft_strncmp(command, "/", 1) == 0)
-		return (ft_strdup(command));
+	if (access(cmd, X_OK) == 0 || ft_strncmp(cmd, "./", 2) == 0 \
+									|| ft_strncmp(cmd, "/", 1) == 0)
+		return (ft_strdup(cmd));
 	while (envp && envp[0] && ft_strncmp(envp[0], "PATH", 4) != 0)
 		envp++;
 	if (!envp || !envp[0])
@@ -34,16 +33,13 @@ static char	*get_command_path(char **envp, char *command)
 	split_paths = ft_split(envp[0], ':');
 	if (split_paths == NULL)
 		return (log_err("dynamic allocation error", NULL, NULL), NULL);
-	counter = 0;
-	while (split_paths[counter])
+	counter = -1;
+	while (split_paths[++counter])
 	{
-		path_temp = ft_strjoin(split_paths[counter], "/");
-		path = ft_strjoin(path_temp, command);
-		free (path_temp);
+		path = ft_strjoin(ft_strjoin(split_paths[counter], "/"), cmd);
 		if (!path || access(path, X_OK) == 0)
 			return (ft_free_rec((void **)split_paths), path);
 		free (path);
-		counter++;
 	}
 	return (ft_free_rec((void **)split_paths), NULL);
 }
@@ -81,14 +77,10 @@ t_cmd_path	*create_cmd_struct(char	**envp, t_tok	**cmd)
 	if (!split_cmd)
 		return (free(path), log_err("dynamic allocation error", 0, 0), NULL);
 	split_cmd[token_amount] = NULL;
-	cmd_i_counter = 0;
-	split_cmd_i_counter = 0;
-	while (cmd[cmd_i_counter])
-	{
+	cmd_i_counter = -1;
+	split_cmd_i_counter = -1;
+	while (cmd[++cmd_i_counter] && ++split_cmd_i_counter >= -1)
 		split_cmd[split_cmd_i_counter] = cmd[cmd_i_counter]->val;
-		split_cmd_i_counter++;
-		cmd_i_counter++;
-	}
 	path->args = split_cmd;
 	return (path);
 }
