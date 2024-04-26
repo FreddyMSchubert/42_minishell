@@ -6,13 +6,13 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 17:33:17 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/26 17:37:33 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	handle_sigint(t_data *sh, char **input)
+static void	handle_sigint(t_data *sh, char **input)
 {
 	if (g_sigint_received == SIGINT)
 	{
@@ -23,7 +23,7 @@ void	handle_sigint(t_data *sh, char **input)
 	}
 }
 
-int	execute_input(t_data *sh, char *input)
+static int	execute_input(t_data *sh, char *input)
 {
 	t_list	*tokenified_input;
 	t_node	*tree;
