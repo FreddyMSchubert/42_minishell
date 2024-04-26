@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 13:34:50 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/26 17:34:36 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,17 @@ typedef struct s_exp
 
 // --- input loop
 int					run_input_loop(t_data *program_data);
+char				*get_input_from_terminal(t_data *sh);
+char				*get_input_from_file(void);
+void				handle_empty_input(t_data *sh, char **input);
+int					execute_expander(char **input, t_data *sh);
+int					execute_lexer(char *input, t_data *sh, t_list \
+					**tokenified_input);
+int					execute_validator(t_list *tokenified_input, t_data *sh);
+int					execute_parser(t_list *tokenified_input, t_data *sh, \
+					t_node **tree);
+int					execute_executor(t_node *tree, t_data *sh);
+
 // - garbage collector
 t_list				*gc_create(void);
 int					gc_append_element(t_list *gc, void *content);

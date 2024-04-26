@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 12:18:59 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 06:08:53 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/26 17:07:36 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 /*
 	Garbage Collector has one dummy node at the start just as a reference.
 */
-
 t_list	*gc_create(void)
 {
 	t_list	*gc;
@@ -42,15 +41,15 @@ int	gc_append_element(t_list *gc, void *content)
 	while (selected_node->next != NULL)
 	{
 		if (selected_node->content == content)
-			return (free(new_node), -2);	// duplicated pointer
+			return (free(new_node), -2);
 		selected_node = selected_node->next;
 	}
 	selected_node->next = new_node;
 	return (0);
 }
 
-// frees all elements in the garbage collector
-// after this, the garbage collector is freed, so it should be reinitialized
+/*frees all elements in the garbage collector
+after this, the garbage collector is freed, so it should be reinitialized*/
 void	gc_cleanup(t_list *gc)
 {
 	if (VERBOSE == 1)
