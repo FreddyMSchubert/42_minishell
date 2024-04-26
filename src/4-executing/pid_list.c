@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 19:50:38 by niklasburch       #+#    #+#             */
-/*   Updated: 2024/04/26 12:40:08 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/26 17:18:37 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,12 @@ static int	free_if_builtin(t_pid_list **tmp, t_pid_list **next)
 	return (0);
 }
 
+/*
+	@brief		waits for a process to finish
+	@param	tmp			pointer to the pid_list node
+	@param	exit_status	pointer to the exit status
+	@return	0
+*/
 static int	wait_for_process(t_pid_list *tmp, int *exit_status)
 {
 	int	status;
@@ -36,6 +42,13 @@ static int	wait_for_process(t_pid_list *tmp, int *exit_status)
 	return (0);
 }
 
+/*
+	@brief		resolves the pid list by waiting for all nodes to finish
+	@param	program_data	pointer to the data struct
+	@param	pid_list		pointer to the pid list
+	@return	NULL
+
+*/
 void	*resolve_pid_list(t_data *program_data, t_pid_list **pid_list)
 {
 	t_pid_list	*tmp;
@@ -65,6 +78,14 @@ void	*resolve_pid_list(t_data *program_data, t_pid_list **pid_list)
 	return (NULL);
 }
 
+/*
+	@brief		adds a pid to the pid list
+	@param	pid			pid to add
+	@param	pidlist		pointer to the pid list
+	@param	is_builtin	whether the pid is a builtin
+	@return	0			success
+			1			malloc failed
+*/
 int	add_to_pid_list(pid_t pid, t_pid_list **pidlist, bool is_builtin)
 {
 	t_pid_list	*new;

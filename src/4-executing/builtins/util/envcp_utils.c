@@ -6,15 +6,20 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 07:17:01 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 07:03:54 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/26 17:06:53 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../../include/minishell.h"
 
-// function to get the val of an environment variable
-// gets a reference to the actual environment variable, 
-// so please strdup it if you want to keep it
+/*
+	@brief	gets the value of an environment variable
+			returns a reference, so strdup before modifying
+	@param	var		name of the variable
+	@param	envcp	pointer to the environment variables array
+	@return	pointer to the value of the variable
+			NULL	if the variable is not found
+*/
 char	*get_envcp_var(char *var, char **envcp)
 {
 	int	i;
@@ -38,7 +43,15 @@ char	*get_envcp_var(char *var, char **envcp)
 	return (NULL);
 }
 
-// creates a new environment variable with the given val
+/*
+	@brief	creates a new environment variable
+	@param	var		name of the variable
+	@param	value	value of the variable
+	@param	data	pointer to the data struct
+	@return	0		success
+			-1		malloc failed
+			-2		malloc failed
+*/
 int	create_envcp_var(char *var, char *value, t_data *data)
 {
 	char	*newenvcp;
@@ -65,8 +78,16 @@ int	create_envcp_var(char *var, char *value, t_data *data)
 	return (0);
 }
 
-// function to set the val of an envcpironment variable
-// if it fails to find the variable and createnew is 1, it creates a new one
+/*
+	@brief	sets the value of an environment variable
+	@param	var			name of the variable
+	@param	val			value of the variable
+	@param	createnew	1 if the variable should be created if it doesn't exist
+	@param	data		pointer to the data struct
+	@return	0		success
+			-1		malloc failed
+			-2		variable not found and createnew is 0
+*/
 int	set_envcp_var(char *var, char *val, char createnew, t_data *data)
 {
 	int			i;
@@ -95,6 +116,13 @@ int	set_envcp_var(char *var, char *val, char createnew, t_data *data)
 	return (-2);
 }
 
+/*
+	@brief	deletes an environment variable
+	@param	var		name of the variable
+	@param	envcp	pointer to the environment variables array
+	@return	0		success
+			-1		variable not found
+*/
 int	delete_envcp_var(char *var, char **envcp)
 {
 	int	i;

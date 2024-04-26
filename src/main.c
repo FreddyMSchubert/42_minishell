@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:29:36 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/25 22:08:05 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/26 17:11:06 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,30 @@
 
 int	g_sigint_received;
 
+/*
+	@brief	main is only used to setup the main data struct
+			it doesn't actually do anything beyond that
+*/
 int	main(int argc, char **argv, char **envp)
 {
-	t_data	program_data;
+	t_data			sh;
 	int				i;
 
-	program_data.exit_flag = 0;
-	program_data.exit_status = 0;
-	program_data.envcp = ft_strarrdup(envp);
-	if (!program_data.envcp)
+	sh.exit_flag = 0;
+	sh.exit_status = 0;
+	sh.envcp = ft_strarrdup(envp);
+	if (!sh.envcp)
 		return (printf("Error: failed to copy environment\n"), 1);
-	program_data.gc = gc_create();
+	sh.gc = gc_create();
 	g_sigint_received = 0;
-    setup_sigs();
-    run_input_loop(&program_data);
+	setup_sigs();
+	run_input_loop(&sh);
 	i = -1;
-	while (program_data.envcp && program_data.envcp[++i])
-		free(program_data.envcp[i]);
-	if (program_data.envcp)
-		free(program_data.envcp);
+	while (sh.envcp && sh.envcp[++i])
+		free(sh.envcp[i]);
+	if (sh.envcp)
+		free(sh.envcp);
 	(void)argc;
 	(void)argv;
-	return (program_data.exit_status);
+	return (sh.exit_status);
 }

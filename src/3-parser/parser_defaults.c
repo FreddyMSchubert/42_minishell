@@ -6,12 +6,18 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 09:49:24 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 09:49:46 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/26 17:19:21 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+/*
+	@brief	creates a default node as expected by the parser
+	@param	sh	pointer to the data struct
+	@return	pointer to the node
+			NULL	if malloc failed
+*/
 t_node	*create_default_node(t_data *sh)
 {
 	t_node	*node;
@@ -29,6 +35,12 @@ t_node	*create_default_node(t_data *sh)
 	return (node);
 }
 
+/*
+	@brief	creates a default token array as expected by the parser
+	@param	sh	pointer to the data struct
+	@return	pointer to the token array
+			NULL	if malloc failed
+*/
 t_tok	**create_default_token_arr(t_data *sh)
 {
 	t_tok	**arr;
