@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_util.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 06:59:51 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 14:15:08 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/26 18:11:42 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,10 @@
 
 /*returns new list node if an operator in quotes is found and changes the 
 current tokens val to the operator*/
+
+/*
+	@brief	Splits the token if an operator is found in quotes.
+*/
 t_list	*split_token_if_operator_in_quotes(t_tok **token, t_data *data)
 {
 	char	*tmp;
@@ -34,13 +38,15 @@ t_list	*split_token_if_operator_in_quotes(t_tok **token, t_data *data)
 
 bool	is_redirect(char c)
 {
-	if (c == '<' || c == '>')
-		return (true);
-	return (false);
+	return (c == '<' || c == '>');
 }
 
-/// @return 2 if valid operator symbol (<<, >>, ||, &&), 
-/// 1 if single operator symbol, 0 if not operator symbol
+/*
+	@brief	detects type of operator symbol
+	@return	2 if valid operator symbol (<<, >>, ||, &&), 
+			1 if single operator symbol,
+			0 if not operator symbol
+*/
 int	is_operator_symbol(char c, char d)
 {
 	if ((c == '<' && d == '<') || (c == '>' && d == '>') || \
