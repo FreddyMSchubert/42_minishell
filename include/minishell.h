@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 12:57:07 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/26 14:54:48 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,10 +131,13 @@ void				setup_sigs(void);
 // - visuals
 void				*print_logo(void);
 
-// --- 0-lex
-t_list				*lex(char *input, t_data *data);
+// --- 0-lexer
+t_list				*lexer(char *input, t_data *data);
+char				*put_space_between_tokens(char *input, t_data *data);
 char				**ms_split(char *input, t_data *data);
 int					count_tokens(const char *s);
+t_list				*detect_token_type(char *input, int is_first_or_after_operator, t_data *data);
+t_list				*split_token_if_operator_in_quotes(t_tok **token, t_data *data);
 int					is_operator_symbol(char c, char d);
 bool				is_redirect(char c);
 int					same_str(char *str1, char *str2);

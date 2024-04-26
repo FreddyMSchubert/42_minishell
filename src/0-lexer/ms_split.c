@@ -6,55 +6,11 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 10:42:01 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/19 21:55:22 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/26 13:44:36 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-/// @brief counts how many pointers are needed in pointer array
-int	count_tokens(const char *s)
-{
-	int	i;
-	int	count;
-	int	in_word;
-	int	in_quote;
-
-	i = -1;
-	count = 0;
-	in_word = 0;
-	in_quote = 0;
-	while ((int)ft_strlen(s) > i && s[++i])
-	{
-		if ((s[i] == '"' && in_quote != 2) || (s[i] == '\'' && in_quote != 1))
-		{
-			if (in_quote == 0)
-			{
-				if (s[i] != '\"')
-					in_quote = 2;
-				else
-					in_quote = 1;
-			}
-			else
-				in_quote = 0;
-		}
-		if (is_operator_symbol(s[i], s[i + 1]))
-		{
-			if (is_operator_symbol(s[i], s[i + 1]) == 2)
-				i++;
-			count++;
-			in_word = 0;
-		}
-		else if (!ft_isspace(s[i]) && !in_word && !in_quote) //count new word
-		{
-			count++;
-			in_word = 1;
-		}
-		else if (ft_isspace(s[i]) && !in_quote)
-			in_word = 0;
-	}
-	return (count);
-}
 
 /// @brief gets start point of string to be split,
 /// determines end point by the next delim in s
@@ -119,17 +75,14 @@ char	**ms_split(char *input, t_data *data)
 	i = -1;
 	j = 0;
 	word_count = count_tokens(input);
-	// printf("word_count: %d\n", word_count);
 	if (word_count == -1)
 		return (NULL);
 	result = ft_calloc((word_count + 1), sizeof(char *));
 	if (!result)
 		return (NULL);
 	gc_append_element(data->gc, result);
-	// result[word_count] = NULL;
 	while (input[++i] && j < word_count)
 	{
-		// printf("input[i]: %s\n", &input[i]);
 		if (is_operator_symbol(input[i], input[i + 1]) || !ft_isspace(input[i]))
 		{
 			result[j++] = make_split_str(input, &i, data);
