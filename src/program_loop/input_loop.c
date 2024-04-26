@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   input_loop.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 07:18:15 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/26 16:16:23 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-extern int	g_sigint_received;
 
 static int	execute_input(t_data *program_data, char *input)
 {
@@ -26,7 +24,7 @@ static int	execute_input(t_data *program_data, char *input)
 	if (VERBOSE == 1)
 		printf("after expanding:\ninput:\n");
 	// --- lex
-	tokenified_input = lex(input, program_data);
+	tokenified_input = lexer(input, program_data);
 	if (tokenified_input == NULL)
 		return (-1);
 	if (VERBOSE == 1)
@@ -57,7 +55,7 @@ static int	execute_input(t_data *program_data, char *input)
 	// --- executer
 	program_data->pid_list = NULL;
 	execute(tree, program_data, &program_data->pid_list);
-	wait_and_free(program_data, &program_data->pid_list);
+	resolve_pid_list(program_data, &program_data->pid_list);
 	return (0);
 }
 

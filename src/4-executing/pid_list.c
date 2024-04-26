@@ -3,18 +3,40 @@
 /*                                                        :::      ::::::::   */
 /*   pid_list.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 19:50:38 by niklasburch       #+#    #+#             */
-/*   Updated: 2024/04/25 21:14:24 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/26 12:40:08 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-extern int	g_sigint_received;
+static int	free_if_builtin(t_pid_list **tmp, t_pid_list **next)
+{
+	if ((*tmp)->is_builtin)
+	{
+		*next = (*tmp)->next;
+		free(*tmp);
+		*tmp = *next;
+		return (1);
+	}
+	return (0);
+}
 
-void	*wait_and_free(t_data *program_data, t_pid_list **pid_list)
+static int	wait_for_process(t_pid_list *tmp, int *exit_status)
+{
+	int	status;
+
+	waitpid(tmp->pid, &status, 0);
+	if (WIFEXITED(status))
+		*exit_status = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		*exit_status = 128 + WTERMSIG(status);
+	return (0);
+}
+
+void	*resolve_pid_list(t_data *program_data, t_pid_list **pid_list)
 {
 	t_pid_list	*tmp;
 	t_pid_list	*next;
@@ -28,18 +50,11 @@ void	*wait_and_free(t_data *program_data, t_pid_list **pid_list)
 	{
 		if (!tmp->next && tmp->is_builtin)
 			return (free(tmp), NULL);
-		if (tmp->is_builtin)
-		{
-			next = tmp->next;
-			free(tmp);
-			tmp = next;
+		if (free_if_builtin(&tmp, &next))
 			continue ;
-		}
-		waitpid(tmp->pid, &status, 0);
-		if (WIFEXITED(status))
-			exit_status = WEXITSTATUS(status);
-		else if (WIFSIGNALED(status))
-			exit_status = 128 + WTERMSIG(status);
+		status = wait_for_process(tmp, &exit_status);
+		if (status != 0)
+			exit_status = status;
 		next = tmp->next;
 		free(tmp);
 		tmp = next;

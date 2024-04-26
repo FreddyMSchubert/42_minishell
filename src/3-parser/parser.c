@@ -63,7 +63,7 @@ static int	get_dominant_operator(t_list **tokens)
 	t_list	*c;
 
 	target_tok = TOK_LOG_AND;
-	c = find_valid_substring(*tokens);
+	*tokens = find_valid_substring(*tokens);
 	while (target_tok > 0)
 	{
 		c = *tokens;

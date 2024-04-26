@@ -131,10 +131,13 @@ void				setup_sigs(void);
 // - visuals
 void				*print_logo(void);
 
-// --- 0-lex
-t_list				*lex(char *input, t_data *data);
+// --- 0-lexer
+t_list				*lexer(char *input, t_data *data);
+char				*put_space_between_tokens(char *input, t_data *data);
 char				**ms_split(char *input, t_data *data);
 int					count_tokens(const char *s);
+t_list				*detect_token_type(char *input, int is_first_or_after_operator, t_data *data);
+t_list				*split_token_if_operator_in_quotes(t_tok **token, t_data *data);
 int					is_operator_symbol(char c, char d);
 bool				is_redirect(char c);
 int					same_str(char *str1, char *str2);
@@ -222,7 +225,7 @@ void				close_fds(t_node *node);
 // fds closing utils
 void				close_fds_loop(void);
 int					add_to_pid_list(pid_t pid, t_pid_list **pidlist, bool is_builtin);
-void				*wait_and_free(t_data *program_data, t_pid_list **pid_list);
+void				*resolve_pid_list(t_data *program_data, t_pid_list **pid_list);
 
 // --- util
 bool				in_quote(const char *str, char quote, const char *current_char);
