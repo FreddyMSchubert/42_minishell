@@ -12,7 +12,7 @@
 
 #include "../../include/minishell.h"
 
-static void	throw_syntax_error(char *token)
+void	throw_syntax_error(char *token)
 {
 	int	err;
 
@@ -22,67 +22,69 @@ static void	throw_syntax_error(char *token)
 	ft_putstr_fd("'\n", err);
 }
 
-// files: 0 for input, 1 for output, 2 for append_out
-int	validate(t_list *tokens)
+int	check_files_and_clear(t_list **files)
+{
+	if (check_files(files[0], 0) != 0 || check_files(files[1], 1) != 0 || \
+		check_files(files[2], 2) != 0)
+	{
+		ft_lstclear(&files[0], NULL);
+		ft_lstclear(&files[1], NULL);
+		ft_lstclear(&files[2], NULL);
+		return (3);
+	}
+	ft_lstclear(&files[0], NULL);
+	ft_lstclear(&files[1], NULL);
+	ft_lstclear(&files[2], NULL);
+	return (0);
+}
+
+int	process_tok_list(t_list **tok, int *brace_opened)
+{
+	t_tok	*token;
+	int		error;
+
+	token = (*tok)->content;
+	error = check_token_errors(*tok, token);
+	if (error != 0)
+		return (error);
+	error = check_brace_errors(*tok, token, brace_opened);
+	if (error != 0)
+		return (error);
+	*tok = (*tok)->next;
+	return (0);
+}
+
+void	null_fd_list(t_list *fd_list[3])
+{
+	fd_list[0] = NULL;
+	fd_list[1] = NULL;
+	fd_list[2] = NULL;
+}
+
+int	validate(t_list *tok_list)
 {
 	int		brace_opened;
 	t_list	*files[3];
-	t_list	*tok;
-	t_tok	*token;
+	t_tok	*tok;
+	int		error;
 
-	files[0] = NULL;
-	files[1] = NULL;
-	files[2] = NULL;
+	null_fd_list(files);
 	brace_opened = 0;
-	tok = tokens;
-	// check for inital token not being pipe or logical operator
-	if (((t_tok *)tok->content)->type == TOK_PIPE || ((t_tok *)tok->content)->type == TOK_LOG_OR || \
-		((t_tok *)tok->content)->type == TOK_LOG_AND)
-		return (throw_syntax_error(((t_tok *)tok->content)->val), 258);
-	while (tok != NULL)
+	error = check_first_token(tok_list);
+	if (error != 0)
+		return (error);
+	while (tok_list != NULL)
 	{
-		token = tok->content;
-		// check for consecutive pipes and or logical operators
-		if (token->type >= TOK_PIPE && token->type <= TOK_LOG_AND && tok->next && \
-				((t_tok *)tok->next->content)->type >= TOK_PIPE \
- && ((t_tok *)tok->next->content)->type <= TOK_LOG_AND)
-			return (throw_syntax_error(token->val), 2);
-		// check for unclosed braces
-		if (token->type == TOK_OPEN_BRACE)
-			brace_opened++;
-		else if (token->type == TOK_CLOSE_BRACE)
-			brace_opened--;
-		if (brace_opened < 0)
-			return (throw_syntax_error(")"), 2);
-		if (token->type == TOK_OPEN_BRACE && tok->next && ((t_tok *)tok->next->content)->type == TOK_CLOSE_BRACE)
-			return (throw_syntax_error(")"), 258);
-		if (token->type == TOK_CLOSE_BRACE && tok->next && ((t_tok *)tok->next->content)->type == TOK_OPEN_BRACE)
-			return (throw_syntax_error("("), 258);
-		if (token->type == TOK_CLOSE_BRACE && tok->next && ((t_tok *)tok->next->content)->type <= TOK_BUILTIN)
-			return (throw_syntax_error(((t_tok *)tok->next->content)->val), 258);
-		// check for valid word after < > >> <<
-		if (token->type == TOK_REDIR)
-		{
-			if (!tok->next)
-				return (throw_syntax_error("newline"), 2);
-			else if (((t_tok *)tok->next->content)->type > TOK_BUILTIN)
-				return (throw_syntax_error(token->val), 2);
-		}
-		tok = tok->next;
+		tok = tok_list->content;
+		error = process_tok_list(&tok_list, &brace_opened);
+		if (error != 0)
+			return (error);
 	}
-	// check for | in beginning or end
-	if (token->type == TOK_PIPE || token->type == TOK_LOG_OR || token->type == TOK_LOG_AND)// || token->type == TOK_REDIR)
-		return (throw_syntax_error(token->val), 2);
-	if (brace_opened != 0)
-	{
-		if (brace_opened > 0)
-			throw_syntax_error("(");
-		else
-			throw_syntax_error(")");
-		return (2);
-	}
-	// check for file errors
-	if (check_files(files[0], 0) != 0 || check_files(files[1], 1) != 0 || check_files(files[2], 2) != 0)
-		return (ft_lstclear(&files[0], NULL), ft_lstclear(&files[1], NULL), ft_lstclear(&files[2], NULL), 3);
-	return (ft_lstclear(&files[0], NULL), ft_lstclear(&files[1], NULL), ft_lstclear(&files[2], NULL), 0);
+	error = check_last_token(tok);
+	if (error != 0)
+		return (error);
+	error = check_braces(brace_opened);
+	if (error != 0)
+		return (error);
+	return (check_files_and_clear(files));
 }
