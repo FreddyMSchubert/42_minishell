@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 07:54:00 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 09:56:16 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/26 22:17:54 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ static char	*convert_line(char *line, t_data *data, t_node *node)
 {
 	char	*converted_line;
 
+	if (ft_strncmp(line, "", 1) == 0)
+		return (line);
 	if (node->r->val[0]->type != TOK_D_QUOTE \
 		&& node->r->val[0]->type != TOK_S_QUOTE)
 		converted_line = expand(line, data, true);
@@ -80,7 +82,7 @@ int	heredoc(t_node *node, t_data	*data)
 	{
 		line = get_line(data);
 		if (!line || ft_strncmp(line, get_filename(node), \
-						ft_strlen(line)) == 0 || g_sigint_received == SIGINT)
+			ft_strlen(get_filename(node))) == 0 || g_sigint_received == SIGINT)
 			break ;
 		converted_line = convert_line(line, data, node);
 		if (!converted_line)

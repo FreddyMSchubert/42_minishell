@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 09:20:32 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/26 12:16:55 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/26 20:48:14 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	append_to_buffer(t_exp *exp, char *to_append)
 		exp->buffer_size = exp->buffer_size * 2 + to_append_len;
 		if (!temp)
 		{
-			fprintf(stderr, "Error allocating memory\n");
+			ft_putstr_fd("Error allocating memory\n", 2);
 			return ;
 		}
 		ft_strlcpy(temp, exp->buffer, exp->buf_pos + ft_strlen(to_append) + 1);

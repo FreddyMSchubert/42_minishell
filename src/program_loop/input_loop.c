@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input_loop.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 17:47:08 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/26 22:16:59 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,6 @@ int	run_input_loop(t_data *sh)
 		handle_empty_input(sh, &input);
 		if (input == NULL)
 			break ;
-		gc_append_element(sh->gc, input);
-		add_history(input);
 		execute_input(sh, input);
 		gc_cleanup(sh->gc);
 		sh->gc = gc_create();
