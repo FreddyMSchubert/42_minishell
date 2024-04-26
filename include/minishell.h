@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 07:58:54 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/26 09:03:24 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,6 +187,8 @@ int					set_envcp_var(char *var, char *value, char createnew, \
 									t_data *program_data);
 int					create_envcp_var(char *vr, char *vl, t_data *data);
 int					delete_envcp_var(char *var, char **envcp);
+// - utils
+void				close_fds(t_node *node);
 // fds closing utils
 void				close_fds_loop(void);
 int					add_to_pid_list(pid_t pid, t_pid_list **pidlist, bool is_builtin);
