@@ -1,5 +1,12 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+### v0.31.2 - 26.4.24 - Freddy
+- norminettification
+	- logical.c
+	- pipe.c
+	- heredoc.c
+- added our global variable to the header, easier
+
 ### v0.31.1 - 26.4.24 - Freddy
 - removed realloc (not allowed function) from create_envcp_var in envcp_utils
 - norminettification

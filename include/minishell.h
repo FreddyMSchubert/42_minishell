@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 07:28:55 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/26 07:58:54 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,10 @@
 #define TOK_LOG_AND 7		// Logical AND &&
 #define TOK_OPEN_BRACE 8	// Open Brace -> (
 #define TOK_CLOSE_BRACE 9	// Close Brace -> )
+
+// ----- GLOBALS
+
+extern int	g_sigint_received;
 
 // ----- STRUCTS
 
@@ -163,7 +167,9 @@ void				child_process_exit(t_data	*data, int	exitcode);
 int					logical_and(t_node *node, t_data *program_data);
 int					logical_or(t_node *node, t_data *program_data);
 int					redirect(t_node *node, t_data *data);
-void				setup_pipe(t_node *node, t_data *data);
+int					heredoc(t_node *node, t_data	*program_data);
+void				setup_pipe(t_node *node);
+char				*get_filename(t_node *node);
 // "normal" commands
 t_cmd_path			*create_cmd_struct(char	**envp, t_tok	**cmd);
 // builtins

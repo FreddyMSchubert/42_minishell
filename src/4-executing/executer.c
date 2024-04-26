@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/25 19:41:35 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/26 07:51:30 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,7 +162,7 @@ pid_t	execute(t_node *tree, t_data *program_data, t_pid_list **pid_list)
 		else if (tree->val[0]->type == TOK_LOG_OR)
 			return (logical_or(tree, program_data));
 		else if (tree->val[0]->type == TOK_PIPE)
-			setup_pipe(tree, program_data);
+			setup_pipe(tree);
 		else if (tree->val[0]->type == TOK_REDIR)
 			if (redirect(tree, program_data) == 1 || !tree->l)
 				return (program_data->exit_status);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   logical.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 08:32:19 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/25 18:40:18 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/26 07:50:18 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ int	logical_and(t_node *node, t_data *program_data)
 		program_data->exit_status = execute(node->l, program_data, &pid_list);
 	wait_and_free(program_data, &pid_list);
 	if (program_data->exit_status == 0 && node->r != NULL)
-		program_data->exit_status = execute(node->r, program_data, &program_data->pid_list);
+		program_data->exit_status = \
+					execute(node->r, program_data, &program_data->pid_list);
 	return (program_data->exit_status);
 }
 
@@ -34,6 +35,7 @@ int	logical_or(t_node *node, t_data *program_data)
 		program_data->exit_status = execute(node->l, program_data, &pid_list);
 	wait_and_free(program_data, &pid_list);
 	if (program_data->exit_status != 0 && node->r != NULL)
-		program_data->exit_status = execute(node->r, program_data, &program_data->pid_list);
+		program_data->exit_status = \
+					execute(node->r, program_data, &program_data->pid_list);
 	return (program_data->exit_status);
 }
