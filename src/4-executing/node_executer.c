@@ -6,12 +6,15 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 11:59:29 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 12:18:44 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/26 17:17:18 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+/*
+	@brief	turns child process into the intended command
+*/
 static int	execute_execve(t_node *node, t_data *sh)
 {
 	t_cmd_path	*cmd_path;
@@ -39,6 +42,9 @@ static int	execute_execve(t_node *node, t_data *sh)
 	return (-1);
 }
 
+/*
+	@brief	dup2s the in & out fds
+*/
 static void	execute_child(t_node *node, t_data *sh)
 {
 	if (node->in_fd != STDIN_FILENO && dup2(node->in_fd, STDIN_FILENO) == -1)
@@ -62,6 +68,9 @@ static void	execute_child(t_node *node, t_data *sh)
 	execute_execve(node, sh);
 }
 
+/*
+	@brief	primarily saves the childs pid && closes the fds
+*/
 int	execute_parent(t_node *node, t_data *sh, t_pid_list **lst, pid_t pid)
 {
 	add_to_pid_list(pid, lst, false);
@@ -71,6 +80,9 @@ int	execute_parent(t_node *node, t_data *sh, t_pid_list **lst, pid_t pid)
 	return (sh->exit_status);
 }
 
+/*
+	@brief	handles forking
+*/
 int	execute_node(t_node *node, t_data *sh, t_pid_list **pid_list)
 {
 	pid_t	pid;

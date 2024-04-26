@@ -6,12 +6,21 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 09:54:40 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 14:09:31 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/26 17:24:34 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+/*
+	@brief	cuts off one set of braces from the token list
+	@param	before_last_close_brace	pointer to the token list node
+									before the last close brace
+	@param	curr	pointer to the token list node
+	@param	depth	depth of the braces
+	@return	pointer to the first token after the last brace
+			NULL	if there are no braces
+*/
 static t_list	*finish_substring(t_list	*before_last_close_brace, \
 									t_list	*curr, int depth)
 {
@@ -26,10 +35,10 @@ static t_list	*finish_substring(t_list	*before_last_close_brace, \
 }
 
 /*
-	Checks whether the inputted token array is a substring
-	If so, it returns the first token after the substring start and next nulls
-	the last token before the substring end
-	returns NULL if no substring is found
+	@brief	checks if the token list is a substring
+	@param	tokens	pointer to the token list
+	@return	pointer to the first token after the last brace
+			NULL	if there are no braces
 */
 t_list	*check_substring(t_list *tokens)
 {

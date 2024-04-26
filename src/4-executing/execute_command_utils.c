@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 06:36:17 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 10:59:26 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/26 17:12:51 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 /*
 	@brief		Returns a dynamically allocated path to the command.
-	@brief		It's on the caller to free the path.
-	@brief		Expects cleaned up command, so no flags, params, etc
+				It's on the caller to free the path.
+				Expects cleaned up command, so no flags, params, etc
 */
 static char	*get_command_path(char **envp, char *cmd)
 {
@@ -56,7 +56,7 @@ static int	get_token_arr_len(t_tok	**cmd)
 
 /*
 	@brief	Creates a path struct consisting of a path string
-	@brief	and the arguments as an array of strings
+			and the arguments as an array of strings
 */
 t_cmd_path	*create_cmd_struct(char	**envp, t_tok	**cmd)
 {
@@ -85,6 +85,10 @@ t_cmd_path	*create_cmd_struct(char	**envp, t_tok	**cmd)
 	return (path);
 }
 
+/*
+	@brief	Closes all file descriptors except for stdin and stdout
+			Should only be called in the child process
+*/
 void	close_fds_loop(void)
 {
 	int	fd;

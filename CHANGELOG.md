@@ -1,5 +1,8 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+### v0.31.5 - 26.4.24 - Freddy
+- Added doxygen - style comments to executor and parser, some in program_loop
+
 ### v0.31.4 - 26.4.24 - Freddy
 - norminettification
 	- execute_command_utils.c

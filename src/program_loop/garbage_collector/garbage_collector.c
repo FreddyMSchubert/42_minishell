@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   garbage_collector.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 12:18:59 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 06:08:53 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/26 17:03:07 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,13 @@
 
 /*
 	Garbage Collector has one dummy node at the start just as a reference.
+	It's not a real garbage collector - just a list we append all elements to
+	so we can free them all at once when we're done with the program.
 */
 
+/*
+	@brief	creates a new garbage collector
+*/
 t_list	*gc_create(void)
 {
 	t_list	*gc;
@@ -28,6 +33,14 @@ t_list	*gc_create(void)
 	return (gc);
 }
 
+/*
+	@brief	appends a new element to the garbage collector
+	@param	gc		pointer to the garbage collector
+	@param	content	pointer to the element to be added
+	@return	0		success
+			-1		malloc failed
+			-2		duplicated pointer
+*/
 int	gc_append_element(t_list *gc, void *content)
 {
 	t_list	*new_node;
@@ -49,8 +62,12 @@ int	gc_append_element(t_list *gc, void *content)
 	return (0);
 }
 
-// frees all elements in the garbage collector
-// after this, the garbage collector is freed, so it should be reinitialized
+/*
+	@brief	frees all elements in the garbage collector
+			after this, the garbage collector is freed,
+			so it should be reinitialized if it is to be used again
+	@param	gc	pointer to the garbage collector
+*/
 void	gc_cleanup(t_list *gc)
 {
 	if (VERBOSE == 1)

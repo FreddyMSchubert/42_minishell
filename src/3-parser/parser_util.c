@@ -6,16 +6,20 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 12:13:26 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 09:41:04 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/26 17:20:22 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 /*
-	Returns a pointer to a new token t_list, containing the tokens
-		from start to end.
-	Does not free or change the original token t_list.
+	@brief	creates a new token list containing the tokens from start to end
+	@param	tokens	pointer to the token list
+	@param	start	index of the first token to include
+	@param	end		index of the last token to include
+	@param	program_data	pointer to the data struct
+	@return	pointer to the new token list
+			NULL	if malloc failed
 	e.g. get_sub_token_arr({a, e, b, w, t, c, d}, 1, 3) -> {e, b, w}
 */
 t_list	*sub_list(t_list *tokens, int start, int end, \
@@ -47,6 +51,11 @@ t_list	*sub_list(t_list *tokens, int start, int end, \
 	return (sub_token_list);
 }
 
+/*
+	@brief	gets the length of a token list
+	@param	tokens	pointer to the token list
+	@return	length of the token list
+*/
 int	toklen(t_list *tokens)
 {
 	int		counter;
@@ -62,6 +71,13 @@ int	toklen(t_list *tokens)
 	return (counter);
 }
 
+/*
+	@brief	gets the token at a specific index
+	@param	tokens	pointer to the token list
+	@param	index	index of the token to get
+	@return	pointer to the token
+			NULL	if the index is out of bounds
+*/
 t_tok	*get_token_at_index(t_list *tokens, int index)
 {
 	int		counter;
@@ -79,6 +95,13 @@ t_tok	*get_token_at_index(t_list *tokens, int index)
 	return (NULL);
 }
 
+/*
+	@brief	converts a token list to an array of tokens
+	@param	tokens	pointer to the token list
+	@param	program_data	pointer to the data struct
+	@return	pointer to the token array
+			NULL	if malloc failed
+*/
 t_tok	**t_list_to_token_arr(t_list	*tokens, t_data	*program_data)
 {
 	t_tok	**token_arr;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 06:19:23 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/25 21:06:24 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/26 17:07:09 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 	If no arguments are given, cd changes to the user's temp directory.
 	Otherwise, chdir changes directory and getcwd gets the new path.
 */
+
 char	*get_path(t_tok **tokens, t_data *program_data)
 {
 	char	*temp;

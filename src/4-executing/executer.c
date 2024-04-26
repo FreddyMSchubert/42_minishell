@@ -6,12 +6,16 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 12:46:50 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/26 17:15:14 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+/*
+	@brief	used for builtin leaf nodes, it calls the right builtin function
+			and cleans up the nodes file descriptors
+*/
 static int	execute_builtin(t_node *node, t_data *sh, t_pid_list **pid_list)
 {
 	if (VERBOSE == 1)
@@ -41,6 +45,9 @@ static int	execute_builtin(t_node *node, t_data *sh, t_pid_list **pid_list)
 	return (sh->exit_status);
 }
 
+/*
+	@brief		determines whether node is a builtin or not
+*/
 static void	execute_leaf(t_node *tree, t_data *sh, t_pid_list **pid_list)
 {
 	if (tree->val[0]->type != TOK_BUILTIN)
@@ -49,6 +56,9 @@ static void	execute_leaf(t_node *tree, t_data *sh, t_pid_list **pid_list)
 		sh->exit_status = execute_builtin(tree, sh, pid_list);
 }
 
+/*
+	@brief		Logic for moving through the tree
+*/
 static pid_t	execute_branch(t_node *tree, t_data *sh, t_pid_list **pid_list)
 {
 	if (tree->val[0]->type == TOK_LOG_AND)
@@ -71,6 +81,9 @@ static pid_t	execute_branch(t_node *tree, t_data *sh, t_pid_list **pid_list)
 	return (sh->exit_status);
 }
 
+/*
+	@brief		determines whether inputted node is a leaf or a branch node
+*/
 pid_t	execute(t_node *tree, t_data *sh, t_pid_list **pid_list)
 {
 	if (sh->exit_flag == 1 || !tree)

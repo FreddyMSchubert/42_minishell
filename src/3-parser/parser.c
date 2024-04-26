@@ -6,15 +6,16 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 12:13:31 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 10:24:45 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/26 17:22:58 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 /*
-	Sister-function to get_dominant_operator,
-	updates which operator is currently looked for in that function
+	@brief	adjusts the priority of the operator
+	@param	current_priority	current priority of the operator
+	@return	new priority of the operator
 */
 static int	adjust_operator_priority(int current_priority)
 {
@@ -24,6 +25,12 @@ static int	adjust_operator_priority(int current_priority)
 		return (0);
 }
 
+/*
+	@brief	loops through tokens to remove all braces on the outside
+	@param	tokens	pointer to the token list
+	@return	pointer to the first token after the last brace
+			NULL	if there are no braces
+*/
 static t_list	*find_valid_substring(t_list *tokens)
 {
 	t_list	*current;
@@ -40,6 +47,13 @@ static t_list	*find_valid_substring(t_list *tokens)
 	return (tokens);
 }
 
+/*
+	@brief	adjusts the depth of the token
+	@param	c	pointer to the token list node
+	@return	1	if the token is an open brace
+			-1	if the token is a close brace
+			0	otherwise
+*/
 static int	adjust_depth(t_list	*c)
 {
 	if (((t_tok *)c->content)->type == TOK_OPEN_BRACE)
@@ -50,10 +64,10 @@ static int	adjust_depth(t_list	*c)
 }
 
 /*
-	Finds the most dominant operator in a token array, returning its index.
-	Returns -1 if there is no dominant operator in the token array.
-	TOK_LOG_AND > TOK_LOG_OP > TOK_PIPE > TOK_REDIR
-	4 in while condition because that's how many types of operators there are
+	@brief	gets the index of the dominant operator in the token list
+	@param	tokens	pointer to the token list
+	@return	index of the dominant operator
+			-1	if there is no dominant operator
 */
 static int	get_dominant_operator(t_list **tokens)
 {
@@ -83,8 +97,11 @@ static int	get_dominant_operator(t_list **tokens)
 }
 
 /*
-	Gets a token array as input. Returns a functional binary tree structure.
-	dom_op_i = dominant operator index
+	@brief	parses the token list into a binary tree
+	@param	tokens	pointer to the token list
+	@param	sh		pointer to the data struct
+	@return	pointer to the root node of the tree
+			NULL	if malloc failed
 */
 t_node	*parse(t_list *tokens, t_data *sh)
 {

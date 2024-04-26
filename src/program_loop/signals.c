@@ -6,12 +6,15 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/11 12:15:06 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 10:54:16 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/26 17:04:18 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+/*
+	@brief	signal handler for SIGINT
+*/
 static void	sigint_handler(int signo)
 {
 	(void)signo;
@@ -26,6 +29,9 @@ static void	sigint_handler(int signo)
 		ioctl(0, TIOCSTI, "\4");
 }
 
+/*
+	@brief	sets up signal handlers
+*/
 void	setup_sigs(void)
 {
 	signal(SIGINT, sigint_handler);

@@ -6,11 +6,15 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 16:53:28 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/26 09:34:56 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/26 17:25:28 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+/*
+	@brief	used to reorder args around redirections to be in front of them
+*/
 
 static t_list	*find_prev_node(t_list *head, t_list *node)
 {
