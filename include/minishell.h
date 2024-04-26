@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 09:03:24 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/26 12:19:22 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,15 @@ typedef struct s_cmd_path
 	char			**args;
 }				t_cmd_path;
 
+typedef struct s_exp
+{
+	char			*buffer;
+	const char		*str;
+	int				buffer_size;
+	int				buf_pos;
+	int				i;
+}	t_exp;
+
 
 // ----- FUNCTIONS
 
@@ -137,16 +146,26 @@ int					validate(t_list *tokens);
 int					check_files(t_list *files, int flag);
 
 // --- 2-expander
-char				*expand(char *str, t_data *program_data, bool heredoc);
-char				*get_envcp(char *var_name, t_data *program_data);
-char				*isolate_var(char *var);
-int					find_closing_quote(char *str, int *i);
-char				*quote_operators(char *envcp_value);
-bool				is_valid_variable(char *var);
+char				*expand(const char *str, t_data *program_data, bool heredoc);
+bool				should_expand(const char *str, int i, char exp_type);
+void				append_to_buffer(t_exp *exp, char *to_append);
+// env
+void				handle_dollar_expansion(t_exp *exp, t_data *data);
+void				handle_dollar_quote_expansion(t_exp *exp);
+void				handle_dollar_question_expansion(t_exp *exp, t_data *data);
+// tilde
+void				handle_tilde_expansion(t_exp *exp, t_data *data);
 // wildcard
+void				handle_wildcard_expansion(t_exp *exp, t_data *data);
 char				*list_matching_files(char *pattern);
-char				*get_pattern(char *str, int index, t_data *program_data);
+char				*get_pattern(const char *str, int index, t_data *program_data);
 char				*get_rid_of_quotes_wildcard(char *str);
+// expand util
+int					find_closing_quote(const char *str, int *i);
+char				*get_envcp(const char *var_name, t_data *program_data);
+bool				is_valid_variable(const char *var);
+char				*isolate_var(char *var);
+char				*quote_operators(char *envcp_value);
 
 // --- 3-parser
 // parser
@@ -195,7 +214,7 @@ int					add_to_pid_list(pid_t pid, t_pid_list **pidlist, bool is_builtin);
 void				*wait_and_free(t_data *program_data, t_pid_list **pid_list);
 
 // --- util
-bool				is_in_quote(char *str, char quote, char *current_char);
+bool				in_quote(const char *str, char quote, const char *current_char);
 void				log_err(char *error, char *path1, char *path2);
 char				*ft_strjoinfree(char *s1, char *s2);
 // printing

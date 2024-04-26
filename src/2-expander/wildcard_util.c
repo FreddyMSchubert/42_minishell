@@ -3,14 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard_util.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: niklasburchhardt <niklasburchhardt@stud    +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 16:11:47 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/24 10:30:48 by niklasburch      ###   ########.fr       */
+/*   Updated: 2024/04/26 12:36:49 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+void	process_quotes(char c, bool *s_quote, bool *d_quote)
+{
+	if (c == '\'' && !*d_quote)
+		*s_quote = !*s_quote;
+	else if (c == '\"' && !*s_quote)
+		*d_quote = !*d_quote;
+}
 
 char	*get_rid_of_quotes_wildcard(char *str)
 {
@@ -30,31 +38,31 @@ char	*get_rid_of_quotes_wildcard(char *str)
 	while (str[++i])
 	{
 		if (str[i] == '*' && (s_quote || d_quote))
-			new_str[j++] = '\\'; // Escape the * character
-		if (str[i] == '\'' && !d_quote)
-			s_quote = !s_quote;
-		else if (str[i] == '\"' && !s_quote)
-			d_quote = !d_quote;
-		else
+			new_str[j++] = '\\';
+		process_quotes(str[i], &s_quote, &d_quote);
+		if (str[i] != '\'' && str[i] != '\"')
 			new_str[j++] = str[i];
 	}
 	new_str[j] = '\0';
-	// printf("new_str: .%s.\n", new_str);
 	return (new_str);
 }
 
-char	*get_pattern(char *str, int index, t_data *program_data)
+char	*get_pattern(const char *str, int index, t_data *data)
 {
-	int	i;
+	int		i;
 	char	*ret;
 
 	i = index;
-	while (str[i] && ((str[i] != ' ' && !is_operator_symbol(str[i], ' ')) || is_in_quote(str, '"', &str[i]) || is_in_quote(str, '\'', &str[i])))
+	while (str[i] && ((str[i] != ' ' && !is_operator_symbol(str[i], ' ')) || \
+	in_quote(str, '"', &str[i]) || in_quote(str, '\'', &str[i])))
 		i++;
-	while (index > 0 && ((str[index - 1] != ' ' && !is_operator_symbol(str[index - 1], ' ')) || is_in_quote(str, '"', &str[index - 1]) || is_in_quote(str, '\'', &str[index - 1])))
+	while (index > 0 && ((str[index - 1] != ' ' && \
+	!is_operator_symbol(str[index - 1], ' ')) || in_quote(str, '"', &str[index \
+	- 1]) || in_quote(str, '\'', &str[index - 1])))
 		index--;
 	ret = ft_substr(&str[index], 0, i - index);
-	gc_append_element(program_data->gc, ret);
-	// printf("pattern: .%s.\n", ret);
-	return (get_rid_of_quotes_wildcard(ret));
+	gc_append_element(data->gc, ret);
+	ret = get_rid_of_quotes_wildcard(ret);
+	gc_append_element(data->gc, ret);
+	return (ret);
 }

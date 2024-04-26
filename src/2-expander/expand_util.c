@@ -6,50 +6,13 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 16:07:07 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/25 20:27:53 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/26 12:13:00 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-char	*get_envcp(char *env_var, t_data *program_data)
-{
-	int		i;
-	char	*tmp;
-
-	i = -1;
-	tmp = ft_strjoin(env_var, "=");
-	if (!tmp)
-		exit_error("malloc failed", 1, program_data->gc);
-	gc_append_element(program_data->gc, tmp);
-	while (program_data->envcp[++i])
-	{
-		if (ft_strncmp(program_data->envcp[i], tmp, ft_strlen(tmp)) == 0)
-			return (ft_strdup(program_data->envcp[i] + ft_strlen(env_var) + 1));
-	}
-	return (ft_strdup(""));
-}
-
-char	*isolate_var(char *var)
-{
-	int	i;
-
-	i = -1;
-	if (!var)
-		return (NULL);
-	while (var[++i])
-	{
-		if (var[i] == ' ' || var[i] == '\'' || var[i] == '\"' || var[i] == '$'
-			|| is_operator_symbol(var[i], var[i + 1]) || var[i] == '/' || var[i] == '?')
-		{
-			var[i] = '\0';
-			break ;
-		}
-	}
-	return (var);
-}
-
-int	find_closing_quote(char *str, int *i)
+int	find_closing_quote(const char *str, int *i)
 {
 	int		j;
 	char	quote;
@@ -88,26 +51,10 @@ char	*quote_operators(char *envcp_value)
 		else
 			new_str[j++] = envcp_value[i];
 	}
-	// printf("new_str: %s\n", new_str);
 	return (new_str);
 }
 
-bool	is_valid_variable(char *var)
-{
-	int	i;
-
-	if (!ft_isalpha((unsigned char)var[0]) && var[0] != '_')
-		return (false);
-	i = 0;
-	while (var[++i] && var[i] != '$' && (ft_isalnum(var[i]) || var[i] == '_') && !is_operator_symbol(var[i], ' ')) // && var[i] != '\'' && var[i] != '\"'
-	{
-		if (!ft_isalnum(var[i]) && var[i] != '_')
-			return (false);
-	}
-	return (true);
-}
-
-bool	is_in_quote(char *str, char quote, char *current_char)
+bool	in_quote(const char *str, char quote, const char *current_char)
 {
 	int		i;
 	bool	d_quote;
