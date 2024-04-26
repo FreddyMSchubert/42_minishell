@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 16:07:34 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/26 09:16:40 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/26 09:42:23 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,14 @@ static int	open_file(t_node *node, t_data *data)
 	filename = get_filename(node);
 	fd = open(filename, flags, 0644);
 	if (fd < 0)
+	{
+		if (node->in_fd != 0)
+			close(node->in_fd);
+		if (node->out_fd != 1)
+			close(node->out_fd);
 		return (log_err(strerror(errno), filename, NULL), \
-						close_fds(node), data->exit_status = 1, 1);
+				data->exit_status = 1, 1);
+	}
 	return (fd);
 }
 
@@ -59,7 +65,7 @@ static void	propagate_descriptor(t_node *node, int fd)
 		node->l->out_fd = fd;
 }
 
-int	redirect(t_node *node, t_data *program_data)
+int	redirect(t_node *node, t_data *data)
 {
 	int		fd;
 
@@ -73,13 +79,13 @@ int	redirect(t_node *node, t_data *program_data)
 	else if (node->out_fd != 1)
 		close(node->out_fd);
 	if (ft_strncmp(node->val[0]->val, "<<", 2) == 0)
-		return (heredoc(node, program_data));
-	fd = open_file(node, program_data);
-	if (fd < 0)
-		return (fd);
+		return (heredoc(node, data));
+	fd = open_file(node, data);
+	if (data->exit_status == 1)
+		return (1);
 	if (node->r->val[0]->type == TOK_REDIR && \
 				ft_strncmp(node->val[0]->val, node->r->val[0]->val, 1) == 0)
-		return (close(fd), redirect(node->r, program_data));
+		return (close(fd), redirect(node->r, data));
 	propagate_descriptor(node, fd);
 	return (0);
 }

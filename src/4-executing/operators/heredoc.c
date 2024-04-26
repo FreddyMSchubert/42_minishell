@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 07:54:00 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 08:27:13 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/26 09:56:16 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static char	*get_line(t_data *data)
 		line = readline("crash_doc 📄 ");
 	else
 	{
-		ft_putstr_fd("crash_doc 📄 ", STDOUT_FILENO);
+		write(0, "crash_doc 📄 ", 12);
 		line = get_next_line(fileno(stdin));
 		if (line == NULL)
 			return (NULL);
@@ -57,8 +57,8 @@ static char	*convert_line(char *line, t_data *data, t_node *node)
 {
 	char	*converted_line;
 
-	if (node->r->val[0]->type == TOK_D_QUOTE \
-		|| node->r->val[0]->type == TOK_S_QUOTE)
+	if (node->r->val[0]->type != TOK_D_QUOTE \
+		&& node->r->val[0]->type != TOK_S_QUOTE)
 		converted_line = expand(line, data, true);
 	else
 	{
