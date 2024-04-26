@@ -6,13 +6,19 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 13:41:21 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/26 17:30:21 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/26 18:20:42 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	handle_quotes(const char *s, int *i, int *in_quote)
+/*
+	@brief	Updates the in_quote variable based on state the given index is in
+			state being	0 means not in quote,
+						1 means in single quote,
+						2 means in double quote
+*/
+static void	handle_quotes(const char *s, int *i, int *in_quote)
 {
 	if ((s[*i] == '"' && *in_quote != 2) || (s[*i] == '\'' && *in_quote != 1))
 	{
@@ -29,6 +35,9 @@ int	handle_quotes(const char *s, int *i, int *in_quote)
 	return (0);
 }
 
+/*
+	@brief	Differentiates between e.g. | and ||, and counts them as one token
+*/
 int	handle_operator_symbols(const char *s, int *i, int *count, int *in_word)
 {
 	if (is_operator_symbol(s[*i], s[*i + 1]))
@@ -41,6 +50,11 @@ int	handle_operator_symbols(const char *s, int *i, int *count, int *in_word)
 	return (0);
 }
 
+/*
+	@brief	Counts the amount of tokens that will be produced by ms_split
+	@input	s	- the string to be split
+	@return	amount of tokens
+*/
 int	count_tokens(const char *s)
 {
 	int	i;

@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 12:44:43 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 17:15:14 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/26 17:51:31 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,9 @@ static void	execute_leaf(t_node *tree, t_data *sh, t_pid_list **pid_list)
 static pid_t	execute_branch(t_node *tree, t_data *sh, t_pid_list **pid_list)
 {
 	if (tree->val[0]->type == TOK_LOG_AND)
-		return (logical_and(tree, sh));
+		return (logical_and(tree, sh, pid_list));
 	else if (tree->val[0]->type == TOK_LOG_OR)
-		return (logical_or(tree, sh));
+		return (logical_or(tree, sh, pid_list));
 	else if (tree->val[0]->type == TOK_PIPE)
 		setup_pipe(tree);
 	else if (tree->val[0]->type == TOK_REDIR)

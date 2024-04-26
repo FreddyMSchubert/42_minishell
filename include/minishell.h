@@ -97,7 +97,6 @@ typedef struct s_data
 	int				exit_status;
 	char			**envcp;
 	t_list			*gc;
-	t_pid_list		*pid_list;
 }	t_data;
 
 typedef struct s_cmd_path
@@ -178,9 +177,7 @@ void				handle_dollar_question_expansion(t_exp *exp, t_data *data);
 void				handle_tilde_expansion(t_exp *exp, t_data *data);
 // wildcard
 void				handle_wildcard_expansion(t_exp *exp, t_data *data);
-char				*list_matching_files(char *pattern);
 char				*get_pattern(const char *str, int index, t_data *sh);
-char				*get_rid_of_quotes_wildcard(char *str);
 // expand util
 int					find_closing_quote(const char *str, int *i);
 char				*get_envcp(const char *var_name, t_data *sh);
@@ -209,8 +206,8 @@ int					execute_node(t_node *node, t_data *data, \
 										t_pid_list **pid_list);
 void				child_process_exit(t_data *data, int exitcode);
 // operators
-int					logical_and(t_node *node, t_data *sh);
-int					logical_or(t_node *node, t_data *sh);
+int					logical_and(t_node *node, t_data *sh, t_pid_list **pidlist);
+int					logical_or(t_node *node, t_data *sh, t_pid_list **pidlist);
 int					redirect(t_node *node, t_data *data);
 int					heredoc(t_node *node, t_data	*sh);
 void				setup_pipe(t_node *node);
