@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 11:59:29 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 22:15:03 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/26 22:25:28 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static int	execute_execve(t_node *node, t_data *sh)
 /*
 	@brief	dup2s the in & out fds
 */
-static void	execute_child(t_node *node, t_data *sh)
+static void	exec_child(t_node *node, t_data *sh)
 {
 	if (node->in_fd != STDIN_FILENO && dup2(node->in_fd, STDIN_FILENO) == -1)
 	{
@@ -71,7 +71,7 @@ static void	execute_child(t_node *node, t_data *sh)
 /*
 	@brief	primarily saves the childs pid && closes the fds
 */
-int	execute_parent(t_node *node, t_data *sh, t_pid_list **lst, pid_t pid)
+static int	exec_parent(t_node *node, t_data *sh, t_pid_list **lst, pid_t pid)
 {
 	add_to_pid_list(pid, lst, false);
 	if (VERBOSE == 1)
@@ -101,8 +101,8 @@ int	execute_node(t_node *node, t_data *sh, t_pid_list **pid_list)
 		return (1);
 	}
 	else if (pid == 0)
-		execute_child(node, sh);
+		exec_child(node, sh);
 	else if (pid > 0)
-		return (execute_parent(node, sh, pid_list, pid));
+		return (exec_parent(node, sh, pid_list, pid));
 	return ("this will never occur, just to silence warning!"[0]);
 }

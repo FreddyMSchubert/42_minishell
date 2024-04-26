@@ -6,12 +6,16 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 14:07:36 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/26 22:14:49 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/26 22:25:11 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+/*
+	@brief	Calculates the amount of spaces which should be added by the
+			put_space_between_tokens function
+*/
 static int	calc_add_spaces(char *input)
 {
 	int	i;
@@ -40,6 +44,9 @@ static int	calc_add_spaces(char *input)
 	return (count_tokens(input) - spaces - 1);
 }
 
+/*
+	@brief	Updates put_space_between_tokens states based on quotes
+*/
 static void	handle_quotes(char *input, int *indices, int *states)
 {
 	if ((input[indices[0]] == '\'' && states[1] != '\'')
@@ -49,6 +56,9 @@ static void	handle_quotes(char *input, int *indices, int *states)
 		states[1] = 0;
 }
 
+/*
+	@brief	Updates put_space_between_tokens states based on operator symbols
+*/
 static void	handle_operator_symbols(char *input, int *indices, char *new_input, \
 		int *states)
 {
@@ -72,6 +82,9 @@ static void	handle_operator_symbols(char *input, int *indices, char *new_input, 
 		states[0] = 1;
 }
 
+/*
+	@brief	Updates put_space_between_tokens states based on remaining symbols
+*/
 static void	handle_remaining_symbols(char *input, int *indices, char *new_input)
 {
 	if (input[indices[0]] && is_operator_symbol(input[indices[0]],

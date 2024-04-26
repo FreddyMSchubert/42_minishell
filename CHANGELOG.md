@@ -1,5 +1,15 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+### v0.31.9 - 26.4.24 - Freddy
+- made stuff that isnt called anywhere static (in the whole program)
+- moved child process exit function from its own file to util
+
+### v0.31.8 - 26.4.24
+- added helpful doxygen comments in lexer
+
+### v0.31.7 - 26.4.24 - Freddy
+- removed pid_list from data struct - it was weirdly inconsistent when it would be passed through explicitly and when used from the data struct
+
 ### v0.31.6 - 26.4.24 - Freddy
 - random improvements
 	- sorted includes in header

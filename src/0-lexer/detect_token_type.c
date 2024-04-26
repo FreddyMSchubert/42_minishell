@@ -3,15 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   detect_token_type.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 13:48:11 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/26 13:52:39 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/26 18:35:54 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+/*
+	@brief	Creates a token struct and assigns the input to the val field.
+*/
 t_tok	*create_token(char *input, t_data *data)
 {
 	t_tok	*token;
@@ -24,6 +27,9 @@ t_tok	*create_token(char *input, t_data *data)
 	return (token);
 }
 
+/*
+	@brief	Creates a list struct and assigns the token to the content field.
+*/
 t_list	*create_list(t_tok *token, t_data *data)
 {
 	t_list	*list;
@@ -36,6 +42,9 @@ t_list	*create_list(t_tok *token, t_data *data)
 	return (list);
 }
 
+/*
+	@brief	Checks whether a string should be treated as a builtin command.
+*/
 static int	is_builtin_string(char *input, int is_first_or_after_operator)
 {
 	if (is_first_or_after_operator && \
@@ -50,6 +59,9 @@ static int	is_builtin_string(char *input, int is_first_or_after_operator)
 	return (-1);
 }
 
+/*
+	@brief	Assigns a type to the token based on its value.
+*/
 void	assign_token_type(t_tok *token, int is_first_or_after_operator)
 {
 	if (in_quote(token->val, '\'', token->val))
@@ -75,6 +87,9 @@ void	assign_token_type(t_tok *token, int is_first_or_after_operator)
 		token->type = TOK_WORD;
 }
 
+/*
+	@brief	Parent function to token detection, handles dynamic allocation etc.
+*/
 t_list	*detect_token_type(char *input, int is_first_or_after_operator, t_data \
 *data)
 {

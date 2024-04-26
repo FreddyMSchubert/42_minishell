@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 22:16:59 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/26 22:25:39 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ static int	execute_input(t_data *sh, char *input)
 	return (0);
 }
 
+/// @brief Main loop of the program
 int	run_input_loop(t_data *sh)
 {
 	char	*input;

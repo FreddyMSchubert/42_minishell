@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   substring_util.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 09:54:40 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 17:50:06 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/26 18:23:07 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static t_list	*finish_substring(t_list	*before_last_close_brace, \
 	return (NULL);
 }
 
-t_list	*update_depth_and_prev(t_list *curr, t_list *prev, int *depth)
+static t_list	*update_depth_and_prev(t_list *curr, t_list *prev, int *depth)
 {
 	if (((t_tok *)curr->content)->type == TOK_OPEN_BRACE)
 		(*depth)++;
@@ -47,7 +47,7 @@ t_list	*update_depth_and_prev(t_list *curr, t_list *prev, int *depth)
 	return (NULL);
 }
 
-t_list	*iterate_through_tokens(t_list *tokens, int *depth)
+static t_list	*iterate_through_tokens(t_list *tokens, int *depth)
 {
 	t_list	*curr;
 	t_list	*prev;

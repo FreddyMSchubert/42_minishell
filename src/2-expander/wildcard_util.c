@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard_util.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 16:11:47 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/26 12:36:49 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/26 18:20:39 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	process_quotes(char c, bool *s_quote, bool *d_quote)
+static void	process_quotes(char c, bool *s_quote, bool *d_quote)
 {
 	if (c == '\'' && !*d_quote)
 		*s_quote = !*s_quote;
@@ -20,7 +20,9 @@ void	process_quotes(char c, bool *s_quote, bool *d_quote)
 		*d_quote = !*d_quote;
 }
 
-char	*get_rid_of_quotes_wildcard(char *str)
+/// @brief Get rid of quotes in the wildcard pattern and escape wildcard 
+/// character if it is in quotes
+static char	*get_rid_of_quotes_wildcard(char *str)
 {
 	int		i;
 	int		j;
@@ -47,6 +49,7 @@ char	*get_rid_of_quotes_wildcard(char *str)
 	return (new_str);
 }
 
+/// @brief Get the pattern of the wildcard
 char	*get_pattern(const char *str, int index, t_data *data)
 {
 	int		i;

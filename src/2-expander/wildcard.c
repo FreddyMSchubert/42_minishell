@@ -3,16 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:44:01 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/26 12:28:37 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/26 18:32:26 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-char	*concatenate_matches_free_s1(char *s1, const char *s2)
+/// @brief concatenates two strings, adding single quotes before and after the
+/// string, freeing the first one
+static char	*concatenate_matches_free_s1(char *s1, const char *s2)
 {
 	char	*new_str;
 	size_t	s1_len;
@@ -41,7 +43,8 @@ char	*concatenate_matches_free_s1(char *s1, const char *s2)
 	return (new_str);
 }
 
-int	process_star(const char **p, const char **f, const char **star, \
+/// @brief processes the '*' character in a pattern.
+static int	process_star(const char **p, const char **f, const char **star, \
 				const char **sf)
 {
 	if (*(*p) == '*' && (*p == *star || *(*p - 1) != '\\'))
@@ -59,6 +62,7 @@ int	process_star(const char **p, const char **f, const char **star, \
 	return (1);
 }
 
+/// @brief matches a pattern with a filename
 int	match(const char *pattern, const char *filename)
 {
 	const char	*p = pattern;
@@ -82,7 +86,8 @@ int	match(const char *pattern, const char *filename)
 	return (*p == '\0');
 }
 
-char	*list_matching_files(char *pattern)
+/// @brief lists all the files that match the pattern
+static char	*list_matching_files(char *pattern)
 {
 	DIR				*dir;
 	struct dirent	*entry;
@@ -111,6 +116,7 @@ char	*list_matching_files(char *pattern)
 	return (result);
 }
 
+/// @brief loops through the string and expands the wildcard result
 void	handle_wildcard_expansion(t_exp *exp, t_data *data)
 {
 	char	*env_var;

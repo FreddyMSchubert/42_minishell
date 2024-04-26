@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 16:53:28 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/26 17:25:28 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/26 18:23:27 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static t_list	*find_prev_node(t_list *head, t_list *node)
 	return (prev);
 }
 
-void	insert_node(t_list **head_ref, t_list *prev_node, t_list *node)
+static void	insert_node(t_list **head_ref, t_list *prev_node, t_list *node)
 {
 	if (prev_node != NULL)
 	{
@@ -45,7 +45,7 @@ void	insert_node(t_list **head_ref, t_list *prev_node, t_list *node)
 	}
 }
 
-void	move_node(t_list **head_ref, t_list *node1, t_list *node2)
+static void	move_node(t_list **head_ref, t_list *node1, t_list *node2)
 {
 	t_list	*prev_node1;
 	t_list	*prev_node2;
@@ -61,7 +61,7 @@ void	move_node(t_list **head_ref, t_list *node1, t_list *node2)
 	insert_node(head_ref, prev_node1, node2);
 }
 
-bool	should_switch(t_list *node)
+static bool	should_switch(t_list *node)
 {
 	t_tok	*current;
 	t_tok	*next_next;
