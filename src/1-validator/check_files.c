@@ -6,34 +6,20 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 11:16:19 by nburchha          #+#    #+#             */
-/*   Updated: 2024/02/21 17:40:49 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/26 13:22:38 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-
-void print_list(t_list *list)
+/// @brief checks the file linked list for errors. 0 infile, 1 outfile, 2 
+///	outfile append
+int	check_files(t_list *files, int flag)
 {
-	t_list *tmp;
-
-	tmp = list;
-	while (tmp != NULL)
-	{
-		printf("print_list: %s\n", (char *)tmp->content);
-		tmp = tmp->next;
-	}
-}
-
-/// @brief checks the file linked list for errors. 0 infile, 1 outfile, 2 outfile append
-int check_files(t_list *files, int flag)
-{
-	t_list *tmp;
+	t_list	*tmp;
 
 	if (files == NULL)
 		return (0);
-	// printf("flag: %d\n", flag);
-	// print_list(files);
 	tmp = files;
 	errno = 0;
 	while (tmp != NULL)

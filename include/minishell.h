@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 12:19:22 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/26 13:34:50 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,6 +144,13 @@ t_list				*split_token_if_operator_in_quotes(t_tok **tok, t_data *sh);
 // --- 1-validate
 int					validate(t_list *tokens);
 int					check_files(t_list *files, int flag);
+int					check_token_errors(t_list *tok, t_tok *token);
+int					check_brace_errors(t_list *tok, t_tok *token, int *brace_opened);
+int					check_first_token(t_list *tok);
+int					check_last_token(t_tok *token);
+int					check_braces(int brace_opened);
+int					process_tok_list(t_list **tok, int *brace_opened);
+void				throw_syntax_error(char *error);
 
 // --- 2-expander
 char				*expand(const char *str, t_data *program_data, bool heredoc);
