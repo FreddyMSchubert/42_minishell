@@ -1,5 +1,10 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+### v0.31.6 - 26.4.24 - Freddy
+- random improvements
+	- sorted includes in header
+	- renamed all program_data instances to sh.
+
 ### v0.31.5 - 26.4.24 - Freddy
 - Added doxygen - style comments to executor and parser, some in program_loop
 

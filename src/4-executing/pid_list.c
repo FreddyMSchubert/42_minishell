@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 19:50:38 by niklasburch       #+#    #+#             */
-/*   Updated: 2024/04/26 17:18:37 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/26 17:33:39 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,12 @@ static int	wait_for_process(t_pid_list *tmp, int *exit_status)
 
 /*
 	@brief		resolves the pid list by waiting for all nodes to finish
-	@param	program_data	pointer to the data struct
+	@param	sh				pointer to the data struct
 	@param	pid_list		pointer to the pid list
 	@return	NULL
 
 */
-void	*resolve_pid_list(t_data *program_data, t_pid_list **pid_list)
+void	*resolve_pid_list(t_data *sh, t_pid_list **pid_list)
 {
 	t_pid_list	*tmp;
 	t_pid_list	*next;
@@ -72,8 +72,8 @@ void	*resolve_pid_list(t_data *program_data, t_pid_list **pid_list)
 		free(tmp);
 		tmp = next;
 	}
-	if (program_data->exit_status == 0)
-		program_data->exit_status = exit_status;
+	if (sh->exit_status == 0)
+		sh->exit_status = exit_status;
 	g_sigint_received = 0;
 	return (NULL);
 }

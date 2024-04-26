@@ -6,21 +6,22 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 17:00:06 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/26 17:37:48 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // ------ INCLUDES
 
+#include <stdio.h>
 #include <stdbool.h>
 #include <fcntl.h>
 #include <errno.h>
-#include <dirent.h>
 #include <unistd.h>
 #include <limits.h>
 #include <string.h>
+// directory operations
+#include <dirent.h>
 // readline
-#include <stdio.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 // signals
@@ -75,7 +76,7 @@ typedef struct s_node
 	t_tok			**val;
 	struct s_node	*l;
 	struct s_node	*r;
-	t_node			*parent;
+	struct s_node	*parent;
 	bool			redirected;
 	int				in_fd;
 	int				out_fd;
