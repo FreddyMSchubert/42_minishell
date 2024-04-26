@@ -1,5 +1,8 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+### v0.31.8 - 26.4.24
+- added helpful doxygen comments in lexer
+
 ### v0.31.7 - 26.4.24 - Freddy
 - removed pid_list from data struct - it was weirdly inconsistent when it would be passed through explicitly and when used from the data struct
 

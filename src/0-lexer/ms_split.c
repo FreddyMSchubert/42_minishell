@@ -3,18 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   ms_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 10:42:01 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 13:44:36 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/26 18:07:39 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-/// @brief gets start point of string to be split,
-/// determines end point by the next delim in s
-/// @return splitted string
+/*
+	@brief	gets a start point of a string to be split,
+			determines the end point by the next delimiter in s
+	@return	the splitted string
+*/
 static char	*make_split_str(const char *s, int *i, t_data *data)
 {
 	size_t	size;
@@ -44,7 +46,9 @@ static char	*make_split_str(const char *s, int *i, t_data *data)
 	return (ret);
 }
 
-/// @brief frees the 2d array in case of a allocation fail
+/*
+	@brief	frees the 2d array in case of a allocation fail
+*/
 void	free_split(char **split)
 {
 	int	i;
@@ -62,9 +66,14 @@ void	free_split(char **split)
 	split = NULL;
 }
 
-/// @brief splits a string into an array of strings, using spaces,
-/// single quotes and double quotes as delimiters. inside single
-/// quotes: everything is a string
+/*
+	@brief	splits a string into an array of strings, using spaces,
+			single quotes and double quotes as delimiters.
+			inside single quotes: everything is a string
+	@param	input: the string to be split
+	@param	data: the struct containing the garbage collector
+	@return	the array of strings
+*/
 char	**ms_split(char *input, t_data *data)
 {
 	int				word_count;

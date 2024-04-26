@@ -3,15 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 06:54:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 16:16:15 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/26 18:05:29 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+/*
+	@brief	Loops through each section of the input,
+			saves their detected type into a linked list.
+*/
 t_list	*create_tokens(char **split_input, t_data *data)
 {
 	int		counter;
@@ -40,6 +44,10 @@ t_list	*create_tokens(char **split_input, t_data *data)
 	return (tokens);
 }
 
+/*
+	@brief	Entrypoint for the lexer.
+			Splits the input into tokens and creates a linked list of tokens.
+*/
 t_list	*lexer(char *input, t_data *data)
 {
 	char	**split_input;
