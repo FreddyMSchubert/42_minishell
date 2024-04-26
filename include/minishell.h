@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 09:03:24 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/26 09:55:23 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ int					is_operator_symbol(char c, char d);
 bool				is_redirect(char c);
 int					same_str(char *str1, char *str2);
 char				*get_rid_of_quotes(char *str);
-t_list				*split_token_if_operator_in_quotes(t_tok **token, t_data *data);
+t_list				*split_token_if_operator_in_quotes(t_tok **tok, t_data *sh);
 
 // --- 1-validate
 int					validate(t_list *tokens);
@@ -150,13 +150,17 @@ char				*get_rid_of_quotes_wildcard(char *str);
 
 // --- 3-parser
 // parser
-t_node		*parse(t_list *tokens, t_data *program_data);
+t_node				*parse(t_list *tokens, t_data *program_data);
 // util
-t_list				*sub_token_t_list(t_list *tokens, int start, int end, t_data *program_data);
+t_list				*sub_list(t_list *tokens, int start, int end, t_data *data);
 t_list				*switch_redir_args(t_list *tokens);
 int					toklen(t_list *tokens);
-t_tok				**t_list_to_token_arr(t_list	*tokens, t_data	*program_data);
+t_tok				**t_list_to_token_arr(t_list	*tokens, t_data	*data);
 t_tok				*get_token_at_index(t_list *tokens, int index);
+t_list				*check_substring(t_list *curr);
+// defaults
+t_node				*create_default_node(t_data *program_data);
+t_tok				**create_default_token_arr(t_data *program_data);
 
 // --- 4-executing
 // general
