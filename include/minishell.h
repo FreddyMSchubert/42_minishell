@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 13:34:50 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/26 17:00:06 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,13 +70,12 @@ typedef struct s_tok
 }	t_tok;
 // char used for type to save space, as there are only 8 types
 
-typedef struct s_node	t_node;
 typedef struct s_node
 {
 	t_tok			**val;
-	t_node          *l;
-	t_node          *r;
-	t_node          *parent;
+	struct s_node	*l;
+	struct s_node	*r;
+	t_node			*parent;
 	bool			redirected;
 	int				in_fd;
 	int				out_fd;
@@ -115,11 +114,10 @@ typedef struct s_exp
 	int				i;
 }	t_exp;
 
-
 // ----- FUNCTIONS
 
 // --- input loop
-int					run_input_loop(t_data *program_data);
+int					run_input_loop(t_data *sh);
 // - garbage collector
 t_list				*gc_create(void);
 int					gc_append_element(t_list *gc, void *content);
@@ -136,8 +134,9 @@ t_list				*lexer(char *input, t_data *data);
 char				*put_space_between_tokens(char *input, t_data *data);
 char				**ms_split(char *input, t_data *data);
 int					count_tokens(const char *s);
-t_list				*detect_token_type(char *input, int is_first_or_after_operator, t_data *data);
-t_list				*split_token_if_operator_in_quotes(t_tok **token, t_data *data);
+t_list				*detect_token_type(char *input, \
+								int is_first_or_after_operator, t_data *data);
+t_list				*split_token_if_operator_in_quotes(t_tok **tok, t_data *sh);
 int					is_operator_symbol(char c, char d);
 bool				is_redirect(char c);
 int					same_str(char *str1, char *str2);
@@ -148,7 +147,8 @@ t_list				*split_token_if_operator_in_quotes(t_tok **tok, t_data *sh);
 int					validate(t_list *tokens);
 int					check_files(t_list *files, int flag);
 int					check_token_errors(t_list *tok, t_tok *token);
-int					check_brace_errors(t_list *tok, t_tok *token, int *brace_opened);
+int					check_brace_errors(t_list *tok, t_tok *token, \
+										int *brace_opened);
 int					check_first_token(t_list *tok);
 int					check_last_token(t_tok *token);
 int					check_braces(int brace_opened);
@@ -156,7 +156,7 @@ int					process_tok_list(t_list **tok, int *brace_opened);
 void				throw_syntax_error(char *error);
 
 // --- 2-expander
-char				*expand(const char *str, t_data *program_data, bool heredoc);
+char				*expand(const char *str, t_data *data, bool heredoc);
 bool				should_expand(const char *str, int i, char exp_type);
 void				append_to_buffer(t_exp *exp, char *to_append);
 // env
@@ -168,18 +168,18 @@ void				handle_tilde_expansion(t_exp *exp, t_data *data);
 // wildcard
 void				handle_wildcard_expansion(t_exp *exp, t_data *data);
 char				*list_matching_files(char *pattern);
-char				*get_pattern(const char *str, int index, t_data *program_data);
+char				*get_pattern(const char *str, int index, t_data *sh);
 char				*get_rid_of_quotes_wildcard(char *str);
 // expand util
 int					find_closing_quote(const char *str, int *i);
-char				*get_envcp(const char *var_name, t_data *program_data);
+char				*get_envcp(const char *var_name, t_data *sh);
 bool				is_valid_variable(const char *var);
 char				*isolate_var(char *var);
 char				*quote_operators(char *envcp_value);
 
 // --- 3-parser
 // parser
-t_node				*parse(t_list *tokens, t_data *program_data);
+t_node				*parse(t_list *tokens, t_data *sh);
 // util
 t_list				*sub_list(t_list *tokens, int start, int end, t_data *data);
 t_list				*switch_redir_args(t_list *tokens);
@@ -188,47 +188,50 @@ t_tok				**t_list_to_token_arr(t_list	*tokens, t_data	*data);
 t_tok				*get_token_at_index(t_list *tokens, int index);
 t_list				*check_substring(t_list *curr);
 // defaults
-t_node				*create_default_node(t_data *program_data);
-t_tok				**create_default_token_arr(t_data *program_data);
+t_node				*create_default_node(t_data *sh);
+t_tok				**create_default_token_arr(t_data *sh);
 
 // --- 4-executing
 // general
-pid_t				execute(t_node *tree, t_data *program_data, t_pid_list **pid_list);
-int					execute_node(t_node *node, t_data *data, t_pid_list **pid_list);
-void				child_process_exit(t_data	*data, int	exitcode);
+pid_t				execute(t_node *tree, t_data *sh, t_pid_list **pid_list);
+int					execute_node(t_node *node, t_data *data, \
+										t_pid_list **pid_list);
+void				child_process_exit(t_data *data, int exitcode);
 // operators
-int					logical_and(t_node *node, t_data *program_data);
-int					logical_or(t_node *node, t_data *program_data);
+int					logical_and(t_node *node, t_data *sh);
+int					logical_or(t_node *node, t_data *sh);
 int					redirect(t_node *node, t_data *data);
-int					heredoc(t_node *node, t_data	*program_data);
+int					heredoc(t_node *node, t_data	*sh);
 void				setup_pipe(t_node *node);
 char				*get_filename(t_node *node);
 // "normal" commands
 t_cmd_path			*create_cmd_struct(char	**envp, t_tok	**cmd);
 // builtins
-int					execute_echo(t_tok **inputs, int out_fd, t_data *program_data);
-int					execute_env(t_data *program_data, int out_fd);
+int					execute_echo(t_tok **inputs, int out_fd, t_data *sh);
+int					execute_env(t_data *sh, int out_fd);
 int					execute_exit(t_tok **tokens, t_data *data, \
 								int out_fd);
-int					execute_cd(t_tok **tokens, t_data *program_data);
-int					execute_pwd(int out_fd, t_data *program_data);
+int					execute_cd(t_tok **tokens, t_data *sh);
+int					execute_pwd(int out_fd, t_data *sh);
 int					execute_export(t_tok **node, int out_fd, t_data *data);
 int					execute_unset(t_tok **node, t_data *data);
 // env utils
 char				*get_envcp_var(char *var, char **envcp);
 int					set_envcp_var(char *var, char *value, char createnew, \
-									t_data *program_data);
+									t_data *sh);
 int					create_envcp_var(char *vr, char *vl, t_data *data);
 int					delete_envcp_var(char *var, char **envcp);
 // - utils
 void				close_fds(t_node *node);
 // fds closing utils
 void				close_fds_loop(void);
-int					add_to_pid_list(pid_t pid, t_pid_list **pidlist, bool is_builtin);
-void				*resolve_pid_list(t_data *program_data, t_pid_list **pid_list);
+int					add_to_pid_list(pid_t pid, t_pid_list **pid_list, \
+										bool is_builtin);
+void				*resolve_pid_list(t_data *sh, t_pid_list **pid_list);
 
 // --- util
-bool				in_quote(const char *str, char quote, const char *current_char);
+bool				in_quote(const char *str, char quote, \
+								const char *current_char);
 void				log_err(char *error, char *path1, char *path2);
 char				*ft_strjoinfree(char *s1, char *s2);
 // printing
