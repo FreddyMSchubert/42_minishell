@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 16:07:07 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/26 12:13:00 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/26 18:29:06 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ int	find_closing_quote(const char *str, int *i)
 	return (j);
 }
 
+/* checks if the current character is an operator symbol and if it is,
+puts it in quotes, so they are not treated as operators later on */
 char	*quote_operators(char *envcp_value)
 {
 	int		i;
@@ -54,6 +56,7 @@ char	*quote_operators(char *envcp_value)
 	return (new_str);
 }
 
+/* checks if the current character is in a quote */
 bool	in_quote(const char *str, char quote, const char *current_char)
 {
 	int		i;
@@ -78,6 +81,8 @@ bool	in_quote(const char *str, char quote, const char *current_char)
 		return (s_quote);
 }
 
+/* allocates a new string that is the old string without
+the quotes that are not in quotes in the string */
 char	*get_rid_of_quotes(char *str)
 {
 	int		i;

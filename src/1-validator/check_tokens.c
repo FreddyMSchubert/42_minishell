@@ -6,12 +6,13 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 13:32:44 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/26 13:32:51 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/26 18:06:00 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+/// @brief Check if there are syntax errors regarding operators
 int	check_token_errors(t_list *tok, t_tok *token)
 {
 	if (token->type >= TOK_PIPE && token->type <= TOK_LOG_AND && tok->next && \
@@ -28,6 +29,8 @@ int	check_token_errors(t_list *tok, t_tok *token)
 	return (0);
 }
 
+/// @brief Check if the braces are opened and closed correctly and
+/// if there are consecutive opened and closed braces
 int	check_brace_errors(t_list *tok, t_tok *token, int *brace_opened)
 {
 	if (token->type == TOK_OPEN_BRACE)
@@ -48,6 +51,7 @@ int	check_brace_errors(t_list *tok, t_tok *token, int *brace_opened)
 	return (0);
 }
 
+/// @brief Check if the first token is a pipe, logical OR or logical AND
 int	check_first_token(t_list *tok)
 {
 	if (((t_tok *)tok->content)->type == TOK_PIPE || \
@@ -57,6 +61,7 @@ int	check_first_token(t_list *tok)
 	return (0);
 }
 
+/// @brief Check if the last token is a pipe, logical OR or logical AND
 int	check_last_token(t_tok *token)
 {
 	if (token->type == TOK_PIPE || token->type == TOK_LOG_OR || \
@@ -65,6 +70,7 @@ int	check_last_token(t_tok *token)
 	return (0);
 }
 
+/// @brief Check if there are any opened braces left
 int	check_braces(int brace_opened)
 {
 	if (brace_opened != 0)

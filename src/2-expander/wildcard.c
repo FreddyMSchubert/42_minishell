@@ -6,12 +6,14 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:44:01 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/26 12:28:37 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/26 18:32:26 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+/// @brief concatenates two strings, adding single quotes before and after the
+/// string, freeing the first one
 char	*concatenate_matches_free_s1(char *s1, const char *s2)
 {
 	char	*new_str;
@@ -41,6 +43,7 @@ char	*concatenate_matches_free_s1(char *s1, const char *s2)
 	return (new_str);
 }
 
+/// @brief processes the '*' character in a pattern.
 int	process_star(const char **p, const char **f, const char **star, \
 				const char **sf)
 {
@@ -59,6 +62,7 @@ int	process_star(const char **p, const char **f, const char **star, \
 	return (1);
 }
 
+/// @brief matches a pattern with a filename
 int	match(const char *pattern, const char *filename)
 {
 	const char	*p = pattern;
@@ -82,6 +86,7 @@ int	match(const char *pattern, const char *filename)
 	return (*p == '\0');
 }
 
+/// @brief lists all the files that match the pattern
 char	*list_matching_files(char *pattern)
 {
 	DIR				*dir;
@@ -111,6 +116,7 @@ char	*list_matching_files(char *pattern)
 	return (result);
 }
 
+/// @brief loops through the string and expands the wildcard result
 void	handle_wildcard_expansion(t_exp *exp, t_data *data)
 {
 	char	*env_var;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 17:46:25 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/26 17:57:27 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,7 +164,6 @@ int					check_brace_errors(t_list *tok, t_tok *token, \
 int					check_first_token(t_list *tok);
 int					check_last_token(t_tok *token);
 int					check_braces(int brace_opened);
-int					process_tok_list(t_list **tok, int *brace_opened);
 void				throw_syntax_error(char *error);
 
 // --- 2-expander
