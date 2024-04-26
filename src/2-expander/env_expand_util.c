@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_expand_util.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 12:12:06 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/26 17:33:18 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/26 18:33:15 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ bool	is_valid_variable(const char *var)
 	return (true);
 }
 
+/// @brief isolates the variable name from the string
 char	*isolate_var(char *var)
 {
 	int	i;
@@ -48,6 +49,7 @@ char	*isolate_var(char *var)
 	return (var);
 }
 
+/// @brief gets the value of an environment variable
 char	*get_envcp(const char *env_var, t_data *sh)
 {
 	int		i;

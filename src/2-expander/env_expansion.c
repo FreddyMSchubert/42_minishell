@@ -6,12 +6,13 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 12:16:20 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/26 12:16:58 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/26 18:30:35 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+/// @brief expansion of ~ to the home directory
 void	handle_tilde_expansion(t_exp *exp, t_data *data)
 {
 	char	*home;
@@ -24,6 +25,7 @@ void	handle_tilde_expansion(t_exp *exp, t_data *data)
 	free(home);
 }
 
+/// @brief expansion of the exit status
 void	handle_dollar_question_expansion(t_exp *exp, t_data *data)
 {
 	char	*exit_status;
@@ -36,6 +38,7 @@ void	handle_dollar_question_expansion(t_exp *exp, t_data *data)
 	free(exit_status);
 }
 
+/// @brief expansion of a quoted string
 void	handle_dollar_quote_expansion(t_exp *exp)
 {
 	char	*to_append;
@@ -46,6 +49,7 @@ void	handle_dollar_quote_expansion(t_exp *exp)
 	free(to_append);
 }
 
+/// @brief expands env variables
 void	handle_dollar_expansion(t_exp *exp, t_data *data)
 {
 	char	*env_var;

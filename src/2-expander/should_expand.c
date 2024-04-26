@@ -6,12 +6,14 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 10:45:40 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/26 11:02:04 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/26 18:13:55 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+/// @brief checks if theres a heredoc before the current token
+/// @return true if theres no heredoc before the current token, otherwise false
 static bool	check_for_heredoc(const char *str, int i)
 {
 	int		j;
@@ -27,7 +29,7 @@ static bool	check_for_heredoc(const char *str, int i)
 	return (true);
 }
 
-/// @brief checks for all possible expansions if they should be done
+/// @brief checks if the string should be expanded
 bool	should_expand(const char *str, int i, char exp_type)
 {
 	if (!check_for_heredoc(str, i))

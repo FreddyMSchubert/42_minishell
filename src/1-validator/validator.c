@@ -61,6 +61,8 @@ static void	null_fd_list(t_list *fd_list[3])
 	fd_list[2] = NULL;
 }
 
+/// @brief checks for syntax errors in the token list
+/// @return exit code of the syntax error, 0 if successful
 int	validate(t_list *tok_list)
 {
 	int		brace_opened;

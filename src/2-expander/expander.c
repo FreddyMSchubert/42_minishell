@@ -6,16 +6,13 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 09:20:32 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/26 18:32:44 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/26 18:08:34 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-/// @param buffer_size current size of the buffer
-/// @param buf_pos current position in the buffer
-/// @param to_append string that needs to be appended to the buffer
-/// @return new buffer
+/// @brief Appends a string to the buffer, reallocating if necessary
 void	append_to_buffer(t_exp *exp, char *to_append)
 {
 	int		to_append_len;
@@ -59,6 +56,7 @@ static void	expand_loop(t_exp *exp, t_data *data, char *temp, bool heredoc)
 	}
 }
 
+/// @brief Expand env variables, ~ and wildcards in a string
 char	*expand(const char *str, t_data *data, bool heredoc)
 {
 	t_exp	exp;
