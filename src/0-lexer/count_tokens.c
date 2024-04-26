@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 13:41:21 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/26 18:20:42 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/26 19:03:04 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ static void	handle_quotes(const char *s, int *i, int *in_quote)
 		else
 			*in_quote = 0;
 	}
-	return (0);
 }
 
 /*

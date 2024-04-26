@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 17:57:27 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/26 19:01:59 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@
 
 // will output detailed logging if set to 1, and normal logging if 0
 #define VERBOSE 0
-// will make everything work with tester provided executable is called minishell
-#define DEBUG 1
+// will not print logo if set to 1
+#define DEBUG 0
 
 // ----- TOKEN TYPES
 
