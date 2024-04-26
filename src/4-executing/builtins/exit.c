@@ -6,13 +6,13 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 13:54:08 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 17:34:06 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/26 18:25:00 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/minishell.h"
 
-bool	is_digit(char *str)
+static bool	is_digit(char *str)
 {
 	int	i;
 

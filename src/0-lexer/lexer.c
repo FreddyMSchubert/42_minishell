@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 06:54:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 16:16:15 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/26 18:29:59 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-t_list	*create_tokens(char **split_input, t_data *data)
+static t_list	*create_tokens(char **split_input, t_data *data)
 {
 	int		counter;
 	int		token_amount;

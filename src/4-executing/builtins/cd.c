@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 06:19:23 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 17:33:45 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/26 18:24:46 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 	Otherwise, chdir changes directory and getcwd gets the new path.
 */
 
-char	*get_path(t_tok **tokens, t_data *sh)
+static char	*get_path(t_tok **tokens, t_data *sh)
 {
 	char	*temp;
 
@@ -45,7 +45,7 @@ char	*get_path(t_tok **tokens, t_data *sh)
 		return (ft_strdup(tokens[1]->val));
 }
 
-int	change_directory(char *path, t_data *sh)
+static int	change_directory(char *path, t_data *sh)
 {
 	int	ret_val;
 
@@ -59,7 +59,7 @@ int	change_directory(char *path, t_data *sh)
 	return (0);
 }
 
-char	*get_current_directory(t_data *sh)
+static char	*get_current_directory(t_data *sh)
 {
 	char	*buffer;
 
@@ -72,7 +72,7 @@ char	*get_current_directory(t_data *sh)
 	return (buffer);
 }
 
-int	update_env_vars(t_data *sh, char *buffer)
+static int	update_env_vars(t_data *sh, char *buffer)
 {
 	if (set_envcp_var("OLDPWD", get_envcp_var("PWD", sh->envcp), \
 												1, sh) == -1)

@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 17:51:15 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/26 18:34:01 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,6 @@ int					check_brace_errors(t_list *tok, t_tok *token, \
 int					check_first_token(t_list *tok);
 int					check_last_token(t_tok *token);
 int					check_braces(int brace_opened);
-int					process_tok_list(t_list **tok, int *brace_opened);
 void				throw_syntax_error(char *error);
 
 // --- 2-expander
@@ -178,9 +177,7 @@ void				handle_dollar_question_expansion(t_exp *exp, t_data *data);
 void				handle_tilde_expansion(t_exp *exp, t_data *data);
 // wildcard
 void				handle_wildcard_expansion(t_exp *exp, t_data *data);
-char				*list_matching_files(char *pattern);
 char				*get_pattern(const char *str, int index, t_data *sh);
-char				*get_rid_of_quotes_wildcard(char *str);
 // expand util
 int					find_closing_quote(const char *str, int *i);
 char				*get_envcp(const char *var_name, t_data *sh);

@@ -22,7 +22,7 @@ void	throw_syntax_error(char *token)
 	ft_putstr_fd("'\n", err);
 }
 
-int	check_files_and_clear(t_list **files)
+static int	check_files_and_clear(t_list **files)
 {
 	if (check_files(files[0], 0) != 0 || check_files(files[1], 1) != 0 || \
 		check_files(files[2], 2) != 0)
@@ -38,7 +38,7 @@ int	check_files_and_clear(t_list **files)
 	return (0);
 }
 
-int	process_tok_list(t_list **tok, int *brace_opened)
+static int	process_tok_list(t_list **tok, int *brace_opened)
 {
 	t_tok	*token;
 	int		error;
@@ -54,7 +54,7 @@ int	process_tok_list(t_list **tok, int *brace_opened)
 	return (0);
 }
 
-void	null_fd_list(t_list *fd_list[3])
+static void	null_fd_list(t_list *fd_list[3])
 {
 	fd_list[0] = NULL;
 	fd_list[1] = NULL;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 09:20:32 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/26 12:16:55 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/26 18:32:44 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	append_to_buffer(t_exp *exp, char *to_append)
 	exp->buf_pos += to_append_len;
 }
 
-void	expand_loop(t_exp *exp, t_data *data, char *temp, bool heredoc)
+static void	expand_loop(t_exp *exp, t_data *data, char *temp, bool heredoc)
 {
 	if (exp->str[exp->i] == '~' && should_expand(exp->str, exp->i, '~'))
 		handle_tilde_expansion(exp, data);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 10:42:01 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 13:44:36 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/26 18:30:10 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static char	*make_split_str(const char *s, int *i, t_data *data)
 }
 
 /// @brief frees the 2d array in case of a allocation fail
-void	free_split(char **split)
+static void	free_split(char **split)
 {
 	int	i;
 
