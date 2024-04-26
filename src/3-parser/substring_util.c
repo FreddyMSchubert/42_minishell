@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   substring_util.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 09:54:40 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 17:24:34 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/26 17:50:06 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,41 @@ static t_list	*finish_substring(t_list	*before_last_close_brace, \
 	return (NULL);
 }
 
+t_list	*update_depth_and_prev(t_list *curr, t_list *prev, int *depth)
+{
+	if (((t_tok *)curr->content)->type == TOK_OPEN_BRACE)
+		(*depth)++;
+	else if (((t_tok *)curr->content)->type == TOK_CLOSE_BRACE)
+	{
+		(*depth)--;
+		if (prev)
+			return (prev);
+	}
+	return (NULL);
+}
+
+t_list	*iterate_through_tokens(t_list *tokens, int *depth)
+{
+	t_list	*curr;
+	t_list	*prev;
+	t_list	*before_last_close_brace;
+
+	before_last_close_brace = NULL;
+	curr = tokens;
+	while (curr != NULL)
+	{
+		before_last_close_brace = update_depth_and_prev(curr, prev, depth);
+		if (*depth == 0 && curr->next != NULL)
+		{
+			*depth = -1;
+			break ;
+		}
+		prev = curr;
+		curr = curr->next;
+	}
+	return (before_last_close_brace);
+}
+
 /*
 	@brief	checks if the token list is a substring
 	@param	tokens	pointer to the token list
@@ -43,30 +78,9 @@ static t_list	*finish_substring(t_list	*before_last_close_brace, \
 t_list	*check_substring(t_list *tokens)
 {
 	int		depth;
-	t_list	*curr;
-	t_list	*prev;
 	t_list	*before_last_close_brace;
 
 	depth = 0;
-	before_last_close_brace = NULL;
-	curr = tokens;
-	while (curr != NULL)
-	{
-		if (((t_tok *)curr->content)->type == TOK_OPEN_BRACE)
-			depth++;
-		else if (((t_tok *)curr->content)->type == TOK_CLOSE_BRACE)
-		{
-			depth--;
-			if (prev)
-				before_last_close_brace = prev;
-		}
-		if (depth == 0 && curr->next != NULL)
-		{
-			depth = -1;
-			break ;
-		}
-		prev = curr;
-		curr = curr->next;
-	}
+	before_last_close_brace = iterate_through_tokens(tokens, &depth);
 	return (finish_substring(before_last_close_brace, tokens, depth));
 }

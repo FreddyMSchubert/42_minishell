@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 07:42:03 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/08 14:45:54 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/26 17:46:57 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,13 @@ void	print_node_with_children(t_node *tree, int tabs)
 	if (tree->l != NULL)
 	{
 		printf("\x1b[31m");
-        print_node_with_children(tree->l, tabs + 1);
+		print_node_with_children(tree->l, tabs + 1);
 		printf("\x1b[0m");
 	}
 	if (tree->r != NULL)
 	{
 		printf("\x1b[34m");
-        print_node_with_children(tree->r, tabs + 1);
+		print_node_with_children(tree->r, tabs + 1);
 		printf("\x1b[0m");
 	}
 }
@@ -45,10 +45,7 @@ void	print_node_with_children(t_node *tree, int tabs)
 void	print_token(t_tok *token)
 {
 	if (!token)
-	{
-		printf("Token is NULL\n");
-		return ;
-	}
+		return (printf("Token is NULL\n"), (void)0);
 	printf("  Type: ");
 	if (token->type == TOK_WORD)
 		printf("Command or Argument");
