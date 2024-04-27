@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 12:13:31 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 17:22:58 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/27 09:37:30 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,14 +111,14 @@ t_node	*parse(t_list *tokens, t_data *sh)
 
 	node = create_default_node(sh);
 	if (!node || !tokens)
-		return (free(node), NULL);
+		return (NULL);
 	dom_op_i = get_dominant_operator(&tokens);
 	if (dom_op_i == -1)
 		return (arr = t_list_to_token_arr(tokens, sh), node->val = arr, \
 					node->l = NULL, node->r = NULL, node);
 	node->val = create_default_token_arr(sh);
 	if (!node->val)
-		return (free(node->val), free(node), NULL);
+		return (free(node->val), NULL);
 	node->val[0] = get_token_at_index(tokens, dom_op_i);
 	node->l = parse(sub_list(tokens, 0, dom_op_i - 1, sh), sh);
 	if (node->l)

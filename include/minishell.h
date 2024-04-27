@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 19:01:59 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/27 09:30:44 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@
 // will output detailed logging if set to 1, and normal logging if 0
 #define VERBOSE 0
 // will not print logo if set to 1
-#define DEBUG 0
+#define DEBUG 1
 
 // ----- TOKEN TYPES
 
@@ -120,7 +120,7 @@ typedef struct s_exp
 int					run_input_loop(t_data *program_data);
 char				*get_input_from_terminal(t_data *sh);
 char				*get_input_from_file(void);
-void				handle_empty_input(t_data *sh, char **input);
+void				handle_empty_input_append_to_gc(t_data *sh, char **input);
 int					execute_expander(char **input, t_data *sh);
 int					execute_lexer(char *input, t_data *sh, t_list \
 					**tokenified_input);
