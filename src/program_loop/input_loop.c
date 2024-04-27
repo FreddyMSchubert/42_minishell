@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   input_loop.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/27 11:34:26 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/27 10:33:04 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static void	handle_sigint(t_data *sh, char **input)
+// 0 -> nothing; 1 -> continue
+static int	handle_sigint(t_data *sh, char **input)
 {
 	if (g_sigint_received == SIGINT)
 	{
@@ -20,7 +21,9 @@ static void	handle_sigint(t_data *sh, char **input)
 		sh->exit_status = 1;
 		if (*input != NULL)
 			free(*input);
+		return (1);
 	}
+	return (0);
 }
 
 static int	execute_input(t_data *sh, char *input)
@@ -39,39 +42,37 @@ static int	execute_input(t_data *sh, char *input)
 	tokenified_input = switch_redir_args(tokenified_input);
 	if (execute_parser(tokenified_input, sh, &tree) == -1)
 		return (-1);
-	if (VERBOSE == 1)
-		printf("\n\n\n");
 	if (execute_executor(tree, sh) == -1)
 		return (-1);
 	return (0);
 }
 
 /// @brief Main loop of the program
-int	run_input_loop(t_data *sh)
+void	run_input_loop(t_data *sh)
 {
 	char	*input;
+	int		ret_val;
 
-	if (DEBUG == 0)
-		print_logo();
 	while (sh->exit_flag == 0)
 	{
-		if (isatty(fileno(stdin)))
-			input = get_input_from_terminal(sh);
-		else
-			input = get_input_from_file();
-		if (input == NULL)
-			return (gc_cleanup(sh->gc), 0);
-		handle_sigint(sh, &input);
-		handle_empty_input_append_to_gc(sh, &input);
+		input = get_input(sh);
 		if (input == NULL)
 			break ;
-		if (ft_isspace_str_all(input) == 1)
+		if (handle_sigint(sh, &input) == 1)
 			continue ;
+		ret_val = handle_empty_input(sh, &input);
+		if (ret_val == 1)
+			continue ;
+		else if (ret_val == 2)
+			break ;
+		if (ret_val == 0)
+		{
+			gc_append_element(sh->gc, input);
+			add_history(input);
+		}
 		execute_input(sh, input);
-		gc_cleanup(sh->gc);
-		sh->gc = gc_create();
+		gc_clean_and_reinit(&sh->gc);
 	}
 	gc_cleanup(sh->gc);
 	clear_history();
-	return (0);
 }

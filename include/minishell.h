@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/27 09:30:44 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/27 10:31:25 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,10 +117,9 @@ typedef struct s_exp
 // ----- FUNCTIONS
 
 // --- input loop
-int					run_input_loop(t_data *program_data);
-char				*get_input_from_terminal(t_data *sh);
-char				*get_input_from_file(void);
-void				handle_empty_input_append_to_gc(t_data *sh, char **input);
+void				run_input_loop(t_data *sh);
+char				*get_input(t_data *sh);
+int					handle_empty_input(t_data *sh, char **input);
 int					execute_expander(char **input, t_data *sh);
 int					execute_lexer(char *input, t_data *sh, t_list \
 					**tokenified_input);
@@ -133,6 +132,7 @@ int					execute_executor(t_node *tree, t_data *sh);
 t_list				*gc_create(void);
 int					gc_append_element(t_list *gc, void *content);
 void				gc_cleanup(t_list *gc);
+void				gc_clean_and_reinit(t_list **gc);
 // - util
 void				exit_error(char *message, int exit_code, t_list *gc);
 // - signals

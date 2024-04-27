@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:29:36 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 21:39:35 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/27 10:19:39 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ int	main(int argc, char **argv, char **envp)
 	t_data			sh;
 	int				i;
 
+	if (DEBUG == 0)
+		print_logo();
 	sh.exit_flag = 0;
 	sh.exit_status = 0;
 	sh.envcp = ft_strarrdup(envp);
