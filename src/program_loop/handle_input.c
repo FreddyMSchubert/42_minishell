@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 17:31:50 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/27 09:30:20 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/27 11:36:51 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ void	handle_empty_input_append_to_gc(t_data *sh, char **input)
 	{
 		gc_cleanup(sh->gc);
 		sh->gc = gc_create();
-		sh->exit_status = 0;
 	}
 	if (*input)
 		gc_append_element(sh->gc, *input);

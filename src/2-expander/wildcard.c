@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:44:01 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/27 10:39:19 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/27 10:45:23 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,6 @@ static char	*list_matching_files(char *pattern)
 			;
 		else if (match(pattern, entry->d_name))
 		{
-			printf("match: %s\n", entry->d_name);
 			result = concatenate_matches_free_s1(result, entry->d_name);
 			if (!result)
 				return (closedir(dir), free(pattern), NULL);
@@ -114,7 +113,6 @@ static char	*list_matching_files(char *pattern)
 	closedir(dir);
 	if (result && ft_strlen(result) > 0)
 		result[ft_strlen(result) - 1] = '\0';
-	printf("result: %s\n", result);
 	return (result);
 }
 
@@ -141,6 +139,7 @@ void	handle_wildcard_expansion(t_exp *exp, t_data *data)
 		in_quote(exp->str, '"', &exp->str[exp->i]) || in_quote(exp->str, '\'', \
 		&exp->str[exp->i])) && !is_operator_symbol(exp->str[exp->i], ' '))
 			exp->i++;
+		exp->i--;
 	}
 	else
 		append_to_buffer(exp, "*");
