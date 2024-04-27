@@ -8,7 +8,7 @@ OBJ = $(SRC:.c=.o)
 
 SRC_DIR = ./src
 
-CFLAGS		:=	-Wall -Werror -Wextra -g #-fsanitize=address
+CFLAGS		:=	-Wall -Werror -Wextra -g -fsanitize=address
 HEADER		:=	-I./include/
 LIBS		:=	-L$(LIBFT_DIR) -lft \
 				-L$(GNL_DIR) -lftgnl \
