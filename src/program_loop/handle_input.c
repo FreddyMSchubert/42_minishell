@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 17:31:50 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/27 12:04:58 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/27 13:21:29 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,9 @@ static char	*get_input_from_terminal(t_data *sh)
 	char	*input;
 
 	if (sh->exit_status == 0)
-	{
-		printf("%s", ANSI_COLOR_CYAN);
-		input = readline("crash > ");
-	}
+		input = readline("\x1b[36mcrash 💣 \x1b[0m");
 	else
-	{
-		printf("%s", ANSI_COLOR_RED);
-		input = readline("crash > ");
-	}
-	printf("%s", ANSI_COLOR_RESET);
+		input = readline("\x1b[31mcrash 💥 \x1b[0m");
 	return (input);
 }
 

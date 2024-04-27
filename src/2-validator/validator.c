@@ -17,7 +17,7 @@ void	throw_syntax_error(char *token)
 	int	err;
 
 	err = STDERR_FILENO;
-	ft_putstr_fd("minishell: syntax error near unexpected token `", err);
+	ft_putstr_fd("crash: syntax error near unexpected token `", err);
 	ft_putstr_fd(token, err);
 	ft_putstr_fd("'\n", err);
 }

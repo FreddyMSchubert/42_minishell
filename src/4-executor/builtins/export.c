@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 09:38:36 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 17:34:11 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/27 13:23:11 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int	export_err(int error_code, char *arg, t_data *data)
 {
-	ft_putstr_fd("minishell: export: `", STDERR_FILENO);
+	ft_putstr_fd("crash: export: `", STDERR_FILENO);
 	if (arg)
 		ft_putstr_fd(arg, STDERR_FILENO);
 	if (error_code == 2)

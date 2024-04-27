@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/27 11:58:34 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/27 13:23:53 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@
 // will output detailed logging if set to 1, and normal logging if 0
 #define VERBOSE 0
 // will not print logo if set to 1
-#define DEBUG 1
+#define DEBUG 0
 
 // ----- TOKEN TYPES
 
@@ -140,32 +140,7 @@ void				setup_sigs(void);
 // - visuals
 void				*print_logo(void);
 
-// --- 0-lexer
-t_list				*lexer(char *input, t_data *data);
-char				*put_space_between_tokens(char *input, t_data *data);
-char				**ms_split(char *input, t_data *data);
-int					count_tokens(const char *s);
-t_list				*detect_token_type(char *input, \
-								int is_first_or_after_operator, t_data *data);
-t_list				*split_token_if_operator_in_quotes(t_tok **tok, t_data *sh);
-int					is_operator_symbol(char c, char d);
-bool				is_redirect(char c);
-int					same_str(char *str1, char *str2);
-char				*get_rid_of_quotes(char *str);
-t_list				*split_token_if_operator_in_quotes(t_tok **tok, t_data *sh);
-
-// --- 1-validate
-int					validate(t_list *tokens);
-int					check_files(t_list *files, int flag);
-int					check_token_errors(t_list *tok, t_tok *token);
-int					check_brace_errors(t_list *tok, t_tok *token, \
-										int *brace_opened);
-int					check_first_token(t_list *tok);
-int					check_last_token(t_tok *token);
-int					check_braces(int brace_opened);
-void				throw_syntax_error(char *error);
-
-// --- 2-expander
+// --- 0-expander
 char				*expand(const char *str, t_data *data, bool heredoc);
 bool				should_expand(const char *str, int i, char exp_type);
 void				append_to_buffer(t_exp *exp, char *to_append);
@@ -184,6 +159,31 @@ char				*get_envcp(const char *var_name, t_data *sh);
 bool				is_valid_variable(const char *var);
 char				*isolate_var(char *var);
 char				*quote_operators(char *envcp_value);
+
+// --- 1-lexer
+t_list				*lexer(char *input, t_data *data);
+char				*put_space_between_tokens(char *input, t_data *data);
+char				**ms_split(char *input, t_data *data);
+int					count_tokens(const char *s);
+t_list				*detect_token_type(char *input, \
+								int is_first_or_after_operator, t_data *data);
+t_list				*split_token_if_operator_in_quotes(t_tok **tok, t_data *sh);
+int					is_operator_symbol(char c, char d);
+bool				is_redirect(char c);
+int					same_str(char *str1, char *str2);
+char				*get_rid_of_quotes(char *str);
+t_list				*split_token_if_operator_in_quotes(t_tok **tok, t_data *sh);
+
+// --- 2-validate
+int					validate(t_list *tokens);
+int					check_files(t_list *files, int flag);
+int					check_token_errors(t_list *tok, t_tok *token);
+int					check_brace_errors(t_list *tok, t_tok *token, \
+										int *brace_opened);
+int					check_first_token(t_list *tok);
+int					check_last_token(t_tok *token);
+int					check_braces(int brace_opened);
+void				throw_syntax_error(char *error);
 
 // --- 3-parser
 // parser

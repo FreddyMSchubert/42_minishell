@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 08:43:39 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 17:03:52 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/27 13:23:32 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 */
 void	exit_error(char *message, int exit_code, t_list *gc)
 {
-	ft_putstr_fd("minishell: ", STDERR_FILENO);
+	ft_putstr_fd("crash: ", STDERR_FILENO);
 	ft_putstr_fd(message, STDERR_FILENO);
 	ft_putstr_fd("\n", STDERR_FILENO);
 	gc_cleanup(gc);
