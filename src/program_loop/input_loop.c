@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   input_loop.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 18:36:41 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/27 10:22:49 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static void	handle_sigint(t_data *sh, char **input)
+// 0 -> nothing; 1 -> continue
+static int	handle_sigint(t_data *sh, char **input)
 {
 	if (g_sigint_received == SIGINT)
 	{
@@ -47,31 +48,31 @@ static int	execute_input(t_data *sh, char *input)
 }
 
 /// @brief Main loop of the program
-int	run_input_loop(t_data *sh)
+void	run_input_loop(t_data *sh)
 {
 	char	*input;
+	int		ret_val;
 
-	if (DEBUG == 0)
-		print_logo();
 	while (sh->exit_flag == 0)
 	{
-		if (isatty(fileno(stdin)))
-			input = get_input_from_terminal(sh);
-		else
-			input = get_input_from_file();
-		if (input == NULL)
-			return (gc_cleanup(sh->gc), 0);
-		handle_sigint(sh, &input);
-		handle_empty_input(sh, &input);
+		input = get_input(sh);
 		if (input == NULL)
 			break ;
-		gc_append_element(sh->gc, input);
-		add_history(input);
+		if (handle_sigint(sh, &input) == 1)
+			continue ;
+		ret_val = handle_empty_input(sh, &input);
+		if (ret_val == 1)
+			continue ;
+		else if (ret_val == 2)
+			break ;
+		if (ret_val == 0)
+		{
+			gc_append_element(sh->gc, input);
+			add_history(input);
+		}
 		execute_input(sh, input);
-		gc_cleanup(sh->gc);
-		sh->gc = gc_create();
+		gc_clean_and_reinit(&sh->gc);
 	}
 	gc_cleanup(sh->gc);
 	clear_history();
-	return (0);
 }

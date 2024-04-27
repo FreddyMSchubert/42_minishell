@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 12:18:59 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 17:07:36 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/27 10:21:37 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,4 +73,10 @@ void	gc_cleanup(t_list *gc)
 	if (VERBOSE == 1)
 		printf("cleaning up garbage collector\n");
 	ft_lstclear(&gc, free);
+}
+
+void	gc_clean_and_reinit(t_list **gc)
+{
+	gc_cleanup(*gc);
+	*gc = gc_create();
 }
