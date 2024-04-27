@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 22:25:39 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/27 09:30:11 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,11 @@ int	run_input_loop(t_data *sh)
 		if (input == NULL)
 			return (gc_cleanup(sh->gc), 0);
 		handle_sigint(sh, &input);
-		handle_empty_input(sh, &input);
+		handle_empty_input_append_to_gc(sh, &input);
 		if (input == NULL)
 			break ;
+		if (ft_strncmp(input, "", 1) == 0)
+			continue ;
 		execute_input(sh, input);
 		gc_cleanup(sh->gc);
 		sh->gc = gc_create();

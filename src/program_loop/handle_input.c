@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 17:31:50 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/26 22:25:34 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/27 09:30:20 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ char	*get_input_from_file(void)
 	return (input);
 }
 
-void	handle_empty_input(t_data *sh, char **input)
+void	handle_empty_input_append_to_gc(t_data *sh, char **input)
 {
 	if (*input == NULL || ft_isspace_str_all(*input) == 1)
 	{
