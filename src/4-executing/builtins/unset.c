@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 09:48:54 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/26 07:23:08 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/27 12:47:33 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,6 @@ int	execute_unset(t_tok **node, t_data *data)
 			data->exit_status = 1;
 			return (1);
 		}
-		else if (ft_strncmp(node[i]->val, "_", 2) == 0)
-			return (data->exit_status = 1, \
-						log_err("cannot unset _", "unset", node[i]->val), 1);
 		delete_envcp_var(node[i]->val, data->envcp);
 		i++;
 	}
