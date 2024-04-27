@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/27 13:23:53 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/27 13:45:36 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ void				exit_error(char *message, int exit_code, t_list *gc);
 // - signals
 void				setup_sigs(void);
 // - visuals
-void				*print_logo(void);
+void				print_logo(void);
 
 // --- 0-expander
 char				*expand(const char *str, t_data *data, bool heredoc);
