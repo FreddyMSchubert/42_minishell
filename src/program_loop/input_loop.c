@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/27 10:22:49 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/27 10:28:53 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,6 @@ static int	execute_input(t_data *sh, char *input)
 	tokenified_input = switch_redir_args(tokenified_input);
 	if (execute_parser(tokenified_input, sh, &tree) == -1)
 		return (-1);
-	if (VERBOSE == 1)
-		printf("\n\n\n");
 	if (execute_executor(tree, sh) == -1)
 		return (-1);
 	return (0);

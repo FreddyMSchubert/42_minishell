@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_input.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 17:21:20 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/26 17:33:35 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/27 10:28:44 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,7 @@ int	execute_validator(t_list *tokenified_input, t_data *sh)
 			printf("Validated input: input is invalid (%d)\n", valid);
 		if (!isatty(fileno(stdin)))
 			sh->exit_flag = 1;
-		gc_cleanup(sh->gc);
-		sh->gc = gc_create();
+		gc_clean_and_reinit(&sh->gc);
 		return (-1);
 	}
 	if (VERBOSE == 1)
@@ -64,6 +63,7 @@ int	execute_parser(t_list *tokenified_input, t_data *sh, t_node **tree)
 	{
 		printf("Parsed input: ");
 		print_node_with_children(*tree, 0);
+		printf("\n");
 	}
 	return (0);
 }
