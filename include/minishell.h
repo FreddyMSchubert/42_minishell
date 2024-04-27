@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/27 10:23:02 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/27 10:31:25 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ typedef struct s_exp
 // --- input loop
 void				run_input_loop(t_data *sh);
 char				*get_input(t_data *sh);
-void				handle_empty_input(t_data *sh, char **input);
+int					handle_empty_input(t_data *sh, char **input);
 int					execute_expander(char **input, t_data *sh);
 int					execute_lexer(char *input, t_data *sh, t_list \
 					**tokenified_input);

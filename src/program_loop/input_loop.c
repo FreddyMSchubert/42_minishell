@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 08:18:12 by fschuber          #+#    #+#             */
-/*   Updated: 2024/04/27 10:28:53 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/27 10:33:04 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,9 @@ static int	handle_sigint(t_data *sh, char **input)
 		sh->exit_status = 1;
 		if (*input != NULL)
 			free(*input);
+		return (1);
 	}
+	return (0);
 }
 
 static int	execute_input(t_data *sh, char *input)

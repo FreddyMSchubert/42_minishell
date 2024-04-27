@@ -6,7 +6,7 @@
 /*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 17:31:50 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/27 10:16:57 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/27 10:32:06 by fschuber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static char	*get_input_from_terminal(t_data *sh)
 	return (input);
 }
 
-static char	*get_input_from_file(void)
+static char	*get_input_from_file(t_data *sh)
 {
 	char	*input;
 	char	*line;
@@ -47,10 +47,10 @@ char	*get_input(t_data *sh)
 {
 	char	*input;
 
-	if (isatty(STDIO_FILENO))
+	if (isatty(STDIN_FILENO))
 		input = get_input_from_terminal(sh);
 	else
-		input = get_input_from_file();
+		input = get_input_from_file(sh);
 	return (input);
 }
 
