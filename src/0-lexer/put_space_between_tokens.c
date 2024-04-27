@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   put_space_between_tokens.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 14:07:36 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/26 18:09:44 by fschuber         ###   ########.fr       */
+/*   Updated: 2024/04/26 22:25:11 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

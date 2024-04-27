@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:30:11 by fschuber          #+#    #+#             */
 /*   Updated: 2024/04/27 10:31:25 by fschuber         ###   ########.fr       */
@@ -43,7 +43,7 @@
 // will output detailed logging if set to 1, and normal logging if 0
 #define VERBOSE 0
 // will not print logo if set to 1
-#define DEBUG 0
+#define DEBUG 1
 
 // ----- TOKEN TYPES
 

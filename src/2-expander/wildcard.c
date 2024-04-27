@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fschuber <fschuber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:44:01 by nburchha          #+#    #+#             */
-/*   Updated: 2024/04/26 18:32:26 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/04/27 10:45:23 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,46 +44,46 @@ static char	*concatenate_matches_free_s1(char *s1, const char *s2)
 }
 
 /// @brief processes the '*' character in a pattern.
-static int	process_star(const char **p, const char **f, const char **star, \
-				const char **sf)
+static int	process_star(const char **ptrs, const char *pattern)
 {
-	if (*(*p) == '*' && (*p == *star || *(*p - 1) != '\\'))
+	if (*ptrs[0] == '*' && (ptrs[0] == pattern || *(ptrs[0] - 1) != '\\'))
 	{
-		*star = (*p)++;
-		*sf = *f;
+		ptrs[2] = (ptrs[0])++;
+		ptrs[3] = ptrs[1];
 	}
-	else if (*star)
+	else if (ptrs[2])
 	{
-		*p = *star + 1;
-		*f = ++(*sf);
+		ptrs[0] = ptrs[2] + 1;
+		ptrs[1] = ++(ptrs[3]);
 	}
 	else
 		return (0);
 	return (1);
 }
 
-/// @brief matches a pattern with a filename
 int	match(const char *pattern, const char *filename)
 {
-	const char	*p = pattern;
-	const char	*f = filename;
-	const char	*star = NULL;
-	const char	*sf = NULL;
+	const char	*ptrs[4];
 
-	while (*f)
+	ptrs[0] = pattern;
+	ptrs[1] = filename;
+	ptrs[2] = NULL;
+	ptrs[3] = NULL;
+	while (*ptrs[1])
 	{
-		if (star && !(*star + 1))
+		if (ptrs[2] && !(*ptrs[2] + 1))
 			return (1);
-		if (*p == *f && *p != '*' && p++ && f++)
+		if (*ptrs[0] == *ptrs[1] && *ptrs[0] != '*' && ptrs[0]++ && ptrs[1]++)
 			;
-		else if (*p == '\\' && *(p + 1) == '*' && *f == '*' && *f++)
-			p += 2;
-		else if (!process_star(&p, &f, &star, &sf))
+		else if (*ptrs[0] == '\\' && *(ptrs[0] + 1) == '*' && *ptrs[1] == '*' \
+				&& ptrs[1]++)
+			ptrs[0] += 2;
+		else if (!process_star(ptrs, pattern))
 			return (0);
 	}
-	while (*p == '*' && (p == pattern || *(p - 1) != '\\'))
-		p++;
-	return (*p == '\0');
+	while (*ptrs[0] == '*' && (ptrs[0] == pattern || *(ptrs[0] - 1) != '\\'))
+		ptrs[0]++;
+	return (*ptrs[0] == '\0');
 }
 
 /// @brief lists all the files that match the pattern
@@ -139,6 +139,7 @@ void	handle_wildcard_expansion(t_exp *exp, t_data *data)
 		in_quote(exp->str, '"', &exp->str[exp->i]) || in_quote(exp->str, '\'', \
 		&exp->str[exp->i])) && !is_operator_symbol(exp->str[exp->i], ' '))
 			exp->i++;
+		exp->i--;
 	}
 	else
 		append_to_buffer(exp, "*");
