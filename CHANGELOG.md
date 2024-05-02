@@ -1,5 +1,8 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+## v0.32.0 - 02.05.24 - Freddy
+- Updated README with lots of content, added logo.png as the readme header, and 4 git log visualization boundaries as seperators, with a testfile.txt which is the section in the hitchhikers guide to the galaxy where 42 is first revealed.
+
 ### v0.31.9 - 26.4.24 - Freddy
 - made stuff that isnt called anywhere static (in the whole program)
 - moved child process exit function from its own file to util
