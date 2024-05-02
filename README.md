@@ -2,9 +2,14 @@
 
 ![CRASH minishell starting up](https://github.com/FreddyMSchubert/42_minishell/blob/main/assets/logo.png "CRASH minishell starting up")
 
-"`Completely reliable & advanced shell`" - A mini BASH - recreation. Made by `Frederick Schubert` & `Niklas Burchhardt`. - Link to githubs
+"`Completely reliable & advanced shell`"\
+A mini BASH - recreation. Made by [`Frederick Schubert`](https://github.com/FreddyMSchubert) & [`Niklas Burchhardt`](https://github.com/nburchha).
+
+
 
 # Installation
+
+Open up a terminal.
 
 Clone the repository:
 ```bash
@@ -214,6 +219,8 @@ There are 4 types of redirections.
 4. Here Document (Heredoc)
 	- e.g. `cat << STOP`
 
+To make this work, every node (each box in the parser diagram) saves an input and an output file descriptor. To redirct a file into a command, the program would open a file descriptor and set it as that commands input. We then initialize it as the commands input before executing the command.
+
 ### Heredoc
 Heredoc (Here Document) allows you to enter a special mode in our shell that allows you to simulate a file in your command if you only need it once.
 For example, `cat << STOP` will allow you to enter lines until you begin a line with STOP. Then, the command will continue as if it was referencing a file - in this case, cat would print out whatever you previously typed.
@@ -264,12 +271,12 @@ I really liked this idea and will reuse it - next time, I may even make my own m
 # Fun stuff to try
 
 general
-- `echo "welcome to crash" | tr 'a-z' 'A-Z'`
-- `echo "SGVsbG8gTWluaXNoZWxs" | base64 --decode`
-- `cat assets/testfile.txt | grep "Deep Thought" | tr 'a-z' 'A-Z'`
+- `echo "WeLcOmE tO cRaSh" | tr 'a-z' 'A-Z'`
 - `grep -R "//" src`
+- `echo "The Answer to the Great Question, of Life, the Universe and Everything is..." && echo "Rk9VUlRZVFdPCg==" | base64 --decode`
+- `cat assets/testfile.txt | grep "Deep Thought" | tr 'a-z' 'A-Z'`
 
 let's break stuff
 - `unset $PATH` - this environment variable is used to find executables when you only type in e.g. `ls` - unsetting it may cause some mayhem. You will, however, still be able to use system executables by directly typing in their path `/bin/ls`.
-- `cat /dev/urandom` will welcome you to the outside of the matrix (if you want to see things burn)
+- `cat /dev/urandom` will welcome you to the outside of the matrix (if you want to see things burn, may or may not crash your terminal and/or pc.)
 - `< file cat >> file` will make an endless file with the contents of file (if you really want to see things burn). You have create & put something into the file first though.

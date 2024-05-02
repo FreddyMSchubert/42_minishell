@@ -1,5 +1,10 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+### v0.32.2 - 02.05.24 - Freddy
+- added links to our githubs to readme
+- minor changes
+- added more explanatory text to redirects
+
 ### v0.32.1 - 02.05.24 - Freddy
 - mirrored boundaries horizontally for better looks
 - removed text referencing another image for now.
