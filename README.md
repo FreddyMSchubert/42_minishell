@@ -207,6 +207,8 @@ This was outputted by the grep command - but what happened to output of the seco
 
 ### Redirections
 There are 4 types of redirections.
+
+To make them work, every node (each box in the parser diagram) saves an input and an output file descriptor. To redirct a file into a command, the program would open a file descriptor and set it as that commands input. We then initialize it as the commands input before executing the command.
 1. Standard input redirection `<`
 	- e.g. `sort < todos.txt`
 	- Redirects the contents of `todos.txt` to serve as input for sort
@@ -219,8 +221,6 @@ There are 4 types of redirections.
 4. Here Document (Heredoc)
 	- e.g. `cat << STOP`
 
-To make this work, every node (each box in the parser diagram) saves an input and an output file descriptor. To redirct a file into a command, the program would open a file descriptor and set it as that commands input. We then initialize it as the commands input before executing the command.
-
 ### Heredoc
 Heredoc (Here Document) allows you to enter a special mode in our shell that allows you to simulate a file in your command if you only need it once.
 For example, `cat << STOP` will allow you to enter lines until you begin a line with STOP. Then, the command will continue as if it was referencing a file - in this case, cat would print out whatever you previously typed.
@@ -229,10 +229,8 @@ command << DELIMITER
 heredoc> line 1
 heredoc> line 2
 heredoc> line 3
-DELIMITER
-line 1
-line 2
-line 3
+heredoc> DELIMITER
+command output with line 1 - 3 as input
 ```
 
 ### Pipes
