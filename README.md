@@ -1,6 +1,6 @@
 # minishell by nburchha & fschuber
 
-![CRASH minishell starting up](https://github.com/FreddyMSchubert/42_minishell/tree/main/assets/logo.png "CRASH minishell starting up")
+![CRASH minishell starting up](https://github.com/FreddyMSchubert/42_minishell/blob/main/assets/logo.png "CRASH minishell starting up")
 
 "`Completely reliable & advanced shell`" - A mini BASH - recreation. Made by `Frederick Schubert` & `Niklas Burchhardt`. - Link to githubs
 
@@ -24,7 +24,7 @@ If you want to exit:
 exit
 ```
 
-![Boundary](https://github.com/FreddyMSchubert/42_minishell/tree/main/assets/boundary-1.png)
+![Boundary](https://github.com/FreddyMSchubert/42_minishell/blob/main/assets/boundary-1.png)
 
 # Project introduction
 > The existence of shells is linked to the very existence of IT.\
@@ -32,7 +32,7 @@ exit
 > It was only logical that they came up with the idea of creating a software to communicate with a computer using interactive lines of commands in a language somewhat close to the human language.\
 > Thanks to **Minishell**, you’ll be able to travel through time and come back to problems people faced when *Windows* didn’t exist.
 
-![Boundary](https://github.com/FreddyMSchubert/42_minishell/tree/main/assets/boundary-2.png)
+![Boundary](https://github.com/FreddyMSchubert/42_minishell/blob/main/assets/boundary-2.png)
 
 # The Task
 This is the biggest 42 project we've completed so far, and also the first large project as a team. The following features were to be implemented:
@@ -79,7 +79,7 @@ If you choose to do the bonus (we did), your program also has to implement:
 - `&&` and `||` with `parenthesis ()` for priorities.
 - Wildcards `*` should work for the current working directory.
 
-![Boundary](https://github.com/FreddyMSchubert/42_minishell/tree/main/assets/boundary-3.png)
+![Boundary](https://github.com/FreddyMSchubert/42_minishell/blob/main/assets/boundary-3.png)
 
 # The Approach / Implementation
 
@@ -261,7 +261,7 @@ This is worth a note (as it may be a little confusing) - instead of enduring the
 
 I really liked this idea and will reuse it - next time, I may even make my own malloc function that immediately appends my resources to the garbage collector & does the malloc protection, making things a lot more simple.
 
-![Boundary](https://github.com/FreddyMSchubert/42_minishell/tree/main/assets/boundary-4.png)
+![Boundary](https://github.com/FreddyMSchubert/42_minishell/blob/main/assets/boundary-4.png)
 
 # Fun stuff to try
 
