@@ -87,8 +87,6 @@ Very similar to how bash handles its process, our program structure looks someth
 
 `expander` -> `lexer` -> `validator` -> `parser` -> `executor`
 
-// -> lets put a cool image showing the structure here.
-
 ## Expander
 
 Starting out, we only have the input string. This may look something like this: `cat *.md | grep $USER`. Before doing anything else, we need to change the actual content of the string in a couple ways.

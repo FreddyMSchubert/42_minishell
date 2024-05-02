@@ -1,5 +1,9 @@
 # CHANGELOG minishell by nburchha & fschuber
 
+### v0.32.1 - 02.05.24 - Freddy
+- mirrored boundaries horizontally for better looks
+- removed text referencing another image for now.
+
 ## v0.32.0 - 02.05.24 - Freddy
 - Updated README with lots of content, added logo.png as the readme header, and 4 git log visualization boundaries as seperators, with a testfile.txt which is the section in the hitchhikers guide to the galaxy where 42 is first revealed.
 
