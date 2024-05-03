@@ -5,7 +5,25 @@
 "`Completely reliable & advanced shell`"\
 A mini BASH - recreation. Made by [`Frederick Schubert`](https://github.com/FreddyMSchubert) & [`Niklas Burchhardt`](https://github.com/nburchha).
 
-
+# Table of Contents
+- [Installation](https://github.com/FreddyMSchubert/42_minishell/blob/main/README.md#installation)
+- [Project Introduction](https://github.com/FreddyMSchubert/42_minishell/blob/main/README.md#project-introduction)
+- [The Task](https://github.com/FreddyMSchubert/42_minishell/blob/main/README.md#the-task)
+  - [The Bonus](https://github.com/FreddyMSchubert/42_minishell/blob/main/README.md#the-bonus)
+- [The Approach / Implementation](https://github.com/FreddyMSchubert/42_minishell/blob/main/README.md#the-approach--implementation)
+  - [Expander](https://github.com/FreddyMSchubert/42_minishell/blob/main/README.md#expander)
+  - [Lexer](https://github.com/FreddyMSchubert/42_minishell/blob/main/README.md#lexer)
+  - [Validator](https://github.com/FreddyMSchubert/42_minishell/blob/main/README.md#validator)
+  - [Parser](https://github.com/FreddyMSchubert/42_minishell/blob/main/README.md#parser)
+  - [Executer](https://github.com/FreddyMSchubert/42_minishell/blob/main/README.md#executer)
+    - [Builtins](https://github.com/FreddyMSchubert/42_minishell/blob/main/README.md#builtins)
+    - [Redirections](https://github.com/FreddyMSchubert/42_minishell/blob/main/README.md#redirections)
+    - [Heredoc](https://github.com/FreddyMSchubert/42_minishell/blob/main/README.md#heredoc)
+    - [Pipes](https://github.com/FreddyMSchubert/42_minishell/blob/main/README.md#pipes)
+    - [Signals](https://github.com/FreddyMSchubert/42_minishell/blob/main/README.md#signals)
+    - [Garbage Collector](https://github.com/FreddyMSchubert/42_minishell/blob/main/README.md#garbage-collector)
+- [Takeaways / What we learned](https://github.com/FreddyMSchubert/42_minishell/blob/main/README.md#takeaways--what-we-learned)
+- [Fun Stuff to try](https://github.com/FreddyMSchubert/42_minishell/blob/main/README.md#fun-stuff-to-try)
 
 # Installation
 
@@ -40,7 +58,11 @@ exit
 ![Boundary](https://github.com/FreddyMSchubert/42_minishell/blob/main/assets/boundary-2.png)
 
 # The Task
-This is the biggest 42 project we've completed so far, and also the first large project as a team. The following features were to be implemented:
+This is the biggest 42 project we've completed so far, and also the first large project as a team.
+
+> As always, for both the bonus and the main part of the task, we had to rigidly keep to the [42 norminette](https://github.com/FreddyMSchubert/42_cursus/blob/main/en.norm.pdf). Have a read, some rules in there are very restrictive.
+
+The following features were to be implemented:
 
 Our shell should
 - Display a `prompt` when waiting for a new command.
@@ -265,6 +287,18 @@ This is worth a note (as it may be a little confusing) - instead of enduring the
 I really liked this idea and will reuse it - next time, I may even make my own malloc function that immediately appends my resources to the garbage collector & does the malloc protection, making things a lot more simple.
 
 ![Boundary](https://github.com/FreddyMSchubert/42_minishell/blob/main/assets/boundary-4.png)
+
+# Takeaways / What we learned
+
+Minishell wasn't just about creating a pretty cool program, but it was most importantly our first major team effort - you can't make minishell alone. Signals be damned, this may be where we truly learned the most - when starting out, we were bad at communicating, just kind of "pushed that" without much thought, and in general, the merge conflict software was having a field day. In contrast, we were very well organized at the end - and I'm certain this will translate will into other projects we'll be working on collaboratively in the future. I have now fully decoded the previously somewhat elusive concept of branches, and am now wielding their full power in combination of the very nice GitHub issues system.
+
+Something else we learned in quite the painful experience on the day we were initially planning to hand in the project was to maintain a top-notch-clean codebase from day 1 and at every step. Very often, we thought "it's fine, i'll write this once, we won't ever have to open this file again". You will. And it will be pain. For about 50% of our codebase, we never actually worked on making it [42-norminette-conformant](https://github.com/FreddyMSchubert/42_cursus/blob/main/en.norm.pdf), which we definitely should have. Rewriting half your codebase on the day you were planning to submit the project will definitely stab you in the back - which I very much realized, as I spent over 16 hours at school that day. (We ended up handing it in a day later.) I am now very happy with the state of the code - it is very clean and organized, I feel good leaving it in this state.
+
+Beyond that, we obviously learned a ton about making a larger project & low level programming & debugging. I feel that especially for debugging we have developed a considerably larger toolchain - I'm a valgrind master now.
+
+I'll remember this project forever - and while I'm happy I'm done with it and about to start on the C++ projects, I really did enjoy the process of making my own tiny shell with a questionable color scheme. What I've learned here is already invaluable in my next project.
+
+![Boundary](https://github.com/FreddyMSchubert/42_minishell/blob/main/assets/boundary-1.png)
 
 # Fun stuff to try
 
