@@ -15,7 +15,7 @@ A mini BASH - recreation. Made by [`Frederick Schubert`](https://github.com/Fred
   - [Lexer](https://github.com/FreddyMSchubert/42_minishell/blob/main/README.md#lexer)
   - [Validator](https://github.com/FreddyMSchubert/42_minishell/blob/main/README.md#validator)
   - [Parser](https://github.com/FreddyMSchubert/42_minishell/blob/main/README.md#parser)
-  - [Executer](https://github.com/FreddyMSchubert/42_minishell/blob/main/README.md#executor)
+  - [Executor](https://github.com/FreddyMSchubert/42_minishell/blob/main/README.md#executor)
     - [Builtins](https://github.com/FreddyMSchubert/42_minishell/blob/main/README.md#builtins)
     - [Redirections](https://github.com/FreddyMSchubert/42_minishell/blob/main/README.md#redirections)
     - [Heredoc](https://github.com/FreddyMSchubert/42_minishell/blob/main/README.md#heredoc)
